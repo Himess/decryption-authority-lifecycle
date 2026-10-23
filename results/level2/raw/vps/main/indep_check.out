@@ -1,0 +1,23 @@
+run: /srv/lifecycle/runs/level2-main-20261021T121502Z
+records=58 methods={'eth_call': 58} level0_selectors_seen=0
+eth_call shapes (keys, block): {(('input', 'to'), 'latest'): 58}
+deploy kind=level0 version=ACL v0.9.0 matches_reference=true proxy=0x4326e23644f6569A76e8141005E3d32b0b5B9a9d
+deploy kind=level0 version=ACL v0.9.0 matches_reference=true proxy=0xc2db9b0c53d56C59180599973E5B5aae485aA114
+retire case=l2.legacy role=delegator-with-successor event=true isAccountRetired=true gas_used=54466
+retire case=l2.v2 role=owner-with-successor event=true isAccountRetired=true gas_used=54466
+OK   l2.legacy.delegate-d.u-active                        delegated Forwarded obs=Forwarded kms=4  err_ctr=0   calls=2   decryptionSignatureInvalidatedBefore(D)=0 x1; isHandleDelegatedForUserDecryption(U,D,C,h)=True x1
+OK   l2.legacy.successor-s.u-active                       delegated Rejected  obs=Rejected  kms=0  err_ctr=3   calls=6   decryptionSignatureInvalidatedBefore(S)=0 x3; isHandleDelegatedForUserDecryption(U,S,C,h)=False x3
+OK   l2.legacy.successor-s.u-retired                      delegated Forwarded obs=Forwarded kms=4  err_ctr=0   calls=2   decryptionSignatureInvalidatedBefore(S)=0 x1; isHandleDelegatedForUserDecryption(U,S,C,h)=True x1
+OK   l2.legacy.delegate-d.u-retired                       delegated Rejected  obs=Rejected  kms=0  err_ctr=3   calls=6   decryptionSignatureInvalidatedBefore(D)=0 x3; isHandleDelegatedForUserDecryption(U,D,C,h)=False x3
+OK   l2.legacy.successor-s-direct.u-retired               direct Rejected  obs=Rejected  kms=0  err_ctr=3   calls=9   decryptionSignatureInvalidatedBefore(S)=0 x3; isAllowed(h,C)=True x3; isAllowed(h,S)=False x3
+OK   l2.legacy.h2-holder-v                                direct Forwarded obs=Forwarded kms=4  err_ctr=0   calls=3   decryptionSignatureInvalidatedBefore(V)=0 x1; isAllowed(h,C)=True x1; isAllowed(h,V)=True x1
+OK   l2.legacy.successor-s.straggler-h2                   delegated Forwarded obs=Forwarded kms=4  err_ctr=0   calls=2   decryptionSignatureInvalidatedBefore(S)=0 x1; isHandleDelegatedForUserDecryption(U,S,C,h)=True x1
+OK   l2.legacy.successor-s.after-resign                   delegated Rejected  obs=Rejected  kms=0  err_ctr=3   calls=6   decryptionSignatureInvalidatedBefore(S)=0 x3; isHandleDelegatedForUserDecryption(U,S,C,h)=False x3
+OK   l2.v2.delegate-dk.u-active                           v2-delegated Forwarded obs=Forwarded kms=4  err_ctr=0   calls=2   decryptionSignatureInvalidatedBefore(Dk)=0 x1; isHandleDelegatedForUserDecryption(U,Dk,C,h)=True x1
+OK   l2.v2.successor-sk.u-active                          v2-delegated Rejected  obs=Rejected  kms=0  err_ctr=3   calls=6   decryptionSignatureInvalidatedBefore(Sk)=0 x3; isHandleDelegatedForUserDecryption(U,Sk,C,h)=False x3
+OK   l2.v2.successor-sk.u-retired                         v2-delegated Forwarded obs=Forwarded kms=4  err_ctr=0   calls=2   decryptionSignatureInvalidatedBefore(Sk)=0 x1; isHandleDelegatedForUserDecryption(U,Sk,C,h)=True x1
+OK   l2.v2.delegate-dk.u-retired                          v2-delegated Rejected  obs=Rejected  kms=0  err_ctr=3   calls=6   decryptionSignatureInvalidatedBefore(Dk)=0 x3; isHandleDelegatedForUserDecryption(U,Dk,C,h)=False x3
+OK   l2.v2.successor-sk-direct.u-retired                  v2-direct Rejected  obs=Rejected  kms=0  err_ctr=3   calls=6   decryptionSignatureInvalidatedBefore(Sk)=0 x3; isAllowed(h,Sk)=False x3
+latency-loop requests checked: 0 groups: 0
+requests: {'ok': 13}
+PROBLEMS: none

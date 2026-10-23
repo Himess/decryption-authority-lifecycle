@@ -1,0 +1,63 @@
+date=2026-10-21T19:59:19Z host=VPS nproc=4 kernel=6.8.0-139-generic
+tree HEAD=ed851716c9a6b799996a23399ece2858336f96db pristine HEAD=ed851716c9a6b799996a23399ece2858336f96db
+== git status --porcelain (tree)
+ M kms-connector/config/endpoint.toml
+ M kms-connector/crates/api/src/error.rs
+ M kms-connector/crates/endpoint/src/core/config.rs
+ M kms-connector/crates/endpoint/src/core/db.rs
+ M kms-connector/crates/endpoint/src/core/http/decrypt.rs
+ M kms-connector/crates/endpoint/src/core/http/public_decrypt.rs
+ M kms-connector/crates/endpoint/src/core/http/user_decrypt.rs
+ M kms-connector/crates/endpoint/tests/integration_tests.rs
+ M kms-connector/crates/kms-worker/src/core/config.rs
+ M kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+ M kms-connector/crates/kms-worker/src/core/event_processor/error.rs
+ M kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+ M kms-connector/crates/kms-worker/src/core/kms_worker.rs
+ M kms-connector/crates/kms-worker/src/core/mod.rs
+ M kms-connector/crates/kms-worker/tests/common/mod.rs
+ M kms-connector/crates/utils/src/tests/setup/db.rs
+ M kms-connector/crates/utils/src/tests/setup/host.rs
+ M shared/user-decryption-signature/src/lib.rs
+?? kms-connector/connector-db/migrations/20261021120000_profile_h_erc1271_attempts.sql
+?? kms-connector/crates/kms-worker/tests/acl_p03_stored_results_h.rs
+?? kms-connector/crates/kms-worker/tests/acl_p04_eip7851_h.rs
+?? kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs
+?? shared/user-decryption-signature/src/profile_h.rs
+?? shared/user-decryption-signature/tests/
+== sha256 of every changed or added file of the tree
+c5ee403a50f76ff50043b09fee9ed491318ac84df9725a4aa3729dc8e3166bab  /srv/lifecycle/src/fhevm-main-l1/kms-connector/config/endpoint.toml
+616f8b137b213f72da6f74faa1c5aa96bfe5baf5cc414206416d557a01961c55  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/api/src/error.rs
+3797a7e49ba4bf014513d4b36d81aba2fec4a1108744a7b3c25eee57ff4332e2  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/endpoint/src/core/config.rs
+0934eed7b81a193e4c3e205bbf838f8a42f32876fb044dcefeb6859ed43ae845  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/endpoint/src/core/db.rs
+48a917368b17ef5d8c04f5d442ecf63a7d6f6677e5a774909eda3661371a6e20  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/endpoint/src/core/http/decrypt.rs
+17d778cc23e4a750a68c6988ccd8e8f157207f5aeeb4b51ebfc3758bf9af8f84  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/endpoint/src/core/http/public_decrypt.rs
+3a8e322466c0ca5efdc3a9a18894d0d8dd7ab03780f60569ff37f9215791eda3  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/endpoint/src/core/http/user_decrypt.rs
+63209bc5041b2829c0a93110ea5ef436fca9830bacbcefaed1eac4dfaec7b6a6  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/endpoint/tests/integration_tests.rs
+98850cb0c9a98cf32b3520d3d8ad67e6ae7be58a2b0522a84378c69d0896300b  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/config.rs
+05816a6d23683c60f672062a01959f34e822c2cb9707a17f452efc3d4be71d93  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+1c20233cfd3fb4a5ae635125582bee6e9f085044e4ae3fd666aa8bc33aa5a897  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/error.rs
+4458ca78c579897dcf4f29222e97b26ab458f6987c24f403936ab77e47c38908  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+362523797c913dfe585698e9e1bde468b70070029795146d2bb2c2f5b9eba654  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/kms_worker.rs
+1f342918f1b934267df32212ddab087b44737525e0942ae547fa0b18ef8c5b26  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/mod.rs
+c5c941d6c6d59574374529875d30c0a62f1ce173c03ccb3d1cd98d75f428ef9d  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/common/mod.rs
+0d83db372b1129928621fd7ceca9dc251808563915c0637042a8450814508cbf  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/utils/src/tests/setup/db.rs
+9259f755845719ff6bd3048c6e462b4f49bd161ea66bc67d8e1da0e3af20a305  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/utils/src/tests/setup/host.rs
+d0b5870836a16d71cd9d574806f14ce14c7ac14f2b0f48c2d18d5fa4d4f6d7fb  /srv/lifecycle/src/fhevm-main-l1/shared/user-decryption-signature/src/lib.rs
+4d119c6d7465000e6cd7e49991422e3f53254e9344151fbd729178e455bea0be  /srv/lifecycle/src/fhevm-main-l1/kms-connector/connector-db/migrations/20261021120000_profile_h_erc1271_attempts.sql
+c2f4dfb5a6b7df791b0e0ea57199949f7ddcbb5e61063e37c17979e6ad5be874  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_p03_stored_results_h.rs
+d9d647d1ffb09efc7e3fe5390973e06f490ec313b88f2220875b29f47f99d1a1  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_p04_eip7851_h.rs
+556627f123e43dd810492fcf709af6f61c276703431bf8cb4664811fb9040f47  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs
+7712d6a17bc3650dcd9a0c823cdfed2b92b6aa247e0198622841b32fba1ec02e  /srv/lifecycle/src/fhevm-main-l1/shared/user-decryption-signature/src/profile_h.rs
+f14f1c6ac602e7218889609ab7026d2f515b6bf01f794da8d6947fcb40b82d6d  /srv/lifecycle/src/fhevm-main-l1/shared/user-decryption-signature/tests/profile_h.rs
+== endpoint binary and harness inputs
+6bae615871ee6875a97e5c56191684011f3b258922b4e81671899dd0314edfc7  /srv/lifecycle/bin/p03/endpoint-main-l1
+f77d80a57ae7025c22f79d9a6cd3eeba9ec9159aaee32b8829a82056ec19355a  /srv/lifecycle/harness/level0/base_acl_main.json
+b6c9361d70ab108e773dfaea81183fb4428e333a32ec47878c46cb289153b2b7  /srv/lifecycle/harness/level0/level0_acl_main.json
+4605658bedb1872fb595ea9ac6f4094cab169adacb4094480f63b278b694797d  /srv/lifecycle/harness/level0/level0_acl_v0.13.8.json
+445ef517c1b0f3b1978685707a2b084a40080fabef179b9be16534666802e68e  /srv/lifecycle/harness/level1/RejectAll1271Wallet.json
+c535fb0cbf87776524f6f968f169e504853b1bc5b91f4792a5b9c58df1151bad  /srv/lifecycle/harness/sol/src/DappStub.sol
+613348ca2fe17f2d8057247a6476617b8d7dac24a68ab6438eb854b049bc7b08  /srv/lifecycle/harness/sol/src/ExecutorStub.sol
+37d0516d3e7c123bbf981774a2ab5ae26d25c5f61e53b23584aa81bcb97034ff  /srv/lifecycle/harness/sol/src/Proxy.sol
+46aa3b639ade6877794a18349339cee9fd452b2c7a5bde6a6e3049885653efa8  /srv/lifecycle/scripts/fault_proxy_v2.py
+53f5e0c395ddc5132ef288416e5f54d77d42b5b839a7b98187b815e515ccf2b1  /srv/lifecycle/scripts/run_p03.sh

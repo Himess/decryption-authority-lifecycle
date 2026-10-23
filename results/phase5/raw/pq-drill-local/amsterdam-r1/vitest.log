@@ -1,0 +1,18 @@
+
+ RUN  v4.1.9 <repo>/impl/harness/phase5/pq-drill-local
+
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B1: the carry tool carries the history to W1 and retires A in one transaction 464ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B2: designation, acceptance through execute, the delay, confirmation; B2d retires, B2c through the watchtower 1988ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B3: a type-4 transaction delegates A to the wallet code and sets its key; B3a reads as EIP-7851, B3b adopts the code 4379ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > SDK: getAuthorityStatus of every A and holder 1543ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > SDK: the Profile H precheck accepts each holder ML-DSA-44 signature; it refuses the old key where A has code 3087ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B6: the old key transactions after each path 6642ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B5: operator-ratified upgrades: 8 signatures revert, 9 pass the guard to a Core release, a release without Core reverts at the guard; the canary stays green 15669ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B8: the ERC-1271 call each holder needs: its gas (E4 meter) and its time on this node 3264ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B3 does not combine with Core retirement: the old key retires A, which ends its wallet too 1682ms
+
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+   Start at  22:56:16
+   Duration  54.27s (transform 1.50s, setup 0ms, import 2.05s, tests 52.02s, environment 0ms)
+

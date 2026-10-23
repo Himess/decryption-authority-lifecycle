@@ -1,0 +1,292 @@
+{
+ "n": 13,
+ "t": 4,
+ "field": "GF(2^127 - 1)",
+ "trials": 20000,
+ "noOutage": [
+  {
+   "k": 0,
+   "answering": 13,
+   "reconstructs": true,
+   "anyFailure": false
+  },
+  {
+   "k": 1,
+   "answering": 12,
+   "reconstructs": true,
+   "anyFailure": false
+  },
+  {
+   "k": 2,
+   "answering": 11,
+   "reconstructs": true,
+   "anyFailure": false
+  },
+  {
+   "k": 3,
+   "answering": 10,
+   "reconstructs": true,
+   "anyFailure": false
+  },
+  {
+   "k": 4,
+   "answering": 9,
+   "reconstructs": true,
+   "anyFailure": false
+  },
+  {
+   "k": 5,
+   "answering": 8,
+   "reconstructs": true,
+   "anyFailure": false
+  },
+  {
+   "k": 6,
+   "answering": 7,
+   "reconstructs": true,
+   "anyFailure": false
+  },
+  {
+   "k": 7,
+   "answering": 6,
+   "reconstructs": true,
+   "anyFailure": false
+  },
+  {
+   "k": 8,
+   "answering": 5,
+   "reconstructs": true,
+   "anyFailure": false
+  },
+  {
+   "k": 9,
+   "answering": 4,
+   "reconstructs": false,
+   "anyFailure": false
+  },
+  {
+   "k": 10,
+   "answering": 3,
+   "reconstructs": false,
+   "anyFailure": false
+  },
+  {
+   "k": 11,
+   "answering": 2,
+   "reconstructs": false,
+   "anyFailure": false
+  },
+  {
+   "k": 12,
+   "answering": 1,
+   "reconstructs": false,
+   "anyFailure": false
+  },
+  {
+   "k": 13,
+   "answering": 0,
+   "reconstructs": false,
+   "anyFailure": false
+  }
+ ],
+ "withOutage": [
+  {
+   "q": 0.01,
+   "k": 0,
+   "monteCarlo": 1.0,
+   "exact": 1.0,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 1,
+   "monteCarlo": 1.0,
+   "exact": 1.0,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 2,
+   "monteCarlo": 1.0,
+   "exact": 1.0,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 3,
+   "monteCarlo": 1.0,
+   "exact": 1.0,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 4,
+   "monteCarlo": 1.0,
+   "exact": 1.0,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 5,
+   "monteCarlo": 1.0,
+   "exact": 0.999999,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 6,
+   "monteCarlo": 0.99985,
+   "exact": 0.999966,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 7,
+   "monteCarlo": 0.99895,
+   "exact": 0.99854,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 8,
+   "monteCarlo": 0.9509,
+   "exact": 0.95099,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 9,
+   "monteCarlo": 0.0,
+   "exact": 0,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 10,
+   "monteCarlo": 0.0,
+   "exact": 0,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 11,
+   "monteCarlo": 0.0,
+   "exact": 0,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 12,
+   "monteCarlo": 0.0,
+   "exact": 0,
+   "within4se": true
+  },
+  {
+   "q": 0.01,
+   "k": 13,
+   "monteCarlo": 0.0,
+   "exact": 0,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 0,
+   "monteCarlo": 1.0,
+   "exact": 1.0,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 1,
+   "monteCarlo": 1.0,
+   "exact": 1.0,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 2,
+   "monteCarlo": 1.0,
+   "exact": 1.0,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 3,
+   "monteCarlo": 1.0,
+   "exact": 0.999997,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 4,
+   "monteCarlo": 1.0,
+   "exact": 0.999967,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 5,
+   "monteCarlo": 0.9996,
+   "exact": 0.999628,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 6,
+   "monteCarlo": 0.99625,
+   "exact": 0.996243,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 7,
+   "monteCarlo": 0.9669,
+   "exact": 0.967226,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 8,
+   "monteCarlo": 0.7737,
+   "exact": 0.773781,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 9,
+   "monteCarlo": 0.0,
+   "exact": 0,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 10,
+   "monteCarlo": 0.0,
+   "exact": 0,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 11,
+   "monteCarlo": 0.0,
+   "exact": 0,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 12,
+   "monteCarlo": 0.0,
+   "exact": 0,
+   "within4se": true
+  },
+  {
+   "q": 0.05,
+   "k": 13,
+   "monteCarlo": 0.0,
+   "exact": 0,
+   "within4se": true
+  }
+ ],
+ "rule_k_le_8_iff_reconstructs": true,
+ "monteCarloMatchesExact": true
+}

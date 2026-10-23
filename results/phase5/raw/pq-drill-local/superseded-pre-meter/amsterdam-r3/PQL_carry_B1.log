@@ -1,0 +1,10 @@
+carry plan: OLD 0x414E1F8dd2459623e91bFB82e13dcA56f7c5D0d4 -> NEW 0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f on registry 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 (blocks 0..60, 1 log requests)
+  3 grants to OLD, 3 distinct handles, 3 to carry in 1 transaction(s), the last one retiring OLD
+  caller                                       allowlisted  grants  handles  kept  skipped
+  0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9  yes               3        3     3  -
+  handles to carry:
+    0xc66f9c4373ec9ddd2dd71d941d89f259b5e9c9c797ff0000000000007a690500
+    0x1d7167a313926fd9cdf80df44c9ccf975a9577647dff0000000000007a690500
+    0x00dcd6783215a94cdbe5fedcaeca7a1a5e83f975b9ff0000000000007a690500
+  tx 0: 3 handles + retireAccount(), status 1, gasUsed 503316, calldata 644 B
+  verified: OLD retired true; NEW holds 3/3; OLD still usable on 0; OK

@@ -1,0 +1,4 @@
+date_utc: 2026-10-22T01:15:43Z
+forge: <workspace>/scratch/foundry-nightly-9089a6b/bin/forge forge Version: 1.8.6-nightly Commit SHA: 9089a6bfdca158b2ef268b3d60923bf1e0879fed 
+level0 clone: lifecycle/level0 5e61f3de, dirty files under host-contracts: 0
+level2 clone: lifecycle/level3 f1b440e7, dirty files under host-contracts: 1

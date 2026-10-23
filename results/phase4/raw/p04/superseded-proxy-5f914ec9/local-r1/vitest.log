@@ -1,0 +1,39 @@
+
+ RUN  v4.1.9 <repo>/impl/harness/phase4/p04-local
+
+stdout | p04-eip7851.test.ts
+[P04/local] tx deploy Keccak-f1600 helper (upstream helpers/f1600_170.hex): 0x3c1de57938ecaf56c77ef4592f92b9d2246f6d7f76145d221ad1ccc6d9ea0103 block 1 gasUsed 4716322
+
+stdout | p04-eip7851.test.ts
+[P04/local] tx deploy MLDSA44Verifier: 0xb49fb732f2cddb9107e1ea7f647e9136273d173921bf13ade4b4fa4a392911b5 block 2 gasUsed 5166161
+
+stdout | p04-eip7851.test.ts
+[P04/local] tx deploy ML-DSA-44 pk blob (prepare.py output): 0x7a2bcc8256af2d636caf46a9b7d181559c603789fcfc2469ef73cf14db57953e block 3 gasUsed 4434717
+
+stdout | p04-eip7851.test.ts
+[P04/local] tx deploy MLDSA44Account1271: 0x954046410f32930b63284fe5da9f15a66321455b1cf3325e1b4dc278bfa8e479 block 4 gasUsed 317011
+
+stdout | p04-eip7851.test.ts
+[P04/local] tx deploy Erc1271GasMeter: 0xbcecae8260f7c338304a1bca50c4bf44013e37c8f90ca312323fa58076814879 block 5 gasUsed 223128
+
+stdout | p04-eip7851.test.ts
+[P04/local] tx deploy NoErc1271: 0xa46700b7e1f54f8a554aaacff35171155a8cda94071248353e5afdbad442d83d block 6 gasUsed 56439
+
+stdout | p04-eip7851.test.ts
+[P04/local] tx EIP-7702 delegate -> MLDSA44Account1271: 0xd4c9f498c5ac506384abe9acd8d7ae10d20ab8a0f871918071310d39067973d9 block 7 gasUsed 36800
+
+stdout | p04-eip7851.test.ts
+[P04/local] tx EIP-7702 delegate -> NoErc1271: 0x6b47fb5109c66790f85f1aab90b59a8335fa3af0ba2778592ff0126e0b6d214a block 8 gasUsed 36800
+
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > the digest the crate computes is the EIP-712 digest ethers computes 108ms
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > row 1: unmodified verifiers accept the root key of an ECDSA-disabled account (the gap) 307ms
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > row 2: Profile H enforce refuses the root key: 0xef0101 is regular code, ERC-1271 only, no shim 165ms
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > row 3: Profile H enforce accepts the ML-DSA-44 signature at B_exec 2,000,000 748ms
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > reference: the same accounts as EIP-7702 delegations (0xef0100), no rewrite 813ms
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > row 5: the SDK pre-check agrees with the verifier 1383ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  21:04:44
+   Duration  26.96s (transform 465ms, setup 0ms, import 2.59s, tests 23.65s, environment 0ms)
+

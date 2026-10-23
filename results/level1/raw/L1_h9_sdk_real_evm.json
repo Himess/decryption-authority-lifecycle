@@ -1,0 +1,194 @@
+{
+ "label": "proven on a local EVM (anvil, Osaka): the SDK precautionary check, rule H9",
+ "sdk": "impl/wt-l1-h9 sdk/js-sdk (branch lifecycle/level1), ethers adapter",
+ "chainId": "31337",
+ "date": "2026-10-21T16:17:37.959Z",
+ "rows": [
+  {
+   "label": "pq.mldsa44",
+   "policy": "none (250,000 cap)",
+   "outcome": {
+    "accepted": false,
+    "error": "Erc1271RejectedError",
+    "message": "ERC-1271 isValidSignature reverted or returned malformed data for userAddress 0x0165878A594ca255338adfa4d48449f69242Eb8F: isValidSignature call reverted: execution reverted (no data present; likely require(false) occurred (action=\"call\", data=\"0x\", reason=\"require(false)\", transaction={ \"data\": \"0x1"
+   },
+   "calls": [
+    {
+     "gas": "250000",
+     "calldataBytes": 2532
+    }
+   ],
+   "codeReads": 0,
+   "warnings": []
+  },
+  {
+   "label": "pq.mldsa44",
+   "policy": "off",
+   "outcome": {
+    "accepted": true
+   },
+   "calls": [
+    {
+     "gas": "2183048",
+     "calldataBytes": 2532
+    }
+   ],
+   "codeReads": 0,
+   "warnings": []
+  },
+  {
+   "label": "pq.mldsa44",
+   "policy": "enforce",
+   "outcome": {
+    "accepted": true
+   },
+   "calls": [
+    {
+     "gas": "2183048",
+     "blockNumber": "10",
+     "calldataBytes": 2532
+    }
+   ],
+   "codeReads": 1,
+   "warnings": []
+  },
+  {
+   "label": "7702.reject-all.root-key",
+   "policy": "none (250,000 cap)",
+   "outcome": {
+    "accepted": true
+   },
+   "calls": [],
+   "codeReads": 0,
+   "warnings": []
+  },
+  {
+   "label": "7702.reject-all.root-key",
+   "policy": "off",
+   "outcome": {
+    "accepted": true
+   },
+   "calls": [],
+   "codeReads": 0,
+   "warnings": []
+  },
+  {
+   "label": "7702.reject-all.root-key",
+   "policy": "shadow",
+   "outcome": {
+    "accepted": true
+   },
+   "calls": [
+    {
+     "gas": "2033544",
+     "blockNumber": "10",
+     "calldataBytes": 196
+    }
+   ],
+   "codeReads": 1,
+   "warnings": [
+    "PROFILE-H-SHADOW userAddress 0xe0bf3540817F3d6Ced015179c371d283E20f9319: served accept, code-first would reject (ERC-1271 isValidSignature returned non-magic value 0xffffffff for userAddress 0xe0bf3540817F3d6Ced015179c371d283E20f9319\nVersion: @fhevm/sdk@0.15.0-0)"
+   ]
+  },
+  {
+   "label": "7702.reject-all.root-key",
+   "policy": "enforce",
+   "outcome": {
+    "accepted": false,
+    "error": "Erc1271WrongMagicError",
+    "message": "ERC-1271 isValidSignature returned non-magic value 0xffffffff for userAddress 0xe0bf3540817F3d6Ced015179c371d283E20f9319\nVersion: @fhevm/sdk@0.15.0-0"
+   },
+   "calls": [
+    {
+     "gas": "2033544",
+     "blockNumber": "10",
+     "calldataBytes": 196
+    }
+   ],
+   "codeReads": 1,
+   "warnings": []
+  },
+  {
+   "label": "7702.no-erc1271.root-key",
+   "policy": "enforce",
+   "outcome": {
+    "accepted": true
+   },
+   "calls": [
+    {
+     "gas": "2033544",
+     "blockNumber": "10",
+     "calldataBytes": 196
+    }
+   ],
+   "codeReads": 1,
+   "warnings": []
+  },
+  {
+   "label": "7702.no-erc1271.root-key",
+   "policy": "enforce",
+   "outcome": {
+    "accepted": false,
+    "error": "Erc1271RejectedError",
+    "message": "ERC-1271 isValidSignature reverted or returned malformed data for userAddress 0x76aD7992Afd29c42683105c4571F1c45405e9Bf9: isValidSignature returned no data on an account with code\nVersion: @fhevm/sdk@0.15.0-0"
+   },
+   "calls": [
+    {
+     "gas": "2033544",
+     "blockNumber": "10",
+     "calldataBytes": 196
+    }
+   ],
+   "codeReads": 1,
+   "warnings": []
+  },
+  {
+   "label": "eoa.valid",
+   "policy": "off",
+   "outcome": {
+    "accepted": true
+   },
+   "calls": [],
+   "codeReads": 0,
+   "warnings": []
+  },
+  {
+   "label": "eoa.valid",
+   "policy": "enforce",
+   "outcome": {
+    "accepted": true
+   },
+   "calls": [],
+   "codeReads": 1,
+   "warnings": []
+  },
+  {
+   "label": "eoa.wrong-key",
+   "policy": "enforce",
+   "outcome": {
+    "accepted": false,
+    "error": "Erc1271EoaMismatchNoCodeError",
+    "message": "ecrecover signer mismatch and userAddress 0xACe3cD6595057C0D133A68a84C23a8911D4471D2 has no contract code on the host chain\nVersion: @fhevm/sdk@0.15.0-0"
+   },
+   "calls": [],
+   "codeReads": 1,
+   "warnings": []
+  },
+  {
+   "label": "regular.owner-wallet",
+   "policy": "enforce",
+   "outcome": {
+    "accepted": true
+   },
+   "calls": [
+    {
+     "gas": "2033544",
+     "blockNumber": "10",
+     "calldataBytes": 196
+    }
+   ],
+   "codeReads": 1,
+   "warnings": []
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+relay [manual] {"chain":"local","chainId":31337,"tx":"0xc92679ba8b8b499f6e52f499d93cdbc1d3557d164d728fa1fd1f31d43e1f49b8","status":1,"gasUsed":148530,"block":70,"calldataBytes":324}

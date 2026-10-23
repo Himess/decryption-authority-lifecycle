@@ -1,0 +1,13 @@
+# (method, function, call-object keys, block) seen on the connector's host-chain endpoint
+run: 58 record(s), 3 kind(s)
+   ('eth_call', 'decryptionSignatureInvalidatedBefore', 'input,to', 'latest')
+   ('eth_call', 'isAllowed', 'input,to', 'latest')
+   ('eth_call', 'isHandleDelegatedForUserDecryption', 'input,to', 'latest')
+baseline: 2 file(s), 74 record(s), 3 kind(s)
+   ('eth_call', 'decryptionSignatureInvalidatedBefore', 'input,to', 'latest')
+   ('eth_call', 'isAllowed', 'input,to', 'latest')
+   ('eth_call', 'isHandleDelegatedForUserDecryption', 'input,to', 'latest')
+kinds in this run but not in the baseline: []
+non-eth_call methods in this run: none
+Level 0 selectors (retireAccount, isAccountRetired, supportsInterface, retirementStorageLocation) seen: none
+eth_calls whose `to` is not one of the run's ACL proxies: 0

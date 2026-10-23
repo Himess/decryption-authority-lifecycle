@@ -1,0 +1,29 @@
+INSCOPE start=2026-10-21T05:10:07Z cgroup=/system.slice/lifecycle-wt-main-1792559407.scope nice=19 ionice=[idle] cmd=[git -C /srv/lifecycle/src/fhevm.git worktree add --detach /srv/lifecycle/src/fhevm-main ed851716c9a6b799996a23399ece2858336f96db]
+Preparing worktree (detached HEAD ed851716c)
+Updating files:   0% (2/5063)Updating files:   1% (51/5063)Updating files:   2% (102/5063)Updating files:   3% (152/5063)Updating files:   4% (203/5063)Updating files:   5% (254/5063)Updating files:   6% (304/5063)Updating files:   7% (355/5063)Updating files:   8% (406/5063)Updating files:   9% (456/5063)Updating files:  10% (507/5063)Updating files:  11% (557/5063)Updating files:  12% (608/5063)Updating files:  13% (659/5063)Updating files:  14% (709/5063)Updating files:  15% (760/5063)Updating files:  16% (811/5063)Updating files:  17% (861/5063)Updating files:  18% (912/5063)Updating files:  19% (962/5063)Updating files:  20% (1013/5063)Updating files:  21% (1064/5063)Updating files:  22% (1114/5063)Updating files:  23% (1165/5063)Updating files:  24% (1216/5063)Updating files:  25% (1266/5063)Updating files:  26% (1317/5063)Updating files:  26% (1323/5063)Updating files:  27% (1368/5063)Updating files:  28% (1418/5063)Updating files:  29% (1469/5063)Updating files:  30% (1519/5063)Updating files:  31% (1570/5063)Updating files:  32% (1621/5063)Updating files:  33% (1671/5063)Updating files:  34% (1722/5063)Updating files:  35% (1773/5063)Updating files:  36% (1823/5063)Updating files:  37% (1874/5063)Updating files:  38% (1924/5063)Updating files:  39% (1975/5063)Updating files:  40% (2026/5063)Updating files:  41% (2076/5063)Updating files:  42% (2127/5063)Updating files:  43% (2178/5063)Updating files:  44% (2228/5063)Updating files:  45% (2279/5063)Updating files:  46% (2329/5063)Updating files:  47% (2380/5063)Updating files:  48% (2431/5063)Updating files:  49% (2481/5063)Updating files:  50% (2532/5063)Updating files:  51% (2583/5063)Updating files:  52% (2633/5063)Updating files:  53% (2684/5063)Updating files:  54% (2735/5063)Updating files:  55% (2785/5063)Updating files:  56% (2836/5063)Updating files:  57% (2886/5063)Updating files:  58% (2937/5063)Updating files:  59% (2988/5063)Updating files:  60% (3038/5063)Updating files:  61% (3089/5063)Updating files:  62% (3140/5063)Updating files:  63% (3190/5063)Updating files:  64% (3241/5063)Updating files:  65% (3291/5063)Updating files:  66% (3342/5063)Updating files:  67% (3393/5063)Updating files:  68% (3443/5063)Updating files:  69% (3494/5063)Updating files:  70% (3545/5063)Updating files:  71% (3595/5063)Updating files:  72% (3646/5063)Updating files:  73% (3696/5063)Updating files:  74% (3747/5063)Updating files:  75% (3798/5063)Updating files:  76% (3848/5063)Updating files:  77% (3899/5063)Updating files:  78% (3950/5063)Updating files:  79% (4000/5063)Updating files:  80% (4051/5063)Updating files:  81% (4102/5063)Updating files:  82% (4152/5063)Updating files:  83% (4203/5063)Updating files:  84% (4253/5063)Updating files:  85% (4304/5063)Updating files:  86% (4355/5063)Updating files:  87% (4405/5063)Updating files:  88% (4456/5063)Updating files:  89% (4507/5063)Updating files:  90% (4557/5063)Updating files:  91% (4608/5063)Updating files:  92% (4658/5063)Updating files:  93% (4709/5063)Updating files:  94% (4760/5063)Updating files:  95% (4810/5063)Updating files:  96% (4861/5063)Updating files:  96% (4876/5063)Updating files:  97% (4912/5063)Updating files:  98% (4962/5063)Updating files:  99% (5013/5063)Updating files: 100% (5063/5063)Updating files: 100% (5063/5063), done.
+HEAD is now at ed851716c fix(coprocessor): stop a deployment rename from moving the host listener's broker identity (#4191)
+	Command being timed: "git -C /srv/lifecycle/src/fhevm.git worktree add --detach /srv/lifecycle/src/fhevm-main ed851716c9a6b799996a23399ece2858336f96db"
+	User time (seconds): 1.33
+	System time (seconds): 1.12
+	Percent of CPU this job got: 60%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:04.07
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 78648
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 20030
+	Voluntary context switches: 2658
+	Involuntary context switches: 1626
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 256296
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T05:10:11Z rc=0 cgroup_memory.peak_bytes=184246272 memory.max=3221225472 memory.swap.max=1073741824 cpu.max=[200000 100000]
+HEAVY name=wt-main unit=lifecycle-wt-main-1792559407 rc=0 wall_s=5 sampled_peak_anon_mb=0 sampled_peak_cgroup_current_mb=0 sampled_peak_swap_mb=0 tripped=0

@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "<repo>\scripts\check_reinitializer_order.py", line 136, in <module>
+    main()
+  File "<repo>\scripts\check_reinitializer_order.py", line 83, in main
+    out_json = sys.argv[sys.argv.index("--json") + 1] if "--json" in sys.argv else None
+               ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndexError: list index out of range

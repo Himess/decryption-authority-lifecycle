@@ -1,0 +1,29 @@
+::group::Checking ACL
+ACL: 64 stable baseline ABI entries, 72 stable target ABI entries
+ACL: added stable ABI entries
+  + error AccountAlreadyRetired(address)
+  + error SenderRetired(address)
+  + error UpgradeDropsRetirement(address)
+  + event AccountRetired(address indexed,address indexed)
+  + function isAccountRetired(address) returns (bool)
+  + function retireAccount() returns ()
+  + function retirementStorageLocation() returns (bytes32)
+  + function supportsInterface(bytes4) returns (bool)
+::endgroup::
+::group::Checking FHEVMExecutor
+FHEVMExecutor: 91 stable baseline ABI entries, 91 stable target ABI entries
+FHEVMExecutor: no stable ABI changes
+::endgroup::
+::group::Checking KMSVerifier
+KMSVerifier: 36 stable baseline ABI entries, 36 stable target ABI entries
+KMSVerifier: no stable ABI changes
+::endgroup::
+::group::Checking InputVerifier
+InputVerifier: 45 stable baseline ABI entries, 45 stable target ABI entries
+InputVerifier: no stable ABI changes
+::endgroup::
+::group::Checking HCULimit
+HCULimit: 37 stable baseline ABI entries, 37 stable target ABI entries
+HCULimit: no stable ABI changes
+::endgroup::
+All contracts passed ABI compatibility checks

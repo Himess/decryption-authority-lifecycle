@@ -1,0 +1,25 @@
+# eipw 0.11.0 with ethereum/ERCs config/eipw.toml (last changed d0404c88, 2026-08-10; sha256 575e0cf5f4f93c92…); referenced EIP and ERC texts fetched 2026-10-22 (ERCs master 077adf82, EIPs master 46005d74)
+error[preamble-discussions-to]: preamble header `discussions-to` is not a valid URL
+ --> ERCS/erc-XXXX.md:6:16
+  |
+6 | discussions-to: TBD
+  |                ^^^^ relative URL without a base
+  |
+  = help: see https://ethereum.github.io/eipw/preamble-discussions-to/
+error[preamble-eip]: preamble header `eip` must be an unsigned integer
+ --> ERCS/erc-XXXX.md:2:5
+  |
+2 | eip: TBD
+  |     ^^^^ not a non-negative integer
+  |
+  = help: see https://ethereum.github.io/eipw/preamble-eip/
+error[preamble-re-discussions-to]: preamble header `discussions-to` should point to a thread on ethereum-magicians.org
+ --> ERCS/erc-XXXX.md:6:16
+  |
+6 | discussions-to: TBD
+  |                ^^^^ required pattern was not matched
+  |
+  = info: the pattern in question: `^https://ethereum-magicians.org/t/[^/]+/[0-9]+$`
+  = help: see https://ethereum.github.io/eipw/preamble-re-discussions-to/
+validation failed with 3 errors :(
+exit=65

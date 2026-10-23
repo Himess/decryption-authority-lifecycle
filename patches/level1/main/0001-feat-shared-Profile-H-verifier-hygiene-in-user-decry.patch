@@ -1,0 +1,983 @@
+From f5e9356b7b0416e2fa147f1d160ec888a547f62f Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 15:27:30 +0300
+Subject: [PATCH 1/8] feat(shared): Profile H verifier hygiene in
+ user-decryption-signature (lifecycle Level 1)
+
+Adds profile_h.rs, the Profile H rules of the Decryption Authority
+Lifecycle draft for the RFC-012/016 signature check, as a new entry point
+(verify_user_decryption_signature); verify_signature is left unchanged:
+
+- H1: signature, public key and extra-data caps (64 KiB / 4 KiB / 1 KiB by
+  default) checked before any host-chain read; a violation is final.
+- H2: code-first ordering at one pinned block B (eth_getCode and the
+  isValidSignature call both at B, nothing cached across verifications):
+  empty code -> 65-byte ecrecover only; an exact 23-byte EIP-7702
+  delegation indicator -> ERC-1271, with an ecrecover fallback only when
+  the call succeeded with empty return data and the signature is 65 bytes
+  (never on a revert, including an empty one); other code -> ERC-1271 only.
+- H3: gas limit B_exec + 21,000 + 64 x len(calldata), B_exec = 2,000,000.
+- H4: at most two ERC-1271 negatives per request, a block apart; the caller
+  carries the AttemptState between processing attempts.
+- H8: off | shadow | enforce; shadow serves the off verdict and reports
+  the code-first one next to it, sharing a single isValidSignature call.
+
+lib.rs: new Erc1271Error variants (CapExceeded, EmptyReturn,
+AwaitingNextBlock, AttemptsExhausted), the call-error mapping factored into
+map_erc1271_call_error, re-exports. Drafted by a delegated agent, reviewed
+line by line against the draft and formatted with rustfmt.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ shared/user-decryption-signature/src/lib.rs   | 109 ++-
+ .../src/profile_h.rs                          | 779 ++++++++++++++++++
+ 2 files changed, 864 insertions(+), 24 deletions(-)
+ create mode 100644 shared/user-decryption-signature/src/profile_h.rs
+
+diff --git a/shared/user-decryption-signature/src/lib.rs b/shared/user-decryption-signature/src/lib.rs
+index 49431b9a..530a4b19 100644
+--- a/shared/user-decryption-signature/src/lib.rs
++++ b/shared/user-decryption-signature/src/lib.rs
+@@ -5,6 +5,21 @@
+ //! we declare both it and `IERC1271` inline because the unified struct is intentionally
+ //! absent from `Decryption.sol` (signature verification is off-chain) and `IERC1271` is not
+ //! part of any in-tree binding.
++//!
++//! [lifecycle Level 1] [`profile_h`] adds the Profile H verifier hygiene of the Decryption
++//! Authority Lifecycle draft: field caps before any host-chain read, code-first ordering at one
++//! pinned block with a narrow EIP-7702 fallback, an execution-gas budget for the ERC-1271 call,
++//! a bounded number of ERC-1271 attempts, and an `off | shadow | enforce` rollout switch.
++//! [`verify_signature`] keeps the RFC-012 ordering and its caller-supplied gas cap unchanged.
++
++pub mod profile_h;
++
++pub use profile_h::{
++    AcceptPath, AccountCode, AttemptState, CappedField, CodeFirstMode, Disposition, Outcome,
++    Rejection, ShadowReport, SignatureInput, SignaturePolicy, VerdictSummary, Verification,
++    check_caps, classify_code, erc1271_gas_limit, read_account_code,
++    verify_user_decryption_signature,
++};
+ 
+ use IERC1271::isValidSignatureCall;
+ use alloy::{
+@@ -13,7 +28,7 @@ use alloy::{
+     rpc::types::TransactionRequest,
+     sol,
+     sol_types::{Eip712Domain, SolCall, SolStruct},
+-    transports::RpcError,
++    transports::{RpcError, TransportError},
+ };
+ use fhevm_gateway_bindings::decryption::IDecryption::UserDecryptionRequestPayload;
+ use thiserror::Error;
+@@ -50,7 +65,7 @@ pub const DEFAULT_DOMAIN_VERSION: &str = "1";
+ /// ERC-1271 magic return value: `bytes4(keccak256("isValidSignature(bytes32,bytes)"))`.
+ pub const ERC1271_MAGIC_VALUE: [u8; 4] = [0x16, 0x26, 0xba, 0x7e];
+ 
+-#[derive(Debug, Error)]
++#[derive(Clone, Debug, Error, PartialEq, Eq)]
+ pub enum Erc1271Error {
+     #[error("ecrecover signer mismatch and userAddress {0} has no contract code on host chain")]
+     EoaMismatchNoCode(Address),
+@@ -66,6 +81,43 @@ pub enum Erc1271Error {
+     EmptyRevert(Address),
+     #[error("RPC transport error during ERC-1271 verification: {0}")]
+     Transport(String),
++    /// [lifecycle Level 1, Profile H1] A variable-length field is above its cap. Raised before
++    /// any host-chain read; irrecoverable.
++    #[error(
++        "{field} is {len} bytes, above the {cap}-byte cap (Profile H1); rejected before any \
++         host-chain read"
++    )]
++    CapExceeded {
++        field: CappedField,
++        len: usize,
++        cap: usize,
++    },
++    /// [lifecycle Level 1, Profile H2] The ERC-1271 call on an account WITH code succeeded with
++    /// empty return data, and the EIP-7702 fallback did not apply (regular code, a signature that
++    /// is not 65 bytes, the fallback switched off) or did not recover `userAddress`.
++    #[error(
++        "ERC-1271 isValidSignature on code-bearing userAddress {0} returned no data and the \
++         EIP-7702 fallback did not accept the signature"
++    )]
++    EmptyReturn(Address),
++    /// [lifecycle Level 1, Profile H4] A retry after an ERC-1271 negative must run at a later
++    /// block than the negative; no call was made.
++    #[error(
++        "ERC-1271 retry for userAddress {account} waits for a block after \
++         {last_negative_block} (current block {current_block})"
++    )]
++    AwaitingNextBlock {
++        account: Address,
++        last_negative_block: u64,
++        current_block: u64,
++    },
++    /// [lifecycle Level 1, Profile H4] The attempt limit for ERC-1271 negatives is reached; no
++    /// call was made.
++    #[error(
++        "ERC-1271 verification for userAddress {account} already failed {attempts} time(s); \
++         the attempt limit is reached"
++    )]
++    AttemptsExhausted { account: Address, attempts: u8 },
+ }
+ 
+ /// Default `Eip712Domain` builder for callers that only have the host `contractsChainId` and
+@@ -98,7 +150,7 @@ pub fn compute_user_decrypt_digest(
+ 
+ /// Try to recover the EOA signer address from a 65-byte signature. Returns `None` for any
+ /// other length or unparsable signature so the caller can fall through to ERC-1271.
+-fn try_ecrecover(digest: &B256, signature: &[u8]) -> Option<Address> {
++pub(crate) fn try_ecrecover(digest: &B256, signature: &[u8]) -> Option<Address> {
+     if signature.len() != 65 {
+         return None;
+     }
+@@ -136,27 +188,10 @@ async fn check_erc1271_signature<P: Provider>(
+         .input(call.abi_encode().into())
+         .gas_limit(gas_limit);
+ 
+-    let returndata = provider.call(tx).await.map_err(|err| match err {
+-        RpcError::ErrorResp(e) => {
+-            if let Some(revert_data) = e.as_revert_data() {
+-                // Empty `data` still counts as revert data to `as_revert_data`, but says
+-                // nothing about why: an under-gassed call, a nested call into an address with
+-                // no code, and a wallet reverting silently all look like this. Only a reason
+-                // makes the rejection deterministic.
+-                if revert_data.is_empty() {
+-                    Erc1271Error::EmptyRevert(addr)
+-                } else {
+-                    Erc1271Error::Rejected(
+-                        addr,
+-                        format!("isValidSignature call reverted: {revert_data}"),
+-                    )
+-                }
+-            } else {
+-                Erc1271Error::Transport(e.to_string())
+-            }
+-        }
+-        _ => Erc1271Error::Transport(err.to_string()),
+-    })?;
++    let returndata = provider
++        .call(tx)
++        .await
++        .map_err(|err| map_erc1271_call_error(addr, err))?;
+ 
+     if returndata.is_empty() {
+         return Err(if signature.is_empty() {
+@@ -185,6 +220,32 @@ async fn check_erc1271_signature<P: Provider>(
+     }
+ }
+ 
++/// Maps the error of an `isValidSignature` `eth_call` to an [`Erc1271Error`]: a revert with a
++/// reason is `Rejected`, a revert with empty data is `EmptyRevert`, anything else is `Transport`.
++pub(crate) fn map_erc1271_call_error(addr: Address, err: TransportError) -> Erc1271Error {
++    match err {
++        RpcError::ErrorResp(e) => {
++            if let Some(revert_data) = e.as_revert_data() {
++                // Empty `data` still counts as revert data to `as_revert_data`, but says
++                // nothing about why: an under-gassed call, a nested call into an address with
++                // no code, and a wallet reverting silently all look like this. Only a reason
++                // makes the rejection deterministic.
++                if revert_data.is_empty() {
++                    Erc1271Error::EmptyRevert(addr)
++                } else {
++                    Erc1271Error::Rejected(
++                        addr,
++                        format!("isValidSignature call reverted: {revert_data}"),
++                    )
++                }
++            } else {
++                Erc1271Error::Transport(e.to_string())
++            }
++        }
++        _ => Erc1271Error::Transport(err.to_string()),
++    }
++}
++
+ /// Verify the EIP-712 signature on a user-decryption request per RFC-012.
+ ///
+ /// 1. If `signature` is non-empty: try `ecrecover`. If it recovers `claimed_signer`, accept.
+diff --git a/shared/user-decryption-signature/src/profile_h.rs b/shared/user-decryption-signature/src/profile_h.rs
+new file mode 100644
+index 00000000..c303156e
+--- /dev/null
++++ b/shared/user-decryption-signature/src/profile_h.rs
+@@ -0,0 +1,779 @@
++//! [lifecycle Level 1] Profile H: verifier signature hygiene for unified user-decryption requests.
++//!
++//! Implements the Profile H rules of the Decryption Authority Lifecycle draft (H1-H4, H8) for the
++//! RFC-012/016 signature check. One [`SignaturePolicy`] value set is shared by every place that
++//! verifies or pre-checks these signatures (KMS connector, relayer, SDK):
++//!
++//! - **H1, caps before any host-chain read.** The signature, the transport public key and the
++//!   extra data are length-capped before any RPC ([`check_caps`]); a violation is final.
++//! - **H2, code-first ordering at one block.** In [`CodeFirstMode::Enforce`] the account's code is
++//!   read at a pinned block `B` (`eth_getCode(signer, B)`) and decides the path:
++//!   - empty code: a 65-byte `ecrecover` only;
++//!   - `0xef0100 ‖ delegate` (exactly 23 bytes, EIP-7702): ERC-1271 on the account at the same
++//!     `B`, with a fallback to `ecrecover` **only** when that call *succeeds* with empty return
++//!     data and the signature is 65 bytes. An empty revert (which an out-of-gas call also
++//!     produces) never falls back;
++//!   - any other code: ERC-1271 only.
++//!
++//!   Nothing is cached across blocks: every verification reads the code again.
++//! - **H3, execution-gas budget.** The ERC-1271 call's gas limit is
++//!   `B_exec + 21_000 + 64 × len(calldata)` ([`erc1271_gas_limit`]), so the calldata of a large
++//!   (e.g. post-quantum) signature no longer eats into the wallet's execution budget.
++//! - **H4, bounded attempts.** ERC-1271 negatives (wrong magic, reasoned revert, empty revert,
++//!   empty return on a code-bearing account) are attempted at most `max_erc1271_attempts` times
++//!   per request, each retry at a later block than the previous negative. The caller carries the
++//!   per-request [`AttemptState`] between processing attempts. Transport errors are left to the
++//!   caller's own policy. `EoaMismatchNoCode` and `EmptySigOnEoa` stay final.
++//! - **H8, rollout.** [`CodeFirstMode::Shadow`] serves the [`CodeFirstMode::Off`] verdict and
++//!   computes the code-first verdict next to it ([`ShadowReport`]), so a verifier can log and
++//!   publish would-be rejections before enforcing.
++//!
++//! `Off` keeps the RFC-012 ordering (`ecrecover` first) but applies the caps, the budget and the
++//! attempt limit. The pre-existing [`crate::verify_signature`] is left untouched.
++
++use crate::{
++    ERC1271_MAGIC_VALUE, Erc1271Error, IERC1271::isValidSignatureCall, map_erc1271_call_error,
++    try_ecrecover,
++};
++use alloy::{
++    eips::BlockId,
++    primitives::{Address, B256, Bytes, FixedBytes},
++    providers::Provider,
++    rpc::types::TransactionRequest,
++    sol_types::SolCall,
++};
++use fhevm_gateway_bindings::decryption::IDecryption::UserDecryptionRequestPayload;
++use std::{fmt, str::FromStr};
++
++/// Default `B_exec`: execution gas available to `isValidSignature` (Profile H3, RECOMMENDED value).
++pub const DEFAULT_ERC1271_EXECUTION_BUDGET: u64 = 2_000_000;
++/// Intrinsic gas of a top-level call, added on top of `B_exec`.
++pub const ERC1271_INTRINSIC_GAS: u64 = 21_000;
++/// Gas allowed per calldata byte. 64 bounds the intrinsic calldata charge (standard pricing and
++/// the EIP-7623 floor) under the Osaka schedule and the schedule Sepolia ran (draft, Profile H).
++pub const ERC1271_CALLDATA_GAS_PER_BYTE: u64 = 64;
++/// Default signature cap (Profile H1): 64 KiB.
++pub const DEFAULT_MAX_USER_SIGNATURE_BYTES: usize = 65_536;
++/// Default transport public key cap (Profile H1, an estimate in the draft).
++pub const DEFAULT_MAX_PUBLIC_KEY_BYTES: usize = 4_096;
++/// Default extra data cap (Profile H1, an estimate in the draft).
++pub const DEFAULT_MAX_EXTRA_DATA_BYTES: usize = 1_024;
++/// Default number of ERC-1271 attempts per request (Profile H4).
++pub const DEFAULT_MAX_ERC1271_ATTEMPTS: u8 = 2;
++/// EIP-7702 delegation indicator prefix.
++pub const EIP7702_DELEGATION_PREFIX: [u8; 3] = [0xef, 0x01, 0x00];
++/// Length of an EIP-7702 delegation indicator: `0xef0100 ‖ address`.
++pub const EIP7702_DELEGATION_LEN: usize = 23;
++
++/// `B_exec + 21_000 + 64 × calldata_len`, saturating (Profile H3).
++pub fn erc1271_gas_limit(execution_budget: u64, calldata_len: usize) -> u64 {
++    let calldata_len = u64::try_from(calldata_len).unwrap_or(u64::MAX);
++    execution_budget
++        .saturating_add(ERC1271_INTRINSIC_GAS)
++        .saturating_add(ERC1271_CALLDATA_GAS_PER_BYTE.saturating_mul(calldata_len))
++}
++
++/// Rollout switch for the code-first ordering (Profile H8).
++#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
++pub enum CodeFirstMode {
++    /// RFC-012 ordering (`ecrecover` first), with the Profile H caps, budget and attempt limit.
++    #[default]
++    Off,
++    /// Serves the `Off` verdict and also computes the code-first verdict; see [`ShadowReport`].
++    Shadow,
++    /// Code-first ordering (Profile H2).
++    Enforce,
++}
++
++impl CodeFirstMode {
++    pub const fn as_str(self) -> &'static str {
++        match self {
++            Self::Off => "off",
++            Self::Shadow => "shadow",
++            Self::Enforce => "enforce",
++        }
++    }
++}
++
++impl fmt::Display for CodeFirstMode {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.write_str(self.as_str())
++    }
++}
++
++impl FromStr for CodeFirstMode {
++    type Err = String;
++
++    fn from_str(s: &str) -> Result<Self, Self::Err> {
++        match s.trim().to_ascii_lowercase().as_str() {
++            "off" => Ok(Self::Off),
++            "shadow" => Ok(Self::Shadow),
++            "enforce" => Ok(Self::Enforce),
++            other => Err(format!(
++                "unknown code_first_mode `{other}` (expected `off`, `shadow` or `enforce`)"
++            )),
++        }
++    }
++}
++
++/// The Profile H value set. Verifiers, relayers and SDKs SHOULD use the same values (H9).
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub struct SignaturePolicy {
++    pub mode: CodeFirstMode,
++    /// `B_exec`: execution gas for `isValidSignature`, excluding intrinsic and calldata gas.
++    pub erc1271_execution_budget: u64,
++    pub max_user_signature_bytes: usize,
++    pub max_public_key_bytes: usize,
++    pub max_extra_data_bytes: usize,
++    /// ERC-1271 negatives allowed per request (values below 1 are treated as 1).
++    pub max_erc1271_attempts: u8,
++    /// The narrow EIP-7702 fallback of H2. Profile Q switches it off.
++    pub eip7702_fallback: bool,
++}
++
++impl Default for SignaturePolicy {
++    fn default() -> Self {
++        Self {
++            mode: CodeFirstMode::Off,
++            erc1271_execution_budget: DEFAULT_ERC1271_EXECUTION_BUDGET,
++            max_user_signature_bytes: DEFAULT_MAX_USER_SIGNATURE_BYTES,
++            max_public_key_bytes: DEFAULT_MAX_PUBLIC_KEY_BYTES,
++            max_extra_data_bytes: DEFAULT_MAX_EXTRA_DATA_BYTES,
++            max_erc1271_attempts: DEFAULT_MAX_ERC1271_ATTEMPTS,
++            eip7702_fallback: true,
++        }
++    }
++}
++
++impl SignaturePolicy {
++    /// Gas limit of an `isValidSignature` call whose ABI-encoded calldata is `calldata_len` bytes.
++    pub fn erc1271_gas_limit(&self, calldata_len: usize) -> u64 {
++        erc1271_gas_limit(self.erc1271_execution_budget, calldata_len)
++    }
++
++    fn attempt_limit(&self) -> u8 {
++        self.max_erc1271_attempts.max(1)
++    }
++}
++
++/// A capped request field (Profile H1).
++#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
++pub enum CappedField {
++    Signature,
++    PublicKey,
++    ExtraData,
++}
++
++impl fmt::Display for CappedField {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.write_str(match self {
++            Self::Signature => "signature",
++            Self::PublicKey => "publicKey",
++            Self::ExtraData => "extraData",
++        })
++    }
++}
++
++/// What a Profile H verification needs from a request.
++#[derive(Clone, Copy, Debug)]
++pub struct SignatureInput<'a> {
++    /// The claimed signer (`userAddress`).
++    pub signer: Address,
++    /// The EIP-712 digest the signer signed.
++    pub digest: B256,
++    pub signature: &'a [u8],
++    /// Length of the transport public key carried by the request (capped, not verified here).
++    pub public_key_len: usize,
++    /// Length of the extra data carried by the request (capped, not verified here).
++    pub extra_data_len: usize,
++}
++
++impl<'a> SignatureInput<'a> {
++    /// The input of a unified (RFC-016) request whose EIP-712 digest is `digest`.
++    pub fn from_payload(payload: &'a UserDecryptionRequestPayload, digest: B256) -> Self {
++        Self {
++            signer: payload.userAddress,
++            digest,
++            signature: payload.signature.as_ref(),
++            public_key_len: payload.publicKey.len(),
++            extra_data_len: payload.extraData.len(),
++        }
++    }
++}
++
++/// Profile H1: rejects any field above its cap. Makes no RPC; a failure is final.
++pub fn check_caps(
++    policy: &SignaturePolicy,
++    input: &SignatureInput<'_>,
++) -> Result<(), Erc1271Error> {
++    for (field, len, cap) in [
++        (
++            CappedField::Signature,
++            input.signature.len(),
++            policy.max_user_signature_bytes,
++        ),
++        (
++            CappedField::PublicKey,
++            input.public_key_len,
++            policy.max_public_key_bytes,
++        ),
++        (
++            CappedField::ExtraData,
++            input.extra_data_len,
++            policy.max_extra_data_bytes,
++        ),
++    ] {
++        if len > cap {
++            return Err(Erc1271Error::CapExceeded { field, len, cap });
++        }
++    }
++    Ok(())
++}
++
++/// Classification of an account's code at one block (Profile H2).
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub enum AccountCode {
++    /// No code: an EOA, or an address where nothing is deployed.
++    Empty,
++    /// Exactly `0xef0100 ‖ delegate` (23 bytes): an EIP-7702 delegation indicator.
++    Eip7702 { delegate: Address },
++    /// Any other code, including a `0xef0100` prefix of the wrong length.
++    Regular { len: usize },
++}
++
++impl AccountCode {
++    pub const fn has_code(&self) -> bool {
++        !matches!(self, Self::Empty)
++    }
++
++    pub const fn is_regular(&self) -> bool {
++        matches!(self, Self::Regular { .. })
++    }
++}
++
++/// Classifies raw account code (Profile H2).
++pub fn classify_code(code: &[u8]) -> AccountCode {
++    if code.is_empty() {
++        AccountCode::Empty
++    } else if code.len() == EIP7702_DELEGATION_LEN && code[..3] == EIP7702_DELEGATION_PREFIX {
++        AccountCode::Eip7702 {
++            delegate: Address::from_slice(&code[3..]),
++        }
++    } else {
++        AccountCode::Regular { len: code.len() }
++    }
++}
++
++/// `eth_getCode(account, block)`, classified. Transport failures map to
++/// [`Erc1271Error::Transport`].
++pub async fn read_account_code<P: Provider>(
++    provider: &P,
++    account: Address,
++    block: u64,
++) -> Result<AccountCode, Erc1271Error> {
++    provider
++        .get_code_at(account)
++        .block_id(BlockId::number(block))
++        .await
++        .map(|code| classify_code(&code))
++        .map_err(|e| Erc1271Error::Transport(format!("eth_getCode({account}, {block}): {e}")))
++}
++
++/// How an accepted signature was accepted.
++#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
++pub enum AcceptPath {
++    /// A 65-byte ECDSA signature recovered the signer.
++    Ecrecover,
++    /// `isValidSignature` returned the magic value.
++    Erc1271,
++    /// EIP-7702 account: `isValidSignature` succeeded with empty return data and a 65-byte
++    /// signature recovered the account (Profile H2 fallback).
++    Eip7702Shim,
++}
++
++/// Per-request ERC-1271 attempt bookkeeping (Profile H4), carried by the caller between
++/// processing attempts of the same request.
++#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
++pub struct AttemptState {
++    /// ERC-1271 negatives already seen for this request.
++    pub negatives: u8,
++    /// Block of the last negative.
++    pub last_negative_block: Option<u64>,
++}
++
++/// What the caller should do with a [`Rejection`].
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub enum Disposition {
++    /// Irrecoverable for this request.
++    Final,
++    /// An ERC-1271 negative with an attempt left: retry at a block after [`Rejection::block`].
++    RetryNextBlock,
++    /// Nothing was called: the retry must wait for a later block. This was not an attempt.
++    AwaitingNextBlock,
++    /// Host-chain transport failure: the caller's own retry policy applies.
++    Transport,
++}
++
++impl Disposition {
++    pub const fn is_final(self) -> bool {
++        matches!(self, Self::Final)
++    }
++}
++
++/// A verdict, as recorded in a [`ShadowReport`].
++#[derive(Clone, Debug, PartialEq, Eq)]
++pub enum VerdictSummary {
++    Accept(AcceptPath),
++    Reject(Erc1271Error),
++    /// No verdict: transport failure, or a retry waiting for a later block.
++    Unknown(Erc1271Error),
++}
++
++/// Both verdicts of a [`CodeFirstMode::Shadow`] verification (Profile H8).
++#[derive(Clone, Debug, PartialEq, Eq)]
++pub struct ShadowReport {
++    /// The signer's code at the verification block, if it was read.
++    pub code: Option<AccountCode>,
++    /// The verdict that was served (`Off` ordering).
++    pub served: VerdictSummary,
++    /// The verdict code-first ordering would have served.
++    pub code_first: VerdictSummary,
++}
++
++impl ShadowReport {
++    /// Served accepted, code-first would have rejected: the impact to log and publish.
++    pub fn would_reject(&self) -> bool {
++        matches!(self.served, VerdictSummary::Accept(_))
++            && matches!(self.code_first, VerdictSummary::Reject(_))
++    }
++
++    /// Served rejected, code-first would have accepted.
++    pub fn would_accept(&self) -> bool {
++        matches!(self.served, VerdictSummary::Reject(_))
++            && matches!(self.code_first, VerdictSummary::Accept(_))
++    }
++}
++
++/// An accepted signature.
++#[derive(Clone, Debug, PartialEq, Eq)]
++pub struct Verification {
++    pub path: AcceptPath,
++    /// The pinned block, if any host-chain read was needed.
++    pub block: Option<u64>,
++    /// The signer's code at `block`, if it was read.
++    pub code: Option<AccountCode>,
++    /// `isValidSignature` calls made by this verification (0 or 1).
++    pub erc1271_calls: u8,
++    pub shadow: Option<ShadowReport>,
++}
++
++/// A rejected (or not yet decidable) signature.
++#[derive(Clone, Debug, PartialEq, Eq)]
++pub struct Rejection {
++    pub error: Erc1271Error,
++    pub disposition: Disposition,
++    /// The pinned block, if any host-chain read was made.
++    pub block: Option<u64>,
++    /// The signer's code at `block`, if it was read.
++    pub code: Option<AccountCode>,
++    /// `isValidSignature` calls made by this verification (0 or 1).
++    pub erc1271_calls: u8,
++    pub shadow: Option<ShadowReport>,
++}
++
++/// Result of [`verify_user_decryption_signature`], with the attempt state to carry forward.
++#[derive(Clone, Debug, PartialEq, Eq)]
++pub struct Outcome {
++    pub result: Result<Verification, Rejection>,
++    pub attempts: AttemptState,
++}
++
++impl Outcome {
++    pub fn shadow(&self) -> Option<&ShadowReport> {
++        match &self.result {
++            Ok(v) => v.shadow.as_ref(),
++            Err(r) => r.shadow.as_ref(),
++        }
++    }
++}
++
++/// Verifies a user-decryption signature under Profile H.
++///
++/// `attempts` is the state returned by the previous verification of the same request
++/// ([`AttemptState::default`] for the first one); store [`Outcome::attempts`] for the next one.
++///
++/// RPCs, all at one block `B` fetched with `eth_blockNumber` when a host-chain read is needed:
++/// - `Off`: none when `ecrecover` matches; else `eth_call isValidSignature` at `B`.
++/// - `Enforce`: `eth_getCode(signer, B)`; then `eth_call isValidSignature` at `B` iff the signer
++///   has code.
++/// - `Shadow`: the union of both, with a single `isValidSignature` call shared by both verdicts.
++pub async fn verify_user_decryption_signature<P: Provider>(
++    provider: &P,
++    input: &SignatureInput<'_>,
++    policy: &SignaturePolicy,
++    attempts: AttemptState,
++) -> Outcome {
++    if let Err(error) = check_caps(policy, input) {
++        return Outcome {
++            result: Err(Rejection {
++                error,
++                disposition: Disposition::Final,
++                block: None,
++                code: None,
++                erc1271_calls: 0,
++                shadow: None,
++            }),
++            attempts,
++        };
++    }
++
++    let mut ctx = Ctx::new(provider, *input, policy);
++    match policy.mode {
++        CodeFirstMode::Off => {
++            let step = legacy_step(&mut ctx, &attempts).await;
++            ctx.finish(attempts, step, None)
++        }
++        CodeFirstMode::Enforce => {
++            let step = code_first_step(&mut ctx, Some(&attempts)).await;
++            ctx.finish(attempts, step, None)
++        }
++        CodeFirstMode::Shadow => {
++            let served = legacy_step(&mut ctx, &attempts).await;
++            if served.is_gated() {
++                return ctx.finish(attempts, served, None);
++            }
++            // The code-first verdict is hypothetical: no attempt gate, and it reuses the block and
++            // the `isValidSignature` result of the served verdict.
++            let code_first = code_first_step(&mut ctx, None).await;
++            let report = ShadowReport {
++                code: ctx.code,
++                served: served.summary(),
++                code_first: code_first.summary(),
++            };
++            ctx.finish(attempts, served, Some(report))
++        }
++    }
++}
++
++// -------------------------------------------------------------------------------------------------
++// Internals
++// -------------------------------------------------------------------------------------------------
++
++/// Raw result of an `isValidSignature` call that did not revert.
++#[derive(Clone, Debug, PartialEq, Eq)]
++enum CallOutcome {
++    Magic,
++    EmptyReturn,
++    Short(usize),
++    WrongMagic(FixedBytes<4>),
++}
++
++fn classify_return(returndata: &[u8]) -> CallOutcome {
++    if returndata.is_empty() {
++        CallOutcome::EmptyReturn
++    } else if returndata.len() < 32 {
++        // A non-compliant fallback returning fewer bytes than an ABI-encoded `bytes4` word.
++        CallOutcome::Short(returndata.len())
++    } else {
++        let magic = FixedBytes::<4>::from_slice(&returndata[..4]);
++        if magic.0 == ERC1271_MAGIC_VALUE {
++            CallOutcome::Magic
++        } else {
++            CallOutcome::WrongMagic(magic)
++        }
++    }
++}
++
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++enum Kind {
++    /// Irrecoverable for this request.
++    Final,
++    /// An ERC-1271 negative: counted against the attempt limit.
++    Negative,
++    /// The attempt gate held the call back until a later block.
++    Waiting,
++    /// Transport failure.
++    Transport,
++}
++
++enum Step {
++    Accept(AcceptPath),
++    Reject(Erc1271Error, Kind),
++}
++
++impl Step {
++    fn is_gated(&self) -> bool {
++        matches!(
++            self,
++            Step::Reject(
++                Erc1271Error::AwaitingNextBlock { .. } | Erc1271Error::AttemptsExhausted { .. },
++                _
++            )
++        )
++    }
++
++    fn summary(&self) -> VerdictSummary {
++        match self {
++            Step::Accept(path) => VerdictSummary::Accept(*path),
++            Step::Reject(e, Kind::Transport | Kind::Waiting) => VerdictSummary::Unknown(e.clone()),
++            Step::Reject(e, _) => VerdictSummary::Reject(e.clone()),
++        }
++    }
++}
++
++struct Ctx<'a, P> {
++    provider: &'a P,
++    input: SignatureInput<'a>,
++    policy: &'a SignaturePolicy,
++    block: Option<u64>,
++    code: Option<AccountCode>,
++    call: Option<Result<CallOutcome, Erc1271Error>>,
++    calls: u8,
++}
++
++impl<'a, P: Provider> Ctx<'a, P> {
++    fn new(provider: &'a P, input: SignatureInput<'a>, policy: &'a SignaturePolicy) -> Self {
++        Self {
++            provider,
++            input,
++            policy,
++            block: None,
++            code: None,
++            call: None,
++            calls: 0,
++        }
++    }
++
++    /// The pinned block `B`, fetched once.
++    async fn block(&mut self) -> Result<u64, Erc1271Error> {
++        if let Some(block) = self.block {
++            return Ok(block);
++        }
++        let block = self
++            .provider
++            .get_block_number()
++            .await
++            .map_err(|e| Erc1271Error::Transport(format!("eth_blockNumber: {e}")))?;
++        self.block = Some(block);
++        Ok(block)
++    }
++
++    /// The signer's code at `B`, read once per verification (never across verifications).
++    async fn code(&mut self) -> Result<AccountCode, Erc1271Error> {
++        if let Some(code) = self.code {
++            return Ok(code);
++        }
++        let block = self.block().await?;
++        let code = read_account_code(self.provider, self.input.signer, block).await?;
++        self.code = Some(code);
++        Ok(code)
++    }
++
++    /// `isValidSignature(digest, signature)` on the signer at `B`, with the Profile H3 budget.
++    /// Made at most once per verification.
++    async fn call(&mut self) -> Result<CallOutcome, Erc1271Error> {
++        if let Some(result) = &self.call {
++            return result.clone();
++        }
++        let block = self.block().await?;
++        let calldata = isValidSignatureCall {
++            hash: self.input.digest,
++            signature: Bytes::copy_from_slice(self.input.signature),
++        }
++        .abi_encode();
++        let gas_limit = self.policy.erc1271_gas_limit(calldata.len());
++        let tx = TransactionRequest::default()
++            .to(self.input.signer)
++            .input(calldata.into())
++            .gas_limit(gas_limit);
++
++        self.calls = self.calls.saturating_add(1);
++        let result = match self.provider.call(tx).block(BlockId::number(block)).await {
++            Ok(returndata) => Ok(classify_return(&returndata)),
++            Err(e) => Err(map_erc1271_call_error(self.input.signer, e)),
++        };
++        self.call = Some(result.clone());
++        result
++    }
++
++    fn ecrecover_matches(&self) -> bool {
++        try_ecrecover(&self.input.digest, self.input.signature) == Some(self.input.signer)
++    }
++
++    /// Profile H4: holds an ERC-1271 call back when the attempt limit is reached, or when the
++    /// previous negative is not yet at least one block behind.
++    fn gate(&self, attempts: &AttemptState, block: u64) -> Option<Step> {
++        let account = self.input.signer;
++        if attempts.negatives >= self.policy.attempt_limit() {
++            return Some(Step::Reject(
++                Erc1271Error::AttemptsExhausted {
++                    account,
++                    attempts: attempts.negatives,
++                },
++                Kind::Final,
++            ));
++        }
++        match attempts.last_negative_block {
++            Some(last) if attempts.negatives > 0 && block <= last => Some(Step::Reject(
++                Erc1271Error::AwaitingNextBlock {
++                    account,
++                    last_negative_block: last,
++                    current_block: block,
++                },
++                Kind::Waiting,
++            )),
++            _ => None,
++        }
++    }
++
++    fn finish(&self, attempts: AttemptState, step: Step, shadow: Option<ShadowReport>) -> Outcome {
++        let (error, kind) = match step {
++            Step::Accept(path) => {
++                return Outcome {
++                    result: Ok(Verification {
++                        path,
++                        block: self.block,
++                        code: self.code,
++                        erc1271_calls: self.calls,
++                        shadow,
++                    }),
++                    attempts,
++                };
++            }
++            Step::Reject(error, kind) => (error, kind),
++        };
++        let (disposition, attempts) = match kind {
++            Kind::Final => (Disposition::Final, attempts),
++            Kind::Waiting => (Disposition::AwaitingNextBlock, attempts),
++            Kind::Transport => (Disposition::Transport, attempts),
++            Kind::Negative => {
++                let next = AttemptState {
++                    negatives: attempts.negatives.saturating_add(1),
++                    last_negative_block: self.block,
++                };
++                let disposition = if next.negatives >= self.policy.attempt_limit() {
++                    Disposition::Final
++                } else {
++                    Disposition::RetryNextBlock
++                };
++                (disposition, next)
++            }
++        };
++        Outcome {
++            result: Err(Rejection {
++                error,
++                disposition,
++                block: self.block,
++                code: self.code,
++                erc1271_calls: self.calls,
++                shadow,
++            }),
++            attempts,
++        }
++    }
++}
++
++/// Maps a reverted or malformed ERC-1271 result to a counted negative (never a fallback).
++fn negative_or_transport(error: Erc1271Error) -> Step {
++    match error {
++        e @ Erc1271Error::Transport(_) => Step::Reject(e, Kind::Transport),
++        e => Step::Reject(e, Kind::Negative),
++    }
++}
++
++/// RFC-012 ordering: `ecrecover` first, then ERC-1271 at `B`. Empty return data means "no code"
++/// (`EoaMismatchNoCode` / `EmptySigOnEoa`), as in [`crate::verify_signature`].
++async fn legacy_step<P: Provider>(ctx: &mut Ctx<'_, P>, attempts: &AttemptState) -> Step {
++    let signer = ctx.input.signer;
++    if !ctx.input.signature.is_empty() && ctx.ecrecover_matches() {
++        return Step::Accept(AcceptPath::Ecrecover);
++    }
++    let block = match ctx.block().await {
++        Ok(block) => block,
++        Err(e) => return Step::Reject(e, Kind::Transport),
++    };
++    if let Some(held) = ctx.gate(attempts, block) {
++        return held;
++    }
++    match ctx.call().await {
++        Ok(CallOutcome::Magic) => Step::Accept(AcceptPath::Erc1271),
++        Ok(CallOutcome::EmptyReturn) => Step::Reject(
++            if ctx.input.signature.is_empty() {
++                Erc1271Error::EmptySigOnEoa(signer)
++            } else {
++                Erc1271Error::EoaMismatchNoCode(signer)
++            },
++            Kind::Final,
++        ),
++        Ok(CallOutcome::Short(len)) => Step::Reject(
++            Erc1271Error::Rejected(signer, format!("returndata length {len} < 32")),
++            Kind::Negative,
++        ),
++        Ok(CallOutcome::WrongMagic(magic)) => {
++            Step::Reject(Erc1271Error::WrongMagic(signer, magic), Kind::Negative)
++        }
++        Err(e) => negative_or_transport(e),
++    }
++}
++
++/// Code-first ordering (Profile H2). `attempts` is `None` for the hypothetical verdict of a shadow
++/// run, which is not gated.
++async fn code_first_step<P: Provider>(
++    ctx: &mut Ctx<'_, P>,
++    attempts: Option<&AttemptState>,
++) -> Step {
++    let signer = ctx.input.signer;
++    let block = match ctx.block().await {
++        Ok(block) => block,
++        Err(e) => return Step::Reject(e, Kind::Transport),
++    };
++    let code = match ctx.code().await {
++        Ok(code) => code,
++        Err(e) => return Step::Reject(e, Kind::Transport),
++    };
++
++    if code == AccountCode::Empty {
++        // No code: a 65-byte ECDSA signature that recovers the signer, and nothing else.
++        return if ctx.input.signature.len() == 65 && ctx.ecrecover_matches() {
++            Step::Accept(AcceptPath::Ecrecover)
++        } else if ctx.input.signature.is_empty() {
++            Step::Reject(Erc1271Error::EmptySigOnEoa(signer), Kind::Final)
++        } else {
++            Step::Reject(Erc1271Error::EoaMismatchNoCode(signer), Kind::Final)
++        };
++    }
++
++    if let Some(attempts) = attempts
++        && let Some(held) = ctx.gate(attempts, block)
++    {
++        return held;
++    }
++    match ctx.call().await {
++        Ok(CallOutcome::Magic) => Step::Accept(AcceptPath::Erc1271),
++        Ok(CallOutcome::EmptyReturn) => {
++            // The only fallback: an EIP-7702 account whose call SUCCEEDED with empty return data
++            // (a delegate without `isValidSignature`, or a delegation to an empty address), and a
++            // 65-byte signature by the account's own key.
++            let delegated = matches!(code, AccountCode::Eip7702 { .. });
++            if delegated
++                && ctx.policy.eip7702_fallback
++                && ctx.input.signature.len() == 65
++                && ctx.ecrecover_matches()
++            {
++                Step::Accept(AcceptPath::Eip7702Shim)
++            } else {
++                Step::Reject(Erc1271Error::EmptyReturn(signer), Kind::Negative)
++            }
++        }
++        Ok(CallOutcome::Short(len)) => Step::Reject(
++            Erc1271Error::Rejected(signer, format!("returndata length {len} < 32")),
++            Kind::Negative,
++        ),
++        Ok(CallOutcome::WrongMagic(magic)) => {
++            Step::Reject(Erc1271Error::WrongMagic(signer, magic), Kind::Negative)
++        }
++        // A revert, with or without a reason, never falls back: an out-of-gas call also reverts
++        // with empty data.
++        Err(e) => negative_or_transport(e),
++    }
++}

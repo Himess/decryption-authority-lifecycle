@@ -1,0 +1,450 @@
+# P2.1: Fhenix's host-chain contracts (cofhe-contracts b5c20ed, vendor/cofhe-contracts-b5c20ed/internal/host-chain/contracts) against the port (src/). Only these four files differ; the other five are byte-identical.
+diff --git a/vendor/cofhe-contracts-b5c20ed/internal/host-chain/contracts/ACL.sol b/src/ACL.sol
+index 8e54958..0eb0f04 100644
+--- a/vendor/cofhe-contracts-b5c20ed/internal/host-chain/contracts/ACL.sol
++++ b/src/ACL.sol
+@@ -83,6 +83,36 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+     /// @param newAddress       New address.
+     event TaskManagerUpdated(address oldAddress, address newAddress);
+ 
++    // ---------------------------------------------------------------------------
++    // [Decryption Authority Lifecycle, Core] Port to Fhenix CoFHE (lifecycle Phase 4, P2.1)
++    // ---------------------------------------------------------------------------
++
++    /// @notice Emitted once per account, when the account is retired. This port has no E1: the successor is always 0.
++    event AccountRetired(address indexed account, address indexed successor);
++
++    /// @notice The account is already retired.
++    error AccountAlreadyRetired(address account);
++
++    /// @notice A grant path was called on the authority of a retired account.
++    error SenderRetired(address sender);
++
++    /// @notice A proposed implementation does not declare Core, or reads another location.
++    error UpgradeDropsRetirement(address newImplementation);
++
++    /// @notice Retirement state (Core), in its own ERC-7201 namespace.
++    /// @custom:storage-location erc7201:cofhe.storage.ACLRetirement
++    struct ACLRetirementStorage {
++        mapping(address account => bool isRetired) retired;
++    }
++
++    /// @dev keccak256(abi.encode(uint256(keccak256("cofhe.storage.ACLRetirement")) - 1)) & ~bytes32(uint256(0xff))
++    bytes32 private constant ACL_RETIREMENT_STORAGE_LOCATION =
++        0xfb6f17ca58407a16d354df28099d1c3b0fae80bca895f989456c75e03a668600;
++
++    /// @notice ERC-165 interface id of the Decryption Authority Lifecycle Core:
++    ///         `retireAccount()` (0xe7142996) XOR `isAccountRetired(address)` (0xb279091e).
++    bytes4 private constant DAL_CORE_INTERFACE_ID = 0x556d2088;
++
+     /// @custom:storage-location erc7201:cofhe.storage.ACL
+     struct ACLStorage {
+         mapping(uint256 handle => bool isGlobal) globalHandles;
+@@ -101,8 +131,8 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+     /// @notice Major version of the contract.
+     uint256 private constant MAJOR_VERSION = 0;
+ 
+-    /// @notice Minor version of the contract.
+-    uint256 private constant MINOR_VERSION = 1;
++    /// @notice Minor version of the contract. [lifecycle] 0.2.0: the Core port.
++    uint256 private constant MINOR_VERSION = 2;
+ 
+     /// @notice Patch version of the contract.
+     uint256 private constant PATCH_VERSION = 0;
+@@ -161,6 +191,7 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+         if (msg.sender != _taskManager()) {
+             revert DirectAllowForbidden(msg.sender);
+         }
++        _requireNotRetired(requester);
+ 
+         if (!isAllowed(handle, requester)) {
+             revert SenderNotAllowed(requester);
+@@ -180,6 +211,7 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+         if (msg.sender != _taskManager()) {
+             revert DirectAllowForbidden(msg.sender);
+         }
++        _requireNotRetired(requester);
+ 
+         if (!isAllowed(handle, requester)) {
+             revert SenderNotAllowed(requester);
+@@ -198,6 +230,7 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+         if (msg.sender != _taskManager()) {
+             revert DirectAllowForbidden(msg.sender);
+         }
++        _requireNotRetired(requester);
+ 
+         uint256 len = handlesList.length;
+         ACLStorage storage $ = _getACLStorage();
+@@ -226,6 +259,12 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+             revert DirectAllowForbidden(msg.sender);
+         }
+ 
++        // [lifecycle] R7: a transient grant on a user's authority reverts if that user is retired. The engine's own
++        // grant of a computation output to its caller (requester = the TaskManager) is R10's class and stays as is.
++        if (requester != _taskManager()) {
++            _requireNotRetired(requester);
++        }
++
+         if (!isAllowed(handle, requester) && requester != _taskManager()) {
+             revert SenderNotAllowed(requester);
+         }
+@@ -252,6 +291,9 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+         // The Task Manager is exempt from the isAllowed() requirement (same as in
+         // allowTransient()), so hoist the comparison and skip the lookup entirely.
+         bool requesterIsTaskManager = requester == _taskManager();
++        if (!requesterIsTaskManager) {
++            _requireNotRetired(requester); // [lifecycle] R7, as in allowTransient()
++        }
+         uint256 len = handles.length;
+ 
+         for (uint256 k = 0; k < len; k++) {
+@@ -319,6 +361,7 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+         if (msg.sender != _taskManager()) {
+             revert DirectAllowForbidden(msg.sender);
+         }
++        _requireNotRetired(sharer); // [lifecycle] R7: the sharer is the grantor
+ 
+         if (!isAllowed(handle, sharer)) {
+             revert SenderNotAllowed(sharer);
+@@ -382,6 +425,7 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+         if (delegateeContract == msg.sender) {
+             revert SenderCannotBeDelegateeAddress();
+         }
++        _requireNotRetired(msg.sender); // [lifecycle] R7: the delegator
+ 
+         ACLStorage storage $ = _getACLStorage();
+         if ($.delegates[msg.sender][delegatee][delegateeContract]) {
+@@ -406,6 +450,10 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+         address contractAddress,
+         address account
+     ) public view virtual returns (bool) {
++        // [lifecycle] R6, on-behalf role: false when the account, the delegatee or the contract is retired.
++        if (_isRetired(account) || _isRetired(delegatee) || _isRetired(contractAddress)) {
++            return false;
++        }
+         ACLStorage storage $ = _getACLStorage();
+         return
+             $.persistedAllowedPairs[handle][account] &&
+@@ -421,12 +469,16 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+      * @return isAllowedTransient   Whether the account can access transiently the handle.
+      */
+     function allowedTransient(uint256 handle, address account) public view virtual returns (bool) {
+-        bool isAllowedTransient;
++        // [lifecycle] R6, use role (transient form): false for a retired account.
++        return !_isRetired(account) && _allowedTransientRaw(handle, account);
++    }
++
++    /// @dev The transient allowance as stored, regardless of retirement (the operand check, R10).
++    function _allowedTransientRaw(uint256 handle, address account) private view returns (bool isAllowedTransient) {
+         bytes32 key = keccak256(abi.encodePacked(handle, account));
+         assembly {
+             isAllowedTransient := tload(key)
+         }
+-        return isAllowedTransient;
+     }
+ 
+     /**
+@@ -445,9 +497,32 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+      * @return isAllowed    Whether the account can access the handle.
+      */
+     function isAllowed(uint256 handle, address account) public view virtual returns (bool) {
++        // [lifecycle] R6, use role: false for a retired account, for every caller (no caller-identity exemption:
++        // the TaskManager relays grants and permit checks, R10.4). A public handle stays public through globalAllowed.
++        if (_isRetired(account)) {
++            return false;
++        }
+         return allowedTransient(handle, account) || persistAllowed(handle, account) || globalAllowed(handle);
+     }
+ 
++    /**
++     * @notice              [lifecycle] R10: the engine's operand check. Whether `account` may use `handle` as an input to
++     *                      a computation the TaskManager performs for it. Retirement is not consulted: every output of
++     *                      that computation is granted only to the caller and only for the transaction, and every way
++     *                      out goes through a gated view or grant path. Only the TaskManager may call it, and only its
++     *                      operand check does.
++     * @param handle        Handle.
++     * @param account       The TaskManager's caller.
++     * @return allowed      Whether the operand may be used.
++     */
++    function isAllowedForOperand(uint256 handle, address account) external view virtual returns (bool) {
++        if (msg.sender != _taskManager()) {
++            revert DirectAllowForbidden(msg.sender);
++        }
++        ACLStorage storage $ = _getACLStorage();
++        return _allowedTransientRaw(handle, account) || $.persistedAllowedPairs[handle][account] || $.globalHandles[handle];
++    }
++
+     /**
+      * @notice              Checks whether a handle is allowed for decryption.
+      * @param handle        Handle.
+@@ -465,6 +540,10 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+      * @return isAllowed    Whether the account can access the handle.
+      */
+     function persistAllowed(uint256 handle, address account) public view virtual returns (bool) {
++        // [lifecycle] R6, use role (persistent form): false for a retired account.
++        if (_isRetired(account)) {
++            return false;
++        }
+         ACLStorage storage $ = _getACLStorage();
+         return $.persistedAllowedPairs[handle][account];
+     }
+@@ -527,8 +606,84 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+      * @dev Should revert when `msg.sender` is not authorized to upgrade the contract.
+      *      Empty implementation since authorization is handled by onlyRole(UPGRADER_ROLE) modifier.
+      */
+-    /* solhint-disable-next-line no-empty-blocks */
+-    function _authorizeUpgrade(address _newImplementation) internal virtual override onlyRole(UPGRADER_ROLE) {}
++    /// @dev [lifecycle] R11: the proposed implementation must declare Core and read retirement state at the same
++    ///      location. A call that reverts, or returns data of the wrong length, counts as failure.
++    function _authorizeUpgrade(address _newImplementation) internal virtual override onlyRole(UPGRADER_ROLE) {
++        (bool ok, bytes memory ret) = _newImplementation.staticcall(
++            abi.encodeWithSelector(this.supportsInterface.selector, DAL_CORE_INTERFACE_ID)
++        );
++        if (!ok || ret.length != 32 || abi.decode(ret, (uint256)) != 1) {
++            revert UpgradeDropsRetirement(_newImplementation);
++        }
++        (ok, ret) = _newImplementation.staticcall(abi.encodeWithSelector(this.retirementStorageLocation.selector));
++        if (!ok || ret.length != 32 || abi.decode(ret, (bytes32)) != ACL_RETIREMENT_STORAGE_LOCATION) {
++            revert UpgradeDropsRetirement(_newImplementation);
++        }
++    }
++
++    // ---------------------------------------------------------------------------
++    // [Decryption Authority Lifecycle, Core]
++    // ---------------------------------------------------------------------------
++
++    /**
++     * @notice Retires the caller's authority over its decryption rights (revocable access). One-way. Unconditional
++     *         for an active caller (R3): there is no pause, deny list, role or fee on it, and contracts may call it.
++     *         Effective immediately for every evaluation that follows, in every role (R5, R6), except the engine's
++     *         operand check (R10); every grant path then reverts on the caller's authority (R7).
++     *         Limits: pre-emptive, not a clawback; oracle access only; as final as this chain's governance.
++     */
++    function retireAccount() external virtual {
++        ACLRetirementStorage storage $ = _retiredStorage();
++        if ($.retired[msg.sender]) {
++            revert AccountAlreadyRetired(msg.sender);
++        }
++        $.retired[msg.sender] = true;
++        emit AccountRetired(msg.sender, address(0));
++    }
++
++    /// @notice Whether `account` has retired its decryption authority.
++    function isAccountRetired(address account) external view virtual returns (bool) {
++        return _isRetired(account);
++    }
++
++    /// @notice The storage location of the retirement state (R11).
++    function retirementStorageLocation() external pure virtual returns (bytes32) {
++        return ACL_RETIREMENT_STORAGE_LOCATION;
++    }
++
++    /// @notice ERC-165: the Access Control interfaces this ACL already declared, and the lifecycle Core (R12).
++    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
++        return interfaceId == DAL_CORE_INTERFACE_ID || super.supportsInterface(interfaceId);
++    }
++
++    /// @notice [lifecycle] R14: the permit's validity probe gives the inactive answer, false, when the permit's issuer
++    ///         or its recipient is retired. A permit with an invalid structure still reverts first, as before.
++    function checkPermissionValidity(ACP memory acp) public view virtual override returns (bool) {
++        return super.checkPermissionValidity(acp) && !_permitPartyRetired(acp);
++    }
++
++    /// @dev `virtual` only so that the R10 negative test can model a caller-identity exemption; this port never
++    ///      overrides it.
++    function _isRetired(address account) internal view virtual returns (bool) {
++        return _retiredStorage().retired[account];
++    }
++
++    /// @dev The parties a permit view consults (R6): the issuer, and the recipient when there is one.
++    function _permitPartyRetired(ACP memory acp) internal view returns (bool) {
++        return _isRetired(acp.issuer) || (acp.recipient != address(0) && _isRetired(acp.recipient));
++    }
++
++    function _requireNotRetired(address account) internal view {
++        if (_isRetired(account)) {
++            revert SenderRetired(account);
++        }
++    }
++
++    function _retiredStorage() private pure returns (ACLRetirementStorage storage $) {
++        assembly {
++            $.slot := ACL_RETIREMENT_STORAGE_LOCATION
++        }
++    }
+ 
+     /**
+      * @dev                         Returns the ACL storage location.
+@@ -614,6 +769,11 @@ contract ACL is UUPSUpgradeable, AccessControlDefaultAdminRulesUpgradeable, Perm
+     ///      Contract scope intersects the EXISTING allowances
+     ///      (populated via FHE.allow/allowThis) — no new data structures.
+     function isAllowedWithPermission(ACP memory acp, uint256 handle) public view withPermission(acp) returns (bool) {
++        // [lifecycle] R6, permit role: false when the issuer or the recipient is retired.
++        if (_permitPartyRetired(acp)) {
++            return false;
++        }
++
+         // Scopes narrow the issuer's existing access, never widen it
+         if (!isAllowed(handle, acp.issuer)) return false;
+ 
+diff --git a/vendor/cofhe-contracts-b5c20ed/internal/host-chain/contracts/Permissioned.sol b/src/Permissioned.sol
+index 3c0bf18..a490d97 100644
+--- a/vendor/cofhe-contracts-b5c20ed/internal/host-chain/contracts/Permissioned.sol
++++ b/src/Permissioned.sol
+@@ -197,9 +197,10 @@ contract PermissionedUpgradeable is Initializable, EIP712Upgradeable {
+   }
+ 
+   /// @dev Structure-validity probe (expiration / signatures / revocation).
++  /// [lifecycle] `virtual`: the ACL adds the parties' retirement (R14).
+   function checkPermissionValidity(
+     ACP memory acp
+-  ) public view withPermission(acp) returns (bool) {
++  ) public view virtual withPermission(acp) returns (bool) {
+     return true;
+   }
+ }
+diff --git a/vendor/cofhe-contracts-b5c20ed/internal/host-chain/contracts/TaskManager.sol b/src/TaskManager.sol
+index fae2009..79ae7c9 100644
+--- a/vendor/cofhe-contracts-b5c20ed/internal/host-chain/contracts/TaskManager.sol
++++ b/src/TaskManager.sol
+@@ -452,8 +452,17 @@ contract TaskManager is ITaskManager, Initializable, UUPSUpgradeable, AccessCont
+         }
+     }
+ 
+-    function checkAllowed(uint256 ctHash) internal view {
+-        if (!acl.isAllowed(ctHash, msg.sender)) revert ACLNotAllowed(ctHash, msg.sender);
++    /// @dev [lifecycle] R10: the function ids that are not computations whose output stays in the engine: the reserved
++    ///      ids 0, 1, 5 and 31, `sealoutput` (3) and `decrypt` (6). Their operands take the ACL's gated use view.
++    uint256 private constant NOT_ENGINE_COMPUTATION = (1 << 0) | (1 << 1) | (1 << 3) | (1 << 5) | (1 << 6) | (1 << 31);
++
++    function checkAllowed(uint256 ctHash, FunctionId funcId) internal view {
++        // [lifecycle] R10: an operand of a computation takes the ACL's dedicated operand check, not a caller-identity
++        // exemption (this contract relays grants and permit checks); any other function id takes the gated use view.
++        bool allowed = (NOT_ENGINE_COMPUTATION >> uint8(funcId)) & 1 == 0
++            ? acl.isAllowedForOperand(ctHash, msg.sender)
++            : acl.isAllowed(ctHash, msg.sender);
++        if (!allowed) revert ACLNotAllowed(ctHash, msg.sender);
+     }
+ 
+     function isUnaryOperation(FunctionId funcId) internal pure returns (bool) {
+@@ -508,9 +517,9 @@ contract TaskManager is ITaskManager, Initializable, UUPSUpgradeable, AccessCont
+         return isValidType(uint8(t));
+     }
+ 
+-    function validateEncryptedHashes(uint256[] memory encryptedHashes) internal view {
++    function validateEncryptedHashes(uint256[] memory encryptedHashes, FunctionId funcId) internal view {
+         for (uint8 i = 0; i < encryptedHashes.length; i++) {
+-            checkAllowed(encryptedHashes[i]);
++            checkAllowed(encryptedHashes[i], funcId);
+         }
+     }
+ 
+@@ -628,7 +637,7 @@ contract TaskManager is ITaskManager, Initializable, UUPSUpgradeable, AccessCont
+         if (!isValidSecurityZone(securityZone)) {
+             revert InvalidSecurityZone(securityZone, securityZoneMin, securityZoneMax);
+         }
+-        validateEncryptedHashes(encryptedHashes);
++        validateEncryptedHashes(encryptedHashes, funcId);
+         validateFunctionInputTypes(funcId, functionName, encryptedHashes);
+     }
+ 
+diff --git a/vendor/cofhe-contracts-b5c20ed/internal/host-chain/contracts/ACPShareRegistry.sol b/src/ACPShareRegistry.sol
+index 28ded62..0d1f41b 100644
+--- a/vendor/cofhe-contracts-b5c20ed/internal/host-chain/contracts/ACPShareRegistry.sol
++++ b/src/ACPShareRegistry.sol
+@@ -103,6 +103,30 @@ contract ACPShareRegistry is UUPSUpgradeable, AccessControlUpgradeable {
+     error AlreadyShared();
+     error UnknownShare();
+ 
++    // ---------------------------------------------------------------------------
++    // [Decryption Authority Lifecycle, Core] Port to Fhenix CoFHE (lifecycle Phase 4, P2.1).
++    // A share is a permit in transit, so its parties are the permit's (R6): a share whose issuer or recipient is
++    // retired is not valid (R14), and a retired issuer cannot post one (R7). Posting to a retired recipient is not
++    // refused (R8); the share is inert. Removing a share only removes rights and stays open to both parties.
++    // ---------------------------------------------------------------------------
++
++    /// @notice A grant path was called on the authority of a retired account.
++    error SenderRetired(address sender);
++
++    /// @notice The retirement registry did not answer for `account` (unset, no code, a revert or a malformed answer).
++    error RetirementUnknown(address account);
++
++    /// @notice Emitted when the retirement registry (the ACL) is set.
++    event RetirementRegistryUpdated(address oldAddress, address newAddress);
++
++    /// @custom:storage-location erc7201:cofhe.storage.ACPShareRegistryRetirement
++    struct RetirementLinkStorage {
++        address registry;
++    }
++
++    /// @dev keccak256(abi.encode(uint256(keccak256("cofhe.storage.ACPShareRegistryRetirement")) - 1)) & ~bytes32(uint256(0xff))
++    bytes32 private constant RETIREMENT_LINK_SLOT = 0x1853fefca184fd5024321406d713d53d3b4f4102fddc4fe1040a6b73116ded00;
++
+     /// @custom:oz-upgrades-unsafe-allow constructor
+     constructor() {
+         _disableInitializers();
+@@ -128,6 +152,10 @@ contract ACPShareRegistry is UUPSUpgradeable, AccessControlUpgradeable {
+         if (acp.sealingKey != bytes32(0)) revert SealingKeyMustBeEmpty();
+         if (acp.issuerSignature.length == 0) revert IssuerSignatureMissing();
+         if (acp.expiration < block.timestamp) revert ShareExpired();
++        // [lifecycle] R7: a retired issuer cannot post a share; an unknown answer fails closed.
++        (bool known, bool retired) = _retirementOf(acp.issuer);
++        if (!known) revert RetirementUnknown(acp.issuer);
++        if (retired) revert SenderRetired(acp.issuer);
+ 
+         ACPShareRegistryStorage storage $ = _getStorage();
+ 
+@@ -218,6 +246,12 @@ contract ACPShareRegistry is UUPSUpgradeable, AccessControlUpgradeable {
+     function _isValid(ShareHeader storage header) private view returns (bool) {
+         if (header.expiration < block.timestamp) return false;
+ 
++        // [lifecycle] R6/R14: a share whose issuer or recipient is retired is not valid; an unknown answer fails closed.
++        (bool known, bool retired) = _retirementOf(header.issuer);
++        if (!known || retired) return false;
++        (known, retired) = _retirementOf(header.recipient);
++        if (!known || retired) return false;
++
+         if (header.revokerData != 0 && header.revokerContract != address(0)) {
+             try IPermissionCustomIdValidator(header.revokerContract).disabled(header.issuer, header.revokerData) returns (
+                 bool disabled
+@@ -239,6 +273,40 @@ contract ACPShareRegistry is UUPSUpgradeable, AccessControlUpgradeable {
+         return ok && result.length == 32 ? abi.decode(result, (uint256)) : block.number;
+     }
+ 
++    /// @notice [lifecycle] Sets the retirement registry: the ACL whose `isAccountRetired` decides a share's parties.
++    ///         Set it in the transaction that upgrades to this implementation (`upgradeToAndCall`): until it is set,
++    ///         `share` reverts and no share is valid.
++    function setRetirementRegistry(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
++        RetirementLinkStorage storage $ = _retirementLink();
++        emit RetirementRegistryUpdated($.registry, newAddress);
++        $.registry = newAddress;
++    }
++
++    /// @notice [lifecycle] The retirement registry (zero when unset).
++    function retirementRegistry() external view returns (address) {
++        return _retirementLink().registry;
++    }
++
++    /// @dev `known` is false when the registry is unset or does not answer with exactly one word; then `retired` is
++    ///      meaningless and callers fail closed.
++    function _retirementOf(address account) private view returns (bool known, bool retired) {
++        address registry = _retirementLink().registry;
++        if (registry == address(0)) return (false, false);
++        // isAccountRetired(address), selector 0xb279091e
++        (bool ok, bytes memory ret) = registry.staticcall(abi.encodeWithSelector(0xb279091e, account));
++        if (!ok || ret.length != 32) return (false, false);
++        uint256 word = abi.decode(ret, (uint256));
++        if (word > 1) return (false, false);
++        return (true, word == 1);
++    }
++
++    function _retirementLink() private pure returns (RetirementLinkStorage storage $) {
++        bytes32 slot = RETIREMENT_LINK_SLOT;
++        assembly {
++            $.slot := slot
++        }
++    }
++
+     /**
+      * @dev Should revert when `msg.sender` is not authorized to upgrade the contract.
+      *      Empty implementation since authorization is handled by the role check.

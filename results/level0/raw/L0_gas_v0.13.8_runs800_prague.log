@@ -1,0 +1,91 @@
+Compiling 87 files with Solc 0.8.24
+Solc 0.8.24 finished in 14.21s
+Compiler run successful!
+
+Warning: the following cheatcode(s) are deprecated and will be removed in future versions:
+  lastCallGas(): replaced by `lastFrameGas`
+Ran 12 tests for test/acl/ACLRetirementGas.t.sol:ACLRetirementGasTest
+[PASS] test_Gas_Allow() (gas: 26202427)
+Logs:
+  GAS|prague|allow (new pair)|33970|36268|2298
+
+[PASS] test_Gas_CallerSide() (gas: 91763778)
+Logs:
+  GAS|prague|allow (new pair) (caller-side)|36462|38760|2298
+  GAS|prague|CALL overhead into the ACL (caller-side minus frame)|2538|2538|0
+  GAS|prague|ERC-7984 confidentialTransfer(to, euint64) by holder (caller-side)|357068|365197|8129
+  GAS|prague|retireAccount (first, cold) (caller-side)|0|26947|26947
+
+[PASS] test_Gas_Carry_n1() (gas: 38318550)
+Logs:
+  GAS|prague|carry n=1: multicall(allow x n) [base] vs same on v0.4.1 (frame)|37031|39373|2342
+  GAS|prague|carry n=1: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (frame)|37031|63562|26531
+  GAS|prague|carry n=1: multicall(allow x n) [base] vs same on v0.4.1 (caller-side)|38943|41285|2342
+  GAS|prague|carry n=1: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (caller-side)|38943|66352|27409
+
+[PASS] test_Gas_Carry_n10() (gas: 39209531)
+Logs:
+  GAS|prague|carry n=10: multicall(allow x n) [base] vs same on v0.4.1 (frame)|305086|310110|5024
+  GAS|prague|carry n=10: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (frame)|305086|334301|29215
+  GAS|prague|carry n=10: multicall(allow x n) [base] vs same on v0.4.1 (caller-side)|316106|321130|5024
+  GAS|prague|carry n=10: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (caller-side)|316106|346199|30093
+
+[PASS] test_Gas_Carry_n100() (gas: 48190779)
+Logs:
+  GAS|prague|carry n=100: multicall(allow x n) [base] vs same on v0.4.1 (frame)|2986734|3018578|31844
+  GAS|prague|carry n=100: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (frame)|2986734|3042783|56049
+  GAS|prague|carry n=100: multicall(allow x n) [base] vs same on v0.4.1 (caller-side)|3094658|3131110|36452
+  GAS|prague|carry n=100: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (caller-side)|3094658|3160911|66253
+
+[PASS] test_Gas_Carry_n500() (gas: 89490596)
+Logs:
+  GAS|prague|carry n=500: multicall(allow x n) [base] vs same on v0.4.1 (frame)|14929103|15080147|151044
+  GAS|prague|carry n=500: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (frame)|14929103|15104413|175310
+  GAS|prague|carry n=500: multicall(allow x n) [base] vs same on v0.4.1 (caller-side)|15533933|15782736|248803
+  GAS|prague|carry n=500: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (caller-side)|15533933|15906069|372136
+
+[PASS] test_Gas_DelegatedViews() (gas: 52439106)
+Logs:
+  GAS|prague|isHandleDelegatedForUserDecryption (true)|12358|19108|6750
+  GAS|prague|getUserDecryptionDelegationExpirationDate (non-zero)|5370|12059|6689
+
+[PASS] test_Gas_ERC7984() (gas: 54067324)
+Logs:
+  GAS|prague|ERC-7984 confidentialTransfer(to, euint64) by holder|354469|362598|8129
+  GAS|prague|ERC-7984 mint (token-internal grants only)|277142|281608|4466
+
+[PASS] test_Gas_ExecutorOverheadAttribution() (gas: 202870610)
+Logs:
+  GAS|prague|isAllowed, executor caller, transient grant [dispatcher/layout: v0.4.0 vs v0.4.1-without-compare]|3191|3247|56
+  GAS|prague|isAllowed, executor caller, transient grant [exemption compare: v0.4.1-without-compare vs v0.4.1]|3247|3295|48
+  GAS|prague|isAllowed, executor caller, persisted pair [dispatcher/layout: v0.4.0 vs v0.4.1-without-compare]|5497|5541|44
+  GAS|prague|isAllowed, executor caller, persisted pair [exemption compare: v0.4.1-without-compare vs v0.4.1]|5541|5589|48
+  GAS|prague|allowedTransient (unchanged code) [dispatcher/layout: v0.4.0 vs v0.4.1-without-compare]|3153|3120|-33
+  GAS|prague|allowedTransient (unchanged code) [exemption compare: v0.4.1-without-compare vs v0.4.1]|3120|3120|0
+  GAS|prague|executor fheAdd, 2 transient operands [dispatcher/layout: v0.4.0 vs v0.4.1-without-compare]|26224|26402|178
+  GAS|prague|executor fheAdd, 2 transient operands [exemption compare: v0.4.1-without-compare vs v0.4.1]|26402|26498|96
+  GAS|prague|executor fheAdd, 2 persisted operands [dispatcher/layout: v0.4.0 vs v0.4.1-without-compare]|30840|30994|154
+  GAS|prague|executor fheAdd, 2 persisted operands [exemption compare: v0.4.1-without-compare vs v0.4.1]|30994|31090|96
+
+[PASS] test_Gas_ExecutorPerOperand() (gas: 78615262)
+Logs:
+  GAS|prague|executor fheAdd, 2 persisted operands|30840|31090|250
+  GAS|prague|executor fheAdd, 2 transient operands|26224|26498|274
+  GAS|prague|executor fheIfThenElse, 3 persisted operands|34994|35336|342
+
+[PASS] test_Gas_IsAllowed() (gas: 130701793)
+Logs:
+  GAS|prague|isAllowed, non-executor caller, persisted pair (true)|5497|7818|2321
+  GAS|prague|isAllowed, non-executor caller, no grant (false)|5497|7818|2321
+  GAS|prague|isAllowed, executor caller, persisted pair|5497|5589|92
+  GAS|prague|isAllowed, executor caller, transient grant|3191|3295|104
+  GAS|prague|persistAllowed (true)|5155|7431|2276
+
+[PASS] test_Gas_RetireAccount() (gas: 12068234)
+Logs:
+  GAS|prague|retireAccount (first, cold)|0|26535|26535
+  GAS|prague|retireAccount (second, reverts AccountAlreadyRetired)|0|4889|4889
+
+Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 62.05ms (205.06ms CPU time)
+
+Ran 1 test suite in 64.67ms (62.05ms CPU time): 12 tests passed, 0 failed, 0 skipped (12 total tests)

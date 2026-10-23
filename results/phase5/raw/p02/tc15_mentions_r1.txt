@@ -1,0 +1,26 @@
+# P0.2 TC15 mentions, 2026-10-22T18:15:15Z
+definition/index  erc/ERC-XXXX-decryption-authority-lifecycle.md:546: | TC15 | V6, V7 | A stored result re-served after retirement; a retirement denial followed by a simulated governance lapse | Refused; final `ACCOUNT_RETIRED`, n
+numbers           erc/ERC-XXXX-decryption-authority-lifecycle.md:557: Every behaviour above has passed in the reference implementation's repository: TC1–TC12 on both release lines of the example (except TC6, the permit role, which
+numbers           erc/assets/erc-XXXX/EVIDENCE.md:42: | 19 | Existing verifiers inherit Core's required verifier rules (V1–V5). The unmodified connector refuses a retired subject's request on every path, at both re
+numbers           docs/COMPANION_EXTENSIONS_AND_PROFILES.md:310: | TC1–TC12, TC17 and TC19 through the conformance kit; TC13–TC15 as fixtures | The kit above, with one adapter per registry | Done (`results/phase4/P2_3_CONFORM
+numbers           docs/COMPANION_EXTENSIONS_AND_PROFILES.md:316: | TC15 | Same harness | **V7 part done** with Profile H (branch `lifecycle/level1`, `cce53bb`): a retirement denial is final at its first attempt and typed `acc
+definition/index  docs/ERC_SPLIT_MAPPING.md:108: | TC15 | ERC: Behaviours | unchanged | no |
+numbers           docs/HEDEF_MIMARI_TR.md:1412: sürülen soyut bir Foundry takımı; artı TC13–TC15 için JSON fikstürleri ve bir denetleyici. Kayıtlı koşularda TC15
+numbers           docs/HEDEF_MIMARI_TR.md:1481: | Saklanmış sonuçlar ve kesin retler (V6, V7, TC15) | Değiştirilmemiş haliyle `main` bağlayıcı uç noktası (endpoint) ve relayer, emekliye ayırmadan sonra saklan
+numbers           docs/TARGET_ARCHITECTURE.md:1399: through adapters, plus JSON fixtures for TC13–TC15 with a checker. On the recorded runs, TC15's fixture finds 35
+numbers           docs/TARGET_ARCHITECTURE.md:1467: | Stored results and final denials (V6, V7, TC15) | Unmodified, the `main` connector endpoint and the relayer serve a stored result again after retirement, and 
+numbers           drafts/ONE_PAGER.md:35: | Unmodified verifier | Refuses a retired account on every request path, also when view calls fail (V1: a malformed answer counts as false). Stored results and 
+numbers           drafts/RESEARCH_WRITEUP.md:92: both required, and with it every recorded case conforms; the conformance kit's fixture for them (TC15) finds 35
+numbers           drafts/RESEARCH_WRITEUP.md:149: simulated governance lapse revives. The hygiene profile closes both (TC15: 35 cells conform, 8 violate, all the
+numbers           export/README.md:51: | The unmodified verifier against the real registry | A retired account is refused on every request path, also under injected view-call failures (rule V1: an an
+numbers           results/RESULTS.md:612: | Conformance kit | Zama `main` and the v0.13 line: 17 passed, 1 skipped (TC6), three runs with isolation off and one with it on; the Fhenix port: 14 passed, 4 
+numbers           results/phase4/CORE_TRACEABILITY.md:52: | V6 | Stored results (SHOULD; MUST under H) | TC15 V6 part (`P0_3_STORED_RESULTS.md`, three runs each). Unmodified: the main connector endpoint re-serves a sto
+numbers           results/phase4/CORE_TRACEABILITY.md:53: | V7 | Final retirement denials (SHOULD; MUST under H) | TC15 V7 part: with Profile H a retirement denial is final and typed `account_retired`, and a simulated 
+definition/index  results/phase4/DECISIONS_LOG.md:68: | D61 | 2026-10-22 | P2.3 | The verifier kit's fixtures restate the Phase 4 harness matrices (TC13 P0.1, TC14 P0.2, TC15 Level 1 and P0.3) as JSON; the checker 
+numbers           results/phase4/P2_3_CONFORMANCE_KIT.md:98: | TC15 | `main` | 25 rows over 7 runs (each run covers its own rows) | 35 conform, **8 violate** |
+numbers           results/phase4/STATUS.md:21: | P2.3 Conformance kit | Done. Registry kit: an abstract Foundry suite (`conformance/DecryptionAuthorityLifecycle.t.sol`, forge-std only) encoding TC1–TC12, TC1
+definition/index  results/phase4/parked/P3_connector_throughput.md:18: TC13–TC15 matrices and the P1.1 latency bench. A concurrency test needs a new load generator and a per-request
+definition/index  conformance/README.md:72: | TC15, V6 | `impl/harness/phase4/make_p03_tests.py` | `run_p03.sh` |
+definition/index  conformance/README.md:73: | TC15, V7 | `impl/harness/level1/make_profile_h_connector_tests.py` | `impl/harness/level1/vps/run_level1.sh` |
+numbers           conformance/README.md:75: On the recorded Phase 4 runs, the TC15 fixture finds 35 conforming cells and 8 violations, all the unmodified verifier's: it serves a stored result
+# total 24; numbers 18; definition/index 6; CHECK 0

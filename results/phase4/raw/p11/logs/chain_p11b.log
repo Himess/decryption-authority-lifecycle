@@ -1,0 +1,30 @@
+2026-10-21T20:51:07Z START build-p11-main-l3b
+2026-10-21T20:51:38Z END build-p11-main-l3b rc=0
+2026-10-21T20:51:38Z START build-p11-mainb
+2026-10-21T20:52:04Z END build-p11-mainb rc=0
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 8 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-21T20:52:14Z START suite-kms-worker-zama-l1
+2026-10-21T20:56:41Z END suite-kms-worker-zama-l1 rc=101
+2026-10-21T20:56:41Z kms-worker Zama suite on l1 failed (continuing)
+2026-10-21T20:56:41Z START suite-kms-worker-zama-l3
+2026-10-21T21:01:09Z END suite-kms-worker-zama-l3 rc=101
+2026-10-21T21:01:09Z kms-worker Zama suite on l3 failed (continuing)
+2026-10-21T21:01:09Z START p11-main-l3-r4
+2026-10-21T21:02:57Z END p11-main-l3-r4 rc=0
+2026-10-21T21:02:57Z START p11-main-r4
+2026-10-21T21:03:19Z END p11-main-r4 rc=0
+2026-10-21T21:03:19Z START p11-main-l3-r5
+2026-10-21T21:04:42Z END p11-main-l3-r5 rc=0
+2026-10-21T21:04:42Z START p11-main-r5
+2026-10-21T21:04:58Z END p11-main-r5 rc=0
+2026-10-21T21:04:58Z START p11-main-l3-r6
+2026-10-21T21:06:21Z END p11-main-l3-r6 rc=0
+2026-10-21T21:06:21Z START p11-main-r6
+2026-10-21T21:06:42Z END p11-main-r6 rc=0
+2026-10-21T21:06:42Z CHAIN DONE
+2026-10-21T21:06:43Z lifecycle-pg removed

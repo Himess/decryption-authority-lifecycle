@@ -1,0 +1,470 @@
+{
+  "label": "proven in mock: the SDK status read on a local chain; EIP-7851 simulated by eth_getCode rewriting",
+  "startedAt": "2026-10-21T21:39:38.711Z",
+  "env": {
+    "clientVersion": "anvil/v1.8.5",
+    "hardFork": "Bpo1",
+    "aclVersion": "ACL v0.4.2",
+    "acl": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+    "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388",
+    "accounts": {
+      "E": "0xDBB56B93f1012EAb5f1A29aF0DafA78fe049D764",
+      "X": "0x4976070C8c9973C6881FD666975693166F4f2487",
+      "S": "0x57c21FE2598CF3867feb9aA94Ff26ae0AD13cb55",
+      "W": "0x64E182D25a768f79cd9066F0dd7239a3f256aCf3",
+      "S2": "0xC3D96365E2299074Df578C8977CfB0E87bd919b5",
+      "DEPLOYER": "0x1fDe6C8318cf7278784AfE83c26Eb7192eBbf7ec"
+    }
+  },
+  "successorDelay": "604800",
+  "rows": [
+    {
+      "label": "p16.ethers.E.eoa",
+      "adapter": "ethers",
+      "account": "E",
+      "simulated": "none",
+      "nodeCode": "0x",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0xDBB56B93f1012EAb5f1A29aF0DafA78fe049D764",
+        "accountCode": {
+          "kind": "empty"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.viem.E.eoa",
+      "adapter": "viem",
+      "account": "E",
+      "simulated": "none",
+      "nodeCode": "0x",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0xDBB56B93f1012EAb5f1A29aF0DafA78fe049D764",
+        "accountCode": {
+          "kind": "empty"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.ethers.D.contract",
+      "adapter": "ethers",
+      "account": "D",
+      "simulated": "none",
+      "nodeCode": "0x00",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388",
+        "accountCode": {
+          "kind": "regular"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.viem.D.contract",
+      "adapter": "viem",
+      "account": "D",
+      "simulated": "none",
+      "nodeCode": "0x00",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388",
+        "accountCode": {
+          "kind": "regular"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.ethers.X.7702",
+      "adapter": "ethers",
+      "account": "X",
+      "simulated": "none",
+      "nodeCode": "0xef01004dc822c8c7393ad602a2967f89c4ca3d00cb1388",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x4976070C8c9973C6881FD666975693166F4f2487",
+        "accountCode": {
+          "kind": "eip7702",
+          "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.viem.X.7702",
+      "adapter": "viem",
+      "account": "X",
+      "simulated": "none",
+      "nodeCode": "0xef01004dc822c8c7393ad602a2967f89c4ca3d00cb1388",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x4976070C8c9973C6881FD666975693166F4f2487",
+        "accountCode": {
+          "kind": "eip7702",
+          "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.ethers.X.7702-retired",
+      "adapter": "ethers",
+      "account": "X",
+      "simulated": "none",
+      "nodeCode": "0xef01004dc822c8c7393ad602a2967f89c4ca3d00cb1388",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x4976070C8c9973C6881FD666975693166F4f2487",
+        "accountCode": {
+          "kind": "eip7702",
+          "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388"
+        },
+        "lifecycle": true,
+        "retired": true,
+        "successor": "0x57c21FE2598CF3867feb9aA94Ff26ae0AD13cb55",
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.viem.X.7702-retired",
+      "adapter": "viem",
+      "account": "X",
+      "simulated": "none",
+      "nodeCode": "0xef01004dc822c8c7393ad602a2967f89c4ca3d00cb1388",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x4976070C8c9973C6881FD666975693166F4f2487",
+        "accountCode": {
+          "kind": "eip7702",
+          "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388"
+        },
+        "lifecycle": true,
+        "retired": true,
+        "successor": "0x57c21FE2598CF3867feb9aA94Ff26ae0AD13cb55",
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.ethers.X.7851-retired",
+      "adapter": "ethers",
+      "account": "X",
+      "simulated": "0xef0101 ‖ D",
+      "nodeCode": "0xef01004dc822c8c7393ad602a2967f89c4ca3d00cb1388",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x4976070C8c9973C6881FD666975693166F4f2487",
+        "accountCode": {
+          "kind": "eip7851",
+          "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388"
+        },
+        "lifecycle": true,
+        "retired": true,
+        "successor": "0x57c21FE2598CF3867feb9aA94Ff26ae0AD13cb55",
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.viem.X.7851-retired",
+      "adapter": "viem",
+      "account": "X",
+      "simulated": "0xef0101 ‖ D",
+      "nodeCode": "0xef01004dc822c8c7393ad602a2967f89c4ca3d00cb1388",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x4976070C8c9973C6881FD666975693166F4f2487",
+        "accountCode": {
+          "kind": "eip7851",
+          "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388"
+        },
+        "lifecycle": true,
+        "retired": true,
+        "successor": "0x57c21FE2598CF3867feb9aA94Ff26ae0AD13cb55",
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.ethers.W.7702-pending",
+      "adapter": "ethers",
+      "account": "W",
+      "simulated": "none",
+      "nodeCode": "0xef01004dc822c8c7393ad602a2967f89c4ca3d00cb1388",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x64E182D25a768f79cd9066F0dd7239a3f256aCf3",
+        "accountCode": {
+          "kind": "eip7702",
+          "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": {
+          "address": "0xC3D96365E2299074Df578C8977CfB0E87bd919b5",
+          "confirmableAt": "1793828381",
+          "accepted": true
+        }
+      }
+    },
+    {
+      "label": "p16.viem.W.7702-pending",
+      "adapter": "viem",
+      "account": "W",
+      "simulated": "none",
+      "nodeCode": "0xef01004dc822c8c7393ad602a2967f89c4ca3d00cb1388",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x64E182D25a768f79cd9066F0dd7239a3f256aCf3",
+        "accountCode": {
+          "kind": "eip7702",
+          "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": {
+          "address": "0xC3D96365E2299074Df578C8977CfB0E87bd919b5",
+          "confirmableAt": "1793828381",
+          "accepted": true
+        }
+      }
+    },
+    {
+      "label": "p16.ethers.W.7851-pending",
+      "adapter": "ethers",
+      "account": "W",
+      "simulated": "0xef0101 ‖ D",
+      "nodeCode": "0xef01004dc822c8c7393ad602a2967f89c4ca3d00cb1388",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x64E182D25a768f79cd9066F0dd7239a3f256aCf3",
+        "accountCode": {
+          "kind": "eip7851",
+          "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": {
+          "address": "0xC3D96365E2299074Df578C8977CfB0E87bd919b5",
+          "confirmableAt": "1793828381",
+          "accepted": true
+        }
+      }
+    },
+    {
+      "label": "p16.viem.W.7851-pending",
+      "adapter": "viem",
+      "account": "W",
+      "simulated": "0xef0101 ‖ D",
+      "nodeCode": "0xef01004dc822c8c7393ad602a2967f89c4ca3d00cb1388",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x64E182D25a768f79cd9066F0dd7239a3f256aCf3",
+        "accountCode": {
+          "kind": "eip7851",
+          "delegate": "0x4dC822C8C7393ad602a2967F89c4CA3D00cb1388"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": {
+          "address": "0xC3D96365E2299074Df578C8977CfB0E87bd919b5",
+          "confirmableAt": "1793828381",
+          "accepted": true
+        }
+      }
+    },
+    {
+      "label": "p16.ethers.E.eoa-after",
+      "adapter": "ethers",
+      "account": "E",
+      "simulated": "none",
+      "nodeCode": "0x",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0xDBB56B93f1012EAb5f1A29aF0DafA78fe049D764",
+        "accountCode": {
+          "kind": "empty"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p16.viem.E.eoa-after",
+      "adapter": "viem",
+      "account": "E",
+      "simulated": "none",
+      "nodeCode": "0x",
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0xDBB56B93f1012EAb5f1A29aF0DafA78fe049D764",
+        "accountCode": {
+          "kind": "empty"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    }
+  ],
+  "wire": {
+    "p16.ethers.E.eoa": {
+      "eth_call getVersion": 3,
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.viem.E.eoa": {
+      "eth_call getVersion": 3,
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.ethers.D.contract": {
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.viem.D.contract": {
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.ethers.X.7702": {
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.viem.X.7702": {
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.ethers.X.7702-retired": {
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.viem.X.7702-retired": {
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.ethers.X.7851-retired": {
+      "eth_getCode (rewritten)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.viem.X.7851-retired": {
+      "eth_getCode (rewritten)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.ethers.W.7702-pending": {
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.viem.W.7702-pending": {
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.ethers.W.7851-pending": {
+      "eth_getCode (rewritten)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.viem.W.7851-pending": {
+      "eth_getCode (rewritten)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.ethers.E.eoa-after": {
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p16.viem.E.eoa-after": {
+      "eth_getCode": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    }
+  },
+  "proxyStderrTail": "",
+  "finishedAt": "2026-10-21T21:39:41.621Z"
+}

@@ -1,0 +1,40 @@
+2026-10-22T06:55:03Z
+$ <home>\.foundry\bin\forge.EXE test --match-path test/conformance/*
+$ <home>\.foundry\bin\forge.EXE test
+$ C:\Program Files\Git\mingw64\bin\git.EXE -C <repo>\.stage\r5\impl\fhevm-main am --quiet <repo>\.stage\r5\patches\level2\main\0001-feat-host-contracts-ACL-v0.9.0-with-the-E1-successor.patch <repo>\.stage\r5\patches\level2\main\0002-test-host-contracts-E1-successor-tests-for-ACL-v0.9..patch <repo>\.stage\r5\patches\level2\main\0003-test-host-contracts-follow-the-ACL-v0.9.0-version-bu.patch <repo>\.stage\r5\patches\level2\main\0004-feat-library-solidity-FHE.isAccountRetired-for-appli.patch <repo>\.stage\r5\patches\level2\main\0005-test-host-contracts-Profile-A-ERC-7984-variant-and-T.patch <repo>\.stage\r5\patches\level2\main\0006-style-host-contracts-prettier-on-the-lifecycle-tests.patch <repo>\.stage\r5\patches\level2\main\0007-feat-sdk-lifecycle-hygiene-in-the-SDK-Decryption-Aut.patch <repo>\.stage\r5\patches\level2\main\0008-fix-sdk-refuse-a-disposed-transport-key-pair-before-.patch
+$ C:\Program Files\Git\mingw64\bin\git.EXE -C <repo>\.stage\r5\impl\fhevm-main am --quiet <repo>\.stage\r5\patches\level3\main\0001-test-host-contracts-exclude-every-declared-interface.patch <repo>\.stage\r5\patches\level3\main\0002-feat-host-contracts-ACL-v0.10.0-with-the-E2-retireme.patch <repo>\.stage\r5\patches\level3\main\0003-test-host-contracts-E2-retirement-certificate-tests-.patch <repo>\.stage\r5\patches\level3\main\0004-test-host-contracts-governance-profile-tests-timeloc.patch <repo>\.stage\r5\patches\level3\main\0005-test-host-contracts-Profile-Q-on-chain-door-asserted.patch <repo>\.stage\r5\patches\level3\main\0006-test-conformance-add-the-Decryption-Authority-Lifecy.patch
+$ C:\Program Files\Git\usr\bin\bash.EXE <repo>\.stage\r5\impl\harness\baselineA_host_contracts.sh main acl
+=== Baseline A (main, scope=acl) ===
+commit: c2078540789a1f07dd17651fd507154559439fd4 branch: lifecycle/repro
+date_utc:   2026-10-22T06:55:09Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         
+git:        git version 2.47.1.windows.2
+hardhat_test_acl rc=0 seconds=84 log=A_fhevm-main_hardhat_test_acl.log
+deploy_emptyProxies rc=0 seconds=15 log=A_fhevm-main_deploy_emptyProxies.log
+forge_test_acl_isolate-default rc=1 seconds=69 log=A_fhevm-main_forge_test_acl_isolate-default.log
+forge_test_acl_isolate-false rc=0 seconds=31 log=A_fhevm-main_forge_test_acl_isolate-false.log
+--- suite results
+[A_fhevm-main_hardhat_test_acl.log]
+  3 passing (104ms)
+[A_fhevm-main_forge_test_acl_isolate-default.log]
+Ran 12 test suites in 15.29s (46.72s CPU time): 144 tests passed, 82 failed, 0 skipped (226 total tests)
+[A_fhevm-main_forge_test_acl_isolate-false.log]
+Ran 12 test suites in 28.93s (144.42s CPU time): 226 tests passed, 0 failed, 0 skipped (226 total tests)
+git status (must be empty):
+$ <home>\.foundry\bin\forge.EXE test --match-path test/conformance/*
+$ <home>\AppData\Local\Programs\Python\Python311\python.exe <repo>\.stage\r5\conformance\install.py <repo>\.stage\r5 --check
+ok   Zama main (lifecycle/level3): impl\fhevm-main\host-contracts\test\conformance 69436bc45afb3b89
+skip Zama v0.13 line (lifecycle/level3): no copy here (impl\wt-l3-v0138\host-contracts\test\conformance or impl\fhevm-v0.13.8\host-contracts\test\conformance)
+ok   Fhenix CoFHE port: impl\fhenix-port\test\conformance 69436bc45afb3b89
+ok   Zama main series: patches\level3\main 69436bc45afb3b89
+ok   Zama v0.13 series: patches\level3\v0.13.8 69436bc45afb3b89
+ERC assets (erc\assets\erc-XXXX\conformance): ok
+kit sha256 69436bc45afb3b896750618e7154e18d3280a269d4d7b8a0e8a2f8ec25b8aa46
+Expected: the Fhenix port 69 passed, 4 skipped (its kit adapter 14 passed, 4 skipped); Zama main's kit 17 passed, 1 skipped. Logs in <repo>\.stage\r5\repro-out
+repro rc=0
+2026-10-22T06:58:57Z

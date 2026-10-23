@@ -1,0 +1,16 @@
+run=r3 hardfork=osaka date=2026-10-22T19:55:10Z
+sdk worktree: dbb289039d6cca3212f92b095c60c2b1b62da282 (lifecycle/phase4-sdk-status)
+anvil: anvil Version: 1.8.5
+node: v22.13.0
+f58af96a9456f56c1c8ba6d41db273d65518ba2de254121f9ec177a85ac334cc *impl/harness/phase5/pq-drill-local/pq-drill-local.test.ts
+77dc646bbe2125d7e14295889726ed5c2ae75c30bcbd27da3d617f3f5fae592b *impl/harness/phase5/pq-drill-local/vitest.config.mts
+46aa3b639ade6877794a18349339cee9fd452b2c7a5bde6a6e3049885653efa8 *impl/harness/phase4/fault_proxy.py
+d42d172077120993adbdf85474d3af79614a8e16d592d1467894b08f3be29c66 *impl/carry-tool/carry.mjs
+1c57601c885236709eac872738549b9d66e3a17577627f8d3672727638ca7bdd *impl/watchtower/watchtower.mjs
+8d86ef3d473fcca52885604d8155713435ac55585cb80caf39dd6d61c9902405 *impl/canary/canary.mjs
+edf1162451cdda7f5f5e4015c85c234f5384c9c33360350fa2c10af83bf75f7b *results/phase5/vps-artifacts/DappStub.json
+3a95567f9b23026546c3d6a2b629fcca0445ee1dfbf100f12e95e9f0206d2178 *results/phase5/vps-artifacts/DeployableERC1967Proxy.json
+b67da0a37fb910b98527f78490ce712dbe376584fd8aa07df0a99e1c8aac849a *results/phase5/vps-artifacts/ExecutorStub.json
+f77d80a57ae7025c22f79d9a6cd3eeba9ec9159aaee32b8829a82056ec19355a *results/phase5/vps-artifacts/base_acl_main.json
+84ca4abfd9dd30cb2d120caaacaefa3eab84877459045e543e8e7c093e756faf *results/phase5/vps-artifacts/empty_uups_proxy_acl_main.json
+f47b80876e61a21f5262af52af32d0bb2bb2fe18efb5d82cdde8d2a648c8b5f1 *results/phase5/vps-artifacts/level3_acl_main.json

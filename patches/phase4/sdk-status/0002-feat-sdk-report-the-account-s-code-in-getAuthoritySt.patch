@@ -1,0 +1,275 @@
+From dbb289039d6cca3212f92b095c60c2b1b62da282 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Thu, 22 Oct 2026 00:34:22 +0300
+Subject: [PATCH 2/2] feat(sdk): report the account's code in
+ getAuthorityStatus (EIP-7702, EIP-7851)
+
+getAuthorityStatus now also reads the account's code through the Ethereum
+module's optional getCode and reports its kind: none, an EIP-7702 delegation
+indicator (0xef0100 || delegate), an EIP-7851 ECDSA-disabled indicator
+(0xef0101 || delegate) or other code, with the delegate. The classification is
+Profile H2's: only an exact 23-byte indicator counts. accountCode is undefined
+when the module cannot read code. Wallets can show an ECDSA-disabled account
+next to its retirement and E1 successor state.
+
+Decryption Authority Lifecycle, Phase 4 P1.6.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../actions/host/getAuthorityStatus.test.ts   | 100 ++++++++++++++++--
+ .../core/actions/host/getAuthorityStatus.ts   |  51 ++++++++-
+ sdk/js-sdk/src/core/actions/host/index.ts     |   1 +
+ 3 files changed, 139 insertions(+), 13 deletions(-)
+
+diff --git a/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.test.ts b/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.test.ts
+index 33b3d2aa..08759f7b 100644
+--- a/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.test.ts
++++ b/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.test.ts
+@@ -16,19 +16,24 @@ import { getAuthorityStatus, getAuthorityStatusOnChains } from './getAuthoritySt
+ ////////////////////////////////////////////////////////////////////////////////
+ // npx vitest run --config src/vitest.config.ts src/core/actions/host/getAuthorityStatus.test.ts
+ //
+-// Decryption Authority Lifecycle, Level 2: one status call per chain (Core, retired, E1 successor), and the purge of
+-// a ring once the account is retired.
++// Decryption Authority Lifecycle, Level 2: one status call per chain (Core, retired, E1 successor, the account's
++// code), and the purge of a ring once the account is retired.
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+ const ACCOUNT = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+ const SUCCESSOR = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8';
++const DELEGATE = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+ const ZERO = '0x0000000000000000000000000000000000000000';
+ const CORE = '0x556d2088';
+ const E1 = '0x7dc5e209';
+ 
++/** `prefix ‖ DELEGATE`: an EIP-7702 (`0xef0100`) or EIP-7851 (`0xef0101`) indicator, or a look-alike. */
++const indicator = (prefix: string) => `${prefix}${DELEGATE.slice(2).toLowerCase()}`;
++
+ type Handlers = Record<string, (args: readonly unknown[]) => unknown>;
++type GetCode = (trustedClient: unknown, parameters: { readonly address: string }) => Promise<string>;
+ 
+-function makeClient(handlers: Handlers) {
++function makeClient(handlers: Handlers, getCode?: GetCode) {
+   const readContract = vi.fn(
+     async (
+       _trustedClient: unknown,
+@@ -41,8 +46,9 @@ function makeClient(handlers: Handlers) {
+       return handler(parameters.args);
+     },
+   );
++  // A module without getCode is one that cannot read code (the member is optional).
+   const runtime = createFhevmRuntime(PRIVATE_ETHERS_TOKEN, {
+-    ethereum: { readContract } as unknown as EthereumModule,
++    ethereum: { readContract, ...(getCode === undefined ? {} : { getCode }) } as unknown as EthereumModule,
+     relayer: {} as RelayerModule,
+     config: {},
+   });
+@@ -51,13 +57,23 @@ function makeClient(handlers: Handlers) {
+   return client;
+ }
+ 
+-const registry = (o: { core: boolean; e1: boolean; retired: boolean; successor?: string; pending?: string }) =>
+-  makeClient({
+-    supportsInterface: ([id]) => (id === CORE ? o.core : id === E1 ? o.e1 : false),
+-    isAccountRetired: () => o.retired,
+-    successorOf: () => o.successor ?? ZERO,
+-    pendingSuccessorOf: () => [o.pending ?? ZERO, 1_800_000_000n, false],
+-  });
++const registry = (o: {
++  core: boolean;
++  e1: boolean;
++  retired: boolean;
++  successor?: string;
++  pending?: string;
++  code?: string;
++}) =>
++  makeClient(
++    {
++      supportsInterface: ([id]) => (id === CORE ? o.core : id === E1 ? o.e1 : false),
++      isAccountRetired: () => o.retired,
++      successorOf: () => o.successor ?? ZERO,
++      pendingSuccessorOf: () => [o.pending ?? ZERO, 1_800_000_000n, false],
++    },
++    o.code === undefined ? undefined : async () => o.code!,
++  );
+ 
+ describe('getAuthorityStatus', () => {
+   it('reports a registry without the lifecycle Core', async () => {
+@@ -94,6 +110,68 @@ describe('getAuthorityStatus', () => {
+     );
+     expect(all.map((s) => s.retired)).toEqual([true, false]);
+   });
++
++  it('reports the account code: none, EIP-7702, EIP-7851 (ECDSA disabled) and other code', async () => {
++    const accountCode = async (code: string) =>
++      (await getAuthorityStatus(registry({ core: true, e1: true, retired: false, code }), { address: ACCOUNT }))
++        .accountCode;
++    expect(await accountCode('0x')).toEqual({ kind: 'empty' });
++    expect(await accountCode(indicator('0xef0100'))).toEqual({ kind: 'eip7702', delegate: DELEGATE });
++    expect(await accountCode(indicator('0xef0101'))).toEqual({ kind: 'eip7851', delegate: DELEGATE });
++    expect(await accountCode(`0xEF0101${DELEGATE.slice(2).toUpperCase()}`)).toEqual({
++      kind: 'eip7851',
++      delegate: DELEGATE,
++    });
++    expect(await accountCode('0x6080604052')).toEqual({ kind: 'regular' });
++    // Only an exact 23-byte indicator with a known prefix is a delegation, as in Profile H2.
++    expect(await accountCode(indicator('0xef0102'))).toEqual({ kind: 'regular' });
++    expect(await accountCode(`${indicator('0xef0101')}00`)).toEqual({ kind: 'regular' });
++    expect(await accountCode(`0xef0101${DELEGATE.slice(2, 40).toLowerCase()}`)).toEqual({ kind: 'regular' });
++  });
++
++  it('reports an EIP-7851 account together with its E1 successor state', async () => {
++    const retired = await getAuthorityStatus(
++      registry({ core: true, e1: true, retired: true, successor: SUCCESSOR, code: indicator('0xef0101') }),
++      { address: ACCOUNT },
++    );
++    expect(retired).toEqual({
++      chainId: sepolia.id,
++      aclAddress: sepolia.fhevm.contracts.acl.address,
++      account: ACCOUNT,
++      accountCode: { kind: 'eip7851', delegate: DELEGATE },
++      lifecycle: true,
++      retired: true,
++      successor: SUCCESSOR,
++      pendingSuccessor: null,
++    });
++    const pending = await getAuthorityStatus(
++      registry({ core: true, e1: true, retired: false, pending: SUCCESSOR, code: indicator('0xef0101') }),
++      { address: ACCOUNT },
++    );
++    expect(pending).toMatchObject({ retired: false, successor: null, accountCode: { kind: 'eip7851' } });
++    expect(pending.pendingSuccessor).toEqual({ address: SUCCESSOR, confirmableAt: 1_800_000_000n, accepted: false });
++  });
++
++  it('reads the code of the checksummed account, also where the ACL has no lifecycle Core', async () => {
++    const getCode = vi.fn(async (_trustedClient: unknown, _parameters: { readonly address: string }) =>
++      indicator('0xef0101'),
++    );
++    const client = makeClient({ supportsInterface: () => false }, getCode);
++    const s = await getAuthorityStatus(client, { address: ACCOUNT.toLowerCase() });
++    expect(s).toMatchObject({ lifecycle: false, retired: false, accountCode: { kind: 'eip7851', delegate: DELEGATE } });
++    expect(getCode).toHaveBeenCalledTimes(1);
++    expect(getCode.mock.calls[0]![1]).toEqual({ address: ACCOUNT });
++  });
++
++  it('leaves the code undefined when the Ethereum module cannot read it, and throws its transport errors', async () => {
++    const s = await getAuthorityStatus(registry({ core: true, e1: true, retired: false }), { address: ACCOUNT });
++    expect(s.accountCode).toBeUndefined();
++    expect(s).toMatchObject({ lifecycle: true, retired: false, successor: null, pendingSuccessor: null });
++    const failing = makeClient({ supportsInterface: () => true }, async () => {
++      throw new Error('transport down');
++    });
++    await expect(getAuthorityStatus(failing, { address: ACCOUNT })).rejects.toThrow('transport down');
++  });
+ });
+ 
+ describe('purgeIfRetired', () => {
+diff --git a/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.ts b/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.ts
+index ecc17d4a..f748ccf9 100644
+--- a/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.ts
++++ b/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.ts
+@@ -9,6 +9,7 @@ import {
+ } from '../../host-contracts/abi-fragments/fragments.js';
+ import { getTrustedClient, initPublicAction } from '../../runtime/CoreFhevm-p.js';
+ import { addressToChecksummedAddress, assertIsAddress } from '../../base/address.js';
++import { assertIsBytesHex } from '../../base/bytes.js';
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+@@ -17,14 +18,35 @@ const LIFECYCLE_CORE_INTERFACE_ID = '0x556d2088';
+ const LIFECYCLE_SUCCESSION_INTERFACE_ID = '0x7dc5e209';
+ const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+ 
++// Delegation indicators: a 3-byte prefix and the delegate's address, 23 bytes in all.
++const EIP7702_INDICATOR_PREFIX = '0xef0100';
++const EIP7851_INDICATOR_PREFIX = '0xef0101';
++const DELEGATION_INDICATOR_BYTES = 23;
++
+ export type GetAuthorityStatusParameters = {
+   readonly address: string;
+ };
+ 
++/**
++ * The account's code as an off-chain verifier reads it (`eth_getCode`):
++ * - `empty`: no code. The account's ECDSA key signs for it.
++ * - `eip7702`: an EIP-7702 delegation indicator, `0xef0100 ‖ delegate`. The ECDSA key still signs for it.
++ * - `eip7851`: an ECDSA-disabled delegation indicator, `0xef0101 ‖ delegate` (EIP-7851, a draft). The key no longer
++ *   authorizes the account on the host chain. Under Profile H, verifiers accept only ERC-1271 signatures from it.
++ * - `regular`: any other code, such as a contract account.
++ */
++export type AccountCode =
++  | { readonly kind: 'empty' }
++  | { readonly kind: 'eip7702' | 'eip7851'; readonly delegate: ChecksummedAddress }
++  | { readonly kind: 'regular' };
++
+ export type AuthorityStatus = {
+   readonly chainId: number;
+   readonly aclAddress: ChecksummedAddress;
+   readonly account: ChecksummedAddress;
++  /** The account's code: none, an EIP-7702 or EIP-7851 indicator, or other code. `undefined` when the client's
++   *  Ethereum module cannot read code. */
++  readonly accountCode: AccountCode | undefined;
+   /** Whether the ACL declares the lifecycle Core (ERC-165 `0x556d2088`). Without it, no account can retire there. */
+   readonly lifecycle: boolean;
+   /** Whether the account has retired its decryption authority on this chain. Retirement is one-way. */
+@@ -46,10 +68,31 @@ export type GetAuthorityStatusReturnType = AuthorityStatus;
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ 
++/** Classifies code as Profile H2 does: only an exact 23-byte indicator is a delegation; anything else is regular. */
++function toAccountCode(code: unknown): AccountCode {
++  assertIsBytesHex(code, { subject: 'account code' });
++  const hex = code.toLowerCase();
++  if (hex === '0x') {
++    return { kind: 'empty' };
++  }
++  if (hex.length === 2 + 2 * DELEGATION_INDICATOR_BYTES) {
++    const prefix = hex.slice(0, 2 + 2 * 3);
++    const kind =
++      prefix === EIP7702_INDICATOR_PREFIX ? 'eip7702' : prefix === EIP7851_INDICATOR_PREFIX ? 'eip7851' : undefined;
++    if (kind !== undefined) {
++      const delegate = `0x${hex.slice(2 + 2 * 3)}`;
++      assertIsAddress(delegate, {});
++      return { kind, delegate: addressToChecksummedAddress(delegate) };
++    }
++  }
++  return { kind: 'regular' };
++}
++
+ /**
+  * The decryption authority status of `address` on the client's chain: whether the ACL supports the Decryption
+- * Authority Lifecycle, whether the account is retired, and its successor (E1). Wallets use it to show one status and
+- * to purge transport keys and permits once the account is retired.
++ * Authority Lifecycle, whether the account is retired, its successor (E1), and its code (an EIP-7851 account has
++ * disabled its ECDSA key). Wallets use it to show one status and to purge transport keys and permits once the account
++ * is retired.
+  */
+ export async function getAuthorityStatus(
+   fhevm: Fhevm<FhevmChain>,
+@@ -77,10 +120,14 @@ export async function getAuthorityStatus(
+     }
+   };
+ 
++  // Optional in the Ethereum module; transport errors are thrown.
++  const code = await fhevm.runtime.ethereum.getCode?.(trustedClient, { address: account });
++
+   const status = {
+     chainId: fhevm.chain.id,
+     aclAddress,
+     account,
++    accountCode: code === undefined ? undefined : toAccountCode(code),
+   };
+ 
+   if (!(await supports(LIFECYCLE_CORE_INTERFACE_ID))) {
+diff --git a/sdk/js-sdk/src/core/actions/host/index.ts b/sdk/js-sdk/src/core/actions/host/index.ts
+index c9f8018f..e2fe463b 100644
+--- a/sdk/js-sdk/src/core/actions/host/index.ts
++++ b/sdk/js-sdk/src/core/actions/host/index.ts
+@@ -13,6 +13,7 @@ export {
+ export { type PersistAllowedParameters, type PersistAllowedReturnType, persistAllowed } from './persistAllowed.js';
+ 
+ export {
++  type AccountCode,
+   type AuthorityStatus,
+   type GetAuthorityStatusParameters,
+   type GetAuthorityStatusReturnType,

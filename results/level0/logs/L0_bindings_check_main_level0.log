@@ -1,0 +1,6 @@
+Compiling 80 files with Solc 0.8.24
+Solc 0.8.24 finished in 261.33ms
+Compiler run successful!
+Bindings found. Checking for consistency.
+Checking bindings for 75 contracts
+Error: File contents do not match expected contents for "rust_bindings/src\\acl.rs"

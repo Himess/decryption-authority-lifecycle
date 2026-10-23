@@ -1,0 +1,316 @@
+INSCOPE start=2026-10-21T16:43:35Z cgroup=/system.slice/lifecycle-l1h9-relayer-alltests-1792601014.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/run_l1h9_relayer_alltests.sh]
+    Blocking waiting for file lock on build directory
+    Finished `test` profile [unoptimized] target(s) in 48.12s
+     Running unittests src/lib.rs (/srv/lifecycle/target/main/debug/deps/fhevm_relayer-29293a69e1e9f8df)
+
+running 282 tests
+test config::retry_after::tests::test_all_fields_required ... ok
+test config::retry_after::tests::test_deserialize_config ... ok
+test config::retry_after::tests::test_validate_empty_backoff_intervals ... ok
+test config::retry_after::tests::test_validate_min_equals_max ... ok
+test config::retry_after::tests::test_validate_duplicate_thresholds ... ok
+test config::retry_after::tests::test_validate_safety_margin_boundary_values ... ok
+test config::retry_after::tests::test_validate_min_greater_than_max ... ok
+test config::retry_after::tests::test_validate_safety_margin_negative ... ok
+test config::retry_after::tests::test_validate_success ... ok
+test config::retry_after::tests::test_validate_unsorted_backoff_intervals ... ok
+test config::retry_after::tests::test_validate_safety_margin_too_high ... ok
+test config::settings::tests::test_aws_kms_fields_are_redacted_in_debug_output ... ok
+test config::settings::tests::test_deserialize_host_chains_standard_yaml_still_works ... ok
+test config::settings::tests::test_deserialize_host_chains_from_indexed_env_vars ... ok
+test config::settings::tests::test_deserialize_listeners_from_indexed_env_vars ... ok
+test config::settings::tests::test_deserialize_listeners_standard_yaml_still_works ... ok
+test config::settings::tests::test_dispatcher_lock_idle_timeout_must_exceed_the_heartbeat ... ok
+test config::settings::tests::test_dispatcher_lock_rejects_zero_intervals ... ok
+test config::settings::tests::test_gw_ciphertext_check_coprocessor_attestations_requires_retry ... ok
+test config::settings::tests::test_gw_ciphertext_check_gateway_chain_accepts_retry_only ... ok
+test config::settings::tests::test_gw_ciphertext_check_gateway_chain_does_not_require_gateway_config_address ... ok
+test config::settings::tests::test_gw_ciphertext_check_gateway_chain_requires_retry ... ok
+test config::settings::tests::test_gw_ciphertext_check_gateway_config_address_is_required ... ok
+test config::settings::tests::test_gw_ciphertext_check_head_timeout_is_required ... ok
+test config::settings::tests::test_gw_ciphertext_check_max_concurrent_handles_is_required ... ok
+test config::settings::tests::test_gw_ciphertext_check_registry_refresh_is_required ... ok
+test config::settings::tests::test_gw_ciphertext_check_rejects_budget_below_one_probe ... ok
+test config::settings::tests::test_gw_ciphertext_check_rejects_zero_timeouts ... ok
+test config::settings::tests::test_gw_ciphertext_check_request_timeout_is_required ... ok
+test config::settings::tests::test_gw_ciphertext_check_source_is_required ... ok
+test config::settings::tests::test_gw_ciphertext_check_source_rejects_unknown_value ... ok
+test config::settings::tests::test_keyurl_chain_mode_unaffected_by_config_validation ... ok
+test config::settings::tests::test_keyurl_chain_requires_kms_generation_address ... ok
+test config::settings::tests::test_dispatcher_lock_idle_timeout_must_exceed_the_standby_poll ... ok
+test config::settings::tests::test_keyurl_chain_requires_poll_interval_ms ... ok
+test config::settings::tests::test_keyurl_config_accepts_valid_static_values ... ok
+test config::settings::tests::test_keyurl_config_rejects_data_id_of_wrong_length ... ok
+test config::settings::tests::test_keyurl_config_rejects_empty_urls ... ok
+test config::settings::tests::test_keyurl_config_rejects_unparsable_url ... ok
+test config::settings::tests::test_keyurl_config_requires_crs ... ok
+test config::settings::tests::test_keyurl_config_rejects_non_hex_data_id ... ok
+test config::settings::tests::test_keyurl_config_requires_fhe_public_key ... ok
+test config::settings::tests::test_keyurl_source_config_from_env_only ... ok
+test config::settings::tests::test_keyurl_source_is_required ... ok
+test config::settings::tests::test_private_key_is_redacted_in_debug_output ... ok
+test config::settings::tests::test_keyurl_source_rejects_unknown_value ... ok
+test config::settings::tests::test_settings_from_yaml_with_env_overrides ... ok
+test config::settings::tests::test_signer_config_deserialize_aws_kms ... ok
+test config::settings::tests::test_signer_config_deserialize_aws_kms_without_endpoint ... ok
+test config::settings::tests::test_signer_config_deserialize_invalid_type ... ok
+test config::settings::tests::test_signer_config_deserialize_missing_type ... ok
+test config::settings::tests::test_signer_config_deserialize_private_key ... ok
+test config::settings::tests::test_sql_database_url_is_redacted_in_debug_output ... ok
+test config::settings::tests::test_user_decrypt_additional_shares_is_required ... ok
+test config::settings::tests::test_settings_new_rejects_invalid_address ... ok
+test config::settings::tests::test_user_decrypt_additional_shares_timeout_is_required ... ok
+test config::settings::tests::test_user_decrypt_shares_threshold_is_required ... ok
+test core::event::tests::test_input_proof_request_conversion_ ... ignored
+test core::event::tests::test_public_decrypt_propagates_extra_data_verbatim ... ok
+test core::input_proof_request::tests::test_input_proof_request_content_hash_deterministic ... ok
+test core::input_proof_request::tests::test_input_proof_request_content_hash_different_for_different_requests ... ok
+test core::input_proof_request::tests::test_input_proof_request_each_field_affects_hash ... ok
+test core::input_proof_request::tests::test_input_proof_request_hash_format ... ok
+test core::public_decrypt_request::tests::test_public_decrypt_request_content_hash_deterministic ... ok
+test core::public_decrypt_request::tests::test_public_decrypt_request_content_hash_different_for_different_requests ... ok
+test core::user_decrypt_request::tests::attestation_formats_hash_differently ... ok
+test core::user_decrypt_request::tests::legacy_delegated_content_hash_deterministic ... ok
+test core::user_decrypt_request::tests::legacy_delegated_content_hash_differs_on_chain_id ... ok
+test core::user_decrypt_request::tests::legacy_delegated_excluded_fields_dont_affect_hash ... ok
+test core::user_decrypt_request::tests::legacy_direct_content_hash_deterministic ... ok
+test core::user_decrypt_request::tests::legacy_direct_content_hash_differs_on_chain_id ... ok
+test core::user_decrypt_request::tests::legacy_direct_excluded_fields_dont_affect_hash ... ok
+test gateway::arbitrum::bindings::tests::test_decryption ... ok
+test gateway::arbitrum::bindings::tests::test_input_verification ... ok
+test gateway::arbitrum::polling_listener::tests::a_chunk_never_reaches_past_the_head ... ok
+test config::settings::tests::test_user_decrypt_shares_threshold_works_when_present ... ok
+test gateway::arbitrum::polling_listener::tests::a_chunk_past_the_end_of_the_range_saturates ... ok
+test gateway::arbitrum::polling_listener::tests::a_large_gap_is_capped_to_one_chunk ... ok
+test gateway::arbitrum::polling_listener::tests::the_chunk_span_counts_blocks_inclusively ... ok
+test gateway::arbitrum::transaction::tx_throttler::tests::test_cloning_shares_state ... ok
+test gateway::arbitrum::transaction::tx_throttler::tests::test_deduplication ... ok
+test gateway::arbitrum::transaction::tx_throttler::tests::test_fifo_ordering ... ok
+test gateway::arbitrum::transaction::tx_throttler::tests::test_position_tracking ... ok
+test gateway::arbitrum::transaction::nonce_manager::tests::confirmed_nonce_is_retired_released_nonce_is_redrawn ... ok
+test gateway::arbitrum::transaction::tx_throttler::tests::test_queue_full ... ok
+test gateway::arbitrum::transaction::tx_throttler::tests::test_position_tracking_deterministic ... ok
+test gateway::arbitrum::transaction::tx_throttler::tests::test_rate_limit_simple ... ok
+test gateway::arbitrum::transaction::tx_throttler::tests::test_throttler_buffer_logic ... ok
+test gateway::ciphertext_checker::tests::transient_error_cleared_by_later_ok_yields_gw_timeout ... ok
+test gateway::handled_events::tests::a_claim_is_forgotten_after_its_ttl ... ok
+test gateway::handled_events::tests::a_handled_event_is_skipped_by_everyone ... ok
+test gateway::handled_events::tests::an_empty_range_completes_on_arrival ... ok
+test gateway::handled_events::tests::an_in_flight_event_is_skipped_without_a_range_and_redispatched_with_one ... ok
+test gateway::handled_events::tests::first_claim_dispatches_and_the_second_does_not ... ok
+test gateway::handled_events::tests::one_listener_advances_the_cursor_while_another_lags ... ok
+test gateway::handled_events::tests::only_the_completed_prefix_advances_the_cursor ... ok
+test gateway::utils::tests::test_classify_revert_ecdsa_invalid_signature ... ok
+test gateway::utils::tests::test_classify_revert_ecdsa_invalid_signature_length ... ok
+test gateway::utils::tests::test_classify_revert_ecdsa_invalid_signature_s ... ok
+test gateway::utils::tests::test_classify_revert_enforced_pause ... ok
+test gateway::utils::tests::test_classify_revert_insufficient_allowance ... ok
+test gateway::utils::tests::test_classify_revert_insufficient_balance ... ok
+test gateway::utils::tests::test_classify_revert_invalid_signature ... ok
+test gateway::utils::tests::test_classify_revert_unknown_selector ... ok
+test gateway::utils::tests::test_extract_revert_selector_no_match ... ok
+test gateway::utils::tests::test_extract_revert_selector_uppercase ... ok
+test gateway::utils::tests::test_extract_revert_selector_with_prefix ... ok
+test gateway::utils::tests::test_extract_revert_selector_without_prefix ... ok
+test gateway::utils::tests::test_u256_to_i32_max_i32 ... ok
+test gateway::utils::tests::test_u256_to_i32_overflow ... ok
+test gateway::utils::tests::test_u256_to_i32_small_values ... ok
+test gateway::utils::tests::test_u256_to_i32_zero ... ok
+test gateway::utils::tests::test_u256_to_i64_max_i64 ... ok
+test gateway::utils::tests::test_u256_to_i64_overflow ... ok
+test gateway::utils::tests::test_u256_to_i64_small_values ... ok
+test gateway::utils::tests::test_u256_to_i64_zero ... ok
+test host::acl_checker::tests::test_decode_bool_empty ... ok
+test host::acl_checker::tests::test_decode_bool_false ... ok
+test host::acl_checker::tests::test_decode_bool_short_data ... ok
+test host::acl_checker::tests::test_decode_bool_true ... ok
+test host::acl_checker::tests::test_group_handles_by_chain ... ok
+test host::acl_checker::tests::test_group_handles_empty ... ok
+test host::chain_id_validator::tests::test_validate_handles_all_valid ... ok
+test host::chain_id_validator::tests::test_validate_handles_empty ... ok
+test host::chain_id_validator::tests::test_validate_handles_unsupported ... ok
+test host::chain_id_validator::tests::test_validate_u256_handles_all_valid ... ok
+test host::chain_id_validator::tests::test_validate_u256_handles_unsupported ... ok
+test host::error_redact::tests::non_transport_error_passes_through ... ok
+test host::extra_data::tests::empty_returns_zero ... ok
+test host::extra_data::tests::large_context_id ... ok
+test host::extra_data::tests::single_zero_byte_returns_zero ... ok
+test host::extra_data::tests::unknown_version_returns_error ... ok
+test host::extra_data::tests::v1_too_short_returns_error ... ok
+test host::extra_data::tests::v2_too_short_returns_error ... ok
+test host::extra_data::tests::v2_with_trailing_bytes_works ... ok
+test host::extra_data::tests::valid_v1_returns_context_id ... ok
+test host::extra_data::tests::valid_v2_returns_context_id ... ok
+test host::handle_chain_id::tests::test_extract_chain_id_from_handle ... ok
+test host::handle_chain_id::tests::test_extract_chain_id_from_u256 ... ok
+test host::signature_prechecker::tests::intermittent_empty_revert_is_retried ... ok
+test host::signature_prechecker::tests::non_unified_request_is_skipped ... ok
+test host::signature_prechecker::tests::persistent_empty_revert_is_invalid_not_server_error ... ok
+test host::signature_prechecker::tests::profile_h_caps_refuse_before_any_rpc ... ok
+test host::signature_prechecker::tests::profile_h_empty_revert_is_retried_only_at_a_later_block ... ok
+test host::signature_prechecker::tests::profile_h_enforce_accepts_an_eoa_after_one_code_read ... ok
+test host::signature_prechecker::tests::profile_h_enforce_refuses_a_7702_root_key_its_delegate_rejects ... ok
+test host::signature_prechecker::tests::profile_h_off_accepts_an_eoa_signature_with_no_rpc ... ok
+test host::signature_prechecker::tests::profile_h_settings_default_off_and_reject_an_unknown_mode ... ok
+test host::signature_prechecker::tests::profile_h_wrong_magic_is_definitive_for_the_precheck ... ok
+test host::signature_prechecker::tests::single_chain_id_detects_mismatch ... ok
+test host::signature_prechecker::tests::transport_error_retries_then_host_call_failed ... ok
+test host::threshold_resolver::tests::context_zero_returns_preseeded_default ... ok
+test host::threshold_resolver::tests::unconfigured_chain_fails_for_nonzero_context ... ok
+test http::admin::config_param::tests::test_config_param_all ... ok
+test http::admin::config_param::tests::test_config_param_display ... ok
+test http::admin::config_param::tests::test_config_param_is_retry_after_param ... ok
+test http::admin::config_param::tests::test_config_param_is_tps_param ... ok
+test http::admin::config_param::tests::test_config_param_is_user_decrypt_wait_param ... ok
+test http::admin::config_param::tests::test_config_param_serialization ... ok
+test http::admin::config_param::tests::test_config_value_f32_serialization ... ok
+test http::admin::config_param::tests::test_config_value_u32_serialization ... ok
+test http::admin::config_param::tests::test_f32_constraints_validation ... ok
+test http::admin::config_param::tests::test_u32_constraints_validation ... ok
+test http::admin::config_param::tests::test_user_decrypt_wait_param_serialization ... ok
+test http::admin::handlers::tests::test_constraint_info_serialization ... ok
+test http::admin::handlers::tests::test_format_validation_error_fallback ... ok
+test http::admin::handlers::tests::test_format_validation_error_over_max ... ok
+test http::admin::handlers::tests::test_format_validation_error_zero_value ... ok
+test http::admin::handlers::tests::test_update_config_request_deserialize ... ok
+test http::admin::handlers::tests::test_update_config_request_f32_value ... ok
+test http::admin::registry::tests::test_registry_f32_value ... ok
+test http::admin::registry::tests::test_registry_get_all ... ok
+test http::admin::registry::tests::test_registry_is_enabled ... ok
+test http::admin::registry::tests::test_registry_tps_channel_notification ... ok
+test http::admin::registry::tests::test_registry_type_mismatch ... ok
+test http::admin::registry::tests::test_registry_update_and_get ... ok
+test http::admin::registry::tests::test_registry_validation_error ... ok
+test http::endpoints::v2::types::error::tests::all_constructor_labels_are_in_canonical_list ... ok
+test http::endpoints::v2::types::error::tests::test_from_parse_error_malformed_json ... ok
+test http::endpoints::v2::types::error::tests::test_from_parse_error_missing_field ... ok
+test http::endpoints::v2::types::error::tests::test_from_parse_error_validation_failed ... ok
+test http::endpoints::v2::types::error::tests::test_internal_server_error_has_status_and_request_id ... ok
+test http::endpoints::v2::types::error::tests::test_internal_server_error_simple_has_no_request_id ... ok
+test http::endpoints::v2::types::error::tests::test_request_error_has_status_and_request_id ... ok
+test http::endpoints::v2::types::error::tests::test_serialized_error_response_format ... ok
+test http::openapi::expected_labels::tests::all_error_labels_appear_in_catalog ... ok
+test http::openapi::expected_labels::tests::all_labels_have_metadata ... ok
+test http::openapi::expected_labels::tests::catalog_labels_are_in_all_error_labels ... ok
+test http::openapi::expected_labels::tests::catalog_status_matches_metadata_status ... ok
+test http::openapi::expected_labels::tests::matrix_labels_exist_in_defs ... ok
+test http::openapi::expected_labels::tests::spec_examples_match_catalog ... ok
+test http::retry_after::queue_info::tests::test_decrypt_queue_info_creation ... ok
+test http::retry_after::queue_info::tests::test_readiness_queue_info_creation ... ok
+test http::retry_after::queue_info::tests::test_tx_queue_info_creation ... ok
+test http::retry_after::state::tests::test_apply_safety_margin_ms ... ok
+test http::retry_after::state::tests::test_compute_copro_kms_backoff ... ok
+test http::retry_after::state::tests::test_compute_for_get_completed ... ok
+test http::retry_after::state::tests::test_compute_for_get_receipt_received ... ok
+test http::retry_after::state::tests::test_compute_for_input_proof_post ... ok
+test http::retry_after::state::tests::test_compute_readiness_queue_wait_ms ... ok
+test http::retry_after::state::tests::test_compute_tx_queue_wait_ms ... ok
+test http::retry_after::state::tests::test_eta_clamped_to_max ... ok
+test http::retry_after::state::tests::test_eta_clamped_to_min ... ok
+test http::retry_after::state::tests::test_get_eta_is_pod_independent ... ok
+test http::retry_after::state::tests::test_new_from_config ... ok
+test http::retry_after::state::tests::test_position_overrides_size ... ok
+test http::retry_after::state::tests::test_setters ... ok
+test http::user_decrypt_wait::tests::disabled_when_additional_shares_zero ... ok
+test http::user_decrypt_wait::tests::disabled_when_timeout_zero ... ok
+test http::user_decrypt_wait::tests::not_ready_below_target_within_window ... ok
+test http::user_decrypt_wait::tests::ready_when_target_reached ... ok
+test http::user_decrypt_wait::tests::ready_when_window_elapsed ... ok
+test http::utils::serialization::tests::test_ct_handles_hex_serialization ... ok
+test http::utils::validations::extra_data_tests::accepts_legacy_version_0x00 ... ok
+test http::utils::validations::extra_data_tests::accepts_version_0x01_with_context_id ... ok
+test http::utils::validations::extra_data_tests::accepts_version_0x02_with_context_id_and_epoch_id ... ok
+test http::utils::validations::extra_data_tests::input_proof_accepts_only_0x00 ... ok
+test http::utils::validations::extra_data_tests::rejects_bare_version_byte ... ok
+test http::utils::validations::extra_data_tests::rejects_empty_and_garbage ... ok
+test http::utils::validations::extra_data_tests::rejects_non_hex_payload ... ok
+test http::utils::validations::extra_data_tests::rejects_unsupported_version_byte ... ok
+test http::utils::validations::extra_data_tests::rejects_version_0x01_with_trailing_bytes ... ok
+test http::utils::validations::extra_data_tests::rejects_version_0x01_with_untagged_context_id ... ok
+test http::utils::validations::extra_data_tests::rejects_version_0x02_missing_epoch_id ... ok
+test http::utils::validations::extra_data_tests::rejects_version_0x02_with_trailing_bytes ... ok
+test http::utils::validations::extra_data_tests::rejects_version_0x02_with_untagged_context_id ... ok
+test http::utils::validations::extra_data_tests::rejects_version_0x02_with_untagged_epoch_id ... ok
+test logging::steps::tests::test_step_display ... ok
+test metrics::http::tests::extract_sdk_info_from_headers ... ok
+test metrics::http::tests::parse_major_minor_accepts_bounded_versions ... ok
+test metrics::http::tests::parse_major_minor_ignores_components_after_minor ... ok
+test metrics::http::tests::parse_major_minor_rejects_out_of_range_or_malformed ... ok
+test metrics::request_cache::tests::test_cache_result_as_str ... ok
+test metrics::retry_after::tests::test_request_type_as_str ... ok
+test orchestrator::dispatcher_lock::tests::gate_is_closed_when_not_held ... ok
+test orchestrator::dispatcher_lock::tests::gate_is_closed_while_held_and_minted_but_handover_not_ready ... ok
+test orchestrator::dispatcher_lock::tests::gate_is_closed_while_held_without_a_minted_epoch ... ok
+test orchestrator::dispatcher_lock::tests::gate_is_closed_while_unconfirmed_even_with_an_epoch ... ok
+test orchestrator::dispatcher_lock::tests::gate_is_open_only_when_held_with_a_minted_epoch ... ok
+test orchestrator::dispatcher_lock::tests::gate_opens_once_handover_becomes_ready ... ok
+test orchestrator::dispatcher_lock::tests::gate_wait_closed_wakes_when_the_lock_is_lost ... ok
+test orchestrator::dispatcher_lock::tests::gate_wait_open_returns_immediately_when_already_open ... ok
+test orchestrator::dispatcher_lock::tests::gate_wait_open_wakes_on_the_epoch_being_minted ... ok
+test orchestrator::dispatcher_lock::tests::gate_wait_open_wakes_on_the_handover_wait_elapsing ... ok
+test orchestrator::dispatcher_lock::tests::hash_schema_key_differs_across_schemas ... ok
+test orchestrator::dispatcher_lock::tests::hash_schema_key_is_deterministic ... ok
+test orchestrator::dispatcher_lock::tests::hash_schema_key_spans_the_full_i32_range ... ok
+test orchestrator::ids::tests::test_concurrent_uniqueness ... ok
+test orchestrator::ids::tests::test_delayed_ids_sort_correctly ... ok
+test orchestrator::ids::tests::test_external_reference_concurrent_uniqueness ... ok
+test orchestrator::ids::tests::test_external_reference_distribution ... ok
+test orchestrator::ids::tests::test_external_reference_randomness ... ok
+test orchestrator::ids::tests::test_external_reference_uniqueness ... ok
+test orchestrator::ids::tests::test_external_reference_variant ... ok
+test orchestrator::ids::tests::test_external_reference_version ... ok
+test orchestrator::ids::tests::test_sequential_ids_sort_correctly ... ok
+test orchestrator::ids::tests::test_sequential_uniqueness ... ok
+test gateway::arbitrum::transaction::tx_throttler::tests::test_rate_limit_sustained ... ok
+test orchestrator::task_manager::tests::test_drain_aborts_task_that_ignores_cancellation ... ok
+test orchestrator::task_manager::tests::test_drain_allows_slow_cooperative_task_to_complete ... ok
+test orchestrator::task_manager::tests::test_drain_completes_successfully ... ok
+test orchestrator::task_manager::tests::test_normal_task_spawning_and_completion ... ok
+test orchestrator::task_manager::tests::test_shutdown_flag_prevents_spawning_after_set ... ok
+test orchestrator::task_manager::tests::test_shutdown_prevents_new_spawns ... ok
+test orchestrator::orchestrator::tests::test_orchestrator ... ok
+test readiness::throttler::tests::test_deduplication ... ok
+test readiness::throttler::tests::test_fifo_ordering ... ok
+test readiness::throttler::tests::test_queue_full ... ok
+test readiness::throttler::tests::test_readiness_headroom ... ok
+test readiness::throttler::tests::test_shutdown_while_waiting_for_permit ... ok
+test store::sql::conversion::tests::test_u256_to_i32_max_i32 ... ok
+test store::sql::conversion::tests::test_u256_to_i32_overflow ... ok
+test store::sql::conversion::tests::test_u256_to_i32_small_values ... ok
+test store::sql::conversion::tests::test_u256_to_i32_zero ... ok
+test store::sql::models::user_decrypt_req_model::tests::a_mismatched_req_type_is_an_error ... ok
+test store::sql::models::user_decrypt_req_model::tests::reads_payloads_written_by_v013 ... ok
+test store::sql::models::user_decrypt_req_model::tests::unified_round_trips ... ok
+test store::sql::models::user_decrypt_req_model::tests::writes_the_shape_v013_wrote ... ok
+test store::sql::repositories::utils::tests::test_advisory_lock_id_deterministic ... ok
+test store::sql::repositories::utils::tests::test_advisory_lock_id_different_inputs ... ok
+test store::sql::repositories::utils::tests::test_advisory_lock_id_full_range ... ok
+test readiness::throttler::tests::test_concurrency_limit ... ok
+
+test result: ok. 281 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 5.98s
+
+	Command being timed: "/srv/lifecycle/scripts/run_l1h9_relayer_alltests.sh"
+	User time (seconds): 3.82
+	System time (seconds): 4.34
+	Percent of CPU this job got: 14%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:55.18
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 131952
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 377
+	Minor (reclaiming a frame) page faults: 38940
+	Voluntary context switches: 4993
+	Involuntary context switches: 195
+	Swaps: 0
+	File system inputs: 218624
+	File system outputs: 1096
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T16:44:30Z rc=0 cgroup_memory.peak_bytes=233758720 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=l1h9-relayer-alltests unit=lifecycle-l1h9-relayer-alltests-1792601014 rc=0 wall_s=57 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=57 killed=no sampled_peak_anon_mb=114 sampled_peak_cgroup_current_mb=220 sampled_peak_swap_mb=0

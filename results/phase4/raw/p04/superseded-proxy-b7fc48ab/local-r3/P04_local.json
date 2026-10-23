@@ -1,0 +1,730 @@
+{
+ "label": "Mock: the EIP-7851 gap on a local EVM (anvil, Osaka), eth_getCode rewritten to 0xef0101 ‖ delegate by a proxy",
+ "env": {
+  "hardware": {
+   "cpu": "AMD Ryzen 5 5600 6-Core Processor",
+   "cores": 12,
+   "memGiB": 16,
+   "os": "Windows_NT 10.0.19045 x64",
+   "node": "v22.13.0",
+   "anvil": "anvil Version: 1.8.5",
+   "forge": "forge Version: 1.8.5"
+  },
+  "chainId": "31337",
+  "date": "2026-10-21T18:34:16.965Z",
+  "udsigH": "impl\\.tools\\target-udsig-h-l1\\release\\udsig-h.exe"
+ },
+ "contracts": {
+  "pkHash": "0x437db8237b9986a1e6176d8134d0f5a34124cf59d901130808b62e7b21179d8c",
+  "pkBytes": 1312,
+  "pkBlobBytes": 20545,
+  "f1600Helper": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "verifier": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "pkBlob": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  "account": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+  "meter": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+  "noErc1271": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
+ },
+ "accounts": {
+  "X": "0x9F3C94f377994B8c59f119672E125331C550237C",
+  "Y": "0xBcABAFdf878Ac087E3E2cdFedc9772ecD3De4c7a",
+  "E": "0x1752f8Ac5c4917B80F55bEED1189d847aE21C983"
+ },
+ "rows": [
+  {
+   "label": "zama-unmodified.X-7851.root-key",
+   "verifier": "zama-unmodified",
+   "account": "X",
+   "code": "7851",
+   "signature": "root-key",
+   "accepted": true,
+   "detail": {
+    "elapsed_ms": 0.2501,
+    "gas_limit": 250000,
+    "ok": true,
+    "signature_len": 65,
+    "wire": []
+   }
+  },
+  {
+   "label": "l1-legacy.X-7851.root-key",
+   "verifier": "l1-legacy",
+   "account": "X",
+   "code": "7851",
+   "signature": "root-key",
+   "accepted": true,
+   "detail": {
+    "elapsed_ms": 0.2744,
+    "fn": "verify_signature",
+    "gas_limit": 250000,
+    "ok": true,
+    "signature_len": 65,
+    "wire": []
+   }
+  },
+  {
+   "label": "profile-h.off.X-7851.root-key",
+   "verifier": "profile-h.off",
+   "account": "X",
+   "code": "7851",
+   "signature": "root-key",
+   "accepted": true,
+   "detail": {
+    "attempts": {
+     "last_negative_block": null,
+     "negatives": 0
+    },
+    "b_exec": 2000000,
+    "block": null,
+    "code": null,
+    "elapsed_ms": 0.2897,
+    "erc1271_calls": 0,
+    "fallback": true,
+    "fn": "verify_user_decryption_signature",
+    "gas_limit_formula": 2033544,
+    "mode": "off",
+    "ok": true,
+    "path": "Ecrecover",
+    "shadow": null,
+    "signature_len": 65,
+    "wire": []
+   }
+  },
+  {
+   "label": "profile-h.shadow.X-7851.root-key",
+   "verifier": "profile-h.shadow",
+   "account": "X",
+   "code": "7851",
+   "signature": "root-key",
+   "accepted": true,
+   "detail": {
+    "attempts": {
+     "last_negative_block": null,
+     "negatives": 0
+    },
+    "b_exec": 2000000,
+    "block": 8,
+    "code": "Regular { len: 23 }",
+    "elapsed_ms": 22.9885,
+    "erc1271_calls": 1,
+    "fallback": true,
+    "fn": "verify_user_decryption_signature",
+    "gas_limit_formula": 2033544,
+    "mode": "shadow",
+    "ok": true,
+    "path": "Ecrecover",
+    "shadow": {
+     "code": "Regular { len: 23 }",
+     "code_first": {
+      "reject": "WrongMagic"
+     },
+     "served": {
+      "accept": "Ecrecover"
+     },
+     "would_accept": false,
+     "would_reject": true
+    },
+    "signature_len": 65,
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef0101cf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+      "rewritten": true
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x1f0788",
+      "selector": "0x1626ba7e",
+      "result": "0xffffffff"
+     }
+    ]
+   }
+  },
+  {
+   "label": "zama-unmodified.Y-7851.root-key",
+   "verifier": "zama-unmodified",
+   "account": "Y",
+   "code": "7851",
+   "signature": "root-key",
+   "accepted": true,
+   "detail": {
+    "elapsed_ms": 0.2349,
+    "gas_limit": 250000,
+    "ok": true,
+    "signature_len": 65,
+    "wire": []
+   }
+  },
+  {
+   "label": "profile-h.enforce.X-7851.root-key",
+   "verifier": "profile-h.enforce",
+   "account": "X",
+   "code": "7851",
+   "signature": "root-key",
+   "accepted": false,
+   "detail": {
+    "attempts": {
+     "last_negative_block": 8,
+     "negatives": 1
+    },
+    "b_exec": 2000000,
+    "block": 8,
+    "code": "Regular { len: 23 }",
+    "disposition": "RetryNextBlock",
+    "elapsed_ms": 14.7777,
+    "erc1271_calls": 1,
+    "error": "ERC-1271 isValidSignature returned non-magic value 0xffffffff for userAddress 0x9F3C94f377994B8c59f119672E125331C550237C",
+    "fallback": true,
+    "fn": "verify_user_decryption_signature",
+    "gas_limit_formula": 2033544,
+    "mode": "enforce",
+    "ok": false,
+    "shadow": null,
+    "signature_len": 65,
+    "variant": "WrongMagic",
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef0101cf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+      "rewritten": true
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x1f0788",
+      "selector": "0x1626ba7e",
+      "result": "0xffffffff"
+     }
+    ]
+   }
+  },
+  {
+   "label": "profile-h.enforce.Y-7851.root-key",
+   "verifier": "profile-h.enforce",
+   "account": "Y",
+   "code": "7851",
+   "signature": "root-key",
+   "accepted": false,
+   "detail": {
+    "attempts": {
+     "last_negative_block": 8,
+     "negatives": 1
+    },
+    "b_exec": 2000000,
+    "block": 8,
+    "code": "Regular { len: 23 }",
+    "disposition": "RetryNextBlock",
+    "elapsed_ms": 7.7987,
+    "erc1271_calls": 1,
+    "error": "ERC-1271 isValidSignature on code-bearing userAddress 0xBcABAFdf878Ac087E3E2cdFedc9772ecD3De4c7a returned no data and the EIP-7702 fallback did not accept the signature",
+    "fallback": true,
+    "fn": "verify_user_decryption_signature",
+    "gas_limit_formula": 2033544,
+    "mode": "enforce",
+    "ok": false,
+    "shadow": null,
+    "signature_len": 65,
+    "variant": "EmptyReturn",
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef01015fc8d32690cc91d4c39d9d3abcbd16989f875707",
+      "rewritten": true
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x1f0788",
+      "selector": "0x1626ba7e",
+      "result": "0x"
+     }
+    ]
+   }
+  },
+  {
+   "label": "profile-h.enforce.X-7851.ml-dsa-44",
+   "verifier": "profile-h.enforce",
+   "account": "X",
+   "code": "7851",
+   "signature": "ml-dsa-44",
+   "accepted": true,
+   "detail": {
+    "attempts": {
+     "last_negative_block": null,
+     "negatives": 0
+    },
+    "b_exec": 2000000,
+    "block": 8,
+    "code": "Regular { len: 23 }",
+    "elapsed_ms": 27.8763,
+    "erc1271_calls": 1,
+    "fallback": true,
+    "fn": "verify_user_decryption_signature",
+    "gas_limit_formula": 2183048,
+    "mode": "enforce",
+    "ok": true,
+    "path": "Erc1271",
+    "shadow": null,
+    "signature_len": 2420,
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef0101cf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+      "rewritten": true
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x214f88",
+      "selector": "0x1626ba7e",
+      "result": "0x1626ba7e"
+     }
+    ]
+   }
+  },
+  {
+   "label": "zama-unmodified.X-7851.ml-dsa-44",
+   "verifier": "zama-unmodified",
+   "account": "X",
+   "code": "7851",
+   "signature": "ml-dsa-44",
+   "accepted": false,
+   "detail": {
+    "elapsed_ms": 22.3525,
+    "error": "ERC-1271 isValidSignature reverted with no reason for userAddress 0x9F3C94f377994B8c59f119672E125331C550237C",
+    "gas_limit": 250000,
+    "ok": false,
+    "signature_len": 2420,
+    "variant": "EmptyRevert",
+    "wire": [
+     {
+      "method": "eth_call",
+      "block": "pending",
+      "rewritten": false,
+      "gas": "0x3d090",
+      "selector": "0x1626ba7e",
+      "error": "execution reverted"
+     }
+    ]
+   }
+  },
+  {
+   "label": "l1-legacy.X-7851.ml-dsa-44",
+   "verifier": "l1-legacy",
+   "account": "X",
+   "code": "7851",
+   "signature": "ml-dsa-44",
+   "accepted": false,
+   "detail": {
+    "elapsed_ms": 13.1939,
+    "error": "ERC-1271 isValidSignature reverted with no reason for userAddress 0x9F3C94f377994B8c59f119672E125331C550237C",
+    "fn": "verify_signature",
+    "gas_limit": 250000,
+    "ok": false,
+    "signature_len": 2420,
+    "variant": "EmptyRevert",
+    "wire": [
+     {
+      "method": "eth_call",
+      "block": "pending",
+      "rewritten": false,
+      "gas": "0x3d090",
+      "selector": "0x1626ba7e",
+      "error": "execution reverted"
+     }
+    ]
+   }
+  },
+  {
+   "label": "zama-unmodified.X-7702.root-key",
+   "verifier": "zama-unmodified",
+   "account": "X",
+   "code": "7702",
+   "signature": "root-key",
+   "accepted": true,
+   "detail": {
+    "elapsed_ms": 0.2399,
+    "gas_limit": 250000,
+    "ok": true,
+    "signature_len": 65,
+    "wire": []
+   }
+  },
+  {
+   "label": "profile-h.enforce.X-7702.root-key",
+   "verifier": "profile-h.enforce",
+   "account": "X",
+   "code": "7702",
+   "signature": "root-key",
+   "accepted": false,
+   "detail": {
+    "attempts": {
+     "last_negative_block": 8,
+     "negatives": 1
+    },
+    "b_exec": 2000000,
+    "block": 8,
+    "code": "Eip7702 { delegate: 0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9 }",
+    "disposition": "RetryNextBlock",
+    "elapsed_ms": 27.7123,
+    "erc1271_calls": 1,
+    "error": "ERC-1271 isValidSignature returned non-magic value 0xffffffff for userAddress 0x9F3C94f377994B8c59f119672E125331C550237C",
+    "fallback": true,
+    "fn": "verify_user_decryption_signature",
+    "gas_limit_formula": 2033544,
+    "mode": "enforce",
+    "ok": false,
+    "shadow": null,
+    "signature_len": 65,
+    "variant": "WrongMagic",
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef0100cf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+      "rewritten": false
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x1f0788",
+      "selector": "0x1626ba7e",
+      "result": "0xffffffff"
+     }
+    ]
+   }
+  },
+  {
+   "label": "profile-h.enforce.X-7702.ml-dsa-44",
+   "verifier": "profile-h.enforce",
+   "account": "X",
+   "code": "7702",
+   "signature": "ml-dsa-44",
+   "accepted": true,
+   "detail": {
+    "attempts": {
+     "last_negative_block": null,
+     "negatives": 0
+    },
+    "b_exec": 2000000,
+    "block": 8,
+    "code": "Eip7702 { delegate: 0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9 }",
+    "elapsed_ms": 33.4758,
+    "erc1271_calls": 1,
+    "fallback": true,
+    "fn": "verify_user_decryption_signature",
+    "gas_limit_formula": 2183048,
+    "mode": "enforce",
+    "ok": true,
+    "path": "Erc1271",
+    "shadow": null,
+    "signature_len": 2420,
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef0100cf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+      "rewritten": false
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x214f88",
+      "selector": "0x1626ba7e",
+      "result": "0x1626ba7e"
+     }
+    ]
+   }
+  },
+  {
+   "label": "profile-h.enforce.Y-7702.root-key",
+   "verifier": "profile-h.enforce",
+   "account": "Y",
+   "code": "7702",
+   "signature": "root-key",
+   "accepted": true,
+   "detail": {
+    "attempts": {
+     "last_negative_block": null,
+     "negatives": 0
+    },
+    "b_exec": 2000000,
+    "block": 8,
+    "code": "Eip7702 { delegate: 0x5fc8d32690cc91d4c39d9d3abcbd16989f875707 }",
+    "elapsed_ms": 40.2765,
+    "erc1271_calls": 1,
+    "fallback": true,
+    "fn": "verify_user_decryption_signature",
+    "gas_limit_formula": 2033544,
+    "mode": "enforce",
+    "ok": true,
+    "path": "Eip7702Shim",
+    "shadow": null,
+    "signature_len": 65,
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef01005fc8d32690cc91d4c39d9d3abcbd16989f875707",
+      "rewritten": false
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x1f0788",
+      "selector": "0x1626ba7e",
+      "result": "0x"
+     }
+    ]
+   }
+  },
+  {
+   "label": "profile-h.enforce.E-eoa.root-key",
+   "verifier": "profile-h.enforce",
+   "account": "E",
+   "code": "eoa",
+   "signature": "root-key",
+   "accepted": true,
+   "detail": {
+    "attempts": {
+     "last_negative_block": null,
+     "negatives": 0
+    },
+    "b_exec": 2000000,
+    "block": 8,
+    "code": "Empty",
+    "elapsed_ms": 29.8992,
+    "erc1271_calls": 0,
+    "fallback": true,
+    "fn": "verify_user_decryption_signature",
+    "gas_limit_formula": 2033544,
+    "mode": "enforce",
+    "ok": true,
+    "path": "Ecrecover",
+    "shadow": null,
+    "signature_len": 65,
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0x",
+      "rewritten": false
+     }
+    ]
+   }
+  },
+  {
+   "label": "sdk.today.X-7851.root-key",
+   "verifier": "sdk.today",
+   "account": "X",
+   "code": "7851",
+   "signature": "root-key",
+   "accepted": true,
+   "detail": {
+    "ok": true,
+    "warnings": [],
+    "wire": []
+   }
+  },
+  {
+   "label": "sdk.today.X-7851.ml-dsa-44",
+   "verifier": "sdk.today",
+   "account": "X",
+   "code": "7851",
+   "signature": "ml-dsa-44",
+   "accepted": false,
+   "detail": {
+    "ok": false,
+    "error": "Erc1271RejectedError",
+    "message": "ERC-1271 isValidSignature reverted or returned malformed data for userAddress 0x9F3C94f377994B8c59f119672E125331C550237C: isValidSignature call reverted: execution reverted (no data present; likely require(false) occurred (action=\"call\", data=\"0x\", reason=\"require(false)\", transaction={ \"data\": \"0x1",
+    "warnings": [],
+    "wire": [
+     {
+      "method": "eth_call",
+      "block": "latest",
+      "rewritten": false,
+      "gas": "0x3d090",
+      "selector": "0x1626ba7e",
+      "error": "execution reverted"
+     }
+    ]
+   }
+  },
+  {
+   "label": "sdk.enforce.X-7851.root-key",
+   "verifier": "sdk.enforce",
+   "account": "X",
+   "code": "7851",
+   "signature": "root-key",
+   "accepted": false,
+   "detail": {
+    "ok": false,
+    "error": "Erc1271WrongMagicError",
+    "message": "ERC-1271 isValidSignature returned non-magic value 0xffffffff for userAddress 0x9F3C94f377994B8c59f119672E125331C550237C\nVersion: @fhevm/sdk@0.15.0-0",
+    "warnings": [],
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef0101cf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+      "rewritten": true
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x1f0788",
+      "selector": "0x1626ba7e",
+      "result": "0xffffffff"
+     }
+    ]
+   }
+  },
+  {
+   "label": "sdk.enforce.X-7851.ml-dsa-44",
+   "verifier": "sdk.enforce",
+   "account": "X",
+   "code": "7851",
+   "signature": "ml-dsa-44",
+   "accepted": true,
+   "detail": {
+    "ok": true,
+    "warnings": [],
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef0101cf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+      "rewritten": true
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x214f88",
+      "selector": "0x1626ba7e",
+      "result": "0x1626ba7e"
+     }
+    ]
+   }
+  },
+  {
+   "label": "sdk.enforce.Y-7851.root-key",
+   "verifier": "sdk.enforce",
+   "account": "Y",
+   "code": "7851",
+   "signature": "root-key",
+   "accepted": false,
+   "detail": {
+    "ok": false,
+    "error": "Erc1271RejectedError",
+    "message": "ERC-1271 isValidSignature reverted or returned malformed data for userAddress 0xBcABAFdf878Ac087E3E2cdFedc9772ecD3De4c7a: isValidSignature returned no data on an account with code\nVersion: @fhevm/sdk@0.15.0-0",
+    "warnings": [],
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef01015fc8d32690cc91d4c39d9d3abcbd16989f875707",
+      "rewritten": true
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x1f0788",
+      "selector": "0x1626ba7e",
+      "result": "0x"
+     }
+    ]
+   }
+  },
+  {
+   "label": "sdk.enforce.Y-7702.root-key",
+   "verifier": "sdk.enforce",
+   "account": "Y",
+   "code": "7702",
+   "signature": "root-key",
+   "accepted": true,
+   "detail": {
+    "ok": true,
+    "warnings": [],
+    "wire": [
+     {
+      "method": "eth_blockNumber",
+      "rewritten": false
+     },
+     {
+      "method": "eth_getCode",
+      "block": "0x8",
+      "code": "0xef01005fc8d32690cc91d4c39d9d3abcbd16989f875707",
+      "rewritten": false
+     },
+     {
+      "method": "eth_call",
+      "block": "0x8",
+      "rewritten": false,
+      "gas": "0x1f0788",
+      "selector": "0x1626ba7e",
+      "result": "0x"
+     }
+    ]
+   }
+  }
+ ]
+}

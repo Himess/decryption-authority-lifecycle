@@ -1,0 +1,29 @@
+2026-10-21T19:51:05Z l1 tree: 5063 files touched
+2026-10-21T19:51:05Z START build-endpoint-l1b
+2026-10-21T19:54:28Z END build-endpoint-l1b rc=0
+2026-10-21T19:54:28Z endpoint-main-l1 6bae615871ee6875a97e5c56191684011f3b258922b4e81671899dd0314edfc7
+2026-10-21T19:54:28Z endpoint-main-l1 account_retired strings=2
+2026-10-21T19:54:28Z START build-p03-main-l1b
+2026-10-21T19:58:37Z END build-p03-main-l1b rc=0
+2026-10-21T19:58:37Z START build-p04-main-l1b
+2026-10-21T19:59:08Z END build-p04-main-l1b rc=0
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 8 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-21T19:59:18Z START p03-main-l1-r4
+2026-10-21T19:59:40Z END p03-main-l1-r4 rc=0
+2026-10-21T19:59:40Z START p03-main-l1-r5
+2026-10-21T19:59:55Z END p03-main-l1-r5 rc=0
+2026-10-21T19:59:55Z START p03-main-l1-r6
+2026-10-21T20:00:24Z END p03-main-l1-r6 rc=0
+2026-10-21T20:00:24Z START p04-main-l1-r4
+2026-10-21T20:01:22Z END p04-main-l1-r4 rc=0
+CREATE DATABASE
+2026-10-21T20:01:23Z relayer_db: relayer_db
+2026-10-21T20:01:23Z START relayer-p03
+2026-10-21T20:15:55Z END relayer-p03 rc=0
+2026-10-21T20:15:55Z CHAIN DONE
+2026-10-21T20:15:56Z lifecycle-pg removed

@@ -1,0 +1,21 @@
+No files changed, compilation skipped
+
+Ran 15 tests for test/acl/ACLRetirementProfileA.t.sol:ACLRetirementProfileATest
+[PASS] test_A1_D22_NaiveGateLocksInTheThiefObserver() (gas: 3535057)
+[PASS] test_A1_ObserverMayAbdicate_ActiveAccountUnaffected() (gas: 1207561)
+[PASS] test_A1_OperatorGate() (gas: 439266)
+[PASS] test_A1_OperatorUntilNowIsAGrant() (gas: 150103)
+[PASS] test_A1_Residual_VanillaObserverLeaksAfterRetirement() (gas: 1630443)
+[PASS] test_A1_ThiefObserverClearedAndCannotBeReAdded() (gas: 1584697)
+[PASS] test_A2_TransferFromRetiredAccountSucceeds() (gas: 1601710)
+[PASS] test_A2_TransferToRetiredAccountSucceeds() (gas: 979805)
+[PASS] test_A3_PostGrantAssertionBreaksTransfersToRetiredAccounts() (gas: 4048907)
+[PASS] test_A4_ProfileARefusesLifecycleCalls() (gas: 1039677)
+[PASS] test_A4_Residual_GenericCallHandsTheContractToASuccessor() (gas: 1013337)
+[PASS] test_A4_Residual_GenericCallRetiresTheContract() (gas: 1326912)
+[PASS] test_Gas_A1GateOverhead() (gas: 1079350)
+[PASS] test_Helper_FHEIsAccountRetiredFollowsTheRegistry() (gas: 349138)
+[PASS] test_Helper_RevertsAgainstARegistryWithoutCore() (gas: 418688)
+Suite result: ok. 15 passed; 0 failed; 0 skipped; finished in 8.63ms (41.68ms CPU time)
+
+Ran 1 test suite in 16.17ms (8.63ms CPU time): 15 tests passed, 0 failed, 0 skipped (15 total tests)

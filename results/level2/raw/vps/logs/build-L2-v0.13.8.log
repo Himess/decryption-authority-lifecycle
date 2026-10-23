@@ -1,0 +1,89 @@
+INSCOPE start=2026-10-21T12:11:35Z cgroup=/system.slice/lifecycle-build-L2-v0.13.8-1792584695.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/kw.sh v0.13.8 build --test acl_successor_real_chain]
+KW ver=v0.13.8 tree=harness step=build commit=fe3ca89b5111ca2b4abb220bf3c78417b821ceb5 date=2026-10-21T12:11:35Z host=VPS nproc=4
+KW dirty-files:  M kms-connector/crates/utils/src/tests/setup/db.rs  M kms-connector/crates/utils/src/tests/setup/host.rs  M kms-connector/crates/utils/src/tests/setup/instance.rs ?? kms-connector/crates/kms-worker/tests/acl_real_chain.rs ?? kms-connector/crates/kms-worker/tests/acl_retirement_real_chain.rs ?? kms-connector/crates/kms-worker/tests/acl_successor_real_chain.rs 
+KW toolchain=1.92.0-x86_64-unknown-linux-gnu (overridden by '/srv/lifecycle/src/fhevm-v0.13.8-harness/kms-connector/rust-toolchain.toml') | rustc 1.92.0 (ded5c06cf 2025-12-08) | cargo 1.92.0 (344c4567c 2025-10-21) | libprotoc 26.1 | jobs=1
+   Compiling kms-worker v0.12.0 (/srv/lifecycle/src/fhevm-v0.13.8-harness/kms-connector/crates/kms-worker)
+warning: constant `N_FWD` is never used
+  --> crates/kms-worker/tests/acl_successor_real_chain.rs:69:7
+   |
+69 | const N_FWD: usize = 10;
+   |       ^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `N_REJ` is never used
+  --> crates/kms-worker/tests/acl_successor_real_chain.rs:70:7
+   |
+70 | const N_REJ: usize = 5;
+   |       ^^^^^
+
+warning: variant `BaseBindings` is never constructed
+   --> crates/kms-worker/tests/acl_successor_real_chain.rs:163:5
+    |
+160 | enum AclKind {
+    |      ------- variant in this enum
+...
+163 |     BaseBindings,
+    |     ^^^^^^^^^^^^
+    |
+    = note: `AclKind` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: function `setup_grants` is never used
+   --> crates/kms-worker/tests/acl_successor_real_chain.rs:368:10
+    |
+368 | async fn setup_grants(acl: &AnvilAcl, a: &Accounts, handle: B256) -> anyhow::Result<()> {
+    |          ^^^^^^^^^^^^
+
+warning: function `log_acl_state` is never used
+   --> crates/kms-worker/tests/acl_successor_real_chain.rs:377:10
+    |
+377 | async fn log_acl_state(
+    |          ^^^^^^^^^^^^^
+
+warning: associated functions `latency` and `production_defaults` are never used
+   --> crates/kms-worker/tests/acl_successor_real_chain.rs:546:8
+    |
+535 | impl RunCfg {
+    | ----------- associated functions in this implementation
+...
+546 |     fn latency() -> Self {
+    |        ^^^^^^^
+...
+554 |     fn production_defaults() -> Self {
+    |        ^^^^^^^^^^^^^^^^^^^
+
+warning: function `create_mock_user_decryption_request_tx` is never used
+  --> crates/kms-worker/tests/common/mod.rs:56:8
+   |
+56 | pub fn create_mock_user_decryption_request_tx(
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `kms-worker` (test "acl_successor_real_chain") generated 7 warnings
+      Timing report saved to /srv/lifecycle/target/v0.13.8/cargo-timings/cargo-timing-20261021T121137.551024304Z.html
+    Finished `test` profile [unoptimized] target(s) in 1m 05s
+  Executable tests/acl_successor_real_chain.rs (/srv/lifecycle/target/v0.13.8/debug/deps/acl_successor_real_chain-a7cc390c1575bf05)
+	Command being timed: "/srv/lifecycle/scripts/kw.sh v0.13.8 build --test acl_successor_real_chain"
+	User time (seconds): 34.97
+	System time (seconds): 16.25
+	Percent of CPU this job got: 77%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:05.85
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1024684
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 9805
+	Minor (reclaiming a frame) page faults: 406172
+	Voluntary context switches: 11354
+	Involuntary context switches: 693
+	Swaps: 0
+	File system inputs: 2289672
+	File system outputs: 172872
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T12:12:41Z rc=0 cgroup_memory.peak_bytes=2201006080 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=build-L2-v0.13.8 unit=lifecycle-build-L2-v0.13.8-1792584695 rc=0 wall_s=67 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=67 killed=no sampled_peak_anon_mb=590 sampled_peak_cgroup_current_mb=1684 sampled_peak_swap_mb=0

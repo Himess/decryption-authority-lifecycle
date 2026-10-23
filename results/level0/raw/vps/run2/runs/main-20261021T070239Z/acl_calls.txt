@@ -1,0 +1,59 @@
+== DirectUserU: 3 eth_call(s) to the ACL
+    decryptionSignatureInvalidatedBefore(U) -> 0   [to=0x39f95c593ad839f0f38066f8c8311e4d5b39e1e9 block=latest]
+    isAllowed(h, C) -> True   [to=0x39f95c593ad839f0f38066f8c8311e4d5b39e1e9 block=latest]
+    isAllowed(h, U) -> True   [to=0x39f95c593ad839f0f38066f8c8311e4d5b39e1e9 block=latest]
+== DirectUserV: 9 eth_call(s) to the ACL
+    decryptionSignatureInvalidatedBefore(V) -> 0   [to=0xee0fcf411efed343e8a6c87144a50a8c3882d32e block=latest]
+    isAllowed(h, C) -> True   [to=0xee0fcf411efed343e8a6c87144a50a8c3882d32e block=latest]
+    isAllowed(h, V) -> False   [to=0xee0fcf411efed343e8a6c87144a50a8c3882d32e block=latest]
+    isAllowed(h, C) -> True   [to=0xee0fcf411efed343e8a6c87144a50a8c3882d32e block=latest]
+    decryptionSignatureInvalidatedBefore(V) -> 0   [to=0xee0fcf411efed343e8a6c87144a50a8c3882d32e block=latest]
+    isAllowed(h, V) -> False   [to=0xee0fcf411efed343e8a6c87144a50a8c3882d32e block=latest]
+    isAllowed(h, V) -> False   [to=0xee0fcf411efed343e8a6c87144a50a8c3882d32e block=latest]
+    isAllowed(h, C) -> True   [to=0xee0fcf411efed343e8a6c87144a50a8c3882d32e block=latest]
+    decryptionSignatureInvalidatedBefore(V) -> 0   [to=0xee0fcf411efed343e8a6c87144a50a8c3882d32e block=latest]
+== DelegatedUToD: 2 eth_call(s) to the ACL
+    isHandleDelegatedForUserDecryption(U, D, C, h) -> True   [to=0x82db7f9359c460deed6737479fd335c5f44518b7 block=latest]
+    decryptionSignatureInvalidatedBefore(D) -> 0   [to=0x82db7f9359c460deed6737479fd335c5f44518b7 block=latest]
+== DelegatedVToD: 6 eth_call(s) to the ACL
+    decryptionSignatureInvalidatedBefore(D) -> 0   [to=0xa72eafe82a9541be9c71372f1f18ab0c76325b58 block=latest]
+    isHandleDelegatedForUserDecryption(V, D, C, h) -> False   [to=0xa72eafe82a9541be9c71372f1f18ab0c76325b58 block=latest]
+    decryptionSignatureInvalidatedBefore(D) -> 0   [to=0xa72eafe82a9541be9c71372f1f18ab0c76325b58 block=latest]
+    isHandleDelegatedForUserDecryption(V, D, C, h) -> False   [to=0xa72eafe82a9541be9c71372f1f18ab0c76325b58 block=latest]
+    isHandleDelegatedForUserDecryption(V, D, C, h) -> False   [to=0xa72eafe82a9541be9c71372f1f18ab0c76325b58 block=latest]
+    decryptionSignatureInvalidatedBefore(D) -> 0   [to=0xa72eafe82a9541be9c71372f1f18ab0c76325b58 block=latest]
+== DelegatedUToV: 6 eth_call(s) to the ACL
+    decryptionSignatureInvalidatedBefore(V) -> 0   [to=0xa5b975b855795445b27a55f88074cb96d02f5540 block=latest]
+    isHandleDelegatedForUserDecryption(U, V, C, h) -> False   [to=0xa5b975b855795445b27a55f88074cb96d02f5540 block=latest]
+    decryptionSignatureInvalidatedBefore(V) -> 0   [to=0xa5b975b855795445b27a55f88074cb96d02f5540 block=latest]
+    isHandleDelegatedForUserDecryption(U, V, C, h) -> False   [to=0xa5b975b855795445b27a55f88074cb96d02f5540 block=latest]
+    decryptionSignatureInvalidatedBefore(V) -> 0   [to=0xa5b975b855795445b27a55f88074cb96d02f5540 block=latest]
+    isHandleDelegatedForUserDecryption(U, V, C, h) -> False   [to=0xa5b975b855795445b27a55f88074cb96d02f5540 block=latest]
+== V2_DirectUserU: 2 eth_call(s) to the ACL
+    isAllowed(h, Uk) -> True   [to=0x39c85e0fc20ab2c293678721bea42372620f4417 block=latest]
+    decryptionSignatureInvalidatedBefore(Uk) -> 0   [to=0x39c85e0fc20ab2c293678721bea42372620f4417 block=latest]
+== V2_DirectUserV: 6 eth_call(s) to the ACL
+    decryptionSignatureInvalidatedBefore(Vk) -> 0   [to=0xf04a4e047d401b1b8d6e8281e7d3ee44c94d560f block=latest]
+    isAllowed(h, Vk) -> False   [to=0xf04a4e047d401b1b8d6e8281e7d3ee44c94d560f block=latest]
+    isAllowed(h, Vk) -> False   [to=0xf04a4e047d401b1b8d6e8281e7d3ee44c94d560f block=latest]
+    decryptionSignatureInvalidatedBefore(Vk) -> 0   [to=0xf04a4e047d401b1b8d6e8281e7d3ee44c94d560f block=latest]
+    isAllowed(h, Vk) -> False   [to=0xf04a4e047d401b1b8d6e8281e7d3ee44c94d560f block=latest]
+    decryptionSignatureInvalidatedBefore(Vk) -> 0   [to=0xf04a4e047d401b1b8d6e8281e7d3ee44c94d560f block=latest]
+== V2_DelegatedUToD: 2 eth_call(s) to the ACL
+    decryptionSignatureInvalidatedBefore(Dk) -> 0   [to=0x424dc6b8ce8b122b0f8c4b5db4fefe53d009c511 block=latest]
+    isHandleDelegatedForUserDecryption(U, Dk, C, h) -> True   [to=0x424dc6b8ce8b122b0f8c4b5db4fefe53d009c511 block=latest]
+== V2_DelegatedVToD: 6 eth_call(s) to the ACL
+    decryptionSignatureInvalidatedBefore(Dk) -> 0   [to=0x0b2aadf68c1691de970ffa783f18062774b75413 block=latest]
+    isHandleDelegatedForUserDecryption(V, Dk, C, h) -> False   [to=0x0b2aadf68c1691de970ffa783f18062774b75413 block=latest]
+    decryptionSignatureInvalidatedBefore(Dk) -> 0   [to=0x0b2aadf68c1691de970ffa783f18062774b75413 block=latest]
+    isHandleDelegatedForUserDecryption(V, Dk, C, h) -> False   [to=0x0b2aadf68c1691de970ffa783f18062774b75413 block=latest]
+    decryptionSignatureInvalidatedBefore(Dk) -> 0   [to=0x0b2aadf68c1691de970ffa783f18062774b75413 block=latest]
+    isHandleDelegatedForUserDecryption(V, Dk, C, h) -> False   [to=0x0b2aadf68c1691de970ffa783f18062774b75413 block=latest]
+== V2_DelegatedUToV: 6 eth_call(s) to the ACL
+    decryptionSignatureInvalidatedBefore(Vk) -> 0   [to=0xfa7b10ecda630551cab781d345ca588dfcb402b3 block=latest]
+    isHandleDelegatedForUserDecryption(U, Vk, C, h) -> False   [to=0xfa7b10ecda630551cab781d345ca588dfcb402b3 block=latest]
+    isHandleDelegatedForUserDecryption(U, Vk, C, h) -> False   [to=0xfa7b10ecda630551cab781d345ca588dfcb402b3 block=latest]
+    decryptionSignatureInvalidatedBefore(Vk) -> 0   [to=0xfa7b10ecda630551cab781d345ca588dfcb402b3 block=latest]
+    isHandleDelegatedForUserDecryption(U, Vk, C, h) -> False   [to=0xfa7b10ecda630551cab781d345ca588dfcb402b3 block=latest]
+    decryptionSignatureInvalidatedBefore(Vk) -> 0   [to=0xfa7b10ecda630551cab781d345ca588dfcb402b3 block=latest]
+== non-eth_call methods seen on the connector's host-chain endpoint: none

@@ -1,0 +1,109 @@
+# @cofhe/foundry-plugin
+
+Foundry test utilities for [CoFHE](https://github.com/FhenixProtocol/cofhesdk). Provides `CofheTest` (base test contract with mock deployment) and `CofheClient` (SDK-like client for encrypting inputs, decrypting outputs, and managing acps).
+
+## Installation
+
+**npm / pnpm**
+
+```sh
+npm install --save-dev @cofhe/foundry-plugin
+```
+
+Add to `foundry.toml`:
+
+```toml
+[profile.default]
+libs = ["node_modules", "lib"]
+remappings = [
+  "forge-std/=node_modules/forge-std/src/",
+  "hardhat/=node_modules/forge-std/src/",
+  "@openzeppelin/contracts/=node_modules/@openzeppelin/contracts/",
+  "@openzeppelin/contracts-upgradeable/=node_modules/@openzeppelin/contracts-upgradeable/",
+  "@fhenixprotocol/cofhe-contracts/=node_modules/@fhenixprotocol/cofhe-contracts/",
+  "@cofhe/mock-contracts/=node_modules/@cofhe/mock-contracts/",
+  "@cofhe/foundry-plugin/=node_modules/@cofhe/foundry-plugin/contracts/"
+]
+```
+
+**Git submodule**
+
+```sh
+git submodule add https://github.com/FhenixProtocol/cofhesdk lib/cofhe-foundry-plugin
+# also add @cofhe/mock-contracts as a second submodule or via npm
+```
+
+## Usage
+
+Inherit `CofheTest` in your test contract and call `deployMocks()` in `setUp`. Use `createCofheClient()` to get a connected client.
+
+```solidity
+import { CofheTest } from "@cofhe/foundry-plugin/CofheTest.sol";
+import { CofheClient } from "@cofhe/foundry-plugin/CofheClient.sol";
+
+contract MyTest is CofheTest {
+    CofheClient client;
+    MyContract target;
+
+    uint256 constant USER_PKEY = 0xac09...;
+
+    function setUp() public {
+        deployMocks();
+        client = createCofheClient();
+        client.connect(USER_PKEY);
+        target = new MyContract();
+    }
+
+    function testEncryptAndStore() public {
+        // The last argument binds the input to the contract that will consume it.
+        (externalEuint32 hash, bytes memory signature) = client.createExternalEuint32(42, address(target));
+        externalEuint32[] memory hashes = new externalEuint32[](1);
+        hashes[0] = hash;
+
+        vm.prank(client.account());
+        target.storeBatch(hashes, signature);
+
+        expectPlaintext(target.eValue(), uint32(42));
+    }
+}
+```
+
+## Gas reporting
+
+Mock FHE operations replicate the off-chain CoFHE work on-chain, which would normally inflate reported gas 2–3×. Under forge, `deployMocks()` excludes that mock-only work from gas metering by default (via `pauseGasMetering` cheatcodes), so `forge test --gas-report`, `forge snapshot`, and `gasleft()` measurements report numbers close to real-network costs.
+
+- Requires forge ≥ 1.0 (older versions had unreliable `pauseGasMetering` behavior). On unsupported setups the shim silently falls back to normal metering — correctness is never affected.
+- Opt out with `mockTaskManager.setMockGasExcluded(false)` to see raw mock gas.
+- When exclusion is off (or on Hardhat), the mock task manager instead emits a `MockGasConsumed(uint256)` event per block of mock-only work, so the overhead remains measurable from receipts.
+
+Note: upgrading to a version with this feature will lower existing `forge snapshot` numbers — the drop is the mock overhead disappearing from the report, not a change in your contracts.
+
+## API
+
+### `CofheTest` (abstract base)
+
+| Function                         | Description                                                                                        |
+| -------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `deployMocks()`                  | Deploys all mock contracts and wires them together; enables mock-gas exclusion (see Gas reporting) |
+| `createCofheClient()`            | Returns a new unconnected `CofheClient`                                                            |
+| `enableLogs()` / `disableLogs()` | Toggle plaintext operation logging                                                                 |
+| `getPlaintext(ctHash)`           | Returns the stored plaintext for a ciphertext handle                                               |
+| `expectPlaintext(handle, value)` | Asserts the plaintext of an encrypted handle matches `value`                                       |
+
+`getPlaintext` and `expectPlaintext` have typed overloads for `ebool`, `euint8`, `euint16`, `euint32`, `euint64`, `euint128`, and `eaddress`.
+
+### `CofheClient`
+
+| Function                                                               | Description                                                                                                     |
+| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `connect(pkey)`                                                        | Sets the active account from a private key                                                                      |
+| `account()`                                                            | Returns the connected account address                                                                           |
+| `createExternalEbool/8/16/32/64/128/address(value, consumingContract)` | Creates a batch-signed encrypted input bound to `consumingContract`; returns `(external*Hash, bytes signature)` |
+| `createEuint32sBatch(values, consumingContract)`                       | Creates a batch of encrypted uint32s sharing one signature                                                      |
+| `decryptForTx_withoutACP(ctHash)`                                      | Decrypts a globally-allowed ciphertext; returns `(ctHash, plaintext, signature)`                                |
+| `decryptForTx_withACP(ctHash, acp)`                                    | Decrypts with a permission; returns `(ctHash, plaintext, signature)`                                            |
+| `decryptForView(ctHash, sealingKey, acp)`                              | Seals and unseals for off-chain reading                                                                         |
+| `acp_createSelf()`                                                     | Creates a self-acp for the connected account                                                                    |
+| `acp_createShared(recipient)`                                          | Creates the issuer half of a shared acp                                                                         |
+| `acp_exportShared(acp)`                                                | Strips recipient fields for safe transmission                                                                   |
+| `acp_importShared(export)`                                             | Completes a shared acp as the recipient                                                                         |

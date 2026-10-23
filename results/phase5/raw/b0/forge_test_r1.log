@@ -1,0 +1,31 @@
+# forge test -vv, impl/pq-wallet, forge Version: 1.8.5, 2026-10-22T19:06:41Z, run 1
+No files changed, compilation skipped
+
+Ran 21 tests for test/PQWallet.t.sol:PQWalletTest
+[PASS] test_7702_delegateInitializeAndUse() (gas: 21901569)
+[PASS] test_7702_someoneElseCannotInitialize() (gas: 32208)
+[PASS] test_codeWithoutKey_acceptsNothing() (gas: 19308309)
+[PASS] test_executeDigest_matchesTheVectors() (gas: 9984507)
+[PASS] test_execute_ecdsaRejected() (gas: 10012616)
+[PASS] test_execute_inOrder() (gas: 14870211)
+[PASS] test_execute_otherDataRejected() (gas: 13476010)
+[PASS] test_execute_otherKeyRejected() (gas: 11277611)
+[PASS] test_execute_otherTargetRejected() (gas: 11275437)
+[PASS] test_execute_outOfOrderRejected() (gas: 11277149)
+[PASS] test_execute_relayedByAnyone() (gas: 11367125)
+[PASS] test_execute_replayRejected() (gas: 12640644)
+[PASS] test_execute_targetRevertBubblesAndKeepsNonce() (gas: 11303924)
+[PASS] test_gas_oneExecute() (gas: 11348211)
+Logs:
+  B0 execute, execution gas inside the test (no intrinsic or calldata cost): 1369296
+
+[PASS] test_initialize_onlyTheAccountItself() (gas: 63430)
+[PASS] test_isValidSignature_acceptsItsKey() (gas: 10475730)
+[PASS] test_isValidSignature_rejectsCorruptedSignature() (gas: 10476275)
+[PASS] test_isValidSignature_rejectsEcdsaAndEmpty() (gas: 8521892)
+[PASS] test_isValidSignature_rejectsOtherHash() (gas: 10476055)
+[PASS] test_isValidSignature_rejectsOtherKey() (gas: 10477181)
+[PASS] test_receivesEther() (gas: 34025)
+Suite result: ok. 21 passed; 0 failed; 0 skipped; finished in 61.55ms (428.77ms CPU time)
+
+Ran 1 test suite in 62.97ms (61.55ms CPU time): 21 tests passed, 0 failed, 0 skipped (21 total tests)

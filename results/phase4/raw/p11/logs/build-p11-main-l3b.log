@@ -1,0 +1,33 @@
+INSCOPE start=2026-10-21T20:51:07Z cgroup=/system.slice/lifecycle-build-p11-main-l3b-1792615867.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/kw.sh main build --test acl_p11_e3_h]
+KW ver=main tree=l3 step=build commit=ed851716c9a6b799996a23399ece2858336f96db date=2026-10-21T20:51:07Z host=VPS nproc=4
+KW dirty-files:  M kms-connector/Cargo.lock  M kms-connector/config/endpoint.toml  M kms-connector/crates/api/src/error.rs  M kms-connector/crates/endpoint/src/core/config.rs  M kms-connector/crates/endpoint/src/core/db.rs  M kms-connector/crates/endpoint/src/core/http/decrypt.rs  M kms-connector/crates/endpoint/src/core/http/public_decrypt.rs  M kms-connector/crates/endpoint/src/core/http/user_decrypt.rs  M kms-connector/crates/endpoint/tests/integration_tests.rs  M kms-connector/crates/kms-worker/Cargo.toml  M kms-connector/crates/kms-worker/src/core/config.rs  M kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs  M kms-connector/crates/kms-worker/src/core/event_processor/error.rs  M kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs  M kms-connector/crates/kms-worker/src/core/kms_worker.rs  M kms-connector/crates/kms-worker/src/core/mod.rs  M kms-connector/crates/kms-worker/tests/common/mod.rs  M kms-connector/crates/utils/src/tests/setup/db.rs  M kms-connector/crates/utils/src/tests/setup/host.rs  M shared/user-decryption-signature/Cargo.lock  M shared/user-decryption-signature/Cargo.toml  M shared/user-decryption-signature/src/lib.rs ?? kms-connector/connector-db/migrations/20261021120000_profile_h_erc1271_attempts.sql ?? kms-connector/crates/kms-worker/tests/acl_p03_stored_results_h.rs ?? kms-connector/crates/kms-worker/tests/acl_p04_eip7851_h.rs ?? kms-connector/crates/kms-worker/tests/acl_p11_e3_h.rs ?? kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs ?? shared/user-decryption-signature/src/kda.rs ?? shared/user-decryption-signature/src/profile_h.rs ?? shared/user-decryption-signature/tests/ 
+KW toolchain=1.99.1-x86_64-unknown-linux-gnu (overridden by '/srv/lifecycle/src/fhevm-main-l3/kms-connector/rust-toolchain.toml') | rustc 1.99.1 (58cf8f9c3 2026-10-13) | cargo 1.99.1 (5f94df478 2026-08-27) | libprotoc 34.1 | jobs=1
+   Compiling kms-worker v0.15.0 (/srv/lifecycle/src/fhevm-main-l3/kms-connector/crates/kms-worker)
+      Timing report saved to /srv/lifecycle/target/main/cargo-timings/cargo-timing-20261021T205108499Z-7c998e4606855278.html
+    Finished `test` profile [unoptimized] target(s) in 28.12s
+  Executable tests/acl_p11_e3_h.rs (/srv/lifecycle/target/main/debug/deps/acl_p11_e3_h-36dd36f08c9bb7f9)
+	Command being timed: "/srv/lifecycle/scripts/kw.sh main build --test acl_p11_e3_h"
+	User time (seconds): 24.57
+	System time (seconds): 6.40
+	Percent of CPU this job got: 106%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:28.98
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1288840
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 28
+	Minor (reclaiming a frame) page faults: 455249
+	Voluntary context switches: 1152
+	Involuntary context switches: 314
+	Swaps: 0
+	File system inputs: 3000
+	File system outputs: 213120
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T20:51:36Z rc=0 cgroup_memory.peak_bytes=1050787840 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=build-p11-main-l3b unit=lifecycle-build-p11-main-l3b-1792615867 rc=0 wall_s=31 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=31 killed=no sampled_peak_anon_mb=537 sampled_peak_cgroup_current_mb=585 sampled_peak_swap_mb=0

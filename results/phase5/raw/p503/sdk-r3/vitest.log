@@ -1,0 +1,29 @@
+
+ RUN  v4.1.9 <repo>/impl/harness/phase5/p503-sdk
+
+stdout | p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated)
+[P503/local] tx deploy Keccak-f1600 helper (upstream helpers/f1600_170.hex): 0xa7b9ad047fa25c3c3d0c398849fd2ba98b46e4576ab51b8cc676504c68a33603 block 27 gasUsed 4716322
+
+stdout | p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated)
+[P503/local] tx deploy MLDSA44Verifier: 0x341666c5684c97661f8c3ec1bf9840b4d2752c6a761e9d6080509d4afbde35f3 block 28 gasUsed 5166161
+
+stdout | p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated)
+[P503/local] tx deploy ML-DSA-44 pk blob (prepare.py output): 0x968ec6c12415af1434a2476f4d71776890bdd5309a800440369d57b626563261 block 29 gasUsed 4434717
+
+stdout | p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated)
+[P503/local] tx deploy MLDSA44Account1271: 0x6b6d14dec8d47a9db06156999f0f176713029d7ea1e2c72185faa7fee167af87 block 30 gasUsed 317011
+
+stdout | p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated)
+[P503/local] tx deploy Erc1271GasMeter: 0xbd0f1484f937263a4efd23e0dc061c519cd302edf07797d1dffc99d6a0c17b21 block 31 gasUsed 223128
+
+ ✓ p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated) > setup: the mock runs ACL v0.4.2 with Core and E1 1ms
+ ✓ p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated) > before: E and X are plain EOAs, active; the wallet itself reads as regular code 598ms
+ ✓ p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated) > X adopts the ML-DSA-44 wallet runtime (anvil_setCode): regular, active 198ms
+ ✓ p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated) > X retires (impersonated, standing in for a call through its code): regular, retired 361ms
+ ✓ p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated) > the proxy rewrote nothing 2ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  21:42:14
+   Duration  5.93s (transform 1.81s, setup 0ms, import 2.94s, tests 2.81s, environment 0ms)
+

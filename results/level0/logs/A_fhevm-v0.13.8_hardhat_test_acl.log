@@ -1,0 +1,78 @@
+Generating typings for: 13 artifacts in dir: types for target: ethers-v6
+Successfully generated 58 typings!
+Compiled 13 Solidity files successfully (evm target: cancun).
+Deploying an EmptyUUPSProxyACL proxy contract...
+EmptyUUPSProxyACL proxy contract successfully deployed!
+ACL address 0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D written successfully!
+<repo>\impl\fhevm-v0.13.8\host-contracts\addresses\FHEVMHostAddresses.sol generated successfully!
+Generating typings for: 2 artifacts in dir: types for target: ethers-v6
+Successfully generated 42 typings!
+Compiled 3 Solidity files successfully (evm target: cancun).
+Deploying an EmptyUUPSProxy proxy contract...
+EmptyUUPSProxy proxy contract successfully deployed!
+FHEVMExecutor address 0xe3a9105a3a932253A70F126eb1E3b589C643dD24 written successfully!
+<repo>\impl\fhevm-v0.13.8\host-contracts\addresses\FHEVMHostAddresses.sol appended with fhevmExecutorAdd successfully!
+Deploying an EmptyUUPSProxy proxy contract...
+EmptyUUPSProxy proxy contract successfully deployed!
+KMSVerifier address 0x901F8942346f7AB3a01F6D7613119Bca447Bb030 written successfully!
+<repo>\impl\fhevm-v0.13.8\host-contracts\addresses\FHEVMHostAddresses.sol appended with kmsVerifierAdd successfully!
+Deploying an EmptyUUPSProxy proxy contract...
+EmptyUUPSProxy proxy contract successfully deployed!
+InputVerifier address 0x36772142b74871f255CbD7A3e89B401d3e45825f written successfully!
+<repo>\impl\fhevm-v0.13.8\host-contracts\addresses\FHEVMHostAddresses.sol appended with inputVerifierAdd successfully!
+Deploying an EmptyUUPSProxy proxy contract...
+EmptyUUPSProxy proxy contract successfully deployed!
+HCULimit address 0x233ff88A48c172d29F675403e6A8e302b0F032D9 written successfully!
+<repo>\impl\fhevm-v0.13.8\host-contracts\addresses\FHEVMHostAddresses.sol appended with hcuLimitAdd successfully!
+Deploying an EmptyUUPSProxy proxy contract...
+EmptyUUPSProxy proxy contract successfully deployed!
+ProtocolConfig address 0x44aA028fd264C76BF4A8f8B4d8A5272f6AE25CAc written successfully!
+<repo>\impl\fhevm-v0.13.8\host-contracts\addresses\FHEVMHostAddresses.sol appended with protocolConfigAdd successfully!
+Deploying an EmptyUUPSProxy proxy contract...
+EmptyUUPSProxy proxy contract successfully deployed!
+KMSGeneration address 0x216be43148dB537BeddBC268163deb1a802b5553 written successfully!
+<repo>\impl\fhevm-v0.13.8\host-contracts\addresses\FHEVMHostAddresses.sol appended with kmsGenerationAdd successfully!
+Generating typings for: 8 artifacts in dir: types for target: ethers-v6
+Successfully generated 54 typings!
+Compiled 9 Solidity files successfully (evm target: cancun).
+Deploying PauserSet...
+PauserSet address 0xded0D2a71268DC12622BdD1b55d68a1CB5662327 written successfully!
+<repo>\impl\fhevm-v0.13.8\host-contracts\addresses\FHEVMHostAddresses.sol appended with pauserSetAdd successfully!
+Generating typings for: 23 artifacts in dir: types for target: ethers-v6
+Successfully generated 94 typings!
+Compiled 26 Solidity files successfully (evm target: cancun).
+ACL code set successfully at address: 0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D
+FHEVMExecutor code set successfully at address: 0xe3a9105a3a932253A70F126eb1E3b589C643dD24
+ProtocolConfig code set successfully at address: 0x44aA028fd264C76BF4A8f8B4d8A5272f6AE25CAc
+KMSGeneration code set successfully at address: 0x216be43148dB537BeddBC268163deb1a802b5553
+KMSVerifier code set successfully at address: 0x901F8942346f7AB3a01F6D7613119Bca447Bb030
+InputVerifier code set successfully at address: 0x36772142b74871f255CbD7A3e89B401d3e45825f
+1 Coprocessor signers were added to InputVerifier at initialization, list of Coprocessor signers is: [ '0x6518D50aDc9036Df37119eA465a8159E34417E2E' ]
+Threshold for InputVerifier is: 1
+HCULimit code set successfully at address: 0x233ff88A48c172d29F675403e6A8e302b0F032D9
+Contract deployment done!
+Nothing to compile
+No need to generate any newer typings.
+Adding pausers to PauserSet contract
+In PauserSet contract: 0xded0D2a71268DC12622BdD1b55d68a1CB5662327 
+
+Added pausers: [
+  '0xa44366bAA26296c1409AD1e284264212029F02f1',
+  '0xc1d91b49A1B3D1324E93F86778C44a03f1063f1b'
+] 
+
+Pausers registration done!
+Generating typings for: 39 artifacts in dir: types for target: ethers-v6
+Successfully generated 138 typings!
+Compiled 33 Solidity files successfully (evm target: cancun).
+bigint: Failed to load bindings, pure JS will be used (try npm run rebuild?)
+
+
+  ACL
+    ✔ allowTransient() is not persistent
+    ✔ allowTransient() reverts if sender is not allowed
+    ✔ allow() reverts if sender is not allowed
+
+
+  3 passing (100ms)
+

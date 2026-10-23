@@ -1,0 +1,19 @@
+Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment. 
+
+Compiling 126 files with Solc 0.8.24
+Solc 0.8.24 finished in 20.40s
+Compiler run successful!
+
+Ran 1 test for test/acl/ACLRetirementProfileA.t.sol:ACLRetirementProfileATest
+[PASS] test_Gas_A1GateOverhead() (gas: 2654072)
+Logs:
+  setOperator, vanilla: 116031
+  setOperator, Profile A: 129635
+  setObserver with a balance, vanilla: 254963
+  setObserver with a balance, Profile A: 258795
+  gate overhead, setOperator: 13604
+  gate overhead, setObserver: 3832
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 3.52ms (842.50µs CPU time)
+
+Ran 1 test suite in 15.20ms (3.52ms CPU time): 1 tests passed, 0 failed, 0 skipped (1 total tests)

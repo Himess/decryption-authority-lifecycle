@@ -1,0 +1,86 @@
+Compiling 9 files with Solc 0.8.25
+Solc 0.8.25 finished in 107.20s
+Compiler run successful!
+
+Ran 7 tests for test/FhenixCoreEngine.t.sol:FhenixCoreEngineTest
+[PASS] testFuzz_R10_OnlyTheTaskManagerMayCallTheOperandCheck(address) (runs: 512, μ: 19792, ~: 19792)
+[PASS] testFuzz_R10_TheOperandCheckAgreesWithTheUseViewForActiveAccounts(uint256,bool,bool) (runs: 512, μ: 844498, ~: 801253)
+[PASS] test_R10_Negative_ACallerIdentityExemptionExemptsGrantsAndThePermitCheck() (gas: 6353214)
+[PASS] test_R10_NonComputationIdsTakeTheGatedView() (gas: 4069633)
+[PASS] test_TC9_ARetiredAccountComputes_ThenEveryExportReverts() (gas: 2137473)
+[PASS] test_TC9_Control_TheSameSequenceSucceedsForAnActiveAccount() (gas: 2214368)
+[PASS] test_TC9_Residual_AFreshInputStillVerifies_AndCannotLeave() (gas: 1137766)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 190.22ms (306.24ms CPU time)
+
+Ran 20 tests for test/FhenixCoreRegistry.t.sol:FhenixCoreRegistryTest
+[PASS] testFuzz_TC12_UnknownIdsAnswerFalse(bytes4) (runs: 512, μ: 14208, ~: 14208)
+[FAIL: next call did not revert as expected; counterexample: calldata=0x228f74a8000000000000000000000000873ea78391295384747ba24f1f9ed9dc646ae51d args=[0x873eA78391295384747Ba24F1F9ed9dc646aE51D]] testFuzz_TC1_RetireOnce_SecondReverts_NoSecondEvent(address) (runs: 0, μ: 0, ~: 0)
+[PASS] testFuzz_TC4_TheAnswerDoesNotDependOnTheCaller(address) (runs: 512, μ: 273495, ~: 273495)
+[PASS] test_ConstantsMatchTheERC() (gas: 24908)
+[FAIL: next call did not revert as expected] test_R2_AdminSettersAndACoreUpgradeLeaveRetirementInPlace() (gas: 265459)
+[PASS] test_TC12_ERC165() (gas: 68027)
+[PASS] test_TC1_R5_TheNextCallInTheSameTransactionAlreadySeesIt() (gas: 1328923)
+[PASS] test_TC2_AContractRetiresItself() (gas: 663376)
+[PASS] test_TC2_AnAccountWithNoHandleRetires() (gas: 69956)
+[PASS] test_TC2_RetireWhileTheEngineIsDisabled_DenyListed_OffTheAccessList() (gas: 205566)
+[PASS] test_TC4_R10_ARetiredAccountStillComputes_OutputInertInViews() (gas: 1558081)
+[PASS] test_TC4_RetiredAccount_TransientUseViewsFalse_OthersUnaffected() (gas: 1965069)
+[PASS] test_TC4_RetiredUser_EveryPersistentUseViewFalse_PublicUnchanged_OthersUnaffected() (gas: 720235)
+[PASS] test_TC5_OnBehalfFalseWhenTheAccountTheDelegateeOrTheContractIsRetired() (gas: 509651)
+[PASS] test_TC5_StorageLayoutAsRead() (gas: 7899)
+[PASS] test_TC7_ARetiredGrantorRevertsOnEveryPathTheTaskManagerRelays() (gas: 1324302)
+[PASS] test_TC7_RemovalOnlyPathsStayOpen_TheRevoker() (gas: 166933)
+[PASS] test_TC7_TheBatchFormAndTheDelegationPathAreGatedAtTheACL() (gas: 227811)
+[PASS] test_TC7_TypedErrorPrecedence() (gas: 358458)
+[PASS] test_TC8_GrantsToARetiredAccountSucceed_AndAreInert() (gas: 2209366)
+Suite result: FAILED. 18 passed; 2 failed; 0 skipped; finished in 190.33ms (207.07ms CPU time)
+
+Ran 14 tests for test/FhenixCorePermit.t.sol:FhenixCorePermitTest
+[PASS] test_TC6_AnInvalidStructureStillRevertsFirst() (gas: 131462)
+[PASS] test_TC6_ERC1271Issuer_FalseOnceRetired() (gas: 910193)
+[PASS] test_TC6_HandleAndContractScopes() (gas: 433724)
+[PASS] test_TC6_Registry_ARetiredIssuerCannotPost() (gas: 161972)
+[PASS] test_TC6_Registry_AShareIsInvalidOnceItsIssuerRetires() (gas: 429893)
+[PASS] test_TC6_Registry_AShareIsInvalidOnceItsRecipientRetires() (gas: 361423)
+[PASS] test_TC6_Registry_FailsClosedWithoutAnAnswer() (gas: 721180)
+[PASS] test_TC6_Registry_OnlyTheAdminSetsTheLink() (gas: 48944)
+[PASS] test_TC6_Registry_PostingToARetiredRecipientIsAccepted_AndInert() (gas: 338382)
+[PASS] test_TC6_Registry_RemovalStaysOpenToRetiredParties() (gas: 728197)
+[PASS] test_TC6_SelfPermit_TrueThenFalseOnceTheIssuerRetires() (gas: 259746)
+[PASS] test_TC6_SharedPermit_FalseOnceTheIssuerRetires() (gas: 270452)
+[PASS] test_TC6_SharedPermit_FalseOnceTheRecipientRetires() (gas: 343225)
+[PASS] test_TC6_ThirdPartyRetirementChangesNothing() (gas: 244322)
+Suite result: ok. 14 passed; 0 failed; 0 skipped; finished in 1.15s (17.24ms CPU time)
+
+Ran 10 tests for test/FhenixCoreBatchUpgrade.t.sol:FhenixCoreBatchUpgradeTest
+[PASS] testFuzz_TC11_TheRoleCheckComesFirst(address) (runs: 512, μ: 200675, ~: 200675)
+[PASS] test_TC10_GrantsThenRetire_OneAtomicBatch() (gas: 1161891)
+[PASS] test_TC10_RetireThenGrant_TheWholeBatchReverts() (gas: 872116)
+[PASS] test_TC10_TheRegistryOffersNoCallerPreservingBatch() (gas: 67827)
+[PASS] test_TC11_ACoreImplementationAtAnotherLocation_Reverts() (gas: 190779)
+[PASS] test_TC11_ACoreImplementationAtTheSameLocation_Accepted_StateAndEnforcementKept() (gas: 359441)
+[PASS] test_TC11_ALyingImplementation_Accepted_TheAssertedResidual_TheCanaryCatchesIt() (gas: 484429)
+[PASS] test_TC11_AnImplementationWithoutCore_Fhenixs_Reverts() (gas: 3303020)
+[PASS] test_TC11_FromFhenixsUnmodifiedACL_StateKept_CoreActive() (gas: 5020429)
+[PASS] test_TC11_MalformedRevertingOrMissingAnswers_Revert() (gas: 370348)
+Suite result: ok. 10 passed; 0 failed; 0 skipped; finished in 1.15s (1.16s CPU time)
+
+Ran 3 tests for test/FhenixCoreDifferential.t.sol:FhenixCoreDifferentialTest
+[PASS] testFuzz_TC3_NeverRetiredAccountsSeeTheSameRegistry(uint256,uint8[12]) (runs: 256, μ: 15138320, ~: 14905099)
+[PASS] test_TC3_AFixedScriptGrantsSharesComputesAndPublishes() (gas: 8681061)
+[PASS] test_TC3_NegativeControl_ARetiredActorIsCaught() (gas: 2148335)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 1.15s (1.17s CPU time)
+
+Ran 5 test suites in 1.15s (3.84s CPU time): 52 tests passed, 2 failed, 0 skipped (54 total tests)
+
+Failing tests:
+Encountered 2 failing tests in test/FhenixCoreRegistry.t.sol:FhenixCoreRegistryTest
+[FAIL: next call did not revert as expected; counterexample: calldata=0x228f74a8000000000000000000000000873ea78391295384747ba24f1f9ed9dc646ae51d args=[0x873eA78391295384747Ba24F1F9ed9dc646aE51D]] testFuzz_TC1_RetireOnce_SecondReverts_NoSecondEvent(address) (runs: 0, μ: 0, ~: 0)
+[FAIL: next call did not revert as expected] test_R2_AdminSettersAndACoreUpgradeLeaveRetirementInPlace() (gas: 265459)
+
+Encountered a total of 2 failing tests, 52 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 2 failed tests
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger
+
+Fuzz seed: 0x8be2496160f32fcbf78930245e7c87b847ee21bb9d6e0520aead908423ee0ba3 (use `--fuzz-seed` to reproduce)

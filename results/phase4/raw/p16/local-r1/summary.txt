@@ -1,0 +1,11 @@
+fhevm-deploy rc=0
+ACL on chain: "ACL v0.4.2"
+ ✓ p16-sdk-status.test.ts > P1.6: getAuthorityStatus reports EIP-7851 accounts and E1 successor state (local chain) > setup: the mock runs ACL v0.4.2 with Core and E1 1ms
+ ✓ p16-sdk-status.test.ts > P1.6: getAuthorityStatus reports EIP-7851 accounts and E1 successor state (local chain) > an EOA, a contract and an EIP-7702 account, all active 826ms
+ ✓ p16-sdk-status.test.ts > P1.6: getAuthorityStatus reports EIP-7851 accounts and E1 successor state (local chain) > X migrates out (E1 successor, retirement), then disables ECDSA: EIP-7851 with the successor state 780ms
+ ✓ p16-sdk-status.test.ts > P1.6: getAuthorityStatus reports EIP-7851 accounts and E1 successor state (local chain) > W, still active with a pending accepted designation, disables ECDSA: EIP-7851 with the pending successor 917ms
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+vitest rc=0
+git status of the worktrees (tracked files must be unchanged):
+RESULT secret_or_hostname_hits=0

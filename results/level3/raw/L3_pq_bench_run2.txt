@@ -1,0 +1,22 @@
+a5-native-verify: native verification, 32-byte message (permit digest)
+threads available: Ok(12)
+secp256k1 ECDSA: sig 65 B, address recovered (no key transmitted)
+ecrecover, k256 0.13.4 (pure Rust) + keccak                median    174.74 us   min    174.21 us   (21x400)
+ecrecover, libsecp256k1 (secp256k1 0.30.0) + keccak        median     52.03 us   min     51.60 us   (21x400)
+ML-DSA-44: sig 2420 B, pk 1312 B, request carries pk||sig = 3732 B
+ML-DSA-44: decode pk+sig, verify (cold)                    median     79.42 us   min     79.17 us   (21x200)
+ML-DSA-44: declared-signer path (keccak(pk) check + cold)  median     82.66 us   min     82.05 us   (21x200)
+ML-DSA-65: sig 3309 B, pk 1952 B, request carries pk||sig = 5261 B
+ML-DSA-65: decode pk+sig, verify (cold)                    median    140.30 us   min    127.15 us   (21x200)
+ML-DSA-65: declared-signer path (keccak(pk) check + cold)  median    139.90 us   min    130.76 us   (21x200)
+ML-DSA-87: sig 4627 B, pk 2592 B, request carries pk||sig = 7219 B
+ML-DSA-87: decode pk+sig, verify (cold)                    median    203.84 us   min    198.96 us   (21x200)
+ML-DSA-87: declared-signer path (keccak(pk) check + cold)  median    209.94 us   min    208.63 us   (21x200)
+FN-DSA-512 (fn-dsa 0.4.0, pre-standard): sig 666 B, pk 897 B
+FN-DSA-512: decode pk, verify (cold)                       median     11.29 us   min     11.08 us   (21x400)
+SLH-DSA-SHA2-128s: sig 7856 B, pk 32 B
+SLH-DSA-SHA2-128s: verify                                  median    141.80 us   min    140.99 us   (15x40)
+SLH-DSA-SHA2-128f: sig 17088 B, pk 32 B
+SLH-DSA-SHA2-128f: verify                                  median    389.25 us   min    385.40 us   (15x20)
+SLH-DSA-SHAKE-128f: sig 17088 B, pk 32 B
+SLH-DSA-SHAKE-128f: verify                                 median   4251.23 us   min   4209.73 us   (15x10)

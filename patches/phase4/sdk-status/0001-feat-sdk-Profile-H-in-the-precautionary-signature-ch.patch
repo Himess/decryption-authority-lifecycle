@@ -1,0 +1,1005 @@
+From 7a497ab2ce68b92dd5a73c060cfbecaddd7dd5c1 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 19:17:18 +0300
+Subject: [PATCH 1/2] feat(sdk): Profile H in the precautionary signature check
+ (lifecycle Level 1, H9)
+
+Decryption Authority Lifecycle draft, Profile H rule H9: advisory prechecks
+use the same caps, budget and ordering as the verifiers.
+
+- verifyErc1271UserDecrypt takes an optional UserDecryptSignaturePolicy
+  (FhevmRuntimeConfig.userDecryptSignaturePolicy). Unset, the check is
+  unchanged (ecrecover first, 250,000 gas).
+- With a policy: H1 caps on the signature, the transport public key and the
+  extra data before any RPC; H3 gas B_exec + 21,000 + 64 x len(calldata);
+  H2 ordering `off` (ecrecover first), `shadow` (serves `off`, logs a
+  different code-first verdict) or `enforce` (code read at one block: no
+  code means a 65-byte ecrecover only; an EIP-7702 indicator means ERC-1271
+  with the narrow shim; other code means ERC-1271 only).
+- The ethereum module gains optional getCode and getBlockNumber (ethers and
+  viem adapters), and eth_call an optional block. A module without them
+  forwards under `enforce`, as any inconclusive check does.
+- setFhevmRuntimeConfig compares the policy like the other fields.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../core/kms/SignedDecryptionPermitV2-p.ts    |   2 +
+ sdk/js-sdk/src/core/modules/ethereum/types.ts |  24 ++
+ sdk/js-sdk/src/core/runtimeConfig-p.ts        |  19 ++
+ sdk/js-sdk/src/core/types/coreFhevmRuntime.ts |   6 +
+ sdk/js-sdk/src/core/types/index.ts            |   3 +
+ .../decrypt/userDecryptSignaturePolicy.ts     |  42 +++
+ .../verifyErc1271UserDecrypt-p.test.ts        | 256 ++++++++++++++++++
+ .../decrypt/verifyErc1271UserDecrypt-p.ts     | 231 ++++++++++++++++
+ sdk/js-sdk/src/ethers/internal/config.ts      |   8 +-
+ sdk/js-sdk/src/ethers/internal/ethereum-ct.ts |   4 +
+ sdk/js-sdk/src/ethers/internal/ethereum.ts    |  22 ++
+ sdk/js-sdk/src/viem/internal/config.ts        |   8 +-
+ sdk/js-sdk/src/viem/internal/ethereum-ct.ts   |   4 +
+ sdk/js-sdk/src/viem/internal/ethereum.ts      |  26 ++
+ 14 files changed, 651 insertions(+), 4 deletions(-)
+ create mode 100644 sdk/js-sdk/src/core/utils-p/decrypt/userDecryptSignaturePolicy.ts
+
+diff --git a/sdk/js-sdk/src/core/kms/SignedDecryptionPermitV2-p.ts b/sdk/js-sdk/src/core/kms/SignedDecryptionPermitV2-p.ts
+index d4f00a70..38d533e0 100644
+--- a/sdk/js-sdk/src/core/kms/SignedDecryptionPermitV2-p.ts
++++ b/sdk/js-sdk/src/core/kms/SignedDecryptionPermitV2-p.ts
+@@ -144,6 +144,8 @@ async function _createSignedDecryptionPermitV2(
+     userAddress: eip712.message.userAddress,
+     eip712,
+     signature,
++    // [lifecycle Level 1] Profile H (H9), when the runtime config sets it
++    policy: context.runtime.config.userDecryptSignaturePolicy,
+   });
+ 
+   return new SignedDecryptionPermitV2Impl(PRIVATE_TOKEN, parameters);
+diff --git a/sdk/js-sdk/src/core/modules/ethereum/types.ts b/sdk/js-sdk/src/core/modules/ethereum/types.ts
+index 2d31a6a4..634df578 100644
+--- a/sdk/js-sdk/src/core/modules/ethereum/types.ts
++++ b/sdk/js-sdk/src/core/modules/ethereum/types.ts
+@@ -64,6 +64,8 @@ export type EthCallParameters = Readonly<{
+   readonly data: BytesHex;
+   /** Optional gas cap for the call. */
+   readonly gas?: bigint | undefined;
++  /** [lifecycle Level 1] Optional block to evaluate the call at (Profile H2 pins one block). Latest when absent. */
++  readonly blockNumber?: bigint | undefined;
+ }>;
+ 
+ /**
+@@ -89,6 +91,27 @@ export type CallModuleFunction = {
+   call(hostPublicClient: TrustedClient, parameters: EthCallParameters): Promise<EthCallResult>;
+ };
+ 
++////////////////////////////////////////////////////////////////////////////////
++// getCode, getBlockNumber ([lifecycle Level 1] Profile H2: code-first ordering at one block)
++////////////////////////////////////////////////////////////////////////////////
++
++export type GetCodeParameters = Readonly<{
++  readonly address: ChecksummedAddress;
++  /** Block to read the code at. Latest when absent. */
++  readonly blockNumber?: bigint | undefined;
++}>;
++
++/**
++ * Optional: a module without them cannot run the code-first ordering, and the
++ * precautionary signature check then forwards the request to the KMS.
++ */
++export type GetCodeModuleFunction = {
++  /** `eth_getCode`: the account's code, `0x` when it has none. Transport errors are thrown. */
++  getCode?(hostPublicClient: TrustedClient, parameters: GetCodeParameters): Promise<BytesHex>;
++  /** `eth_blockNumber`, uncached. Transport errors are thrown. */
++  getBlockNumber?(hostPublicClient: TrustedClient): Promise<bigint>;
++};
++
+ ////////////////////////////////////////////////////////////////////////////////
+ // signTypedData
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -195,6 +218,7 @@ export type EthereumModule = Prettify<
+     SignTypedDataModuleFunction &
+     ReadContractModuleFunction &
+     CallModuleFunction &
++    GetCodeModuleFunction &
+     EncodeModuleFunction &
+     EncodePackedModuleFunction &
+     DecodeModuleFunction &
+diff --git a/sdk/js-sdk/src/core/runtimeConfig-p.ts b/sdk/js-sdk/src/core/runtimeConfig-p.ts
+index 4070c0bc..23fd63f8 100644
+--- a/sdk/js-sdk/src/core/runtimeConfig-p.ts
++++ b/sdk/js-sdk/src/core/runtimeConfig-p.ts
+@@ -1,4 +1,5 @@
+ import type { Auth } from './types/auth.js';
++import type { UserDecryptSignaturePolicy } from './utils-p/decrypt/userDecryptSignaturePolicy.js';
+ 
+ export function authsAreEqual(a: Auth | undefined, b: Auth | undefined): boolean {
+   if (a === undefined || b === undefined) {
+@@ -14,3 +15,21 @@ export function authsAreEqual(a: Auth | undefined, b: Auth | undefined): boolean
+       return b.type === 'ApiKeyCookie' && a.value === b.value && a.cookie === b.cookie;
+   }
+ }
++
++/** [lifecycle Level 1] Field-by-field equality of two Profile H signature policies. */
++export function signaturePoliciesAreEqual(
++  a: UserDecryptSignaturePolicy | undefined,
++  b: UserDecryptSignaturePolicy | undefined,
++): boolean {
++  if (a === undefined || b === undefined) {
++    return a === b;
++  }
++  return (
++    a.codeFirstMode === b.codeFirstMode &&
++    a.erc1271ExecutionBudget === b.erc1271ExecutionBudget &&
++    a.maxUserSignatureBytes === b.maxUserSignatureBytes &&
++    a.maxPublicKeyBytes === b.maxPublicKeyBytes &&
++    a.maxExtraDataBytes === b.maxExtraDataBytes &&
++    a.eip7702Fallback === b.eip7702Fallback
++  );
++}
+diff --git a/sdk/js-sdk/src/core/types/coreFhevmRuntime.ts b/sdk/js-sdk/src/core/types/coreFhevmRuntime.ts
+index c2784141..d601a6ad 100644
+--- a/sdk/js-sdk/src/core/types/coreFhevmRuntime.ts
++++ b/sdk/js-sdk/src/core/types/coreFhevmRuntime.ts
+@@ -5,6 +5,7 @@ import type { DecryptModule, DecryptModuleFactory, WithDecryptModule } from '../
+ import type { Logger } from './logger.js';
+ import type { Auth } from './auth.js';
+ import type { WasmAssetLoadMode } from './wasmAssets.js';
++import type { UserDecryptSignaturePolicy } from '../utils-p/decrypt/userDecryptSignaturePolicy.js';
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+@@ -15,6 +16,11 @@ export type FhevmRuntimeConfig = {
+   readonly singleThread?: boolean | undefined;
+   readonly numberOfThreads?: number | undefined;
+   readonly auth?: Auth | undefined;
++  /**
++   * [lifecycle Level 1] Profile H for the precautionary user-decryption signature check (rule H9):
++   * the deployment's verifier caps, budget and ordering. Unset: the check runs as before.
++   */
++  readonly userDecryptSignaturePolicy?: UserDecryptSignaturePolicy | undefined;
+ };
+ 
+ // eslint-disable-next-line @typescript-eslint/naming-convention
+diff --git a/sdk/js-sdk/src/core/types/index.ts b/sdk/js-sdk/src/core/types/index.ts
+index 7a1c4cd6..7729c603 100644
+--- a/sdk/js-sdk/src/core/types/index.ts
++++ b/sdk/js-sdk/src/core/types/index.ts
+@@ -4,3 +4,6 @@ export type { EncryptedValue, EncryptedValueLike } from './encryptedTypes.js';
+ export type { Eip712Like } from './kms.js';
+ export type { FhevmEncryptClient, FhevmDecryptClient } from './fhevmClient.js';
+ export { asEncryptedValue, isEncryptedValue } from '../handle/EncryptedValue.js';
++// [lifecycle Level 1] Profile H for the precautionary user-decryption signature check (H9)
++export type { UserDecryptSignaturePolicy } from '../utils-p/decrypt/userDecryptSignaturePolicy.js';
++export { PROFILE_H_DEFAULT_SIGNATURE_POLICY } from '../utils-p/decrypt/userDecryptSignaturePolicy.js';
+diff --git a/sdk/js-sdk/src/core/utils-p/decrypt/userDecryptSignaturePolicy.ts b/sdk/js-sdk/src/core/utils-p/decrypt/userDecryptSignaturePolicy.ts
+new file mode 100644
+index 00000000..95b1ac9c
+--- /dev/null
++++ b/sdk/js-sdk/src/core/utils-p/decrypt/userDecryptSignaturePolicy.ts
+@@ -0,0 +1,42 @@
++// [lifecycle Level 1] Profile H (Decryption Authority Lifecycle draft): the value set shared by
++// the precautionary user-decryption signature check and the runtime config. No imports, so the
++// `types` entry point can export it without pulling in runtime code.
++
++/**
++ * The Profile H value set. Rule H9: advisory prechecks SHOULD use the same caps,
++ * budget and ordering as the verifiers. Mirrors `SignaturePolicy` in the shared
++ * crate (`shared/user-decryption-signature/src/profile_h.rs`) and the
++ * `profile_h` settings of the KMS connector and the relayer: set it to the
++ * values the deployment's verifiers state.
++ */
++export type UserDecryptSignaturePolicy = {
++  /**
++   * H2/H8 ordering. `off`: ecrecover first, as without a policy. `shadow`: the
++   * `off` verdict decides, and a different code-first verdict is logged.
++   * `enforce`: code-first, reading the account's code at one block.
++   */
++  readonly codeFirstMode: 'off' | 'shadow' | 'enforce';
++  /** H3 `B_exec`: execution gas for `isValidSignature`, excluding the intrinsic and calldata gas. */
++  readonly erc1271ExecutionBudget: bigint;
++  /** H1 caps, in bytes, checked before any RPC. */
++  readonly maxUserSignatureBytes: number;
++  readonly maxPublicKeyBytes: number;
++  readonly maxExtraDataBytes: number;
++  /** H2's narrow EIP-7702 fallback (Profile Q switches it off). */
++  readonly eip7702Fallback: boolean;
++};
++
++/** The draft's recommended values, with the `off` ordering. */
++export const PROFILE_H_DEFAULT_SIGNATURE_POLICY: UserDecryptSignaturePolicy = Object.freeze({
++  codeFirstMode: 'off',
++  erc1271ExecutionBudget: 2_000_000n,
++  maxUserSignatureBytes: 65_536,
++  maxPublicKeyBytes: 4_096,
++  maxExtraDataBytes: 1_024,
++  eip7702Fallback: true,
++});
++
++/** H3: `B_exec + 21,000 + 64 × len(calldata)`, the calldata length in bytes. */
++export function erc1271GasLimit(executionBudget: bigint, calldataByteLength: number): bigint {
++  return executionBudget + 21_000n + 64n * BigInt(calldataByteLength);
++}
+diff --git a/sdk/js-sdk/src/core/utils-p/decrypt/verifyErc1271UserDecrypt-p.test.ts b/sdk/js-sdk/src/core/utils-p/decrypt/verifyErc1271UserDecrypt-p.test.ts
+index 252c521f..8c7ab8b2 100644
+--- a/sdk/js-sdk/src/core/utils-p/decrypt/verifyErc1271UserDecrypt-p.test.ts
++++ b/sdk/js-sdk/src/core/utils-p/decrypt/verifyErc1271UserDecrypt-p.test.ts
+@@ -17,6 +17,9 @@ import {
+ import { createCoreFhevm } from '../../runtime/CoreFhevm-p.js';
+ import { createFhevmRuntime } from '../../runtime/CoreFhevmRuntime-p.js';
+ import { ERC1271_MAGIC_VALUE, verifyErc1271UserDecrypt } from './verifyErc1271UserDecrypt-p.js';
++import type { UserDecryptSignaturePolicy } from './userDecryptSignaturePolicy.js';
++import { PROFILE_H_DEFAULT_SIGNATURE_POLICY, erc1271GasLimit } from './userDecryptSignaturePolicy.js';
++import { signaturePoliciesAreEqual } from '../../runtimeConfig-p.js';
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+@@ -57,6 +60,9 @@ type MockOptions = {
+   readonly call?: EthereumModule['call'];
+   readonly recover?: EthereumModule['recoverTypedDataAddress'];
+   readonly logger?: Logger;
++  // [lifecycle Level 1] Profile H reads (absent: the module cannot read code)
++  readonly getCode?: EthereumModule['getCode'];
++  readonly getBlockNumber?: EthereumModule['getBlockNumber'];
+ };
+ 
+ function makeEthereum(opts: MockOptions): EthereumModule {
+@@ -71,6 +77,8 @@ function makeEthereum(opts: MockOptions): EthereumModule {
+         ('0x' + values.map((v) => remove0x(String(v))).join('')) as BytesHex,
+     ),
+     call: opts.call ?? vi.fn(async (): Promise<EthCallResult> => ({ success: true, data: RETURN_MAGIC })),
++    getCode: opts.getCode,
++    getBlockNumber: opts.getBlockNumber,
+   } as unknown as EthereumModule;
+ }
+ 
+@@ -272,3 +280,251 @@ describe('verifyErc1271UserDecrypt', () => {
+     expect(ethereum.call).toHaveBeenCalledTimes(0);
+   });
+ });
++
++////////////////////////////////////////////////////////////////////////////////
++// [lifecycle Level 1] Profile H (rule H9: the verifiers' caps, budget and ordering)
++////////////////////////////////////////////////////////////////////////////////
++
++const DELEGATE = 'ab'.repeat(20);
++const CODE_7702 = `0xef0100${DELEGATE}` as BytesHex;
++const CODE_REGULAR = '0x6080604052' as BytesHex;
++const BLOCK = 16n;
++
++function policy(codeFirstMode: UserDecryptSignaturePolicy['codeFirstMode'], eip7702Fallback = true) {
++  return { ...PROFILE_H_DEFAULT_SIGNATURE_POLICY, codeFirstMode, eip7702Fallback };
++}
++
++/** The account has `code`; the block number is fixed. */
++function reads(code: BytesHex): Pick<MockOptions, 'getCode' | 'getBlockNumber'> {
++  return { getCode: vi.fn(async () => code), getBlockNumber: vi.fn(async () => BLOCK) };
++}
++
++type CallArgs = { data: string; gas: bigint; blockNumber?: bigint };
++
++function callArgs(call: EthereumModule['call']): CallArgs {
++  const mockCalls = (call as unknown as { mock: { calls: [unknown, CallArgs][] } }).mock.calls;
++  const args = mockCalls[0];
++  if (args === undefined) {
++    throw new Error('expected the mocked eth_call to have been invoked');
++  }
++  return args[1];
++}
++
++describe('verifyErc1271UserDecrypt with a Profile H policy', () => {
++  it('H1: refuses a signature above the cap before any RPC', async () => {
++    const { context, ethereum } = makeContext({ ...reads(CODE_REGULAR) });
++    const signature = ('0x' + '11'.repeat(65_537)) as BytesHex;
++
++    await expect(
++      verifyErc1271UserDecrypt(context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature,
++        policy: policy('enforce'),
++      }),
++    ).rejects.toBeInstanceOf(Erc1271RejectedError);
++    expect(ethereum.call).toHaveBeenCalledTimes(0);
++    expect(ethereum.getCode).toHaveBeenCalledTimes(0);
++  });
++
++  it('H1: refuses a transport public key above the cap', async () => {
++    const eip712 = makeEip712();
++    const big = { ...eip712, message: { ...eip712.message, publicKey: ('0x' + '00'.repeat(4_097)) as BytesHex } };
++
++    await expect(
++      verifyErc1271UserDecrypt(makeContext({}).context, {
++        userAddress: WALLET,
++        eip712: big,
++        signature: SIG_65,
++        policy: policy('off'),
++      }),
++    ).rejects.toBeInstanceOf(Erc1271RejectedError);
++  });
++
++  it('H3: gives isValidSignature B_exec + 21,000 + 64 per calldata byte, not 250,000', async () => {
++    // A 2,420-byte ML-DSA-44 signature, which the 250,000 cap cannot verify.
++    const signature = ('0x' + '33'.repeat(2_420)) as BytesHex;
++    const call = queuedCall({ success: true, data: RETURN_MAGIC });
++    const { context } = makeContext({ call });
++
++    await expect(
++      verifyErc1271UserDecrypt(context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature,
++        policy: policy('off'),
++      }),
++    ).resolves.toBeUndefined();
++
++    const { data, gas, blockNumber } = callArgs(call);
++    const calldataBytes = (data.length - 2) / 2;
++    expect(calldataBytes).toBe(4 + 32 + 2_420); // selector, digest and signature in the mock's encoding
++    expect(gas).toBe(2_000_000n + 21_000n + 64n * BigInt(calldataBytes));
++    expect(gas).toBe(erc1271GasLimit(2_000_000n, 2_456));
++    expect(blockNumber).toBeUndefined(); // `off` reads no code and pins no block
++  });
++
++  it('off: ecrecover first, with no RPC, as without a policy', async () => {
++    const { context, ethereum } = makeContext({ recover: vi.fn(async () => WALLET), ...reads(CODE_7702) });
++
++    await expect(
++      verifyErc1271UserDecrypt(context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature: SIG_65,
++        policy: policy('off'),
++      }),
++    ).resolves.toBeUndefined();
++    expect(ethereum.call).toHaveBeenCalledTimes(0);
++    expect(ethereum.getCode).toHaveBeenCalledTimes(0);
++  });
++
++  it('enforce (H2): refuses a 7702 root key whose delegate answers wrong magic, at the code block', async () => {
++    const call = queuedCall({ success: true, data: RETURN_WRONG_MAGIC });
++    const { context, ethereum } = makeContext({ recover: vi.fn(async () => WALLET), call, ...reads(CODE_7702) });
++
++    await expect(
++      verifyErc1271UserDecrypt(context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature: SIG_65,
++        policy: policy('enforce'),
++      }),
++    ).rejects.toBeInstanceOf(Erc1271WrongMagicError);
++    expect(ethereum.getCode).toHaveBeenCalledTimes(1);
++    expect(callArgs(call).blockNumber).toBe(BLOCK);
++  });
++
++  it('enforce (H2): the 7702 shim accepts only a successful empty return and the account key', async () => {
++    const accept = makeContext({
++      recover: vi.fn(async () => WALLET),
++      call: queuedCall({ success: true, data: RETURN_EMPTY }),
++      ...reads(CODE_7702),
++    });
++    await expect(
++      verifyErc1271UserDecrypt(accept.context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature: SIG_65,
++        policy: policy('enforce'),
++      }),
++    ).resolves.toBeUndefined();
++
++    // Shim off (Profile Q): the same answer is a rejection.
++    const off = makeContext({
++      recover: vi.fn(async () => WALLET),
++      call: queuedCall({ success: true, data: RETURN_EMPTY }),
++      ...reads(CODE_7702),
++    });
++    await expect(
++      verifyErc1271UserDecrypt(off.context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature: SIG_65,
++        policy: policy('enforce', false),
++      }),
++    ).rejects.toBeInstanceOf(Erc1271RejectedError);
++
++    // A revert never falls back, even with the account key.
++    const reverted = makeContext({
++      recover: vi.fn(async () => WALLET),
++      call: queuedCall({ success: false, reason: 'execution reverted' }),
++      ...reads(CODE_7702),
++    });
++    await expect(
++      verifyErc1271UserDecrypt(reverted.context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature: SIG_65,
++        policy: policy('enforce'),
++      }),
++    ).rejects.toBeInstanceOf(Erc1271RejectedError);
++  });
++
++  it('enforce (H2): regular code is ERC-1271 only, even when the signature recovers the address', async () => {
++    const call = queuedCall({ success: true, data: RETURN_EMPTY });
++    const { context } = makeContext({ recover: vi.fn(async () => WALLET), call, ...reads(CODE_REGULAR) });
++
++    await expect(
++      verifyErc1271UserDecrypt(context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature: SIG_65,
++        policy: policy('enforce'),
++      }),
++    ).rejects.toBeInstanceOf(Erc1271RejectedError);
++  });
++
++  it('enforce (H2): no code means a 65-byte ecrecover only, after one code read', async () => {
++    const eoa = makeContext({ recover: vi.fn(async () => WALLET), ...reads('0x' as BytesHex) });
++    await expect(
++      verifyErc1271UserDecrypt(eoa.context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature: SIG_65,
++        policy: policy('enforce'),
++      }),
++    ).resolves.toBeUndefined();
++    expect(eoa.ethereum.getCode).toHaveBeenCalledTimes(1);
++    expect(eoa.ethereum.call).toHaveBeenCalledTimes(0);
++
++    const blob = makeContext({ ...reads('0x' as BytesHex) });
++    await expect(
++      verifyErc1271UserDecrypt(blob.context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature: SIG_130,
++        policy: policy('enforce'),
++      }),
++    ).rejects.toBeInstanceOf(Erc1271EoaMismatchNoCodeError);
++    expect(blob.ethereum.call).toHaveBeenCalledTimes(0);
++  });
++
++  it('shadow (H8): serves the `off` verdict and logs a would-be rejection', async () => {
++    const warn = vi.fn();
++    const { context } = makeContext({
++      logger: { warn } as unknown as Logger,
++      recover: vi.fn(async () => WALLET),
++      call: queuedCall({ success: true, data: RETURN_WRONG_MAGIC }),
++      ...reads(CODE_7702),
++    });
++
++    await expect(
++      verifyErc1271UserDecrypt(context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature: SIG_65,
++        policy: policy('shadow'),
++      }),
++    ).resolves.toBeUndefined();
++    expect(warn).toHaveBeenCalledTimes(1);
++    expect(String(warn.mock.calls[0]?.[0])).toContain('PROFILE-H-SHADOW');
++  });
++
++  it('a module that cannot read code forwards under enforce (inconclusive)', async () => {
++    const warn = vi.fn();
++    const { context, ethereum } = makeContext({ logger: { warn } as unknown as Logger });
++
++    await expect(
++      verifyErc1271UserDecrypt(context, {
++        userAddress: WALLET,
++        eip712: makeEip712(),
++        signature: SIG_130,
++        policy: policy('enforce'),
++      }),
++    ).resolves.toBeUndefined();
++    expect(warn).toHaveBeenCalledTimes(1);
++    expect(ethereum.call).toHaveBeenCalledTimes(0);
++  });
++});
++
++describe('signaturePoliciesAreEqual', () => {
++  it('compares field by field', () => {
++    expect(signaturePoliciesAreEqual(undefined, undefined)).toBe(true);
++    expect(signaturePoliciesAreEqual(PROFILE_H_DEFAULT_SIGNATURE_POLICY, undefined)).toBe(false);
++    expect(
++      signaturePoliciesAreEqual(PROFILE_H_DEFAULT_SIGNATURE_POLICY, { ...PROFILE_H_DEFAULT_SIGNATURE_POLICY }),
++    ).toBe(true);
++    expect(signaturePoliciesAreEqual(PROFILE_H_DEFAULT_SIGNATURE_POLICY, policy('enforce'))).toBe(false);
++  });
++});
+diff --git a/sdk/js-sdk/src/core/utils-p/decrypt/verifyErc1271UserDecrypt-p.ts b/sdk/js-sdk/src/core/utils-p/decrypt/verifyErc1271UserDecrypt-p.ts
+index 56766b70..c86468a1 100644
+--- a/sdk/js-sdk/src/core/utils-p/decrypt/verifyErc1271UserDecrypt-p.ts
++++ b/sdk/js-sdk/src/core/utils-p/decrypt/verifyErc1271UserDecrypt-p.ts
+@@ -2,6 +2,7 @@ import type { EthCallResult } from '../../modules/ethereum/types.js';
+ import type { FhevmRuntime } from '../../types/coreFhevmRuntime.js';
+ import type { KmsUserDecryptEip712V2 } from '../../types/kms.js';
+ import type { Bytes32Hex, Bytes65Hex, BytesHex, ChecksummedAddress } from '../../types/primitives.js';
++import type { Erc1271VerificationError } from '../../errors/Erc1271Error.js';
+ import {
+   Erc1271EmptySigOnEoaError,
+   Erc1271EoaMismatchNoCodeError,
+@@ -9,6 +10,8 @@ import {
+   Erc1271WrongMagicError,
+ } from '../../errors/Erc1271Error.js';
+ import { getTrustedClient } from '../../runtime/CoreFhevm-p.js';
++import type { UserDecryptSignaturePolicy } from './userDecryptSignaturePolicy.js';
++import { erc1271GasLimit } from './userDecryptSignaturePolicy.js';
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+@@ -27,6 +30,13 @@ export const ERC1271_MAGIC_VALUE = '0x1626ba7e' as const;
+  */
+ export const ERC1271_GAS_LIMIT = 250_000n;
+ 
++////////////////////////////////////////////////////////////////////////////////
++// [lifecycle Level 1] Profile H (Decryption Authority Lifecycle draft)
++////////////////////////////////////////////////////////////////////////////////
++
++export type { UserDecryptSignaturePolicy } from './userDecryptSignaturePolicy.js';
++export { PROFILE_H_DEFAULT_SIGNATURE_POLICY, erc1271GasLimit } from './userDecryptSignaturePolicy.js';
++
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+ /** Byte length of a `0x`-prefixed hex string. */
+@@ -48,6 +58,8 @@ export type VerifyErc1271UserDecryptParameters = {
+   readonly eip712: KmsUserDecryptEip712V2;
+   /** The opaque signature blob (65-byte EOA, multisig concat, or empty `0x`). */
+   readonly signature: BytesHex;
++  /** [lifecycle Level 1] Profile H (H9). When absent, the check runs as described below. */
++  readonly policy?: UserDecryptSignaturePolicy | undefined;
+ };
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -72,6 +84,9 @@ export type VerifyErc1271UserDecryptParameters = {
+  * - An **inconclusive** outcome (no read provider, or an RPC transport error)
+  *   logs a warning and returns, forwarding the request to the KMS.
+  *
++ * [lifecycle Level 1] With `policy` set, the check follows the verifiers' Profile H
++ * caps, budget and ordering instead (rule H9); see `verifyProfileH`.
++ *
+  * @throws {@link Erc1271VerificationError} on a definitive local rejection.
+  */
+ export async function verifyErc1271UserDecrypt(
+@@ -89,6 +104,12 @@ export async function verifyErc1271UserDecrypt(
+ 
+   const sigByteLength = byteLengthOfHex(signature);
+ 
++  // [lifecycle Level 1] Profile H: the verifiers' caps, budget and ordering (H9).
++  if (parameters.policy !== undefined) {
++    await verifyProfileH(context, { userAddress, eip712, signature, digest, policy: parameters.policy });
++    return;
++  }
++
+   // 1. EOA fast path — local, no RPC. Only meaningful for a 65-byte signature.
+   //    An unparsable blob (or a recovered address that isn't userAddress) simply
+   //    falls through to the ERC-1271 STATICCALL, never rejecting outright.
+@@ -163,3 +184,213 @@ export async function verifyErc1271UserDecrypt(
+ 
+   throw new Erc1271WrongMagicError({ userAddress, magicValue });
+ }
++
++////////////////////////////////////////////////////////////////////////////////
++// [lifecycle Level 1] Profile H
++////////////////////////////////////////////////////////////////////////////////
++
++/** Accepted, or the definitive rejection to throw. */
++type Verdict = { readonly accepted: true } | { readonly accepted: false; readonly error: Erc1271VerificationError };
++
++const ACCEPTED: Verdict = Object.freeze({ accepted: true });
++
++function rejected(error: Erc1271VerificationError): Verdict {
++  return { accepted: false, error };
++}
++
++/** An EIP-7702 delegation indicator: exactly `0xef0100 ‖ address` (23 bytes). */
++function isEip7702Indicator(code: BytesHex): boolean {
++  return byteLengthOfHex(code) === 23 && code.toLowerCase().startsWith('0xef0100');
++}
++
++/** Maps a non-empty or reverted `isValidSignature` result (both orderings). */
++function verdictOfCall(userAddress: ChecksummedAddress, result: EthCallResult): Verdict {
++  if (!result.success) {
++    return rejected(
++      new Erc1271RejectedError({ userAddress, detail: `isValidSignature call reverted: ${result.reason}` }),
++    );
++  }
++  const returnByteLength = byteLengthOfHex(result.data);
++  if (returnByteLength < 32) {
++    return rejected(new Erc1271RejectedError({ userAddress, detail: `returndata length ${returnByteLength} < 32` }));
++  }
++  const magicValue = result.data.slice(0, 10).toLowerCase();
++  return magicValue === ERC1271_MAGIC_VALUE
++    ? ACCEPTED
++    : rejected(new Erc1271WrongMagicError({ userAddress, magicValue }));
++}
++
++/**
++ * The check under Profile H, as the shared crate's `verify_user_decryption_signature`:
++ * - H1: the signature, the transport public key and the extra data are capped before any RPC;
++ * - H3: the `isValidSignature` gas is `B_exec + 21,000 + 64 × len(calldata)`;
++ * - H2, `enforce`: the account's code at one block B decides the path. No code: a 65-byte
++ *   ecrecover only. An EIP-7702 indicator: ERC-1271 at B, falling back to ecrecover only when
++ *   the call succeeds with no data. Other code: ERC-1271 only;
++ * - `off`: ecrecover first, then ERC-1271 with the budget. `shadow`: the `off` verdict decides,
++ *   and the code-first verdict is computed at the same block and logged when it differs.
++ *
++ * One attempt (H4 allows at most two). An inconclusive outcome forwards to the KMS, as above.
++ */
++async function verifyProfileH(
++  context: VerifyErc1271UserDecryptContext,
++  parameters: {
++    readonly userAddress: ChecksummedAddress;
++    readonly eip712: KmsUserDecryptEip712V2;
++    readonly signature: BytesHex;
++    readonly digest: Bytes32Hex;
++    readonly policy: UserDecryptSignaturePolicy;
++  },
++): Promise<void> {
++  const { userAddress, eip712, signature, digest, policy } = parameters;
++  const ethereum = context.runtime.ethereum;
++  const logger = context.runtime.config.logger;
++
++  // H1: caps before any RPC. A violation is definitive.
++  const caps: ReadonlyArray<readonly [string, number, number]> = [
++    ['signature', byteLengthOfHex(signature), policy.maxUserSignatureBytes],
++    ['publicKey', byteLengthOfHex(eip712.message.publicKey), policy.maxPublicKeyBytes],
++    ['extraData', byteLengthOfHex(eip712.message.extraData), policy.maxExtraDataBytes],
++  ];
++  for (const [field, length, cap] of caps) {
++    if (length > cap) {
++      throw new Erc1271RejectedError({
++        userAddress,
++        detail: `${field} is ${length} bytes, above the ${cap}-byte cap (Profile H1)`,
++      });
++    }
++  }
++
++  const sigByteLength = byteLengthOfHex(signature);
++  const { domain, primaryType, message } = eip712;
++  const types = { [primaryType]: [...eip712.types[primaryType]] };
++
++  // Whether a 65-byte signature recovers userAddress (local, no RPC).
++  let recovers = false;
++  if (sigByteLength === 65) {
++    try {
++      const recovered = await ethereum.recoverTypedDataAddress({
++        domain,
++        types,
++        primaryType,
++        message,
++        signature: signature as Bytes65Hex,
++      });
++      recovers = recovered.toLowerCase() === userAddress.toLowerCase();
++    } catch {
++      // Unparsable 65-byte blob: not an ECDSA signature by userAddress.
++    }
++  }
++
++  // H3: the budget, from the calldata's length.
++  const encodedArgs = ethereum.encode({ types: ['bytes32', 'bytes'], values: [digest, signature] });
++  const calldata = `${ERC1271_MAGIC_VALUE}${encodedArgs.slice(2)}` as BytesHex;
++  const gas = erc1271GasLimit(policy.erc1271ExecutionBudget, byteLengthOfHex(calldata));
++
++  // Host-chain reads, each made at most once. `shadow` and `enforce` pin them all to one block B (H2).
++  const pinned = policy.codeFirstMode !== 'off';
++  const reads: { block?: bigint; code?: BytesHex; call?: EthCallResult } = {};
++  const blockNumber = async (): Promise<bigint> => {
++    if (reads.block === undefined) {
++      if (ethereum.getBlockNumber === undefined) {
++        throw new Error('the ethereum module cannot read the block number');
++      }
++      reads.block = await ethereum.getBlockNumber(getTrustedClient(context));
++    }
++    return reads.block;
++  };
++  const accountCode = async (): Promise<BytesHex> => {
++    if (reads.code === undefined) {
++      if (ethereum.getCode === undefined) {
++        throw new Error('the ethereum module cannot read account code');
++      }
++      reads.code = await ethereum.getCode(getTrustedClient(context), {
++        address: userAddress,
++        blockNumber: await blockNumber(),
++      });
++    }
++    return reads.code;
++  };
++  const isValidSignature = async (): Promise<EthCallResult> => {
++    reads.call ??= await ethereum.call(getTrustedClient(context), {
++      to: userAddress,
++      data: calldata,
++      gas,
++      ...(pinned ? { blockNumber: await blockNumber() } : {}),
++    });
++    return reads.call;
++  };
++
++  // `off`: ecrecover first; empty return data means "no code".
++  const legacyVerdict = async (): Promise<Verdict> => {
++    if (recovers) {
++      return ACCEPTED;
++    }
++    const result = await isValidSignature();
++    if (result.success && byteLengthOfHex(result.data) === 0) {
++      return rejected(
++        sigByteLength === 0
++          ? new Erc1271EmptySigOnEoaError({ userAddress })
++          : new Erc1271EoaMismatchNoCodeError({ userAddress }),
++      );
++    }
++    return verdictOfCall(userAddress, result);
++  };
++
++  // `enforce` (H2): the code at B decides the path.
++  const codeFirstVerdict = async (): Promise<Verdict> => {
++    const code = await accountCode();
++    if (byteLengthOfHex(code) === 0) {
++      if (sigByteLength === 65 && recovers) {
++        return ACCEPTED;
++      }
++      return rejected(
++        sigByteLength === 0
++          ? new Erc1271EmptySigOnEoaError({ userAddress })
++          : new Erc1271EoaMismatchNoCodeError({ userAddress }),
++      );
++    }
++    const result = await isValidSignature();
++    if (result.success && byteLengthOfHex(result.data) === 0) {
++      // The only fallback: an EIP-7702 account whose call succeeded with no data, and its own 65-byte signature.
++      if (isEip7702Indicator(code) && policy.eip7702Fallback && sigByteLength === 65 && recovers) {
++        return ACCEPTED;
++      }
++      return rejected(
++        new Erc1271RejectedError({ userAddress, detail: 'isValidSignature returned no data on an account with code' }),
++      );
++    }
++    return verdictOfCall(userAddress, result);
++  };
++
++  let verdict: Verdict;
++  try {
++    verdict = policy.codeFirstMode === 'enforce' ? await codeFirstVerdict() : await legacyVerdict();
++  } catch (err) {
++    // Inconclusive: no read provider, a module without the reads, or a transport error.
++    const reason = err instanceof Error ? err.message : String(err);
++    logger?.warn?.(
++      `ERC-1271 user-decryption signature check (Profile H) could not complete for userAddress ${userAddress}; ` +
++        `forwarding to the KMS (authoritative). Reason: ${reason}`,
++    );
++    return;
++  }
++
++  if (policy.codeFirstMode === 'shadow') {
++    try {
++      const codeFirst = await codeFirstVerdict();
++      if (codeFirst.accepted !== verdict.accepted) {
++        logger?.warn?.(
++          `PROFILE-H-SHADOW userAddress ${userAddress}: served ${verdict.accepted ? 'accept' : 'reject'}, ` +
++            `code-first would ${codeFirst.accepted ? 'accept' : `reject (${codeFirst.error.message})`}`,
++        );
++      }
++    } catch {
++      // The shadow verdict only informs; a failed read changes nothing.
++    }
++  }
++
++  if (!verdict.accepted) {
++    throw verdict.error;
++  }
++}
+diff --git a/sdk/js-sdk/src/ethers/internal/config.ts b/sdk/js-sdk/src/ethers/internal/config.ts
+index b6b523cf..41b69b75 100644
+--- a/sdk/js-sdk/src/ethers/internal/config.ts
++++ b/sdk/js-sdk/src/ethers/internal/config.ts
+@@ -1,5 +1,5 @@
+ import type { FhevmRuntimeConfig } from '../../core/types/coreFhevmRuntime.js';
+-import { authsAreEqual } from '../../core/runtimeConfig-p.js';
++import { authsAreEqual, signaturePoliciesAreEqual } from '../../core/runtimeConfig-p.js';
+ 
+ let ethersFhevmRuntimeConfig: FhevmRuntimeConfig | undefined;
+ 
+@@ -20,6 +20,9 @@ export function setFhevmRuntimeConfig(config: FhevmRuntimeConfig): void {
+     ethersFhevmRuntimeConfig = Object.freeze<FhevmRuntimeConfig>({
+       ...config,
+       logger: config.logger ? Object.freeze({ ...config.logger }) : undefined,
++      userDecryptSignaturePolicy: config.userDecryptSignaturePolicy
++        ? Object.freeze({ ...config.userDecryptSignaturePolicy })
++        : undefined,
+     });
+     return;
+   }
+@@ -30,7 +33,8 @@ export function setFhevmRuntimeConfig(config: FhevmRuntimeConfig): void {
+     ethersFhevmRuntimeConfig.wasmAssetLoadMode !== config.wasmAssetLoadMode ||
+     ethersFhevmRuntimeConfig.singleThread !== config.singleThread ||
+     ethersFhevmRuntimeConfig.numberOfThreads !== config.numberOfThreads ||
+-    !authsAreEqual(ethersFhevmRuntimeConfig.auth, config.auth)
++    !authsAreEqual(ethersFhevmRuntimeConfig.auth, config.auth) ||
++    !signaturePoliciesAreEqual(ethersFhevmRuntimeConfig.userDecryptSignaturePolicy, config.userDecryptSignaturePolicy)
+   ) {
+     throw new Error(
+       'FhevmRuntime config has already been set and cannot be changed. ' +
+diff --git a/sdk/js-sdk/src/ethers/internal/ethereum-ct.ts b/sdk/js-sdk/src/ethers/internal/ethereum-ct.ts
+index 0e786fe3..2b2e19ef 100644
+--- a/sdk/js-sdk/src/ethers/internal/ethereum-ct.ts
++++ b/sdk/js-sdk/src/ethers/internal/ethereum-ct.ts
+@@ -16,7 +16,9 @@ import {
+   decode,
+   encode,
+   encodePacked,
++  getBlockNumber,
+   getChainId,
++  getCode,
+   hashTypedData,
+   readContract,
+   recoverTypedDataAddress,
+@@ -39,6 +41,8 @@ export const cleartextEthereumModule: CleartextEthereumModuleFactory = () => {
+       getChainId,
+       readContract,
+       call,
++      getCode,
++      getBlockNumber,
+       mnemonicToAccount: (parameters: MnemonicToAccountParameters): MnemonicToAccountReturnType => {
+         const signer = HDNodeWallet.fromPhrase(parameters.mnemonic, undefined, parameters.path);
+         return {
+diff --git a/sdk/js-sdk/src/ethers/internal/ethereum.ts b/sdk/js-sdk/src/ethers/internal/ethereum.ts
+index 85c6524f..c449c318 100644
+--- a/sdk/js-sdk/src/ethers/internal/ethereum.ts
++++ b/sdk/js-sdk/src/ethers/internal/ethereum.ts
+@@ -9,6 +9,7 @@ import type {
+   EthCallResult,
+   EthereumModuleFactory,
+   GetChainIdReturnType,
++  GetCodeParameters,
+   HashTypedDataParameters,
+   HashTypedDataReturnType,
+   TrustedClient,
+@@ -129,6 +130,7 @@ export async function call(
+       to: parameters.to,
+       data: parameters.data,
+       ...(parameters.gas !== undefined ? { gasLimit: parameters.gas } : {}),
++      ...(parameters.blockNumber !== undefined ? { blockTag: parameters.blockNumber } : {}),
+     });
+     // ethers' `Provider.call` always resolves to a hex string ('0x' for empty).
+     return { success: true, data: data as BytesHex };
+@@ -144,6 +146,24 @@ export async function call(
+   }
+ }
+ 
++////////////////////////////////////////////////////////////////////////////////
++// getCode, getBlockNumber ([lifecycle Level 1] Profile H2)
++////////////////////////////////////////////////////////////////////////////////
++
++export async function getCode(
++  hostPublicClient: TrustedClient<EthersT.ContractRunner>,
++  parameters: GetCodeParameters,
++): Promise<BytesHex> {
++  const provider = getEthersProvider(hostPublicClient);
++  // ethers resolves to '0x' for an account without code.
++  return (await provider.getCode(parameters.address, parameters.blockNumber ?? 'latest')) as BytesHex;
++}
++
++export async function getBlockNumber(hostPublicClient: TrustedClient<EthersT.ContractRunner>): Promise<bigint> {
++  const provider = getEthersProvider(hostPublicClient);
++  return BigInt(await provider.getBlockNumber());
++}
++
+ ////////////////////////////////////////////////////////////////////////////////
+ // getChainId
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -215,6 +235,8 @@ export const ethereumModule: EthereumModuleFactory = () => {
+       getChainId,
+       readContract,
+       call,
++      getCode,
++      getBlockNumber,
+     }),
+   });
+ };
+diff --git a/sdk/js-sdk/src/viem/internal/config.ts b/sdk/js-sdk/src/viem/internal/config.ts
+index 54531cb8..6a0b24a0 100644
+--- a/sdk/js-sdk/src/viem/internal/config.ts
++++ b/sdk/js-sdk/src/viem/internal/config.ts
+@@ -1,5 +1,5 @@
+ import type { FhevmRuntimeConfig } from '../../core/types/coreFhevmRuntime.js';
+-import { authsAreEqual } from '../../core/runtimeConfig-p.js';
++import { authsAreEqual, signaturePoliciesAreEqual } from '../../core/runtimeConfig-p.js';
+ 
+ let viemFhevmRuntimeConfig: FhevmRuntimeConfig | undefined;
+ 
+@@ -20,6 +20,9 @@ export function setFhevmRuntimeConfig(config: FhevmRuntimeConfig): void {
+     viemFhevmRuntimeConfig = Object.freeze<FhevmRuntimeConfig>({
+       ...config,
+       logger: config.logger ? Object.freeze({ ...config.logger }) : undefined,
++      userDecryptSignaturePolicy: config.userDecryptSignaturePolicy
++        ? Object.freeze({ ...config.userDecryptSignaturePolicy })
++        : undefined,
+     });
+     return;
+   }
+@@ -30,7 +33,8 @@ export function setFhevmRuntimeConfig(config: FhevmRuntimeConfig): void {
+     viemFhevmRuntimeConfig.wasmAssetLoadMode !== config.wasmAssetLoadMode ||
+     viemFhevmRuntimeConfig.singleThread !== config.singleThread ||
+     viemFhevmRuntimeConfig.numberOfThreads !== config.numberOfThreads ||
+-    !authsAreEqual(viemFhevmRuntimeConfig.auth, config.auth)
++    !authsAreEqual(viemFhevmRuntimeConfig.auth, config.auth) ||
++    !signaturePoliciesAreEqual(viemFhevmRuntimeConfig.userDecryptSignaturePolicy, config.userDecryptSignaturePolicy)
+   ) {
+     throw new Error(
+       'FhevmRuntime config has already been set and cannot be changed. ' +
+diff --git a/sdk/js-sdk/src/viem/internal/ethereum-ct.ts b/sdk/js-sdk/src/viem/internal/ethereum-ct.ts
+index 9df21d72..54b3f8be 100644
+--- a/sdk/js-sdk/src/viem/internal/ethereum-ct.ts
++++ b/sdk/js-sdk/src/viem/internal/ethereum-ct.ts
+@@ -17,7 +17,9 @@ import {
+   decode,
+   encode,
+   encodePacked,
++  getBlockNumber,
+   getChainId,
++  getCode,
+   hashTypedData,
+   readContract,
+   recoverTypedDataAddress,
+@@ -40,6 +42,8 @@ export const cleartextEthereumModule: CleartextEthereumModuleFactory = () => {
+       getChainId,
+       readContract,
+       call,
++      getCode,
++      getBlockNumber,
+       mnemonicToAccount: (parameters: MnemonicToAccountParameters): MnemonicToAccountReturnType => {
+         const signer = mnemonicToAccount(parameters.mnemonic, { path: parameters.path });
+         const pk = signer.getHdKey().privateKey;
+diff --git a/sdk/js-sdk/src/viem/internal/ethereum.ts b/sdk/js-sdk/src/viem/internal/ethereum.ts
+index 24bd61e9..d420ac83 100644
+--- a/sdk/js-sdk/src/viem/internal/ethereum.ts
++++ b/sdk/js-sdk/src/viem/internal/ethereum.ts
+@@ -10,6 +10,7 @@ import type {
+   EthCallResult,
+   EthereumModuleFactory,
+   GetChainIdReturnType,
++  GetCodeParameters,
+   HashTypedDataParameters,
+   HashTypedDataReturnType,
+   TrustedClient,
+@@ -103,6 +104,7 @@ export async function call(
+       to: parameters.to,
+       data: parameters.data,
+       ...(parameters.gas !== undefined ? { gas: parameters.gas } : {}),
++      ...(parameters.blockNumber !== undefined ? { blockNumber: parameters.blockNumber } : {}),
+     });
+     return { success: true, data: (data ?? '0x') as BytesHex };
+   } catch (err) {
+@@ -116,6 +118,28 @@ export async function call(
+   }
+ }
+ 
++////////////////////////////////////////////////////////////////////////////////
++// getCode, getBlockNumber ([lifecycle Level 1] Profile H2)
++////////////////////////////////////////////////////////////////////////////////
++
++export async function getCode(
++  hostPublicClient: TrustedClient<PublicClient>,
++  parameters: GetCodeParameters,
++): Promise<BytesHex> {
++  const publicClient = trustedClientToViemPublicClient(hostPublicClient);
++  const code = await publicClient.getCode({
++    address: parameters.address,
++    ...(parameters.blockNumber !== undefined ? { blockNumber: parameters.blockNumber } : {}),
++  });
++  // viem resolves to undefined for an account without code.
++  return (code ?? '0x') as BytesHex;
++}
++
++export async function getBlockNumber(hostPublicClient: TrustedClient<PublicClient>): Promise<bigint> {
++  const publicClient = trustedClientToViemPublicClient(hostPublicClient);
++  return publicClient.getBlockNumber({ cacheTime: 0 });
++}
++
+ ////////////////////////////////////////////////////////////////////////////////
+ // getChainId
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -187,6 +211,8 @@ export const ethereumModule: EthereumModuleFactory = () => {
+       getChainId,
+       readContract,
+       call,
++      getCode,
++      getBlockNumber,
+     }),
+   });
+ };

@@ -1,0 +1,9 @@
+139 records, 27 requests; ms from the recorder's receipt to anvil's answer
+call                                                n  median    p10    p90    max
+eth_call isAllowed                                 46    4.80   2.12  13.80  60.14
+eth_call decryptionSignatureInvalidatedBefore      43    7.09   2.27  17.00  39.94
+eth_call isAccountRetired                          21    3.62   1.97  12.88  41.66
+eth_call isHandleDelegatedForUserDecryption        11    4.08   2.41  11.15  15.18
+eth_blockNumber                                     8    5.43   1.35  13.76  22.94
+eth_getCode                                         8    4.73   1.30   6.05   6.40
+eth_call isValidSignature                           2    3.03   2.20   3.85   4.06

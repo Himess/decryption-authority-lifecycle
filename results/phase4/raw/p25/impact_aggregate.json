@@ -1,0 +1,33 @@
+{
+ "head_block": 26243993,
+ "real_end_accounts": 12730,
+ "active_end_accounts": 1713,
+ "all": {
+  "eoa": 10291,
+  "contract": 219,
+  "eip7851": 0,
+  "eoa_7702": 2220,
+  "erc1271_M": 1393,
+  "erc1271_E": 101,
+  "shim_M": 46,
+  "shim_E": 0,
+  "refused_M": 507,
+  "refused_E": 173,
+  "handles_refused": 10609,
+  "handles_all": 408894
+ },
+ "active": {
+  "eoa": 1216,
+  "contract": 83,
+  "eip7851": 0,
+  "eoa_7702": 414,
+  "erc1271_M": 286,
+  "erc1271_E": 21,
+  "shim_M": 4,
+  "shim_E": 0,
+  "refused_M": 68,
+  "refused_E": 35,
+  "handles_refused": 3865,
+  "handles_all": 151063
+ }
+}

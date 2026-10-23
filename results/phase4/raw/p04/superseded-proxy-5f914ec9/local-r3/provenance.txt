@@ -1,0 +1,6 @@
+run=r3 date=2026-10-21T18:05:43Z
+worktree commit: 0eec67588b9123e3bcca0945e923b7ce3cfce6fc (lifecycle/level1)
+anvil: anvil Version: 1.8.5
+udsig-h: cf0cf9fa5b63a6ac153875717b618b07f4e156367b5f2f2fc62b939a9e457515 (impl/harness/phase4/udsig-h-l1)
+ee73f3b8965f87e91735f3e7af656c3c9a27eaa89a05c2f7144486a3268abfab *impl/harness/phase4/p04-local/p04-eip7851.test.ts
+5f914ec9e3b16f0561419865341ac50a9e70850e596bda20c55ea230d4a0e6ef *impl/harness/phase4/fault_proxy.py

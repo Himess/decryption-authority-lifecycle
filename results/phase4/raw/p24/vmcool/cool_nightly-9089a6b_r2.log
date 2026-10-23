@@ -1,0 +1,18 @@
+forge Version: 1.8.6-nightly
+Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment. 
+
+No files changed, compilation skipped
+
+Warning: the following cheatcode(s) are deprecated and will be removed in future versions:
+  lastCallGas(): replaced by `lastFrameGas`
+Ran 1 test for test/Cool.t.sol:CoolTest
+[PASS] test_cool() (gas: 177630)
+Logs:
+  after vm.cool: caller-side: 8116
+  after vm.cool: frame: 5115
+  warm: caller-side: 1116
+  warm: frame: 615
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 454.00µs (190.70µs CPU time)
+
+Ran 1 test suite in 12.41ms (454.00µs CPU time): 1 tests passed, 0 failed, 0 skipped (1 total tests)

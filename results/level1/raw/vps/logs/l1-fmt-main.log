@@ -1,0 +1,843 @@
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs:785:
+                 ErrorCode::AclDenied,
+                 anyhow!("{user_address} is not allowed to decrypt {handle}!"),
+             );
+-            return Err(self.finalize_if_retired(host_client, denial, &subjects).await);
++            return Err(self
++                .finalize_if_retired(host_client, denial, &subjects)
++                .await);
+         }
+         if !contract_allowed {
+             let denial = RequestCheckError::recoverable(
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs:793:
+                 ErrorCode::AclDenied,
+                 anyhow!("{contract_address} is not allowed to decrypt {handle}!"),
+             );
+-            return Err(self.finalize_if_retired(host_client, denial, &subjects).await);
++            return Err(self
++                .finalize_if_retired(host_client, denial, &subjects)
++                .await);
+         }
+ 
+         Ok(())
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs:108:
+         policy: &SignaturePolicy,
+         attempts: AttemptState,
+     ) -> Outcome {
+-        verify_user_decryption_signature(self.acl_contract.provider(), input, policy, attempts).await
++        verify_user_decryption_signature(self.acl_contract.provider(), input, policy, attempts)
++            .await
+     }
+ 
+     /// [lifecycle Level 1, H5] `isAccountRetired(account)` on this chain's ACL, at the latest block. `None` when the
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs:116:
+     pub async fn is_account_retired(&self, account: Address) -> Option<bool> {
+         let tx = TransactionRequest::default()
+             .to(*self.acl_contract.address())
+-            .input(IAclLifecycleCore::isAccountRetiredCall { account }.abi_encode().into());
++            .input(
++                IAclLifecycleCore::isAccountRetiredCall { account }
++                    .abi_encode()
++                    .into(),
++            );
+         let returndata = self
+             .acl_contract
+             .provider()
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs:136:
+             .map_err(|e| self.acl_err(e))?;
+         read_account_code(provider, account, block)
+             .await
+-            .map_err(|e| RequestCheckError::from(e).context(format!("on host chain {}", self.chain_id)))
++            .map_err(|e| {
++                RequestCheckError::from(e).context(format!("on host chain {}", self.chain_id))
++            })
+     }
+ 
+     fn acl_err(&self, e: impl Into<anyhow::Error>) -> RequestCheckError {
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:47:
+ };
+ use fhevm_host_bindings::{acl::ACL, empty_uups_proxy_acl::EmptyUUPSProxyACL};
+ use kms_grpc::kms::v1::{
+-    Empty, SigningSchemeType, TypedSignature, UserDecryptionResponse,
+-    UserDecryptionResponsePayload,
++    Empty, SigningSchemeType, TypedSignature, UserDecryptionResponse, UserDecryptionResponsePayload,
+ };
+ use kms_worker::core::{Config, ProfileHConfig};
+ use mocktail::{
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:254:
+ 
+ /// Same steps as `AnvilAcl::deploy` (Zama's `_deployACL` flow), with the ACL implementation taken
+ /// from a forge artifact instead of `fhevm_host_bindings`.
+-async fn deploy_acl_artifact(env: &Env, artifact: &Path, owner: Address) -> anyhow::Result<AnvilAcl> {
++async fn deploy_acl_artifact(
++    env: &Env,
++    artifact: &Path,
++    owner: Address,
++) -> anyhow::Result<AnvilAcl> {
+     let provider = ProviderBuilder::new()
+         .connect_http(env.anvil_url.clone())
+         .erased();
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:312:
+             (executor, executor_art.deployed_bytecode.clone()),
+         )
+         .await?;
+-    let dapp = deploy_code(&provider, owner, dapp_art.bytecode.to_vec(), "DappStub deploy").await?;
++    let dapp = deploy_code(
++        &provider,
++        owner,
++        dapp_art.bytecode.to_vec(),
++        "DappStub deploy",
++    )
++    .await?;
+     info!(
+         "Deployed real ACL ({version}) from artifact proxy={acl} impl={acl_implementation} owner={owner} \
+         executor(stand-in)={executor} dapp C={dapp}"
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:373:
+         onchain.len(),
+         keccak256(&reference),
+     );
+-    ensure!(matches, "deployed ACL runtime code does not match its reference");
+-    let want = if kind == AclKind::Level0 { LEVEL0_VERSION } else { BASE_VERSION };
+-    ensure!(acl.version == want, "unexpected ACL version {} (want {want})", acl.version);
++    ensure!(
++        matches,
++        "deployed ACL runtime code does not match its reference"
++    );
++    let want = if kind == AclKind::Level0 {
++        LEVEL0_VERSION
++    } else {
++        BASE_VERSION
++    };
++    ensure!(
++        acl.version == want,
++        "unexpected ACL version {} (want {want})",
++        acl.version
++    );
+     if kind == AclKind::Level0 {
+         let l0 = IAclLevel0::new(acl.acl, &acl.provider);
+         let core = l0
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:383:
+             .call()
+             .await?;
+         let location = l0.retirementStorageLocation().call().await?;
+-        info!("ACL-LEVEL0 supportsInterface(0x556d2088)={core} retirementStorageLocation={location}");
+-        ensure!(core && location == RETIREMENT_LOCATION, "Level 0 Core not declared");
++        info!(
++            "ACL-LEVEL0 supportsInterface(0x556d2088)={core} retirementStorageLocation={location}"
++        );
++        ensure!(
++            core && location == RETIREMENT_LOCATION,
++            "Level 0 Core not declared"
++        );
+     }
+     Ok(acl)
+ }
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:404:
+ 
+ /// Real grants and delegations. Legacy: `h` persisted for C and U; U and V each delegate to D for C.
+ /// RFC-016: `h` persisted for Uk; U and V each delegate to Dk for C. All for 1 day.
+-async fn setup_grants(acl: &AnvilAcl, a: &Accounts, k: &LocalKeys, handle: B256) -> anyhow::Result<()> {
++async fn setup_grants(
++    acl: &AnvilAcl,
++    a: &Accounts,
++    k: &LocalKeys,
++    handle: B256,
++) -> anyhow::Result<()> {
+     acl.grant(handle, a.u).await?;
+     acl.grant(handle, k.uk.address()).await?;
+     let exp = expiration()?;
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:438:
+         view.isAllowed(handle, c).call().await?,
+         view.isAllowed(handle, uk).call().await?,
+         view.isAllowed(handle, vk).call().await?,
+-        view.isHandleDelegatedForUserDecryption(a.u, a.d, c, handle).call().await?,
+-        view.isHandleDelegatedForUserDecryption(a.v, a.d, c, handle).call().await?,
+-        view.isHandleDelegatedForUserDecryption(a.u, dk, c, handle).call().await?,
+-        view.isHandleDelegatedForUserDecryption(a.v, dk, c, handle).call().await?,
++        view.isHandleDelegatedForUserDecryption(a.u, a.d, c, handle)
++            .call()
++            .await?,
++        view.isHandleDelegatedForUserDecryption(a.v, a.d, c, handle)
++            .call()
++            .await?,
++        view.isHandleDelegatedForUserDecryption(a.u, dk, c, handle)
++            .call()
++            .await?,
++        view.isHandleDelegatedForUserDecryption(a.v, dk, c, handle)
++            .call()
++            .await?,
+     );
+     info!(
+         "ACL-STATE[{tag}] decryptionSignatureInvalidatedBefore(U)={} (V)={} (D)={} (Uk)={} (Dk)={}",
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:448:
+-        view.decryptionSignatureInvalidatedBefore(a.u).call().await?,
+-        view.decryptionSignatureInvalidatedBefore(a.v).call().await?,
+-        view.decryptionSignatureInvalidatedBefore(a.d).call().await?,
++        view.decryptionSignatureInvalidatedBefore(a.u)
++            .call()
++            .await?,
++        view.decryptionSignatureInvalidatedBefore(a.v)
++            .call()
++            .await?,
++        view.decryptionSignatureInvalidatedBefore(a.d)
++            .call()
++            .await?,
+         view.decryptionSignatureInvalidatedBefore(uk).call().await?,
+         view.decryptionSignatureInvalidatedBefore(dk).call().await?,
+     );
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:651:
+         expect: Outcome,
+         expect_false: &'static str,
+     ) -> Self {
+-        let path = if owner == signer.address() { "v2-direct" } else { "v2-delegated" };
++        let path = if owner == signer.address() {
++            "v2-direct"
++        } else {
++            "v2-delegated"
++        };
+         Self {
+             label,
+             path,
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:864:
+ }
+ 
+ impl<'a> RequestHarness<'a> {
+-    async fn new(env: &'a Env, acl: &'a AnvilAcl, kind: AclKind, handle: B256) -> anyhow::Result<Self> {
++    async fn new(
++        env: &'a Env,
++        acl: &'a AnvilAcl,
++        kind: AclKind,
++        handle: B256,
++    ) -> anyhow::Result<Self> {
+         let (s3_server, s3_base_url) = start_s3_mock(handle).await?;
+         Ok(Self {
+             env,
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:970:
+             bail!("unexpected request kind");
+         };
+         // The gateway event's userAddress is the requester (direct) or the delegate (delegated).
+-        sqlx::query("UPDATE user_decryption_requests SET user_address = $1 WHERE decryption_id = $2")
+-            .bind(req.user.as_slice())
+-            .bind(request.decryptionId.as_le_slice())
+-            .execute(db)
+-            .await?;
++        sqlx::query(
++            "UPDATE user_decryption_requests SET user_address = $1 WHERE decryption_id = $2",
++        )
++        .bind(req.user.as_slice())
++        .bind(request.decryptionId.as_le_slice())
++        .execute(db)
++        .await?;
+         let id = request.decryptionId;
+         info!(
+             "L0-REQUEST label={} version={VERSION} acl_kind={} acl={} acl_version=\"{}\" path={} source=onchain \
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:997:
+         );
+         let cancel_token = CancellationToken::new();
+         let worker = kms_worker.start(cancel_token.clone());
+-        self.drive(db, &req.label, false, req.expect, id, kms_server, worker, cancel_token, cfg)
+-            .await
++        self.drive(
++            db,
++            &req.label,
++            false,
++            req.expect,
++            id,
++            kms_server,
++            worker,
++            cancel_token,
++            cfg,
++        )
++        .await
+     }
+ 
+     async fn run_v2(
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1031:
+ 
+         // Repo helper inserts the row (random key, validity window around now); the test then sets the
+         // user, the handle entry (owner, contract), allowedContracts and the user's EIP-712 signature.
+-        let source = if req.http { RequestSource::Http } else { RequestSource::OnChain };
++        let source = if req.http {
++            RequestSource::Http
++        } else {
++            RequestSource::OnChain
++        };
+         let request = insert_rand_request(
+             db,
+             TestEventType::UserDecryptionV2,
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1064:
+         .execute(db)
+         .await?;
+         let id = request.decryptionId;
+-        let allowed: Vec<String> = req.allowed_contracts.iter().map(|a| a.to_string()).collect();
++        let allowed: Vec<String> = req
++            .allowed_contracts
++            .iter()
++            .map(|a| a.to_string())
++            .collect();
+         info!(
+             "L0-REQUEST label={} version={VERSION} acl_kind={} acl={} acl_version=\"{}\" path={} source={} \
+             user={user} delegator={} owner={} contract={c} allowed_contracts=[{}] handle={} decryption_id={id} \
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1075:
+             self.acl.version,
+             req.path,
+             if req.http { "http" } else { "onchain" },
+-            if req.owner == user { "-".to_string() } else { req.owner.to_string() },
++            if req.owner == user {
++                "-".to_string()
++            } else {
++                req.owner.to_string()
++            },
+             req.owner,
+             allowed.join(","),
+             self.handle,
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1088:
+         );
+         let cancel_token = CancellationToken::new();
+         let worker = kms_worker.start(cancel_token.clone());
+-        self.drive(db, &req.label, req.http, req.expect, id, kms_server, worker, cancel_token, cfg)
+-            .await
++        self.drive(
++            db,
++            &req.label,
++            req.http,
++            req.expect,
++            id,
++            kms_server,
++            worker,
++            cancel_token,
++            cfg,
++        )
++        .await
+     }
+ 
+     #[allow(clippy::too_many_arguments)]
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1134:
+         info!(
+             "L0-RESULT label={label} expected={expect:?} observed={observed:?} kms_mock_hits={kms_hits} \
+             s3_mock_hits={s3_hits} error_counter={} status={} error_code={} harness_wall_ms={}",
+-            error_counter.map(|e| e.to_string()).unwrap_or_else(|| "-".into()),
+-            row.as_ref().map(|r| r.1.clone()).unwrap_or_else(|| "-".into()),
++            error_counter
++                .map(|e| e.to_string())
++                .unwrap_or_else(|| "-".into()),
++            row.as_ref()
++                .map(|r| r.1.clone())
++                .unwrap_or_else(|| "-".into()),
+             error_code.clone().unwrap_or_else(|| "-".into()),
+             wall.as_millis(),
+         );
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1165:
+                 r.observed,
+                 r.error_code
+             );
+-            ensure!(r.kms_hits >= 2, "{}: UserDecrypt + GetUserDecryptionResult expected", r.label);
++            ensure!(
++                r.kms_hits >= 2,
++                "{}: UserDecrypt + GetUserDecryptionResult expected",
++                r.label
++            );
+         }
+         Outcome::Rejected => {
+             ensure!(
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1174:
+                 r.label,
+                 r.observed
+             );
+-            ensure!(r.kms_hits == 0, "{}: a rejected request reached the KMS Core", r.label);
++            ensure!(
++                r.kms_hits == 0,
++                "{}: a rejected request reached the KMS Core",
++                r.label
++            );
+             if r.http {
+-                ensure!(r.error_code.is_some(), "{}: no error response for an HTTP request", r.label);
++                ensure!(
++                    r.error_code.is_some(),
++                    "{}: no error response for an HTTP request",
++                    r.label
++                );
+             } else {
+                 ensure!(
+                     r.error_counter == Some(cfg.max_attempts as i16),
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1222:
+ }
+ 
+ fn ensure_final(r: &RunResult, code: Option<&str>) -> anyhow::Result<()> {
+-    ensure!(r.observed == Outcome::Rejected, "{}: expected a refusal, observed {:?}", r.label, r.observed);
+-    ensure!(r.kms_hits == 0, "{}: a refused request reached the KMS Core", r.label);
++    ensure!(
++        r.observed == Outcome::Rejected,
++        "{}: expected a refusal, observed {:?}",
++        r.label,
++        r.observed
++    );
++    ensure!(
++        r.kms_hits == 0,
++        "{}: a refused request reached the KMS Core",
++        r.label
++    );
+     if r.http {
+-        ensure!(r.error_code.as_deref() == code, "{}: error code {:?}, expected {:?}", r.label, r.error_code, code);
++        ensure!(
++            r.error_code.as_deref() == code,
++            "{}: error code {:?}, expected {:?}",
++            r.label,
++            r.error_code,
++            code
++        );
+     } else {
+-        ensure!(r.error_counter == Some(1), "{}: a final denial must end at the first attempt, error_counter {:?}", r.label, r.error_counter);
++        ensure!(
++            r.error_counter == Some(1),
++            "{}: a final denial must end at the first attempt, error_counter {:?}",
++            r.label,
++            r.error_counter
++        );
+     }
+     Ok(())
+ }
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1234:
+ 
+ fn ensure_retried(r: &RunResult, cfg: &RunCfg, code: Option<&str>) -> anyhow::Result<()> {
+-    ensure!(r.observed == Outcome::Rejected, "{}: expected a refusal, observed {:?}", r.label, r.observed);
+-    ensure!(r.kms_hits == 0, "{}: a refused request reached the KMS Core", r.label);
++    ensure!(
++        r.observed == Outcome::Rejected,
++        "{}: expected a refusal, observed {:?}",
++        r.label,
++        r.observed
++    );
++    ensure!(
++        r.kms_hits == 0,
++        "{}: a refused request reached the KMS Core",
++        r.label
++    );
+     if r.http {
+-        ensure!(r.error_code.as_deref() == code, "{}: error code {:?}, expected {:?}", r.label, r.error_code, code);
++        ensure!(
++            r.error_code.as_deref() == code,
++            "{}: error code {:?}, expected {:?}",
++            r.label,
++            r.error_code,
++            code
++        );
+     } else {
+-        ensure!(r.error_counter == Some(cfg.max_attempts as i16), "{}: error_counter {:?} != max_attempts", r.label, r.error_counter);
++        ensure!(
++            r.error_counter == Some(cfg.max_attempts as i16),
++            "{}: error_counter {:?} != max_attempts",
++            r.label,
++            r.error_counter
++        );
+     }
+     Ok(())
+ }
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1245:
+ 
+ fn ensure_forwarded(r: &RunResult) -> anyhow::Result<()> {
+-    ensure!(r.observed == Outcome::Forwarded, "{}: expected Forwarded, observed {:?} ({:?})", r.label, r.observed, r.error_code);
+-    ensure!(r.kms_hits >= 2, "{}: UserDecrypt + GetUserDecryptionResult expected", r.label);
++    ensure!(
++        r.observed == Outcome::Forwarded,
++        "{}: expected Forwarded, observed {:?} ({:?})",
++        r.label,
++        r.observed,
++        r.error_code
++    );
++    ensure!(
++        r.kms_hits >= 2,
++        "{}: UserDecrypt + GetUserDecryptionResult expected",
++        r.label
++    );
+     Ok(())
+ }
+ 
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1278:
+     let (uk, vk) = (&keys.uk, &keys.vk);
+ 
+     for on in [false, true] {
+-        rh.profile_h = if on { profile_h_on("off", false) } else { ProfileHConfig::default() };
++        rh.profile_h = if on {
++            profile_h_on("off", false)
++        } else {
++            ProfileHConfig::default()
++        };
+         let t = if on { "on" } else { "off" };
+         // Retired subjects.
+-        let r = rh.run_legacy(db, &Req::direct(format!("{case}.{t}.legacy-direct.u-retired"), a.u, Outcome::Rejected, "isAllowed(h,U)"), &cfg).await?;
+-        if on { ensure_final(&r, None)? } else { ensure_retried(&r, &cfg, None)? }
+-        let r = rh.run_legacy(db, &Req::delegated(format!("{case}.{t}.legacy-delegated.delegator-u-retired"), a.d, a.u, Outcome::Rejected, "isHandleDelegatedForUserDecryption(U,D,C,h)"), &cfg).await?;
+-        if on { ensure_final(&r, None)? } else { ensure_retried(&r, &cfg, None)? }
+-        let r = rh.run_v2(db, &ReqV2::new(format!("{case}.{t}.v2-direct.uk-retired"), uk, uk.address(), vec![], false, Outcome::Rejected, "isAllowed(h,Uk)"), &cfg).await?;
+-        if on { ensure_final(&r, None)? } else { ensure_retried(&r, &cfg, None)? }
+-        let r = rh.run_v2(db, &ReqV2::new(format!("{case}.{t}.v2-http-direct.uk-retired"), uk, uk.address(), vec![], true, Outcome::Rejected, "isAllowed(h,Uk)"), &cfg).await?;
+-        if on { ensure_final(&r, Some("account_retired"))? } else { ensure_final(&r, Some("acl_denied"))? }
++        let r = rh
++            .run_legacy(
++                db,
++                &Req::direct(
++                    format!("{case}.{t}.legacy-direct.u-retired"),
++                    a.u,
++                    Outcome::Rejected,
++                    "isAllowed(h,U)",
++                ),
++                &cfg,
++            )
++            .await?;
++        if on {
++            ensure_final(&r, None)?
++        } else {
++            ensure_retried(&r, &cfg, None)?
++        }
++        let r = rh
++            .run_legacy(
++                db,
++                &Req::delegated(
++                    format!("{case}.{t}.legacy-delegated.delegator-u-retired"),
++                    a.d,
++                    a.u,
++                    Outcome::Rejected,
++                    "isHandleDelegatedForUserDecryption(U,D,C,h)",
++                ),
++                &cfg,
++            )
++            .await?;
++        if on {
++            ensure_final(&r, None)?
++        } else {
++            ensure_retried(&r, &cfg, None)?
++        }
++        let r = rh
++            .run_v2(
++                db,
++                &ReqV2::new(
++                    format!("{case}.{t}.v2-direct.uk-retired"),
++                    uk,
++                    uk.address(),
++                    vec![],
++                    false,
++                    Outcome::Rejected,
++                    "isAllowed(h,Uk)",
++                ),
++                &cfg,
++            )
++            .await?;
++        if on {
++            ensure_final(&r, None)?
++        } else {
++            ensure_retried(&r, &cfg, None)?
++        }
++        let r = rh
++            .run_v2(
++                db,
++                &ReqV2::new(
++                    format!("{case}.{t}.v2-http-direct.uk-retired"),
++                    uk,
++                    uk.address(),
++                    vec![],
++                    true,
++                    Outcome::Rejected,
++                    "isAllowed(h,Uk)",
++                ),
++                &cfg,
++            )
++            .await?;
++        if on {
++            ensure_final(&r, Some("account_retired"))?
++        } else {
++            ensure_final(&r, Some("acl_denied"))?
++        }
+         // An ordinary denial (V holds nothing) stays recoverable, whatever the setting.
+-        let r = rh.run_legacy(db, &Req::direct(format!("{case}.{t}.legacy-direct.v-no-allowance"), a.v, Outcome::Rejected, "isAllowed(h,V)"), &cfg).await?;
++        let r = rh
++            .run_legacy(
++                db,
++                &Req::direct(
++                    format!("{case}.{t}.legacy-direct.v-no-allowance"),
++                    a.v,
++                    Outcome::Rejected,
++                    "isAllowed(h,V)",
++                ),
++                &cfg,
++            )
++            .await?;
+         ensure_retried(&r, &cfg, None)?;
+-        let r = rh.run_v2(db, &ReqV2::new(format!("{case}.{t}.v2-http-direct.vk-no-allowance"), vk, vk.address(), vec![], true, Outcome::Rejected, "isAllowed(h,Vk)"), &cfg).await?;
++        let r = rh
++            .run_v2(
++                db,
++                &ReqV2::new(
++                    format!("{case}.{t}.v2-http-direct.vk-no-allowance"),
++                    vk,
++                    vk.address(),
++                    vec![],
++                    true,
++                    Outcome::Rejected,
++                    "isAllowed(h,Vk)",
++                ),
++                &cfg,
++            )
++            .await?;
+         ensure_final(&r, Some("acl_denied"))?;
+         // A never-retired request is forwarded.
+-        let r = rh.run_legacy(db, &Req::delegated(format!("{case}.{t}.legacy-delegated.v-no-allowance-to-d"), a.d, a.v, Outcome::Rejected, "isHandleDelegatedForUserDecryption(V,D,C,h)"), &cfg).await?;
++        let r = rh
++            .run_legacy(
++                db,
++                &Req::delegated(
++                    format!("{case}.{t}.legacy-delegated.v-no-allowance-to-d"),
++                    a.d,
++                    a.v,
++                    Outcome::Rejected,
++                    "isHandleDelegatedForUserDecryption(V,D,C,h)",
++                ),
++                &cfg,
++            )
++            .await?;
+         ensure_retried(&r, &cfg, None)?;
+     }
+     Ok(())
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1328:
+         setup_grants(&acl, &a, &keys, handle).await?;
+         retire(&acl, a.u, "user", case).await?;
+         let mut rh = RequestHarness::new(&env, &acl, AclKind::Level0, handle).await?;
+-        rh.profile_h = if on { profile_h_on("off", false) } else { ProfileHConfig::default() };
++        rh.profile_h = if on {
++            profile_h_on("off", false)
++        } else {
++            ProfileHConfig::default()
++        };
+ 
+         // The lapse: as soon as the request's first attempt has been denied, clear retired[U].
+         let lapse = {
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1337:
+             let (proxy, slot) = (acl.acl, retired_slot(a.u));
+             tokio::spawn(async move {
+                 loop {
+-                    let denied: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM user_decryption_requests WHERE error_counter >= 1")
+-                        .fetch_one(&db)
+-                        .await?;
++                    let denied: i64 = sqlx::query_scalar(
++                        "SELECT COUNT(*) FROM user_decryption_requests WHERE error_counter >= 1",
++                    )
++                    .fetch_one(&db)
++                    .await?;
+                     if denied > 0 {
+                         break;
+                     }
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1348:
+                 let _: serde_json::Value = provider
+                     .raw_request("anvil_setStorageAt".into(), (proxy, slot, B256::ZERO))
+                     .await?;
+-                info!("L1-LAPSE applied: retired[U] cleared in the ACL proxy {proxy} (slot {slot}) after the first denial");
++                info!(
++                    "L1-LAPSE applied: retired[U] cleared in the ACL proxy {proxy} (slot {slot}) after the first denial"
++                );
+                 anyhow::Ok(())
+             })
+         };
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1355:
+-        let expect = if on { Outcome::Rejected } else { Outcome::Forwarded };
+-        let r = rh.run_legacy(db, &Req::direct(format!("{case}.legacy-direct.u-retired"), a.u, expect, "isAllowed(h,U)"), &cfg).await?;
++        let expect = if on {
++            Outcome::Rejected
++        } else {
++            Outcome::Forwarded
++        };
++        let r = rh
++            .run_legacy(
++                db,
++                &Req::direct(
++                    format!("{case}.legacy-direct.u-retired"),
++                    a.u,
++                    expect,
++                    "isAllowed(h,U)",
++                ),
++                &cfg,
++            )
++            .await?;
+         lapse.await.map_err(|e| anyhow!("lapse task: {e}"))??;
+-        let still_retired = IAclLevel0::new(acl.acl, &acl.provider).isAccountRetired(a.u).call().await?;
+-        info!("L1-LAPSE result case={case} observed={:?} kms_mock_hits={} error_counter={:?} isAccountRetired(U)_after_lapse={still_retired}", r.observed, r.kms_hits, r.error_counter);
++        let still_retired = IAclLevel0::new(acl.acl, &acl.provider)
++            .isAccountRetired(a.u)
++            .call()
++            .await?;
++        info!(
++            "L1-LAPSE result case={case} observed={:?} kms_mock_hits={} error_counter={:?} isAccountRetired(U)_after_lapse={still_retired}",
++            r.observed, r.kms_hits, r.error_counter
++        );
+         ensure!(!still_retired, "the lapse did not apply");
+         if on {
+             ensure_final(&r, None)?;
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1366:
+         // The DB truth for the final case: status failed, nothing re-queued after the lapse.
+         if on {
+             tokio::time::sleep(Duration::from_secs(2)).await;
+-            let responses: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM user_decryption_responses").fetch_one(db).await?;
++            let responses: i64 =
++                sqlx::query_scalar("SELECT COUNT(*) FROM user_decryption_responses")
++                    .fetch_one(db)
++                    .await?;
+             ensure!(responses == 0, "a response appeared after the lapse");
+         }
+     }
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1390:
+     let handle = make_handle(env.chain_id);
+     setup_grants(&acl, &a, &keys, handle).await?;
+     // U now has regular code; D (the delegate of U) gets an EIP-7702 delegation indicator.
+-    let _: serde_json::Value = acl.provider.raw_request("anvil_setCode".into(), (a.u, Bytes::from_static(&[0x60, 0x80, 0x60, 0x40, 0x52]))).await?;
++    let _: serde_json::Value = acl
++        .provider
++        .raw_request(
++            "anvil_setCode".into(),
++            (a.u, Bytes::from_static(&[0x60, 0x80, 0x60, 0x40, 0x52])),
++        )
++        .await?;
+     let mut indicator = vec![0xef, 0x01, 0x00];
+     indicator.extend_from_slice(rand_digest().0[..20].as_ref());
+-    let _: serde_json::Value = acl.provider.raw_request("anvil_setCode".into(), (a.d, Bytes::from(indicator))).await?;
++    let _: serde_json::Value = acl
++        .provider
++        .raw_request("anvil_setCode".into(), (a.d, Bytes::from(indicator)))
++        .await?;
+     info!("L1-H6 code set: U regular (5 bytes), D EIP-7702 indicator (23 bytes)");
+ 
+     let test_instance = TestInstanceBuilder::default()
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1405:
+     let cfg = RunCfg::harness();
+ 
+     rh.profile_h = ProfileHConfig::default();
+-    let r = rh.run_legacy(db, &Req::direct(format!("{case}.off.legacy-direct.u-regular-code"), a.u, Outcome::Forwarded, "-"), &cfg).await?;
++    let r = rh
++        .run_legacy(
++            db,
++            &Req::direct(
++                format!("{case}.off.legacy-direct.u-regular-code"),
++                a.u,
++                Outcome::Forwarded,
++                "-",
++            ),
++            &cfg,
++        )
++        .await?;
+     ensure_forwarded(&r)?;
+ 
+     rh.profile_h = profile_h_on("off", true);
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1412:
+-    let r = rh.run_legacy(db, &Req::direct(format!("{case}.on.legacy-direct.u-regular-code"), a.u, Outcome::Rejected, "-"), &cfg).await?;
++    let r = rh
++        .run_legacy(
++            db,
++            &Req::direct(
++                format!("{case}.on.legacy-direct.u-regular-code"),
++                a.u,
++                Outcome::Rejected,
++                "-",
++            ),
++            &cfg,
++        )
++        .await?;
+     ensure_final(&r, None)?;
+-    let r = rh.run_legacy(db, &Req::delegated(format!("{case}.on.legacy-delegated.d-7702"), a.d, a.u, Outcome::Forwarded, "-"), &cfg).await?;
++    let r = rh
++        .run_legacy(
++            db,
++            &Req::delegated(
++                format!("{case}.on.legacy-delegated.d-7702"),
++                a.d,
++                a.u,
++                Outcome::Forwarded,
++                "-",
++            ),
++            &cfg,
++        )
++        .await?;
+     ensure_forwarded(&r)?;
+     Ok(())
+ }
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1436:
+     let kx = PrivateKeySigner::from_bytes(&rand_digest())?;
+     info!("LOCAL-KEYS-L1 Kx={}", kx.address());
+     acl.grant(handle, kx.address()).await?;
+-    let reject_all = load_artifact(Path::new(&std::env::var("LIFECYCLE_L1_REJECTALL_ARTIFACT")?))?;
++    let reject_all = load_artifact(Path::new(&std::env::var(
++        "LIFECYCLE_L1_REJECTALL_ARTIFACT",
++    )?))?;
+     let delegate = Address::from_slice(&rand_digest().0[..20]);
+-    let _: serde_json::Value = acl.provider.raw_request("anvil_setCode".into(), (delegate, reject_all.deployed_bytecode.clone())).await?;
++    let _: serde_json::Value = acl
++        .provider
++        .raw_request(
++            "anvil_setCode".into(),
++            (delegate, reject_all.deployed_bytecode.clone()),
++        )
++        .await?;
+     let mut indicator = vec![0xef, 0x01, 0x00];
+     indicator.extend_from_slice(delegate.as_slice());
+-    let _: serde_json::Value = acl.provider.raw_request("anvil_setCode".into(), (kx.address(), Bytes::from(indicator))).await?;
++    let _: serde_json::Value = acl
++        .provider
++        .raw_request(
++            "anvil_setCode".into(),
++            (kx.address(), Bytes::from(indicator)),
++        )
++        .await?;
+     info!("L1-H2 Kx delegated to RejectAll1271Wallet at {delegate}");
+ 
+     let test_instance = TestInstanceBuilder::default()
+Diff in /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs:1459:
+         ("enforce", profile_h_on("enforce", false)),
+     ] {
+         rh.profile_h = ph;
+-        let r = rh.run_v2(db, &ReqV2::new(format!("{case}.{t}.v2-direct.eoa-uk"), &keys.uk, keys.uk.address(), vec![], false, Outcome::Forwarded, "-"), &cfg).await?;
++        let r = rh
++            .run_v2(
++                db,
++                &ReqV2::new(
++                    format!("{case}.{t}.v2-direct.eoa-uk"),
++                    &keys.uk,
++                    keys.uk.address(),
++                    vec![],
++                    false,
++                    Outcome::Forwarded,
++                    "-",
++                ),
++                &cfg,
++            )
++            .await?;
+         ensure_forwarded(&r)?;
+-        let expect = if t == "enforce" { Outcome::Rejected } else { Outcome::Forwarded };
+-        let r = rh.run_v2(db, &ReqV2::new(format!("{case}.{t}.v2-direct.7702-reject-all-root-key"), &kx, kx.address(), vec![], false, expect, "-"), &cfg).await?;
++        let expect = if t == "enforce" {
++            Outcome::Rejected
++        } else {
++            Outcome::Forwarded
++        };
++        let r = rh
++            .run_v2(
++                db,
++                &ReqV2::new(
++                    format!("{case}.{t}.v2-direct.7702-reject-all-root-key"),
++                    &kx,
++                    kx.address(),
++                    vec![],
++                    false,
++                    expect,
++                    "-",
++                ),
++                &cfg,
++            )
++            .await?;
+         if t == "enforce" {
+-            ensure!(r.observed == Outcome::Rejected && r.kms_hits == 0, "{}: enforce must refuse before the KMS ({:?})", r.label, r.observed);
++            ensure!(
++                r.observed == Outcome::Rejected && r.kms_hits == 0,
++                "{}: enforce must refuse before the KMS ({:?})",
++                r.label,
++                r.observed
++            );
+         } else {
+             ensure_forwarded(&r)?;
+         }

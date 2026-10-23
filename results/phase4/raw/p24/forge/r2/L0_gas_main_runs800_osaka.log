@@ -1,0 +1,94 @@
+Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment. 
+
+Compiling 118 files with Solc 0.8.24
+Solc 0.8.24 finished in 15.42s
+Compiler run successful!
+
+Warning: the following cheatcode(s) are deprecated and will be removed in future versions:
+  lastCallGas(): replaced by `lastFrameGas`
+Ran 12 tests for test/acl/ACLRetirementGas.t.sol:ACLRetirementGasTest
+[PASS] test_Gas_Allow() (gas: 26002654)
+Logs:
+  GAS|osaka|allow (new pair)|36512|38745|2233
+
+[PASS] test_Gas_CallerSide() (gas: 91035693)
+Logs:
+  GAS|osaka|allow (new pair) (caller-side)|41504|43737|2233
+  GAS|osaka|CALL overhead into the ACL (caller-side minus frame)|5030|5030|0
+  GAS|osaka|ERC-7984 confidentialTransfer(to, euint64) by holder (caller-side)|379870|386937|7067
+  GAS|osaka|retireAccount (first, cold) (caller-side)|0|31947|31947
+
+[PASS] test_Gas_Carry_n1() (gas: 37949390)
+Logs:
+  GAS|osaka|carry n=1: multicall(allow x n) [base] vs same on v0.8.0 (frame)|39596|41872|2276
+  GAS|osaka|carry n=1: multicall(allow x n) [base] vs v0.8.0 + retireAccount() (frame)|39596|66061|26465
+  GAS|osaka|carry n=1: multicall(allow x n) [base] vs same on v0.8.0 (caller-side)|44008|46284|2276
+  GAS|osaka|carry n=1: multicall(allow x n) [base] vs v0.8.0 + retireAccount() (caller-side)|44008|71351|27343
+
+[PASS] test_Gas_Carry_n10() (gas: 38838429)
+Logs:
+  GAS|osaka|carry n=10: multicall(allow x n) [base] vs same on v0.8.0 (frame)|308029|312402|4373
+  GAS|osaka|carry n=10: multicall(allow x n) [base] vs v0.8.0 + retireAccount() (frame)|308029|336593|28564
+  GAS|osaka|carry n=10: multicall(allow x n) [base] vs same on v0.8.0 (caller-side)|321549|325922|4373
+  GAS|osaka|carry n=10: multicall(allow x n) [base] vs v0.8.0 + retireAccount() (caller-side)|321549|350991|29442
+
+[PASS] test_Gas_Carry_n100() (gas: 47800052)
+Logs:
+  GAS|osaka|carry n=100: multicall(allow x n) [base] vs same on v0.8.0 (frame)|2993457|3018800|25343
+  GAS|osaka|carry n=100: multicall(allow x n) [base] vs v0.8.0 + retireAccount() (frame)|2993457|3043005|49548
+  GAS|osaka|carry n=100: multicall(allow x n) [base] vs same on v0.8.0 (caller-side)|3103881|3133832|29951
+  GAS|osaka|carry n=100: multicall(allow x n) [base] vs v0.8.0 + retireAccount() (caller-side)|3103881|3163633|59752
+
+[PASS] test_Gas_Carry_n500() (gas: 89013069)
+Logs:
+  GAS|osaka|carry n=500: multicall(allow x n) [base] vs same on v0.8.0 (frame)|14952626|15071169|118543
+  GAS|osaka|carry n=500: multicall(allow x n) [base] vs v0.8.0 + retireAccount() (frame)|14952626|15095435|142809
+  GAS|osaka|carry n=500: multicall(allow x n) [base] vs same on v0.8.0 (caller-side)|15559956|15776258|216302
+  GAS|osaka|carry n=500: multicall(allow x n) [base] vs v0.8.0 + retireAccount() (caller-side)|15559956|15899591|339635
+
+[PASS] test_Gas_DelegatedViews() (gas: 78059401)
+Logs:
+  GAS|osaka|isHandleDelegatedForUserDecryption (true)|14934|21564|6630
+  GAS|osaka|isDelegatedForUserDecryption (true)|10346|16971|6625
+  GAS|osaka|getUserDecryptionDelegationExpirationDate (non-zero)|7877|14554|6677
+
+[PASS] test_Gas_ERC7984() (gas: 53739223)
+Logs:
+  GAS|osaka|ERC-7984 confidentialTransfer(to, euint64) by holder|374771|381838|7067
+  GAS|osaka|ERC-7984 mint (token-internal grants only)|295344|299266|3922
+
+[PASS] test_Gas_ExecutorOverheadAttribution() (gas: 202001827)
+Logs:
+  GAS|osaka|isAllowed, executor caller, transient grant [dispatcher/layout: v0.7.0 vs v0.8.0-without-compare]|5714|5747|33
+  GAS|osaka|isAllowed, executor caller, transient grant [exemption compare: v0.8.0-without-compare vs v0.8.0]|5747|5795|48
+  GAS|osaka|isAllowed, executor caller, persisted pair [dispatcher/layout: v0.7.0 vs v0.8.0-without-compare]|8052|8041|-11
+  GAS|osaka|isAllowed, executor caller, persisted pair [exemption compare: v0.8.0-without-compare vs v0.8.0]|8041|8089|48
+  GAS|osaka|allowedTransient (unchanged code) [dispatcher/layout: v0.7.0 vs v0.8.0-without-compare]|5653|5665|12
+  GAS|osaka|allowedTransient (unchanged code) [exemption compare: v0.8.0-without-compare vs v0.8.0]|5665|5665|0
+  GAS|osaka|executor fheAdd, 2 transient operands [dispatcher/layout: v0.7.0 vs v0.8.0-without-compare]|39445|39533|88
+  GAS|osaka|executor fheAdd, 2 transient operands [exemption compare: v0.8.0-without-compare vs v0.8.0]|39533|39629|96
+  GAS|osaka|executor fheAdd, 2 persisted operands [dispatcher/layout: v0.7.0 vs v0.8.0-without-compare]|44125|44125|0
+  GAS|osaka|executor fheAdd, 2 persisted operands [exemption compare: v0.8.0-without-compare vs v0.8.0]|44125|44221|96
+
+[PASS] test_Gas_ExecutorPerOperand() (gas: 78081717)
+Logs:
+  GAS|osaka|executor fheAdd, 2 persisted operands|44125|44221|96
+  GAS|osaka|executor fheAdd, 2 transient operands|39445|39629|184
+  GAS|osaka|executor fheIfThenElse, 3 persisted operands|48516|48649|133
+
+[PASS] test_Gas_IsAllowed() (gas: 129703106)
+Logs:
+  GAS|osaka|isAllowed, non-executor caller, persisted pair (true)|8052|10318|2266
+  GAS|osaka|isAllowed, non-executor caller, no grant (false)|8052|10318|2266
+  GAS|osaka|isAllowed, executor caller, persisted pair|8052|8089|37
+  GAS|osaka|isAllowed, executor caller, transient grant|5714|5795|81
+  GAS|osaka|persistAllowed (true)|7643|9909|2266
+
+[PASS] test_Gas_RetireAccount() (gas: 11903915)
+Logs:
+  GAS|osaka|retireAccount (first, cold)|0|29035|29035
+  GAS|osaka|retireAccount (second, reverts AccountAlreadyRetired)|0|7389|7389
+
+Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 57.85ms (182.66ms CPU time)
+
+Ran 1 test suite in 60.55ms (57.85ms CPU time): 12 tests passed, 0 failed, 0 skipped (12 total tests)

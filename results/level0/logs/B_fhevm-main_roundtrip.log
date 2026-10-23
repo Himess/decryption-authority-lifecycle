@@ -1,0 +1,9 @@
+
+ RUN  v4.1.9 <repo>/impl/harness/cleartext-roundtrip
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  08:57:40
+   Duration  5.18s (transform 1.88s, setup 0ms, import 3.43s, tests 1.29s, environment 0ms)
+

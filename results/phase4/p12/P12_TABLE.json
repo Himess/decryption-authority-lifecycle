@@ -1,0 +1,1984 @@
+{
+ "runs": [
+  "p12-main-l3-r1-20261021T223242Z",
+  "p12-main-l3-r2-20261021T224014Z",
+  "p12-main-l3-r3-20261021T224633Z"
+ ],
+ "rows": {
+  "pre.eoa-ecdsa": {
+   "runs": 3,
+   "group": "pre",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / accepted (Ecrecover)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "pre.legacy.direct": {
+   "runs": 3,
+   "group": "pre",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9)"
+   ],
+   "getCode": [
+    "0"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q4.eoa-ecdsa": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q4.eoa-ecdsa.http": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "user_signature_rejected"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q4.x-7702.root-key": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q4.x-7702.ml-dsa-44": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q4.x-7851.ml-dsa-44": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / accepted (Erc1271)"
+   ],
+   "getCode": [
+    "0+1r"
+   ],
+   "isValidSignature": [
+    1
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q4.x-7851.root-key": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "3"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / Profile H refused (RetryNextBlock) / Profile H refused (AwaitingNextBlock)"
+   ],
+   "getCode": [
+    "0+3r"
+   ],
+   "isValidSignature": [
+    1
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q4.contract.ml-dsa-44": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / accepted (Erc1271)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    1
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q4.kda.u-pre": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / E3 accepted / Q5 passed"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     18,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     18,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     18,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q4.legacy.direct": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / Q4 refused path=legacy"
+   ],
+   "getCode": [
+    "0"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q4.legacy.delegated": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / Q4 refused path=legacy"
+   ],
+   "getCode": [
+    "0"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q5.kda.u-post": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / E3 accepted / Q5 refused"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     26,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     26,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     26,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q5.kda.u-post.http": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "acl_denied"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / E3 accepted / Q5 refused"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     26,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     26,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     26,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q5.contract-delegate.u-pre": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / accepted (Erc1271) / Q5 passed"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    1
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     19,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     19,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     19,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q5.contract-delegate.v-post": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / accepted (Erc1271) / Q5 refused"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    1
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     27,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     27,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     27,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q5.kda.x-7851-pre": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / E3 accepted / Q5 passed"
+   ],
+   "getCode": [
+    "1+1r"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     20,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     20,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     20,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q5.kda.x-7851-post": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / E3 accepted / Q5 refused"
+   ],
+   "getCode": [
+    "1+1r"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     28,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     28,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     28,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-no-root-ecdsa.q5.kda.w-regular-post": {
+   "runs": 3,
+   "group": "tc22-no-root-ecdsa",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / E3 accepted / Q5 not applied (regular code)"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q4.eoa-ecdsa": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q4.eoa-ecdsa.http": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "user_signature_rejected"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q4.x-7702.root-key": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q4.x-7702.ml-dsa-44": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q4.x-7851.ml-dsa-44": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "0+1r"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q4.x-7851.root-key": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "0+1r"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q4.contract.ml-dsa-44": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q4.kda.u-pre": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / E3 accepted / Q5 passed"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     18,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     18,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     18,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-strict.q4.legacy.direct": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=legacy"
+   ],
+   "getCode": [
+    "0"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q4.legacy.delegated": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=legacy"
+   ],
+   "getCode": [
+    "0"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q5.kda.u-post": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / E3 accepted / Q5 refused"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     26,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     26,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     26,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-strict.q5.kda.u-post.http": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "acl_denied"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / E3 accepted / Q5 refused"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     26,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     26,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     26,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-strict.q5.contract-delegate.u-pre": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "tc22-strict.q5.contract-delegate.v-post": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)",
+    "established strict 13/13 (needs 9) / Q5 refused"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0,
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708820,
+     27,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-strict.q5.kda.x-7851-pre": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / E3 accepted / Q5 passed"
+   ],
+   "getCode": [
+    "1+1r"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     20,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     20,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     20,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-strict.q5.kda.x-7851-post": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / E3 accepted / Q5 refused"
+   ],
+   "getCode": [
+    "1+1r"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [
+    [
+     1792708371,
+     28,
+     0,
+     0
+    ],
+    [
+     1792708820,
+     28,
+     0,
+     0
+    ],
+    [
+     1792709200,
+     28,
+     0,
+     0
+    ]
+   ],
+   "matches": true
+  },
+  "tc22-strict.q5.kda.w-regular-post": {
+   "runs": 3,
+   "group": "tc22-strict",
+   "variant": "strict",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established strict 13/13 (needs 9) / E3 accepted / Q5 not applied (regular code)"
+   ],
+   "getCode": [
+    "2"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    2
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "control.q-off.eoa-ecdsa": {
+   "runs": 3,
+   "group": "control",
+   "variant": "off",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "accepted (Ecrecover)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "residual.forged-grant.attacker-erc1271": {
+   "runs": 3,
+   "group": "residual",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / accepted (Erc1271)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    1
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "q1.13-of-13": {
+   "runs": 3,
+   "group": "q1",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 13/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "q1.9-of-13": {
+   "runs": 3,
+   "group": "q1",
+   "variant": "no-root-ecdsa",
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms": [
+    "0"
+   ],
+   "error_counter": [
+    "1"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "established no-root-ecdsa 9/13 (needs 9) / Q4 refused path=signature / Profile H refused (Final)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "q1.8-of-13": {
+   "runs": 3,
+   "group": "q1",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "not established 8/13 (below the threshold) / accepted (Ecrecover)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "q1.8-plus-invalid": {
+   "runs": 3,
+   "group": "q1",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "not established 8/13 (below the threshold) / accepted (Ecrecover)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "q1.8-plus-intruder": {
+   "runs": 3,
+   "group": "q1",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "not established 8/13 (below the threshold) / accepted (Ecrecover)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "q1.8-plus-duplicate": {
+   "runs": 3,
+   "group": "q1",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "not established 8/13 (below the threshold) / accepted (Ecrecover)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "q1.9-for-another-b_q": {
+   "runs": 3,
+   "group": "q1",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "not established 0/13 (below the threshold) / accepted (Ecrecover)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "q1.13-other-ics": {
+   "runs": 3,
+   "group": "q1",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "not established 0/13 (other ICS) / accepted (Ecrecover)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  },
+  "q1.13-other-acl": {
+   "runs": 3,
+   "group": "q1",
+   "variant": "no-root-ecdsa",
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms": [
+    "4"
+   ],
+   "error_counter": [
+    "0"
+   ],
+   "error_code": [
+    "-"
+   ],
+   "q": [
+    "not established 0/13 (other chain or ACL) / accepted (Ecrecover)"
+   ],
+   "getCode": [
+    "1"
+   ],
+   "isValidSignature": [
+    0
+   ],
+   "getStorageAt": [
+    0
+   ],
+   "cutoff_rows": [],
+   "matches": true
+  }
+ },
+ "disagreements": [],
+ "adoption": {
+  "k00.eoa": {
+   "k": 0,
+   "request": "eoa",
+   "runs": 3,
+   "forwarding_workers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "same_in_every_run": true,
+   "shares": 13,
+   "released": true,
+   "model_release": true,
+   "agrees": true
+  },
+  "k00.kda": {
+   "k": 0,
+   "request": "kda",
+   "runs": 3,
+   "forwarding_workers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "same_in_every_run": true,
+   "shares": 13,
+   "released": true,
+   "model_release": true,
+   "agrees": true
+  },
+  "k04.eoa": {
+   "k": 4,
+   "request": "eoa",
+   "runs": 3,
+   "forwarding_workers": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "same_in_every_run": true,
+   "shares": 9,
+   "released": true,
+   "model_release": true,
+   "agrees": true
+  },
+  "k05.eoa": {
+   "k": 5,
+   "request": "eoa",
+   "runs": 3,
+   "forwarding_workers": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "same_in_every_run": true,
+   "shares": 8,
+   "released": true,
+   "model_release": true,
+   "agrees": true
+  },
+  "k08.eoa": {
+   "k": 8,
+   "request": "eoa",
+   "runs": 3,
+   "forwarding_workers": [
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "same_in_every_run": true,
+   "shares": 5,
+   "released": true,
+   "model_release": true,
+   "agrees": true
+  },
+  "k09.eoa": {
+   "k": 9,
+   "request": "eoa",
+   "runs": 3,
+   "forwarding_workers": [
+    9,
+    10,
+    11,
+    12
+   ],
+   "same_in_every_run": true,
+   "shares": 4,
+   "released": false,
+   "model_release": false,
+   "agrees": true
+  },
+  "k13.eoa": {
+   "k": 13,
+   "request": "eoa",
+   "runs": 3,
+   "forwarding_workers": [],
+   "same_in_every_run": true,
+   "shares": 0,
+   "released": false,
+   "model_release": false,
+   "agrees": true
+  },
+  "k13.kda": {
+   "k": 13,
+   "request": "kda",
+   "runs": 3,
+   "forwarding_workers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "same_in_every_run": true,
+   "shares": 13,
+   "released": true,
+   "model_release": true,
+   "agrees": true
+  }
+ },
+ "blocks": [
+  {
+   "U": "0x6a914711ff9Bb6FA9F40Bc60D2790Dd1eE99Fc48",
+   "V": "0x63B915402562550a6244140c5Fbdb6e4eCB0f3df",
+   "W": "0xb9412830B9Ddf747724eC127f88130757a1106E2",
+   "R": "0xFcFec9FD80345d2A0A5D708c1B157512216a350c",
+   "Uk": "0xa4Cf428B82D5dDFA75aA19eAb5028BE7626cc40B",
+   "X": "0x7260ba5Edf5Fb607486a6d5eF2FEb23dDFCE6494",
+   "erc1271": "0x8af80f484F5A732ac0a172E563cdD0FefCD5deC7",
+   "KDA_u_pre": "0x0865BB4fBE451cdF067aa6dc9428b5B593fbAb8E",
+   "KDA_u_post": "0x584b48787c92c2a75682D84edBF5d1548A5E4b0c",
+   "KDA_x_pre": "0x7E0151Ef6050Ea986715d1DdbE7926573Ce0356d",
+   "KDA_x_post": "0xfc4f4c7A01B548e236Cda467c7964CD658A6dA06",
+   "KDA_w_post": "0x7537E3cb476Fd23C047A47eD9eeD20aABFAA364B",
+   "b_q": "25",
+   "blk_u_pre": "18",
+   "blk_u_c_pre": "19",
+   "blk_x_pre": "20",
+   "blk_u_post": "26",
+   "blk_v_c_post": "27",
+   "blk_x_post": "28",
+   "blk_w_post": "29",
+   "w_code": "0x00"
+  },
+  {
+   "U": "0xE73Dea7a002C9CACe3209a8Ad89fF9E43078e825",
+   "V": "0xf7Ee2af586c6c8B1D63Fdd4677d9bcfA646D0aB1",
+   "W": "0x06f36a270d76eAeeB68CbdF4c8D32bb3DDeDE72a",
+   "R": "0x4eab9c0C8dED21ce9eC488E57841a1F4711787F1",
+   "Uk": "0x7c79D0905D9Eb46EA74BA1Ed3C2C9764A4aDD7a5",
+   "X": "0x751c3d97E48Dd91169E871AD83cE46D30BB03F46",
+   "erc1271": "0xf0AB6965d6552105b6fA42F3d18dcC84a7511f24",
+   "KDA_u_pre": "0x0865BB4fBE451cdF067aa6dc9428b5B593fbAb8E",
+   "KDA_u_post": "0x584b48787c92c2a75682D84edBF5d1548A5E4b0c",
+   "KDA_x_pre": "0x7E0151Ef6050Ea986715d1DdbE7926573Ce0356d",
+   "KDA_x_post": "0xfc4f4c7A01B548e236Cda467c7964CD658A6dA06",
+   "KDA_w_post": "0x7537E3cb476Fd23C047A47eD9eeD20aABFAA364B",
+   "b_q": "25",
+   "blk_u_pre": "18",
+   "blk_u_c_pre": "19",
+   "blk_x_pre": "20",
+   "blk_u_post": "26",
+   "blk_v_c_post": "27",
+   "blk_x_post": "28",
+   "blk_w_post": "29",
+   "w_code": "0x00"
+  },
+  {
+   "U": "0x8DBda674a01b2Fa87F92f0DDD5da7cC5ab1fEB22",
+   "V": "0x739Ed9d2553D36BEB8B7AA8096Bd505Dd9d70957",
+   "W": "0x91067E8543D6517bC5b3709fdecF411CFC62485C",
+   "R": "0x058CE2b68A3EB585464303fB4818000E37705795",
+   "Uk": "0x2dCeaf3A061d0B25B608517A11B4b276724DdF6b",
+   "X": "0x08c6Ac83Ff71f70C7A635Daae155F83Df821A802",
+   "erc1271": "0x4CBf1a2e705b24463E17DBba0B47a8A4A5714296",
+   "KDA_u_pre": "0x0865BB4fBE451cdF067aa6dc9428b5B593fbAb8E",
+   "KDA_u_post": "0x584b48787c92c2a75682D84edBF5d1548A5E4b0c",
+   "KDA_x_pre": "0x7E0151Ef6050Ea986715d1DdbE7926573Ce0356d",
+   "KDA_x_post": "0xfc4f4c7A01B548e236Cda467c7964CD658A6dA06",
+   "KDA_w_post": "0x7537E3cb476Fd23C047A47eD9eeD20aABFAA364B",
+   "b_q": "25",
+   "blk_u_pre": "18",
+   "blk_u_c_pre": "19",
+   "blk_x_pre": "20",
+   "blk_u_post": "26",
+   "blk_v_c_post": "27",
+   "blk_x_post": "28",
+   "blk_w_post": "29",
+   "w_code": "0x00"
+  }
+ ]
+}

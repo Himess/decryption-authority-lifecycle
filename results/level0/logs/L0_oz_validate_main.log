@@ -1,0 +1,26 @@
+== fhevm-main: test/acl/retirement/fixtures/ACL_v0_4_1.sol:ACL (reference test/acl/retirement/fixtures/ACL_v0_4_0.sol:ACL)
+ ✔  test/acl/retirement/fixtures/ACL_v0_4_1.sol:ACL (upgrades from test/acl/retirement/fixtures/ACL_v0_4_0.sol:ACL)
+
+SUCCESS
+rc=0
+== fhevm-main: contracts/ACL.sol:ACL (reference test/acl/retirement/fixtures/ACL_v0_7_0.sol:ACL)
+ ✔  contracts/ACL.sol:ACL (upgrades from test/acl/retirement/fixtures/ACL_v0_7_0.sol:ACL)
+
+SUCCESS
+rc=0
+== fhevm-main: contracts/ACL.sol:ACL (reference test/acl/retirement/fixtures/ACL_v0_4_1.sol:ACL)
+ ✔  contracts/ACL.sol:ACL (upgrades from test/acl/retirement/fixtures/ACL_v0_4_1.sol:ACL)
+
+SUCCESS
+rc=0
+== fhevm-main: test/acl/retirement/fixtures/ACL_v0_4_0.sol:ACL (reference contracts/ACL.sol:ACL)
+ ✘  test/acl/retirement/fixtures/ACL_v0_4_0.sol:ACL (upgrades from contracts/ACL.sol:ACL)
+
+      ACL: Deleted `decryptionSignatureInvalidatedBefore`
+        > Keep the variable even if unused
+      
+      ACL: Deleted namespace `erc7201:fhevm.storage.ACLRetirement`
+        > Keep the struct with annotation '@custom:storage-location erc7201:fhevm.storage.ACLRetirement' even if unused
+
+FAILED
+rc=1

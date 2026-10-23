@@ -1,0 +1,6 @@
+Error: tx failed: deploy
+    at send (file:///<repo>/impl/harness/level2/carry_e2e.mjs:73:39)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async deploy (file:///<repo>/impl/harness/level2/carry_e2e.mjs:79:29)
+    at async deployACL (file:///<repo>/impl/harness/level2/carry_e2e.mjs:85:16)
+    at async main (file:///<repo>/impl/harness/level2/carry_e2e.mjs:124:17)

@@ -1,0 +1,39 @@
+INSCOPE start=2026-10-21T21:33:36Z cgroup=/system.slice/lifecycle-p11-latency-1792618416.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/run_p11_latency.sh]
+   Compiling user-decryption-signature v0.14.0 (/srv/lifecycle/src/fhevm-main-l3/shared/user-decryption-signature)
+   Compiling p11-latency v0.1.0 (/srv/lifecycle/harness/p11-latency)
+    Finished `release` profile [optimized] target(s) in 14m 31s
+bench sha256 4d6834ec66286bf36f128043880f4a619835df34b88dcfd6fa50a703cd30c0bc
+ecdsa, Profile H enforce                       code read + ecrecover              rpcs=2 ok=true p50=3560us p95=8410us mean=4096us min=1253us
+erc1271 ML-DSA-44 account, Profile H B_exec 2M code read + isValidSignature       rpcs=3 ok=true p50=10885us p95=20866us mean=12056us min=5238us
+kda ML-DSA-44 single:rustcrypto                code read + native verify          rpcs=1 ok=true p50=2202us p95=5235us mean=2555us min=591us
+ecdsa, Profile H enforce                       code read + ecrecover              rpcs=2 ok=true p50=3434us p95=9629us mean=4268us min=1125us
+erc1271 ML-DSA-44 account, Profile H B_exec 2M code read + isValidSignature       rpcs=3 ok=true p50=12517us p95=25880us mean=14389us min=6042us
+kda ML-DSA-44 single:rustcrypto                code read + native verify          rpcs=1 ok=true p50=2712us p95=8849us mean=3602us min=780us
+ecdsa, Profile H enforce                       code read + ecrecover              rpcs=2 ok=true p50=3349us p95=11563us mean=5840us min=840us
+erc1271 ML-DSA-44 account, Profile H B_exec 2M code read + isValidSignature       rpcs=3 ok=true p50=10516us p95=34332us mean=14535us min=5381us
+kda ML-DSA-44 single:rustcrypto                code read + native verify          rpcs=1 ok=true p50=1781us p95=5580us mean=2228us min=445us
+	Command being timed: "/srv/lifecycle/scripts/run_p11_latency.sh"
+	User time (seconds): 775.71
+	System time (seconds): 184.64
+	Percent of CPU this job got: 104%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 15:20.78
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1522156
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1680
+	Minor (reclaiming a frame) page faults: 7572805
+	Voluntary context switches: 94967
+	Involuntary context switches: 7976
+	Swaps: 0
+	File system inputs: 399768
+	File system outputs: 2579048
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T21:48:57Z rc=0 cgroup_memory.peak_bytes=2518691840 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=p11-latency unit=lifecycle-p11-latency-1792618416 rc=0 wall_s=926 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=926 killed=no sampled_peak_anon_mb=1333 sampled_peak_cgroup_current_mb=2334 sampled_peak_swap_mb=0

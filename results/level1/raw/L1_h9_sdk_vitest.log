@@ -1,0 +1,43 @@
+
+ RUN  v4.1.9 <repo>/impl/harness/level1/sdk-h9
+
+stdout | sdk-h9-real-evm.test.ts
+[L1H9/local] tx deploy OwnerWallet1271: 0xa06f339e586f37d42e1a2d8a5499cfd1d4f46b23eff0885654511d41d19df065 block 1 gasUsed 208414
+
+stdout | sdk-h9-real-evm.test.ts
+[L1H9/local] tx deploy RejectAll1271Wallet: 0x386442a2eae642a2f2fa79a0322e24e6f8b8d7135d5101397ae86b53fef935e4 block 2 gasUsed 171651
+
+stdout | sdk-h9-real-evm.test.ts
+[L1H9/local] tx deploy NoErc1271: 0x6db58d670cad32db22dc3ba2d2bfbf66ea22c077d5d81316c55511550ef53365 block 3 gasUsed 56439
+
+stdout | sdk-h9-real-evm.test.ts
+[L1H9/local] tx EIP-7702 delegate 0xe0bf3540817F3d6Ced015179c371d283E20f9319 -> 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512: 0x17f814788bcb17525f7e3139df666fdd88973dc5dff6944f9ba02f1258cf2673 block 4 gasUsed 37160
+
+stdout | sdk-h9-real-evm.test.ts
+[L1H9/local] tx EIP-7702 delegate 0x76aD7992Afd29c42683105c4571F1c45405e9Bf9 -> 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0: 0x442f59a108ea8e98d7c229f5014bd9e00097e813a92f4693884ca367b1bc931a block 5 gasUsed 36852
+
+stdout | sdk-h9-real-evm.test.ts
+[L1H9/local] tx deploy Keccak-f1600 helper (upstream helpers/f1600_170.hex): 0x8f2daa560c1f18667bb4a511eb06c734b312eaed9d80b2ebc5513ef71ae08a28 block 6 gasUsed 4716322
+
+stdout | sdk-h9-real-evm.test.ts
+[L1H9/local] tx deploy MLDSA44Verifier: 0x4f46d3fe895ad79ee61efab8cef871666c5ee414c1fd058e379d13c9969a8219 block 7 gasUsed 5166161
+
+stdout | sdk-h9-real-evm.test.ts
+[L1H9/local] tx deploy ML-DSA-44 pk blob (prepare.py output): 0x2e9c75d5298e9e9e8f2f8387f62c21935ca8ee3dc7c9c2dd082c1b97272df980 block 8 gasUsed 4434717
+
+stdout | sdk-h9-real-evm.test.ts
+[L1H9/local] tx deploy MLDSA44Account1271: 0x91c3640c53acaf41651392ffab9a4d6cfe174e0c254d39af82843a3b0dcebcbe block 9 gasUsed 316999
+
+stdout | sdk-h9-real-evm.test.ts
+[L1H9/local] tx deploy Erc1271GasMeter: 0xc9c2e6bfb676439c9cc152a68af25e4fc2d138b2f96102cbe54084015f9198b9 block 10 gasUsed 223128
+
+ ✓ sdk-h9-real-evm.test.ts > SDK precheck, H9, on a local EVM > ML-DSA-44 ERC-1271 account: refused at 250,000, accepted under the Profile H budget 1626ms
+ ✓ sdk-h9-real-evm.test.ts > SDK precheck, H9, on a local EVM > EIP-7702 account whose delegate rejects everything: root key accepted today, refused under enforce 169ms
+ ✓ sdk-h9-real-evm.test.ts > SDK precheck, H9, on a local EVM > EIP-7702 account whose delegate has no isValidSignature: the narrow shim, and Profile Q without it 125ms
+ ✓ sdk-h9-real-evm.test.ts > SDK precheck, H9, on a local EVM > controls: an EOA and a regular-code wallet 140ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  19:17:29
+   Duration  8.11s (transform 373ms, setup 0ms, import 2.45s, tests 5.46s, environment 0ms)
+

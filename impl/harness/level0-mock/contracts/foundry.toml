@@ -1,0 +1,19 @@
+# Test-only contract for the Level 0 cleartext-mock run (scenario 4).
+# Compiled against the v0.13.8 clone's own library-solidity (FHE 0.13.6) with the
+# same settings as the SDK's v13 profile (optimizer on, 800 runs, no via-IR, forge's
+# default EVM version); the driver pins solc with FOUNDRY_SOLC_VERSION.
+[profile.default]
+src = "src"
+out = "../.build/vault-out"
+cache_path = "../.build/vault-cache"
+libs = []
+test = "no-tests"
+script = "no-scripts"
+optimizer = true
+optimizer_runs = 800
+via_ir = false
+allow_paths = ["../../../fhevm-v0.13.8"]
+remappings = [
+    "@fhevm/solidity/=../../../fhevm-v0.13.8/library-solidity/",
+    "encrypted-types/=../../../fhevm-v0.13.8/sdk/js-sdk/contracts/dependencies/@encrypted-types-0.0.4/",
+]

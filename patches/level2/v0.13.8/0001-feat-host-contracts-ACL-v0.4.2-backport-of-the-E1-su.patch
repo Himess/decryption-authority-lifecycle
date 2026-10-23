@@ -1,0 +1,1494 @@
+From 70444e41f354a006eb26f08ac292cdd54b690321 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 15:03:58 +0300
+Subject: [PATCH 1/4] feat(host-contracts): ACL v0.4.2 backport of the E1
+ successor extension (lifecycle Level 2)
+
+Same E1 code as main's ACL v0.9.0 (lifecycle/level2 50147ff): the
+Succession record and the raise-only delay appended to the retirement
+namespace, designate / mandatory accept / confirm after D = 7 days /
+locked, retirement voids pending designations and emits the confirmed
+successor, and the delegated view answers for (account, successor) after
+retirement as an active, non-expiring wildcard delegation would. This line
+has no isDelegatedForUserDecryption view. On this line the gateway verifies
+the delegate's ECDSA signature, so a successor must be an ECDSA EOA.
+
+Version 0.4.1 -> 0.4.2, reinitializer 6 -> 7, reinitializeV6(). Level 0
+upgrade tests run against an ACL v0.4.1 fixture (make_fixtures.py, blob
+57bc6f5c); new U8 tests cover v0.4.1 -> v0.4.2, v0.4.0 -> v0.4.2,
+reinitializeV6 and a Core-only rollback (fail-closed, record kept).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ host-contracts/contracts/ACL.sol              | 335 +++++++-
+ host-contracts/contracts/ACLEvents.sol        |  31 +
+ .../test/acl/ACLRetirementUpgradeMatrix.t.sol | 100 ++-
+ host-contracts/test/acl/acl.t.sol             |   2 +-
+ .../acl/retirement/fixtures/ACL_v0_4_1.sol    | 774 ++++++++++++++++++
+ .../TestHostContractsDeployerTestUtils.t.sol  |   2 +-
+ 6 files changed, 1226 insertions(+), 18 deletions(-)
+ create mode 100644 host-contracts/test/acl/retirement/fixtures/ACL_v0_4_1.sol
+
+diff --git a/host-contracts/contracts/ACL.sol b/host-contracts/contracts/ACL.sol
+index 57bc6f5..be182de 100644
+--- a/host-contracts/contracts/ACL.sol
++++ b/host-contracts/contracts/ACL.sol
+@@ -89,6 +89,12 @@ contract ACL is
+     /// @notice Returned if the handlesList array is empty.
+     error HandlesListIsEmpty();
+ 
++    /**
++     * @notice Returned if `cancelSuccessorDesignation` or `confirmSuccessor` finds no pending successor designation.
++     * @param account The account without a pending designation.
++     */
++    error NoPendingSuccessor(address account);
++
+     /**
+      * @notice Returned if the the delegate contract is not already delegate for sender & delegator addresses.
+      * @param delegator The address of the account that delegates access to its handles.
+@@ -100,6 +106,18 @@ contract ACL is
+     /// @notice Returned if the sender address is not allowed to pause the contract.
+     error NotPauser(address sender);
+ 
++    /**
++     * @notice Returned if `acceptSuccession` is called by an address that is not the account's pending successor.
++     * @param caller The caller.
++     */
++    error NotPendingSuccessor(address caller);
++
++    /**
++     * @notice Returned if `resignSuccession` is called by an address that is not the account's confirmed successor.
++     * @param caller The caller.
++     */
++    error NotSuccessor(address caller);
++
+     /**
+      * @notice Returned if the sender address is the same as the contract address.
+      * @param contractAddress The contract address to delegate access to.
+@@ -126,11 +144,47 @@ contract ACL is
+ 
+     /**
+      * @notice Returned if a retired account calls a grant path: `allow`, `allowForDecryption`, `allowTransient`
+-     *         (outside the FHEVMExecutor branch) or `delegateForUserDecryption`.
++     *         (outside the FHEVMExecutor branch) or `delegateForUserDecryption`; or a succession function frozen by
++     *         retirement: `designateSuccessor`, `acceptSuccession` (retired caller), `cancelSuccessorDesignation`,
++     *         `confirmSuccessor` or `raiseSuccessorDelay`.
+      * @param sender The address of the retired account.
+      */
+     error SenderRetired(address sender);
+ 
++    /**
++     * @notice Returned if `confirmSuccessor` is called before the pending successor has accepted the designation.
++     * @param successor The pending successor.
++     */
++    error SuccessionNotAccepted(address successor);
++
++    /**
++     * @notice Returned if `designateSuccessor` is called by an account that already has a confirmed successor.
++     *         A confirmed successor is locked: only the successor can clear it, through `resignSuccession`.
++     * @param successor The confirmed successor.
++     */
++    error SuccessorAlreadyConfirmed(address successor);
++
++    /**
++     * @notice Returned if `raiseSuccessorDelay` is called with a delay that is not strictly greater than the
++     *         caller's effective delay, or that exceeds 365 days.
++     * @param delay The rejected delay, in seconds.
++     */
++    error SuccessorDelayInvalid(uint64 delay);
++
++    /**
++     * @notice Returned if a designated or pending successor is invalid: the null address, the account itself, or a
++     *         retired account.
++     * @param successor The rejected successor.
++     */
++    error SuccessorInvalid(address successor);
++
++    /**
++     * @notice Returned if `confirmSuccessor` is called before the designation's `confirmableAt` timestamp.
++     * @param successor The pending successor.
++     * @param confirmableAt The UNIX timestamp from which the designation can be confirmed.
++     */
++    error SuccessorNotYetConfirmable(address successor, uint64 confirmableAt);
++
+     /**
+      * @notice Returned if an upgrade targets an implementation that does not declare the Decryption Authority
+      *         Lifecycle Core interface through ERC-165, or that reports another retirement storage location.
+@@ -163,14 +217,36 @@ contract ACL is
+         mapping(address account => bool isDenied) denyList;
+     }
+ 
++    /**
++     * @notice Successor record of an account (Decryption Authority Lifecycle, extension E1).
++     * @dev Two slots: `pending`, `confirmableAt` and `accepted` share the first, `confirmed` is the second.
++     *      Lifecycle: designate (account) -> accept (successor) -> confirm (account, at or after `confirmableAt`)
++     *      -> locked. A confirmed successor gains a read right over the account's data only once the account
++     *      retires, and only the successor can clear it (`resignSuccession`).
++     */
++    struct Succession {
++        /// @notice The designated successor awaiting acceptance and confirmation, or the null address.
++        address pending;
++        /// @notice The UNIX timestamp from which the pending designation can be confirmed, fixed at designation.
++        uint64 confirmableAt;
++        /// @notice Whether the pending successor has accepted the designation.
++        bool accepted;
++        /// @notice The confirmed successor, or the null address.
++        address confirmed;
++    }
++
+     /**
+      * @notice Retirement state, kept in its own ERC-7201 namespace so that it survives any release that keeps
+      *         the namespace (see `_authorizeUpgrade`).
+      * @dev Append-only: later lifecycle extensions add their fields here, in the same namespace.
++     *      `succession` and `successorDelayOf` were appended by the E1 extension (ACL v0.4.2).
+      */
+     /// @custom:storage-location erc7201:fhevm.storage.ACLRetirement
+     struct ACLRetirementStorage {
+         mapping(address account => bool isRetired) retired;
++        mapping(address account => Succession succession) succession;
++        /// Raise-only per-account successor delay, in seconds; 0 means the registry-wide `SUCCESSOR_DELAY`.
++        mapping(address account => uint64 delay) successorDelayOf;
+     }
+ 
+     /// @notice Name of the contract.
+@@ -183,7 +259,7 @@ contract ACL is
+     uint256 private constant MINOR_VERSION = 4;
+ 
+     /// @notice Patch version of the contract.
+-    uint256 private constant PATCH_VERSION = 1;
++    uint256 private constant PATCH_VERSION = 2;
+ 
+     /// @notice FHEVMExecutor address.
+     address private constant FHEVM_EXECUTOR_ADDRESS = fhevmExecutorAdd;
+@@ -201,7 +277,7 @@ contract ACL is
+ 
+     /// Constant used for making sure the version number used in the `reinitializer` modifier is
+     /// identical between `initializeFromEmptyProxy` and the `reinitializeVX` method
+-    uint64 private constant REINITIALIZER_VERSION = 6;
++    uint64 private constant REINITIALIZER_VERSION = 7;
+ 
+     /// keccak256(abi.encode(uint256(keccak256("fhevm.storage.ACL")) - 1)) & ~bytes32(uint256(0xff))
+     bytes32 private constant ACL_STORAGE_LOCATION = 0xa688f31953c2015baaf8c0a488ee1ee22eb0e05273cc1fd31ea4cbee42febc00;
+@@ -220,6 +296,18 @@ contract ACL is
+     /// @notice Selector of `retirementStorageLocation()`, read from a new implementation by `_authorizeUpgrade`.
+     bytes4 private constant RETIREMENT_STORAGE_LOCATION_SELECTOR = 0xc89c7ccd;
+ 
++    /// @notice ERC-165 interface id of the E1 Successor extension (`IDecryptionAuthoritySuccession`).
++    bytes4 private constant DAL_SUCCESSION_INTERFACE_ID = 0x7dc5e209;
++
++    /// @notice ERC-165 interface id of the E1 per-account delay (`IDecryptionAuthoritySuccessionDelay`).
++    bytes4 private constant DAL_SUCCESSION_DELAY_INTERFACE_ID = 0xc61ca396;
++
++    /// @notice Registry-wide successor delay D, in seconds. The extension requires D >= 7 days.
++    uint64 private constant SUCCESSOR_DELAY = 7 days;
++
++    /// @notice Upper bound of a per-account raised successor delay, in seconds.
++    uint64 private constant MAX_SUCCESSOR_DELAY = 365 days;
++
+     /// @custom:oz-upgrades-unsafe-allow constructor
+     constructor() {
+         _disableInitializers();
+@@ -235,11 +323,11 @@ contract ACL is
+     }
+ 
+     /**
+-     * @notice Re-initializes the contract from V4 (ACL v0.4.0). Retirement state needs no initialization.
++     * @notice Re-initializes the contract from ACL v0.4.1. Succession state needs no initialization.
+      */
+     /// @custom:oz-upgrades-unsafe-allow missing-initializer-call
+     /// @custom:oz-upgrades-validate-as-initializer
+-    function reinitializeV5() public virtual reinitializer(REINITIALIZER_VERSION) {}
++    function reinitializeV6() public virtual reinitializer(REINITIALIZER_VERSION) {}
+ 
+     /**
+      * @notice Allows the use of `handle` for the address `account`.
+@@ -439,6 +527,9 @@ contract ACL is
+      *      `multicall([allow(h_i, newAccount)..., retireAccount()])`.
+      *      Limits: it is pre-emptive, not a clawback (whatever was already shared or decrypted stays exposed); it
+      *      restricts oracle access only (the account still acts on-chain); it is as final as this chain's governance.
++     *      Succession (E1): retirement voids any pending successor designation and freezes the succession record;
++     *      a successor confirmed beforehand gains the read right of the delegated view (see
++     *      `isHandleDelegatedForUserDecryption`). The event carries that confirmed successor, or the null address.
+      */
+     function retireAccount() public virtual {
+         ACLRetirementStorage storage $ = _retired();
+@@ -446,7 +537,152 @@ contract ACL is
+             revert AccountAlreadyRetired(msg.sender);
+         }
+         $.retired[msg.sender] = true;
+-        emit AccountRetired(msg.sender, address(0));
++        Succession storage succession = $.succession[msg.sender];
++        if (succession.pending != address(0)) {
++            _clearPendingSuccessor(succession);
++        }
++        emit AccountRetired(msg.sender, succession.confirmed);
++    }
++
++    /**
++     * @notice Designates `successor` as the caller's successor (E1): the one account that may keep reading the
++     *         caller's data after the caller retires. The designation takes effect only once the successor has
++     *         accepted it and the caller has confirmed it, at or after `confirmableAt`.
++     * @dev Pause-gated. Reverts with `SenderRetired` if the caller is retired, `SuccessorAlreadyConfirmed` if the
++     *      caller already has a confirmed successor, and `SuccessorInvalid` if `successor` is the null address, the
++     *      caller itself or a retired account. Replaces any pending designation and clears its acceptance.
++     *      `confirmableAt` is fixed here: the current timestamp plus the caller's effective delay.
++     *      Clients must not treat a successor as a payment address, and must show pending designations.
++     *      On this line the gateway verifies the delegate's ECDSA signature, so a successor must be an ECDSA EOA.
++     * @param successor The account to designate.
++     */
++    function designateSuccessor(address successor) public virtual whenNotPaused {
++        ACLRetirementStorage storage $ = _retired();
++        if ($.retired[msg.sender]) {
++            revert SenderRetired(msg.sender);
++        }
++        Succession storage succession = $.succession[msg.sender];
++        address confirmed = succession.confirmed;
++        if (confirmed != address(0)) {
++            revert SuccessorAlreadyConfirmed(confirmed);
++        }
++        if (successor == address(0) || successor == msg.sender || $.retired[successor]) {
++            revert SuccessorInvalid(successor);
++        }
++        uint64 confirmableAt = uint64(block.timestamp) + _effectiveSuccessorDelay($, msg.sender);
++        succession.pending = successor;
++        succession.confirmableAt = confirmableAt;
++        succession.accepted = false;
++        emit SuccessorDesignated(msg.sender, successor, confirmableAt);
++    }
++
++    /**
++     * @notice Accepts the caller's pending designation as `account`'s successor (E1). Acceptance is mandatory and is
++     *         a transaction from the successor itself: an address no key controls, such as a key-derived address,
++     *         can never accept.
++     * @dev Pause-gated. Reverts with `NotPendingSuccessor` unless the caller is `account`'s pending successor,
++     *      `AccountAlreadyRetired` if `account` is retired, and `SenderRetired` if the caller is retired.
++     * @param account The account that designated the caller.
++     */
++    function acceptSuccession(address account) public virtual whenNotPaused {
++        ACLRetirementStorage storage $ = _retired();
++        Succession storage succession = $.succession[account];
++        if (succession.pending != msg.sender) {
++            revert NotPendingSuccessor(msg.sender);
++        }
++        if ($.retired[account]) {
++            revert AccountAlreadyRetired(account);
++        }
++        if ($.retired[msg.sender]) {
++            revert SenderRetired(msg.sender);
++        }
++        succession.accepted = true;
++        emit SuccessionAccepted(account, msg.sender);
++    }
++
++    /**
++     * @notice Cancels the caller's pending successor designation (E1). A confirmed successor is not affected.
++     * @dev Not pause-gated. Reverts with `SenderRetired` if the caller is retired (retirement already voided any
++     *      pending designation) and `NoPendingSuccessor` if no designation is pending.
++     */
++    function cancelSuccessorDesignation() public virtual {
++        ACLRetirementStorage storage $ = _retired();
++        if ($.retired[msg.sender]) {
++            revert SenderRetired(msg.sender);
++        }
++        Succession storage succession = $.succession[msg.sender];
++        address pending = succession.pending;
++        if (pending == address(0)) {
++            revert NoPendingSuccessor(msg.sender);
++        }
++        _clearPendingSuccessor(succession);
++        emit SuccessorDesignationCancelled(msg.sender, pending);
++    }
++
++    /**
++     * @notice Confirms the caller's pending successor (E1). From then on the successor is locked: the caller can
++     *         neither replace nor cancel it, and only the successor can clear it (`resignSuccession`).
++     * @dev Pause-gated. Reverts with `SenderRetired` if the caller is retired, `NoPendingSuccessor` if no designation
++     *      is pending, `SuccessionNotAccepted` if the successor has not accepted, `SuccessorNotYetConfirmable`
++     *      before `confirmableAt`, and `SuccessorInvalid` if the pending successor is retired.
++     */
++    function confirmSuccessor() public virtual whenNotPaused {
++        ACLRetirementStorage storage $ = _retired();
++        if ($.retired[msg.sender]) {
++            revert SenderRetired(msg.sender);
++        }
++        Succession storage succession = $.succession[msg.sender];
++        address pending = succession.pending;
++        if (pending == address(0)) {
++            revert NoPendingSuccessor(msg.sender);
++        }
++        if (!succession.accepted) {
++            revert SuccessionNotAccepted(pending);
++        }
++        uint64 confirmableAt = succession.confirmableAt;
++        if (block.timestamp < confirmableAt) {
++            revert SuccessorNotYetConfirmable(pending, confirmableAt);
++        }
++        if ($.retired[pending]) {
++            revert SuccessorInvalid(pending);
++        }
++        succession.confirmed = pending;
++        _clearPendingSuccessor(succession);
++        emit SuccessorConfirmed(msg.sender, pending);
++    }
++
++    /**
++     * @notice Resigns the caller's role as `account`'s confirmed successor (E1). Callable at any time, including
++     *         after `account` has retired and while the contract is paused.
++     * @dev Reverts with `NotSuccessor` unless the caller is `account`'s confirmed successor.
++     * @param account The account whose successor the caller is.
++     */
++    function resignSuccession(address account) public virtual {
++        Succession storage succession = _retired().succession[account];
++        if (succession.confirmed != msg.sender) {
++            revert NotSuccessor(msg.sender);
++        }
++        succession.confirmed = address(0);
++        emit SuccessionResigned(account, msg.sender);
++    }
++
++    /**
++     * @notice Raises the caller's successor delay to `delay` seconds for future designations (E1, per-account
++     *         delay). Raise-only; a pending designation keeps its `confirmableAt`.
++     * @dev Not pause-gated. Reverts with `SenderRetired` if the caller is retired and `SuccessorDelayInvalid` unless
++     *      `delay` is strictly greater than the caller's effective delay and at most 365 days.
++     * @param delay The new delay, in seconds.
++     */
++    function raiseSuccessorDelay(uint64 delay) public virtual {
++        ACLRetirementStorage storage $ = _retired();
++        if ($.retired[msg.sender]) {
++            revert SenderRetired(msg.sender);
++        }
++        if (delay <= _effectiveSuccessorDelay($, msg.sender) || delay > MAX_SUCCESSOR_DELAY) {
++            revert SuccessorDelayInvalid(delay);
++        }
++        $.successorDelayOf[msg.sender] = delay;
++        emit SuccessorDelayRaised(msg.sender, delay);
+     }
+ 
+     /**
+@@ -476,7 +712,9 @@ contract ACL is
+      * @param delegate The address of the account that receives the delegation.
+      * @param contractAddress The contract address to delegate access to.
+      * @return expirationDate The UNIX timestamp when the user decryption delegation expires (0 means delegation is inactive).
+-     *         Returns 0 if the delegator, the delegate or the contract is retired.
++     *         Returns 0 if the delegator, the delegate or the contract is retired. It describes delegation rows
++     *         only: a confirmed successor's read right (E1) is not a delegation, so it also gets 0 here; read
++     *         `successorOf` and the delegated view for it.
+      */
+     function getUserDecryptionDelegationExpirationDate(
+         address delegator,
+@@ -561,7 +799,10 @@ contract ACL is
+      * @dev Succeeds when the delegator and `contractAddress` are both persistently allowed on the handle, and either
+      *      a non-expired delegation exists for `(delegator, delegate, contractAddress)` or for
+      *      `(delegator, delegate, WILDCARD_DELEGATION_ADDRESS)`. Wildcard does not bypass `allow`; it only avoids per-contract
+-     *      delegation entries. Returns false if the delegator, the delegate or the contract is retired.
++     *      delegation entries. Returns false if the delegate or the contract is retired. For a retired delegator,
++     *      only its confirmed successor (E1) gets true, as if it held an active, non-expiring wildcard delegation;
++     *      this covers handles granted to the delegator after its retirement (stragglers), whose raw pair is read
++     *      here. Every other delegate gets false, and there is no transitivity.
+      * @param delegator The address of the account that delegates access to its handles.
+      * @param delegate The address of the account that receives the delegation.
+      * @param contractAddress The app contract associated with the handle for this check.
+@@ -575,13 +816,16 @@ contract ACL is
+         bytes32 handle
+     ) public view virtual returns (bool) {
+         ACLRetirementStorage storage $r = _retired();
+-        if ($r.retired[delegator] || $r.retired[delegate] || $r.retired[contractAddress]) {
++        if ($r.retired[delegate] || $r.retired[contractAddress]) {
+             return false;
+         }
+         ACLStorage storage $ = _getACLStorage();
+         if (!$.persistedAllowedPairs[handle][delegator] || !$.persistedAllowedPairs[handle][contractAddress]) {
+             return false;
+         }
++        if ($r.retired[delegator]) {
++            return _isConfirmedSuccessor($r, delegator, delegate);
++        }
+         return
+             _isUserDecryptionDelegationActive($, delegator, delegate, WILDCARD_DELEGATION_ADDRESS) ||
+             _isUserDecryptionDelegationActive($, delegator, delegate, contractAddress);
+@@ -618,6 +862,47 @@ contract ACL is
+         return _retired().retired[account];
+     }
+ 
++    /**
++     * @notice Returns the registry-wide successor delay D (E1), in seconds.
++     * @return delay The delay, 7 days.
++     */
++    function successorDelay() public pure virtual returns (uint64) {
++        return SUCCESSOR_DELAY;
++    }
++
++    /**
++     * @notice Returns `account`'s effective successor delay (E1): the larger of D and any delay it raised it to.
++     * @param account Address of the account.
++     * @return delay The effective delay, in seconds.
++     */
++    function successorDelayOf(address account) public view virtual returns (uint64) {
++        return _effectiveSuccessorDelay(_retired(), account);
++    }
++
++    /**
++     * @notice Returns `account`'s confirmed successor (E1), or the null address. The successor has no right while
++     *         `account` is active; once `account` retires, it reads `account`'s data through the delegated view.
++     * @param account Address of the account.
++     * @return successor The confirmed successor.
++     */
++    function successorOf(address account) public view virtual returns (address) {
++        return _retired().succession[account].confirmed;
++    }
++
++    /**
++     * @notice Returns `account`'s pending successor designation (E1), if any.
++     * @param account Address of the account.
++     * @return successor The pending successor, or the null address.
++     * @return confirmableAt The UNIX timestamp from which the designation can be confirmed.
++     * @return accepted Whether the pending successor has accepted.
++     */
++    function pendingSuccessorOf(
++        address account
++    ) public view virtual returns (address successor, uint64 confirmableAt, bool accepted) {
++        Succession storage succession = _retired().succession[account];
++        return (succession.pending, succession.confirmableAt, succession.accepted);
++    }
++
+     /**
+      * @notice Adds `account` to the deny list
+      * @param account Address of the account.
+@@ -694,12 +979,17 @@ contract ACL is
+ 
+     /**
+      * @notice ERC-165 interface detection.
+-     * @dev True for ERC-165 itself (0x01ffc9a7) and for the Decryption Authority Lifecycle Core (0x556d2088).
++     * @dev True for ERC-165 itself (0x01ffc9a7), the Decryption Authority Lifecycle Core (0x556d2088), the E1
++     *      Successor extension (0x7dc5e209) and its per-account delay (0xc61ca396).
+      * @param interfaceId The interface identifier.
+      * @return supported Whether the interface is supported.
+      */
+     function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {
+-        return interfaceId == ERC165_INTERFACE_ID || interfaceId == DAL_CORE_INTERFACE_ID;
++        return
++            interfaceId == ERC165_INTERFACE_ID ||
++            interfaceId == DAL_CORE_INTERFACE_ID ||
++            interfaceId == DAL_SUCCESSION_INTERFACE_ID ||
++            interfaceId == DAL_SUCCESSION_DELAY_INTERFACE_ID;
+     }
+ 
+     /**
+@@ -746,6 +1036,29 @@ contract ACL is
+         return $.userDecryptionDelegations[delegator][delegate][contractAddress].expirationDate > block.timestamp;
+     }
+ 
++    /// @dev Whether `delegate` is the confirmed successor of `account` (E1). Callers check retirement first.
++    function _isConfirmedSuccessor(
++        ACLRetirementStorage storage $r,
++        address account,
++        address delegate
++    ) private view returns (bool) {
++        address successor = $r.succession[account].confirmed;
++        return successor != address(0) && successor == delegate;
++    }
++
++    /// @dev The effective successor delay of `account`: the larger of `SUCCESSOR_DELAY` and its raised delay.
++    function _effectiveSuccessorDelay(ACLRetirementStorage storage $r, address account) private view returns (uint64) {
++        uint64 raised = $r.successorDelayOf[account];
++        return raised > SUCCESSOR_DELAY ? raised : SUCCESSOR_DELAY;
++    }
++
++    /// @dev Clears a pending designation (successor, `confirmableAt`, acceptance); the confirmed successor is kept.
++    function _clearPendingSuccessor(Succession storage succession) private {
++        succession.pending = address(0);
++        succession.confirmableAt = 0;
++        succession.accepted = false;
++    }
++
+     /**
+      * @dev Returns the ACL storage location.
+      */
+diff --git a/host-contracts/contracts/ACLEvents.sol b/host-contracts/contracts/ACLEvents.sol
+index 80c2cbc..449d33a 100644
+--- a/host-contracts/contracts/ACLEvents.sol
++++ b/host-contracts/contracts/ACLEvents.sol
+@@ -56,4 +56,35 @@ contract ACLEvents {
+     /// @param account      The retired account.
+     /// @param successor    The confirmed successor, or the null address when there is none.
+     event AccountRetired(address indexed account, address indexed successor);
++
++    /// @notice                 Emitted when an account designates a successor (E1).
++    /// @param account          The designating account.
++    /// @param successor        The designated successor.
++    /// @param confirmableAt    The UNIX timestamp from which the designation can be confirmed.
++    event SuccessorDesignated(address indexed account, address indexed successor, uint64 confirmableAt);
++
++    /// @notice             Emitted when a designated successor accepts the designation (E1).
++    /// @param account      The designating account.
++    /// @param successor    The accepting successor.
++    event SuccessionAccepted(address indexed account, address indexed successor);
++
++    /// @notice             Emitted when an account cancels its pending successor designation (E1).
++    /// @param account      The designating account.
++    /// @param successor    The successor whose designation was cancelled.
++    event SuccessorDesignationCancelled(address indexed account, address indexed successor);
++
++    /// @notice             Emitted when an account confirms its successor, which is locked from then on (E1).
++    /// @param account      The designating account.
++    /// @param successor    The confirmed successor.
++    event SuccessorConfirmed(address indexed account, address indexed successor);
++
++    /// @notice             Emitted when a confirmed successor resigns (E1).
++    /// @param account      The account whose successor resigned.
++    /// @param successor    The resigning successor.
++    event SuccessionResigned(address indexed account, address indexed successor);
++
++    /// @notice             Emitted when an account raises its successor delay (E1, per-account delay).
++    /// @param account      The account.
++    /// @param delay        The new delay, in seconds.
++    event SuccessorDelayRaised(address indexed account, uint64 delay);
+ }
+diff --git a/host-contracts/test/acl/ACLRetirementUpgradeMatrix.t.sol b/host-contracts/test/acl/ACLRetirementUpgradeMatrix.t.sol
+index f44f3d9..dd0955d 100644
+--- a/host-contracts/test/acl/ACLRetirementUpgradeMatrix.t.sol
++++ b/host-contracts/test/acl/ACLRetirementUpgradeMatrix.t.sol
+@@ -9,6 +9,7 @@ import {HostContractsDeployerTestUtils} from "../../fhevm-foundry/HostContractsD
+ import {aclAdd, fhevmExecutorAdd} from "../../addresses/FHEVMHostAddresses.sol";
+ import {ACLUpgradedExample} from "../../examples/ACLUpgradedExample.sol";
+ import {ACL as ACL_v0_4_0} from "./retirement/fixtures/ACL_v0_4_0.sol";
++import {ACL as ACL_v0_4_1} from "./retirement/fixtures/ACL_v0_4_1.sol";
+ import {ACL as ACL_v0_4_1_noguard} from "./retirement/fixtures/ACL_v0_4_1_noguard.sol";
+ import {ACL as ACL_v0_4_1_drift} from "./retirement/fixtures/ACL_v0_4_1_drift.sol";
+ import {ACLLocationOnlyNoCore, ACLCoreOtherLocation, RetirementTestAccount} from "./retirement/RetirementMocks.sol";
+@@ -192,7 +193,7 @@ contract ACLRetirementUpgradeMatrixTest is HostContractsDeployerTestUtils {
+     function _toV041() internal {
+         _deployProxyWith(address(new ACL_v0_4_0()));
+         _seedState();
+-        _upgrade(address(new ACL()), "reinitializeV5()");
++        _upgrade(address(new ACL_v0_4_1()), "reinitializeV5()");
+     }
+ 
+     ////////////////////////////////////////////////////////////////////////////
+@@ -204,7 +205,7 @@ contract ACLRetirementUpgradeMatrixTest is HostContractsDeployerTestUtils {
+         assertEq(acl.getVersion(), "ACL v0.4.0");
+         assertEq(_initializedVersion(), 5);
+         _seedState();
+-        _upgrade(address(new ACL()), "reinitializeV5()");
++        _upgrade(address(new ACL_v0_4_1()), "reinitializeV5()");
+         assertEq(acl.getVersion(), "ACL v0.4.1");
+         assertEq(_initializedVersion(), 6);
+         _assertBaseStatePreserved();
+@@ -217,11 +218,11 @@ contract ACLRetirementUpgradeMatrixTest is HostContractsDeployerTestUtils {
+     function test_reinitializeV5SucceedsOnUpgradePath() public {
+         _deployProxyWith(address(new ACL_v0_4_0()));
+         assertEq(_initializedVersion(), 5);
+-        _upgrade(address(new ACL()), "");
+-        ACL(aclAdd).reinitializeV5();
++        _upgrade(address(new ACL_v0_4_1()), "");
++        ACL_v0_4_1(aclAdd).reinitializeV5();
+         assertEq(_initializedVersion(), 6);
+         vm.expectRevert(Initializable.InvalidInitialization.selector);
+-        ACL(aclAdd).reinitializeV5();
++        ACL_v0_4_1(aclAdd).reinitializeV5();
+     }
+ 
+     ////////////////////////////////////////////////////////////////////////////
+@@ -317,6 +318,95 @@ contract ACLRetirementUpgradeMatrixTest is HostContractsDeployerTestUtils {
+         assertEq(vm.load(aclAdd, _retiredSlot(retiredUser)), bytes32(uint256(1)));
+     }
+ 
++    ////////////////////////////////////////////////////////////////////////////
++    // U8 (Level 2): v0.4.1 -> v0.4.2 (E1 appended to the retirement namespace), and v0.4.0 -> v0.4.2 directly
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_U8_v041_to_v042_BitsPreserved_SuccessionStartsEmpty() public {
++        _toV041();
++        _retireThree();
++        _assertEnforced();
++
++        // The v0.4.1 guard accepts v0.4.2 (declares Core, same location); reinitializer 6 -> 7.
++        _upgrade(address(new ACL()), "reinitializeV6()");
++
++        assertEq(acl.getVersion(), "ACL v0.4.2");
++        assertEq(_initializedVersion(), 7);
++        _assertBaseStatePreserved();
++        _assertEnforced();
++        assertTrue(acl.supportsInterface(0x7dc5e209), "E1 declared");
++        assertEq(acl.successorOf(retiredDelegator), address(0));
++        (address pending, uint64 at, bool accepted) = acl.pendingSuccessorOf(alice);
++        assertEq(pending, address(0));
++        assertEq(at, 0);
++        assertFalse(accepted);
++        vm.prank(retiredDelegator);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, retiredDelegator));
++        acl.designateSuccessor(carol);
++        assertFalse(acl.isHandleDelegatedForUserDecryption(retiredDelegator, bob, app, h1));
++        vm.prank(alice);
++        acl.designateSuccessor(carol);
++        vm.prank(carol);
++        acl.acceptSuccession(alice);
++        vm.warp(block.timestamp + 7 days);
++        vm.prank(alice);
++        acl.confirmSuccessor();
++        vm.prank(alice);
++        acl.retireAccount();
++        assertTrue(acl.isHandleDelegatedForUserDecryption(alice, carol, app, h1));
++        assertFalse(acl.isHandleDelegatedForUserDecryption(alice, bob, app, h1), "alice's own delegation to bob ends");
++    }
++
++    function test_U8_v040_to_v042_Direct() public {
++        _deployProxyWith(address(new ACL_v0_4_0()));
++        _seedState();
++        _upgrade(address(new ACL()), "reinitializeV6()");
++        assertEq(acl.getVersion(), "ACL v0.4.2");
++        assertEq(_initializedVersion(), 7);
++        _assertBaseStatePreserved();
++        _retireThree();
++        _assertEnforced();
++    }
++
++    /// @dev Zama's pattern: reinitializeV6 lands on exactly 7 from v0.4.1's version 6, and a second call reverts.
++    function test_reinitializeV6SucceedsOnUpgradePath() public {
++        _deployProxyWith(address(new ACL_v0_4_1()));
++        assertEq(_initializedVersion(), 6);
++        _upgrade(address(new ACL()), "");
++        ACL(aclAdd).reinitializeV6();
++        assertEq(_initializedVersion(), 7);
++        vm.expectRevert(Initializable.InvalidInitialization.selector);
++        ACL(aclAdd).reinitializeV6();
++    }
++
++    /// @dev Observation, not a requirement: the guard checks Core only, so it accepts a rollback from v0.4.2 to the
++    ///      Core-only v0.4.1. Retirement stays enforced, and the successor's read right disappears (fail-closed, a
++    ///      lockout rather than a leak). The succession record stays in the namespace and returns with v0.4.2.
++    function test_U8_RollbackToCoreOnly_FailClosed_RecordKept() public {
++        _deployProxyWith(address(new ACL()));
++        _seedState();
++        vm.prank(alice);
++        acl.designateSuccessor(carol);
++        vm.prank(carol);
++        acl.acceptSuccession(alice);
++        vm.warp(block.timestamp + 7 days);
++        vm.prank(alice);
++        acl.confirmSuccessor();
++        vm.prank(alice);
++        acl.retireAccount();
++        assertTrue(acl.isHandleDelegatedForUserDecryption(alice, carol, app, h1));
++
++        _upgrade(address(new ACL_v0_4_1()), "");
++        assertEq(acl.getVersion(), "ACL v0.4.1");
++        assertTrue(acl.isAccountRetired(alice), "retirement survives the rollback");
++        assertFalse(acl.isAllowed(h1, alice));
++        assertFalse(acl.isHandleDelegatedForUserDecryption(alice, carol, app, h1), "no successor path in v0.4.1");
++
++        _upgrade(address(new ACL()), "");
++        assertEq(acl.successorOf(alice), carol, "the record was kept");
++        assertTrue(acl.isHandleDelegatedForUserDecryption(alice, carol, app, h1));
++    }
++
+     ////////////////////////////////////////////////////////////////////////////
+     // The guard does not block legitimate Core successors
+     ////////////////////////////////////////////////////////////////////////////
+diff --git a/host-contracts/test/acl/acl.t.sol b/host-contracts/test/acl/acl.t.sol
+index b553291..5a9a8d8 100644
+--- a/host-contracts/test/acl/acl.t.sol
++++ b/host-contracts/test/acl/acl.t.sol
+@@ -98,7 +98,7 @@ contract ACLTest is HostContractsDeployerTestUtils {
+      * It checks that the version is correct, the owner/pauser are set to the expected addresses, and the fhevmExecutor address is correct.
+      */
+     function test_PostProxyUpgradeCheck() public view {
+-        assertEq(acl.getVersion(), string(abi.encodePacked("ACL v0.4.1")));
++        assertEq(acl.getVersion(), string(abi.encodePacked("ACL v0.4.2")));
+         assertEq(acl.owner(), owner);
+         assertEq(acl.isPauser(pauser), true);
+         assertEq(acl.getFHEVMExecutorAddress(), fhevmExecutorAdd);
+diff --git a/host-contracts/test/acl/retirement/fixtures/ACL_v0_4_1.sol b/host-contracts/test/acl/retirement/fixtures/ACL_v0_4_1.sol
+new file mode 100644
+index 0000000..0fd5e40
+--- /dev/null
++++ b/host-contracts/test/acl/retirement/fixtures/ACL_v0_4_1.sol
+@@ -0,0 +1,774 @@
++// SPDX-License-Identifier: BSD-3-Clause-Clear
++// TEST FIXTURE, generated by impl/harness/level0/make_fixtures.py. Do not edit by hand.
++// Source: fhevm-v0.13.8 branch lifecycle/level0 (61be560) host-contracts/contracts/ACL.sol, ACL v0.4.1 (Level 0 backport)
++// Source git blob: 57bc6f5c8195f12d793f7fe3d367ada20c0d4c43
++// Edits (mechanical, nothing else changed):
++//   - 1 import path(s) "./shared/ -> "../../../../contracts/shared/
++//   - 1 import path(s) "./interfaces/ -> "../../../../contracts/interfaces/
++//   - 1 import path(s) "./ACLEvents.sol" -> "../../../../contracts/ACLEvents.sol"
++//   - 1 import path(s) "../addresses/ -> "../../../../addresses/
++pragma solidity ^0.8.24;
++
++import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
++import {MulticallUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/MulticallUpgradeable.sol";
++import {UUPSUpgradeableEmptyProxy} from "../../../../contracts/shared/UUPSUpgradeableEmptyProxy.sol";
++import {Ownable2StepUpgradeable} from "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol";
++import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
++import {fhevmExecutorAdd, pauserSetAdd} from "../../../../addresses/FHEVMHostAddresses.sol";
++import {IPauserSet} from "../../../../contracts/interfaces/IPauserSet.sol";
++
++import {ACLEvents} from "../../../../contracts/ACLEvents.sol";
++
++/**
++ * @title ACL.
++ * @notice The ACL (Access Control List) is a permission management system designed to control who can access, compute on,
++ * or decrypt encrypted values in fhEVM. By defining and enforcing these permissions, the ACL ensures that encrypted data remains
++ * secure while still being usable within authorized contexts.
++ */
++/// @custom:security-contact https://github.com/zama-ai/fhevm/blob/main/SECURITY.md
++contract ACL is
++    UUPSUpgradeableEmptyProxy,
++    Ownable2StepUpgradeable,
++    PausableUpgradeable,
++    ACLEvents,
++    MulticallUpgradeable
++{
++    /**
++     * @notice Returned if an account is already in the deny list.
++     * @param account The address of the account that is already blocked.
++     */
++    error AccountAlreadyBlocked(address account);
++
++    /**
++     * @notice Returned if an account that is already retired calls `retireAccount()`.
++     * @param account The address of the account that is already retired.
++     */
++    error AccountAlreadyRetired(address account);
++
++    /**
++     * @notice Returned if an account is not in the deny list.
++     * @param account The address of the account that is not blocked.
++     */
++    error AccountNotBlocked(address account);
++
++    /**
++     * @notice Returned if a delegation or revoke has already been done in a same block.
++     * @param delegator The address of the account that delegates access to its handles.
++     * @param delegate The address of the account that receives the delegation.
++     * @param contractAddress The contract address to delegate access to.
++     * @param blockNumber The block number.
++     */
++    error AlreadyDelegatedOrRevokedInSameBlock(
++        address delegator,
++        address delegate,
++        address contractAddress,
++        uint256 blockNumber
++    );
++
++    /**
++     * @notice Returned if the delegate address is the same as the contract address.
++     * @param contractAddress The contract address to delegate access to.
++     */
++    error DelegateCannotBeContractAddress(address contractAddress);
++
++    /**
++     * @notice Returned if the delegate address is the wildcard contract address.
++     * @param delegate The address of the delegate.
++     */
++    error DelegateCannotBeWildcard(address delegate);
++
++    /**
++     * @notice Returned if the requested expiration date was already set to same expiration for (delegate,contractAddress).
++     * @param delegator The address of the account that delegates access to its handles.
++     * @param delegate The address of the account that receives the delegation.
++     * @param contractAddress The contract address to delegate access to.
++     * @param expirationDate The UNIX timestamp when the user decryption delegation expires.
++     */
++    error ExpirationDateAlreadySetToSameValue(
++        address delegator,
++        address delegate,
++        address contractAddress,
++        uint256 expirationDate
++    );
++
++    /// @notice Returned if the requested expiration date for user decryption delegation is in the past.
++    error ExpirationDateInThePast();
++
++    /// @notice Returned if the handlesList array is empty.
++    error HandlesListIsEmpty();
++
++    /**
++     * @notice Returned if the the delegate contract is not already delegate for sender & delegator addresses.
++     * @param delegator The address of the account that delegates access to its handles.
++     * @param delegate The address of the account that receives the delegation.
++     * @param contractAddress The contract address to delegate access to.
++     */
++    error NotDelegatedYet(address delegator, address delegate, address contractAddress);
++
++    /// @notice Returned if the sender address is not allowed to pause the contract.
++    error NotPauser(address sender);
++
++    /**
++     * @notice Returned if the sender address is the same as the contract address.
++     * @param contractAddress The contract address to delegate access to.
++     */
++    error SenderCannotBeContractAddress(address contractAddress);
++
++    /**
++     * @notice Returned if the sender address is the same as the delegate address.
++     * @param delegate The address of the account that receives the delegation.
++     */
++    error SenderCannotBeDelegate(address delegate);
++
++    /**
++     * @notice Returned if the sender address is not allowed for allow operations.
++     * @param sender The address of the account that is not allowed.
++     */
++    error SenderNotAllowed(address sender);
++
++    /**
++     * @notice Returned if the sender address is in the deny list.
++     * @param sender The address of the account that is denied.
++     */
++    error SenderDenied(address sender);
++
++    /**
++     * @notice Returned if a retired account calls a grant path: `allow`, `allowForDecryption`, `allowTransient`
++     *         (outside the FHEVMExecutor branch) or `delegateForUserDecryption`.
++     * @param sender The address of the retired account.
++     */
++    error SenderRetired(address sender);
++
++    /**
++     * @notice Returned if an upgrade targets an implementation that does not declare the Decryption Authority
++     *         Lifecycle Core interface through ERC-165, or that reports another retirement storage location.
++     * @param newImplementation The address of the rejected implementation.
++     */
++    error UpgradeDropsRetirement(address newImplementation);
++
++    /**
++     * @notice Struct that represents a delegation.
++     * @dev The `delegationCounter` is incremented at each delegation or revocation
++     *      to allow off-chain clients to track changes.
++     */
++    struct UserDecryptionDelegation {
++        /// @notice The UNIX timestamp when the user decryption delegation expires.
++        uint64 expirationDate;
++        /// @notice The last block number when a delegation or revocation happened.
++        uint64 lastBlockDelegateOrRevoke;
++        /// @notice Counter that tracks the order of each delegation or revocation.
++        uint64 delegationCounter;
++    }
++
++    /// @custom:storage-location erc7201:fhevm.storage.ACL
++    struct ACLStorage {
++        mapping(bytes32 handle => mapping(address account => bool isAllowed)) persistedAllowedPairs;
++        mapping(bytes32 handle => bool isAllowedForDecryption) allowedForDecryption;
++        // prettier-ignore
++        mapping(address account =>
++            mapping(address delegate => mapping(address contractAddress => UserDecryptionDelegation delegation)))
++                userDecryptionDelegations;
++        mapping(address account => bool isDenied) denyList;
++    }
++
++    /**
++     * @notice Retirement state, kept in its own ERC-7201 namespace so that it survives any release that keeps
++     *         the namespace (see `_authorizeUpgrade`).
++     * @dev Append-only: later lifecycle extensions add their fields here, in the same namespace.
++     */
++    /// @custom:storage-location erc7201:fhevm.storage.ACLRetirement
++    struct ACLRetirementStorage {
++        mapping(address account => bool isRetired) retired;
++    }
++
++    /// @notice Name of the contract.
++    string private constant CONTRACT_NAME = "ACL";
++
++    /// @notice Major version of the contract.
++    uint256 private constant MAJOR_VERSION = 0;
++
++    /// @notice Minor version of the contract.
++    uint256 private constant MINOR_VERSION = 4;
++
++    /// @notice Patch version of the contract.
++    uint256 private constant PATCH_VERSION = 1;
++
++    /// @notice FHEVMExecutor address.
++    address private constant FHEVM_EXECUTOR_ADDRESS = fhevmExecutorAdd;
++
++    /// @notice PauserSet contract.
++    IPauserSet private constant PAUSER_SET = IPauserSet(pauserSetAdd);
++
++    /**
++     * @notice Sentinel address for user-decryption delegation that applies to every app contract.
++     * @dev `type(uint160).max` (EIP-55: 0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF). No contract can be deployed here.
++     *      Pass as `contractAddress` in `delegateForUserDecryption` / `revokeDelegationForUserDecryption` to grant or
++     *      revoke blanket delegation. This is a high-trust grant: SDKs should warn users explicitly.
++     */
++    address public constant WILDCARD_DELEGATION_ADDRESS = address(type(uint160).max);
++
++    /// Constant used for making sure the version number used in the `reinitializer` modifier is
++    /// identical between `initializeFromEmptyProxy` and the `reinitializeVX` method
++    uint64 private constant REINITIALIZER_VERSION = 6;
++
++    /// keccak256(abi.encode(uint256(keccak256("fhevm.storage.ACL")) - 1)) & ~bytes32(uint256(0xff))
++    bytes32 private constant ACL_STORAGE_LOCATION = 0xa688f31953c2015baaf8c0a488ee1ee22eb0e05273cc1fd31ea4cbee42febc00;
++
++    /// keccak256(abi.encode(uint256(keccak256("fhevm.storage.ACLRetirement")) - 1)) & ~bytes32(uint256(0xff))
++    bytes32 private constant ACL_RETIREMENT_STORAGE_LOCATION =
++        0xe6ae1005b480da47ced1ed3eb5869a54ca87c5d592369277249f4148c0e86200;
++
++    /// @notice ERC-165 interface id of ERC-165 itself, `supportsInterface(bytes4)`.
++    bytes4 private constant ERC165_INTERFACE_ID = 0x01ffc9a7;
++
++    /// @notice ERC-165 interface id of the Decryption Authority Lifecycle Core:
++    ///         `retireAccount()` (0xe7142996) XOR `isAccountRetired(address)` (0xb279091e).
++    bytes4 private constant DAL_CORE_INTERFACE_ID = 0x556d2088;
++
++    /// @notice Selector of `retirementStorageLocation()`, read from a new implementation by `_authorizeUpgrade`.
++    bytes4 private constant RETIREMENT_STORAGE_LOCATION_SELECTOR = 0xc89c7ccd;
++
++    /// @custom:oz-upgrades-unsafe-allow constructor
++    constructor() {
++        _disableInitializers();
++    }
++
++    /**
++     * @notice  Initializes the contract.
++     */
++    /// @custom:oz-upgrades-validate-as-initializer
++    function initializeFromEmptyProxy() public virtual onlyFromEmptyProxy reinitializer(REINITIALIZER_VERSION) {
++        __Ownable_init(owner());
++        __Pausable_init();
++    }
++
++    /**
++     * @notice Re-initializes the contract from V4 (ACL v0.4.0). Retirement state needs no initialization.
++     */
++    /// @custom:oz-upgrades-unsafe-allow missing-initializer-call
++    /// @custom:oz-upgrades-validate-as-initializer
++    function reinitializeV5() public virtual reinitializer(REINITIALIZER_VERSION) {}
++
++    /**
++     * @notice Allows the use of `handle` for the address `account`.
++     * @dev The caller must not be in the deny list and must be allowed to use `handle` for allow() to succeed. If not, allow() reverts.
++     *      A retired caller is never allowed and reverts with `SenderRetired`. A grant to a retired `account` is
++     *      accepted and inert: no view ever answers true for a retired account.
++     * @param handle Handle.
++     * @param account Address of the account.
++     */
++    function allow(bytes32 handle, address account) public virtual whenNotPaused {
++        if (isAccountDenied(msg.sender)) {
++            revert SenderDenied(msg.sender);
++        }
++        if (!isAllowed(handle, msg.sender)) {
++            if (_retired().retired[msg.sender]) {
++                revert SenderRetired(msg.sender);
++            }
++            revert SenderNotAllowed(msg.sender);
++        }
++        ACLStorage storage $ = _getACLStorage();
++        $.persistedAllowedPairs[handle][account] = true;
++        emit Allowed(msg.sender, account, handle);
++    }
++
++    /**
++     * @notice Allows a list of handles to be decrypted.
++     * @dev The caller must not be in the deny list and must be allowed to use `handlesList[i]` for allowForDecryption() to succeed.
++     *      If not, allowForDecryption() reverts. A retired caller reverts with `SenderRetired`.
++     * @param handlesList List of handles.
++     */
++    function allowForDecryption(bytes32[] memory handlesList) public virtual whenNotPaused {
++        uint256 lenHandlesList = handlesList.length;
++        if (lenHandlesList == 0) {
++            revert HandlesListIsEmpty();
++        }
++
++        if (isAccountDenied(msg.sender)) {
++            revert SenderDenied(msg.sender);
++        }
++
++        ACLStorage storage $ = _getACLStorage();
++        for (uint256 k = 0; k < lenHandlesList; k++) {
++            bytes32 handle = handlesList[k];
++            if (!isAllowed(handle, msg.sender)) {
++                if (_retired().retired[msg.sender]) {
++                    revert SenderRetired(msg.sender);
++                }
++                revert SenderNotAllowed(msg.sender);
++            }
++            $.allowedForDecryption[handle] = true;
++        }
++        emit AllowedForDecryption(msg.sender, handlesList);
++    }
++
++    /**
++     * @notice Allows the use of `handle` by address `account` for this transaction.
++     * @dev The caller must not be in the deny list and must be allowed to use `handle` for allowTransient() to succeed.
++     *      If not, allowTransient() reverts. The Coprocessor contract can always `allowTransient`,
++     *      contrarily to `allow`. Any other retired caller reverts with `SenderRetired`.
++     * @param handle Handle.
++     * @param account Address of the account.
++     */
++    function allowTransient(bytes32 handle, address account) public virtual whenNotPaused {
++        if (msg.sender != FHEVM_EXECUTOR_ADDRESS) {
++            if (isAccountDenied(msg.sender)) {
++                revert SenderDenied(msg.sender);
++            }
++
++            if (!isAllowed(handle, msg.sender)) {
++                if (_retired().retired[msg.sender]) {
++                    revert SenderRetired(msg.sender);
++                }
++                revert SenderNotAllowed(msg.sender);
++            }
++        }
++
++        bytes32 key = keccak256(abi.encodePacked(handle, account));
++        assembly {
++            tstore(key, 1)
++            let length := tload(0)
++            let lengthPlusOne := add(length, 1)
++            tstore(lengthPlusOne, key)
++            tstore(0, lengthPlusOne)
++        }
++    }
++
++    /**
++     * @notice Delegates an account the access to handles for user decryption, for instance, in the context of account
++     * abstraction for issuing user decryption requests from a smart contract account.
++     * @dev A retired caller reverts with `SenderRetired`. Delegating to a retired delegate, or for a retired contract,
++     *      is accepted and inert: the delegated view answers false for every retired party.
++     * @param delegate The address of the account that receives the delegation.
++     * @param contractAddress The contract address to delegate access to, or `WILDCARD_DELEGATION_ADDRESS` for delegation across
++     *        all contracts (until expiry). Mixing wildcard with per-contract delegations is allowed and can be useful,
++     *        for example when different expiries are desired, although it is often unnecessary.
++     * @param expirationDate The UNIX timestamp when the user decryption delegation expires.
++     */
++    function delegateForUserDecryption(
++        address delegate,
++        address contractAddress,
++        uint64 expirationDate
++    ) public virtual whenNotPaused {
++        if (_retired().retired[msg.sender]) {
++            revert SenderRetired(msg.sender);
++        }
++        ACLStorage storage $ = _getACLStorage();
++        UserDecryptionDelegation storage userDecryptionDelegation = $.userDecryptionDelegations[msg.sender][delegate][
++            contractAddress
++        ];
++        uint256 blockNumber = block.number;
++
++        if (userDecryptionDelegation.lastBlockDelegateOrRevoke == blockNumber) {
++            revert AlreadyDelegatedOrRevokedInSameBlock(msg.sender, delegate, contractAddress, blockNumber);
++        }
++
++        if (contractAddress == msg.sender) {
++            revert SenderCannotBeContractAddress(contractAddress);
++        }
++        if (delegate == msg.sender) {
++            revert SenderCannotBeDelegate(delegate);
++        }
++        if (delegate == WILDCARD_DELEGATION_ADDRESS) {
++            revert DelegateCannotBeWildcard(delegate);
++        }
++        if (delegate == contractAddress) {
++            revert DelegateCannotBeContractAddress(contractAddress);
++        }
++        if (expirationDate <= block.timestamp) {
++            revert ExpirationDateInThePast();
++        }
++
++        uint64 oldExpirationDate = userDecryptionDelegation.expirationDate;
++        uint64 newExpirationDate = expirationDate;
++        if (oldExpirationDate == newExpirationDate) {
++            revert ExpirationDateAlreadySetToSameValue(msg.sender, delegate, contractAddress, oldExpirationDate);
++        }
++
++        // Set the last block where the delegation happened.
++        userDecryptionDelegation.lastBlockDelegateOrRevoke = uint64(blockNumber);
++
++        // Set the delegation expiration date.
++        userDecryptionDelegation.expirationDate = newExpirationDate;
++
++        emit DelegatedForUserDecryption(
++            msg.sender,
++            delegate,
++            contractAddress,
++            ++userDecryptionDelegation.delegationCounter,
++            oldExpirationDate,
++            newExpirationDate
++        );
++    }
++
++    /**
++     * @notice Revokes the access to handles for user decryption delegated to an account.
++     * @param delegate The address of the account that receives the delegation.
++     * @param contractAddress The contract address to revoke access to, or `WILDCARD_DELEGATION_ADDRESS` to revoke the
++     *        wildcard delegation across all contracts.
++     */
++    function revokeDelegationForUserDecryption(address delegate, address contractAddress) public virtual whenNotPaused {
++        ACLStorage storage $ = _getACLStorage();
++        UserDecryptionDelegation storage userDecryptionDelegation = $.userDecryptionDelegations[msg.sender][delegate][
++            contractAddress
++        ];
++        uint256 blockNumber = block.number;
++
++        if (userDecryptionDelegation.lastBlockDelegateOrRevoke == blockNumber) {
++            revert AlreadyDelegatedOrRevokedInSameBlock(msg.sender, delegate, contractAddress, blockNumber);
++        }
++
++        // Set the last block where the revocation happened.
++        userDecryptionDelegation.lastBlockDelegateOrRevoke = uint64(blockNumber);
++
++        uint64 oldExpirationDate = userDecryptionDelegation.expirationDate;
++        if (oldExpirationDate == 0) {
++            revert NotDelegatedYet(msg.sender, delegate, contractAddress);
++        }
++
++        // Reset the delegation expiration date.
++        userDecryptionDelegation.expirationDate = 0;
++
++        emit RevokedDelegationForUserDecryption(
++            msg.sender,
++            delegate,
++            contractAddress,
++            ++userDecryptionDelegation.delegationCounter,
++            oldExpirationDate
++        );
++    }
++
++    /**
++     * @notice Retires the caller's authority over its decryption rights (revocable access).
++     * @dev One-way: no function clears it. Not gated by pause or by the deny list, and callable by contracts.
++     *      Effective immediately: every authorization view answers false for the caller in every role (user,
++     *      delegator, delegate, contract), except operand checks made by the FHEVMExecutor, and every grant path
++     *      reverts for the caller. To keep access from a new account, batch the grants first:
++     *      `multicall([allow(h_i, newAccount)..., retireAccount()])`.
++     *      Limits: it is pre-emptive, not a clawback (whatever was already shared or decrypted stays exposed); it
++     *      restricts oracle access only (the account still acts on-chain); it is as final as this chain's governance.
++     */
++    function retireAccount() public virtual {
++        ACLRetirementStorage storage $ = _retired();
++        if ($.retired[msg.sender]) {
++            revert AccountAlreadyRetired(msg.sender);
++        }
++        $.retired[msg.sender] = true;
++        emit AccountRetired(msg.sender, address(0));
++    }
++
++    /**
++     * @dev Triggers stopped state.
++     * Only a pauser address can pause.
++     * The contract must not be paused.
++     */
++    function pause() external virtual {
++        if (!PAUSER_SET.isPauser(msg.sender)) {
++            revert NotPauser(msg.sender);
++        }
++        _pause();
++    }
++
++    /**
++     * @dev Returns to normal state.
++     * Only owner can unpause.
++     * The contract must be paused.
++     */
++    function unpause() external virtual onlyOwner {
++        _unpause();
++    }
++
++    /**
++     * @notice Get the expiration date of a delegation for user decryption.
++     * @param delegator The address of the account that delegates access to its handles.
++     * @param delegate The address of the account that receives the delegation.
++     * @param contractAddress The contract address to delegate access to.
++     * @return expirationDate The UNIX timestamp when the user decryption delegation expires (0 means delegation is inactive).
++     *         Returns 0 if the delegator, the delegate or the contract is retired.
++     */
++    function getUserDecryptionDelegationExpirationDate(
++        address delegator,
++        address delegate,
++        address contractAddress
++    ) public view virtual returns (uint64) {
++        ACLRetirementStorage storage $r = _retired();
++        if ($r.retired[delegator] || $r.retired[delegate] || $r.retired[contractAddress]) {
++            return 0;
++        }
++        ACLStorage storage $ = _getACLStorage();
++        UserDecryptionDelegation storage userDecryptionDelegation = $.userDecryptionDelegations[delegator][delegate][
++            contractAddress
++        ];
++        return userDecryptionDelegation.expirationDate;
++    }
++
++    /**
++     * @notice Checks whether the account is allowed to use the handle in the
++     * same transaction (transient).
++     * @param handle Handle.
++     * @param account Address of the account.
++     * @return isAllowedTransient Whether the account can access transiently the handle.
++     */
++    function allowedTransient(bytes32 handle, address account) public view virtual returns (bool) {
++        bool isAllowedTransient;
++        bytes32 key = keccak256(abi.encodePacked(handle, account));
++        assembly {
++            isAllowedTransient := tload(key)
++        }
++        return isAllowedTransient;
++    }
++
++    /**
++     * @notice Getter function for the FHEVMExecutor contract address.
++     * @return fhevmExecutorAddress Address of the FHEVMExecutor.
++     */
++    function getFHEVMExecutorAddress() public view virtual returns (address) {
++        return FHEVM_EXECUTOR_ADDRESS;
++    }
++
++    /**
++     * @notice Getter function for the PauserSet contract address.
++     * @return pauserSetAddress Address of the PauserSet contract.
++     */
++    function getPauserSetAddress() public view virtual returns (address) {
++        return address(PAUSER_SET);
++    }
++
++    /**
++     * @notice Returns whether the account is allowed to use the `handle`, either due to
++     * allowTransient() or allow().
++     * @dev Returns false for a retired `account` whenever the caller is not the FHEVMExecutor. The executor exemption
++     *      exists for exactly one evaluation: authorizing an operand's use as input to a computation the executor
++     *      performs for its caller, whose outputs it grants only transiently and only to that caller. Every grant,
++     *      publication, delegation, deputy check and off-chain verifier reads this view with another caller, so the
++     *      exemption is never an export route. The executor path reads the raw persisted mapping and never the
++     *      retirement slot.
++     * @param handle Handle.
++     * @param account Address of the account.
++     * @return isAllowed Whether the account can access the handle.
++     */
++    function isAllowed(bytes32 handle, address account) public view virtual returns (bool) {
++        if (msg.sender != FHEVM_EXECUTOR_ADDRESS && _retired().retired[account]) {
++            return false;
++        }
++        return allowedTransient(handle, account) || _getACLStorage().persistedAllowedPairs[handle][account];
++    }
++
++    /**
++     * @notice Checks whether a handle is allowed for decryption.
++     * @param handle Handle.
++     * @return isAllowed Whether the handle is allowed for decryption.
++     */
++    function isAllowedForDecryption(bytes32 handle) public view virtual returns (bool) {
++        ACLStorage storage $ = _getACLStorage();
++        return $.allowedForDecryption[handle];
++    }
++
++    /**
++     * @notice Returns whether an account is delegated to access the handle for user decryption.
++     * @dev Succeeds when the delegator and `contractAddress` are both persistently allowed on the handle, and either
++     *      a non-expired delegation exists for `(delegator, delegate, contractAddress)` or for
++     *      `(delegator, delegate, WILDCARD_DELEGATION_ADDRESS)`. Wildcard does not bypass `allow`; it only avoids per-contract
++     *      delegation entries. Returns false if the delegator, the delegate or the contract is retired.
++     * @param delegator The address of the account that delegates access to its handles.
++     * @param delegate The address of the account that receives the delegation.
++     * @param contractAddress The app contract associated with the handle for this check.
++     * @param handle The handle to check for delegated user decryption.
++     * @return isDelegatedForUserDecryption Whether the handle can be accessed for delegated user decryption.
++     */
++    function isHandleDelegatedForUserDecryption(
++        address delegator,
++        address delegate,
++        address contractAddress,
++        bytes32 handle
++    ) public view virtual returns (bool) {
++        ACLRetirementStorage storage $r = _retired();
++        if ($r.retired[delegator] || $r.retired[delegate] || $r.retired[contractAddress]) {
++            return false;
++        }
++        ACLStorage storage $ = _getACLStorage();
++        if (!$.persistedAllowedPairs[handle][delegator] || !$.persistedAllowedPairs[handle][contractAddress]) {
++            return false;
++        }
++        return
++            _isUserDecryptionDelegationActive($, delegator, delegate, WILDCARD_DELEGATION_ADDRESS) ||
++            _isUserDecryptionDelegationActive($, delegator, delegate, contractAddress);
++    }
++
++    /**
++     * @notice Returns `true` if address `a` is allowed to use `c` and `false` otherwise.
++     * @dev Returns false for a retired `account`, whoever the caller is.
++     * @param handle Handle.
++     * @param account Address of the account.
++     * @return isAllowed Whether the account can access the handle.
++     */
++    function persistAllowed(bytes32 handle, address account) public view virtual returns (bool) {
++        ACLStorage storage $ = _getACLStorage();
++        return $.persistedAllowedPairs[handle][account] && !_retired().retired[account];
++    }
++
++    /**
++     * @notice Returns `true` if `account` is deny-listed and `false` otherwise.
++     * @param account Address of the account.
++     * @return isAccountDenied Whether the account is on the deny list.
++     */
++    function isAccountDenied(address account) public view virtual returns (bool) {
++        ACLStorage storage $ = _getACLStorage();
++        return $.denyList[account];
++    }
++
++    /**
++     * @notice Returns `true` if `account` has retired its decryption authority through `retireAccount()`.
++     * @param account Address of the account.
++     * @return isAccountRetired Whether the account is retired.
++     */
++    function isAccountRetired(address account) public view virtual returns (bool) {
++        return _retired().retired[account];
++    }
++
++    /**
++     * @notice Adds `account` to the deny list
++     * @param account Address of the account.
++     */
++    function blockAccount(address account) public virtual onlyOwner {
++        ACLStorage storage $ = _getACLStorage();
++        if ($.denyList[account]) {
++            revert AccountAlreadyBlocked(account);
++        }
++        $.denyList[account] = true;
++        emit BlockedAccount(account);
++    }
++
++    /**
++     * @notice Removes `account` from the deny list
++     * @param account Address of the account.
++     */
++    function unblockAccount(address account) public virtual onlyOwner {
++        ACLStorage storage $ = _getACLStorage();
++        if (!$.denyList[account]) {
++            revert AccountNotBlocked(account);
++        }
++        $.denyList[account] = false;
++        emit UnblockedAccount(account);
++    }
++
++    /**
++     * @notice Returns wether specified account is in the set of pausers.
++     * @param account The address of the account.
++     */
++    function isPauser(address account) external view virtual returns (bool) {
++        return PAUSER_SET.isPauser(account);
++    }
++
++    /**
++     * @dev This function removes the transient allowances, which could be useful for integration with
++     * Account Abstraction when bundling several UserOps calling the FHEVMExecutor Coprocessor.
++     */
++    function cleanTransientStorage() external virtual {
++        assembly {
++            let length := tload(0)
++            tstore(0, 0)
++            let lengthPlusOne := add(length, 1)
++            for {
++                let i := 1
++            } lt(i, lengthPlusOne) {
++                i := add(i, 1)
++            } {
++                let handle := tload(i)
++                tstore(i, 0)
++                tstore(handle, 0)
++            }
++        }
++    }
++
++    /**
++     * @notice Getter for the name and version of the contract.
++     * @return string Name and the version of the contract.
++     */
++    function getVersion() external pure virtual returns (string memory) {
++        return
++            string(
++                abi.encodePacked(
++                    CONTRACT_NAME,
++                    " v",
++                    Strings.toString(MAJOR_VERSION),
++                    ".",
++                    Strings.toString(MINOR_VERSION),
++                    ".",
++                    Strings.toString(PATCH_VERSION)
++                )
++            );
++    }
++
++    /**
++     * @notice ERC-165 interface detection.
++     * @dev True for ERC-165 itself (0x01ffc9a7) and for the Decryption Authority Lifecycle Core (0x556d2088).
++     * @param interfaceId The interface identifier.
++     * @return supported Whether the interface is supported.
++     */
++    function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {
++        return interfaceId == ERC165_INTERFACE_ID || interfaceId == DAL_CORE_INTERFACE_ID;
++    }
++
++    /**
++     * @notice Returns the ERC-7201 location of the retirement state, `erc7201:fhevm.storage.ACLRetirement`.
++     * @dev `_authorizeUpgrade` requires every new implementation to report this same location.
++     * @return location The storage location.
++     */
++    function retirementStorageLocation() public pure virtual returns (bytes32) {
++        return ACL_RETIREMENT_STORAGE_LOCATION;
++    }
++
++    /**
++     * @dev Should revert when `msg.sender` is not authorized to upgrade the contract.
++     *      Also reverts with `UpgradeDropsRetirement` unless the new implementation (a) reports ERC-165 support for
++     *      the Decryption Authority Lifecycle Core and (b) reports the same retirement storage location. Both checks
++     *      run in the current implementation, before the switch. They stop accidental downgrades and namespace drift,
++     *      not an implementation that lies about either answer.
++     */
++    function _authorizeUpgrade(address newImplementation) internal virtual override onlyOwner {
++        // The selector of supportsInterface(bytes4) equals the ERC-165 interface id, 0x01ffc9a7.
++        (bool okCore, bytes memory retCore) = newImplementation.staticcall(
++            abi.encodeWithSelector(ERC165_INTERFACE_ID, DAL_CORE_INTERFACE_ID)
++        );
++        (bool okLocation, bytes memory retLocation) = newImplementation.staticcall(
++            abi.encodeWithSelector(RETIREMENT_STORAGE_LOCATION_SELECTOR)
++        );
++        bool declaresCore = okCore && retCore.length == 32 && uint256(bytes32(retCore)) == 1;
++        bool sameState = okLocation &&
++            retLocation.length == 32 &&
++            bytes32(retLocation) == ACL_RETIREMENT_STORAGE_LOCATION;
++        if (!declaresCore || !sameState) {
++            revert UpgradeDropsRetirement(newImplementation);
++        }
++    }
++
++    /// @dev Looks up `userDecryptionDelegations[delegator][delegate][contractAddress]`.
++    /// @param contractAddress App contract from the decryption request, or `WILDCARD_DELEGATION_ADDRESS` for the wildcard row.
++    function _isUserDecryptionDelegationActive(
++        ACLStorage storage $,
++        address delegator,
++        address delegate,
++        address contractAddress
++    ) private view returns (bool) {
++        return $.userDecryptionDelegations[delegator][delegate][contractAddress].expirationDate > block.timestamp;
++    }
++
++    /**
++     * @dev Returns the ACL storage location.
++     */
++    function _getACLStorage() internal pure returns (ACLStorage storage $) {
++        assembly {
++            $.slot := ACL_STORAGE_LOCATION
++        }
++    }
++
++    /**
++     * @dev Returns the ACL retirement storage location.
++     */
++    function _retired() internal pure returns (ACLRetirementStorage storage $) {
++        assembly {
++            $.slot := ACL_RETIREMENT_STORAGE_LOCATION
++        }
++    }
++}
+diff --git a/host-contracts/test/fhevm-foundry/TestHostContractsDeployerTestUtils.t.sol b/host-contracts/test/fhevm-foundry/TestHostContractsDeployerTestUtils.t.sol
+index a491095..8dc2278 100644
+--- a/host-contracts/test/fhevm-foundry/TestHostContractsDeployerTestUtils.t.sol
++++ b/host-contracts/test/fhevm-foundry/TestHostContractsDeployerTestUtils.t.sol
+@@ -27,7 +27,7 @@ contract TestHostContractsDeployerTestUtils is HostContractsDeployerTestUtils {
+         assertEq(address(aclProxy), aclAdd, "ACL proxy address mismatch");
+         assertNotEq(aclImplementation, address(0), "Implementation not deployed");
+         assertEq(aclProxy.owner(), OWNER, "Owner mismatch");
+-        assertEq(aclProxy.getVersion(), "ACL v0.4.1", "Version mismatch");
++        assertEq(aclProxy.getVersion(), "ACL v0.4.2", "Version mismatch");
+         assertEq(_readImplementationSlot(aclAdd), aclImplementation, "Implementation slot mismatch");
+     }
+ 

@@ -1,0 +1,559 @@
+// SPDX-License-Identifier: BSD-3-Clause-Clear
+pragma solidity >=0.8.25 <0.9.0;
+
+import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
+import { FHE } from '@fhenixprotocol/cofhe-contracts/FHE.sol';
+import { FunctionId, Utils } from '@fhenixprotocol/cofhe-contracts/ICofhe.sol';
+import { console } from 'hardhat/console.sol';
+
+/// @dev Foundry/hevm cheatcode address: address(uint160(uint256(keccak256('hevm cheat code')))).
+///      Only reachable when running under forge with cheatcode access granted (vm.allowCheatcodes);
+///      on Hardhat this address has no code and the shim is never enabled.
+address constant CHEATCODE_ADDRESS = 0x7109709ECfa91a80626fF3989D68f67F5b1DD12D;
+
+address constant ZK_VERIFIER_SIGNER_ADDRESS = 0x6E12D8C87503D4287c294f2Fdef96ACd9DFf6bd2;
+uint256 constant ZK_VERIFIER_SIGNER_PRIVATE_KEY = 49099792800763675079532137679706322989817545357788440619111868498148356080914;
+
+address constant DECRYPT_RESULT_SIGNER_ADDRESS = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
+uint256 constant DECRYPT_RESULT_SIGNER_PRIVATE_KEY = 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d;
+
+/**
+ * @dev Mock implementation of the CoFHE coprocessor, used to test FHE ops in isolation.
+ * Is inherited by MockTaskManager.
+ *
+ * It is responsible for storing a map of ctHash -> value
+ * and for performing the operations on the values.
+ *
+ * It is intended as a 1:1 drop-in replacement for the real CoFHE coprocessor, with the following differences:
+ * - AsyncCallbacks are called synchronously (with a mock 1-10 second delay).
+ * - Unencrypted values are available onchain via the `mockStorage` map.
+ *
+ * NOTE: This is not used in production
+ */
+abstract contract MockCoFHE {
+  // Pulled from TMCommon
+  uint256 constant uintTypeMask = (type(uint8).max >> 1); // 0x7f - 7 bits reserved for uint type in the one before last byte
+  uint256 constant triviallyEncryptedMask = type(uint8).max - uintTypeMask; //0x80  1 bit reserved for isTriviallyEncrypted
+  uint256 constant shiftedTypeMask = uintTypeMask << 8; // 0x7f007 bits reserved for uint type in the one before last byte
+
+  bool public logOps = true;
+
+  /// @dev When true, mock-only work (plaintext replication + logging) runs between
+  ///      pauseGasMetering/resumeGasMetering cheatcodes so it is excluded from forge's
+  ///      gas accounting, giving gas numbers closer to the real CoFHE task manager.
+  ///      Only enable under forge AFTER granting this contract cheatcode access
+  ///      (vm.allowCheatcodes(address(taskManager))); must stay false on Hardhat.
+  bool public mockGasExcluded = false;
+
+  mapping(uint256 => uint256) public mockStorage;
+  mapping(uint256 => bool) public inMockStorage;
+
+  /// @dev Emitted for each block of mock-only work (op replication, decrypt-task storage,
+  ///      log building) with the gas it consumed, whenever that work runs metered (i.e. not
+  ///      under forge's paused gas metering). Tooling sums these per transaction to compute
+  ///      gas usage excluding mock overhead - see the hardhat plugin's getAdjustedGasUsed.
+  event MockGasConsumed(uint256 gas);
+
+  /// @dev Gas spent emitting MockGasConsumed itself (LOG1 + 32 data bytes + bookkeeping).
+  ///      It lands after the closing gasleft() read, so it is added back as a constant to
+  ///      keep the reported figure covering the full mock-only cost.
+  uint256 internal constant MOCK_GAS_EVENT_COST = 1030;
+
+  error InputNotInMockStorage(uint256 ctHash);
+
+  // Used internally to check if we missed any operations in the mocks
+  error InvalidUnaryOperation(string operation);
+  error InvalidTwoInputOperation(string operation);
+  error InvalidThreeInputOperation(string operation);
+
+  // OPTIONS
+
+  function setLogOps(bool _logOps) public {
+    logOps = _logOps;
+  }
+
+  function setMockGasExcluded(bool _mockGasExcluded) public {
+    mockGasExcluded = _mockGasExcluded;
+  }
+
+  /// @dev How a mock-only block is being accounted for.
+  ///      MEASURE           - metering is live: measure with gasleft() and emit MockGasConsumed.
+  ///      PAUSED_BY_MOCK    - we paused forge's metering and must resume it afterwards.
+  ///      ALREADY_UNMETERED - metering was already paused by the caller's own test; leave it
+  ///                          untouched (the mock work is unmetered either way) and emit nothing.
+  enum MockGasMode {
+    MEASURE,
+    PAUSED_BY_MOCK,
+    ALREADY_UNMETERED
+  }
+
+  /// @dev True while forge's gas metering is paused: gasleft() is frozen, so two consecutive
+  ///      reads are equal. While metered they differ by the cost of the second GAS opcode.
+  ///      (Foundry has no query cheatcode for this state.)
+  function _isGasMeteringPaused() internal view returns (bool) {
+    uint256 a = gasleft();
+    uint256 b = gasleft();
+    return a == b;
+  }
+
+  /// @dev Opens a mock-only block. Under forge (detected by code at the cheatcode address -
+  ///      forge plants a marker byte there, other environments have none) with exclusion
+  ///      enabled, pauses gas metering unless the caller's test already paused it - never
+  ///      steal a pause we don't own, or `_mockGasTrackEnd` would resume metering out from
+  ///      under the user's own measurement region. Everywhere else, records gasleft() so the
+  ///      block's cost can be reported via MockGasConsumed.
+  ///      Only wrap code that cannot revert - a revert inside the block would skip
+  ///      `_mockGasTrackEnd` and leak paused metering (see sendEventCreated's trampoline
+  ///      for the revert-safe variant).
+  function _mockGasTrackStart() internal returns (MockGasMode mode, uint256 startGas) {
+    if (mockGasExcluded && CHEATCODE_ADDRESS.code.length > 0) {
+      if (_isGasMeteringPaused()) return (MockGasMode.ALREADY_UNMETERED, 0);
+      (bool ok, ) = CHEATCODE_ADDRESS.call(abi.encodeWithSignature('pauseGasMetering()'));
+      if (ok) return (MockGasMode.PAUSED_BY_MOCK, 0);
+    }
+    return (MockGasMode.MEASURE, gasleft());
+  }
+
+  /// @dev Closes a mock-only block: resumes metering (if we paused it) or emits the
+  ///      measured cost. A caller-owned pause is left exactly as we found it.
+  function _mockGasTrackEnd(MockGasMode mode, uint256 startGas) internal {
+    if (mode == MockGasMode.PAUSED_BY_MOCK) {
+      (bool ok, ) = CHEATCODE_ADDRESS.call(abi.encodeWithSignature('resumeGasMetering()'));
+      ok;
+    } else if (mode == MockGasMode.MEASURE) {
+      emit MockGasConsumed(startGas - gasleft() + MOCK_GAS_EVENT_COST);
+    }
+  }
+
+  // Utils
+
+  function getUintTypeFromHash(uint256 hash) internal pure returns (uint8) {
+    return uint8((hash & shiftedTypeMask) >> 8);
+  }
+
+  function getUtypeStringFromHash(uint256 hash) internal pure returns (string memory) {
+    uint8 inputType = getUintTypeFromHash(hash);
+    if (inputType == Utils.EBOOL_TFHE) return 'ebool';
+    if (inputType == Utils.EUINT8_TFHE) return 'euint8';
+    if (inputType == Utils.EUINT16_TFHE) return 'euint16';
+    if (inputType == Utils.EUINT32_TFHE) return 'euint32';
+    if (inputType == Utils.EUINT64_TFHE) return 'euint64';
+    if (inputType == Utils.EUINT128_TFHE) return 'euint128';
+    if (inputType == Utils.EUINT256_TFHE) return 'euint256';
+    if (inputType == Utils.EADDRESS_TFHE) return 'eaddress';
+    return 'unknown';
+  }
+
+  function getUtypeBits(uint256 hash) internal pure returns (uint256) {
+    uint8 inputType = getUintTypeFromHash(hash);
+    if (inputType == Utils.EBOOL_TFHE) return 8;
+    if (inputType == Utils.EUINT8_TFHE) return 8;
+    if (inputType == Utils.EUINT16_TFHE) return 16;
+    if (inputType == Utils.EUINT32_TFHE) return 32;
+    if (inputType == Utils.EUINT64_TFHE) return 64;
+    if (inputType == Utils.EUINT128_TFHE) return 128;
+    if (inputType == Utils.EUINT256_TFHE) return 256;
+    if (inputType == Utils.EADDRESS_TFHE) return 160;
+    return 0;
+  }
+
+  function getUtypeMask(uint256 hash) internal pure returns (uint256) {
+    uint256 bits = getUtypeBits(hash);
+    unchecked {
+      return (1 << bits) - 1;
+    }
+  }
+
+  function removeFirstLetter(string memory str) public pure returns (string memory) {
+    bytes memory strBytes = bytes(str);
+    if (strBytes.length == 0) return '';
+    bytes memory result = new bytes(strBytes.length - 1);
+    for (uint i = 1; i < strBytes.length; i++) {
+      result[i - 1] = strBytes[i];
+    }
+    return string(result);
+  }
+
+  function getIsBoolTypeFromHash(uint256 hash) internal pure returns (bool) {
+    uint8 inputType = getUintTypeFromHash(hash);
+    return (inputType ^ Utils.EBOOL_TFHE) == 0;
+  }
+
+  function strEq(string memory _a, string memory _b) internal pure returns (bool) {
+    return keccak256(abi.encodePacked(_a)) == keccak256(abi.encodePacked(_b));
+  }
+
+  function opIs(string memory op, FunctionId fid) internal pure returns (bool) {
+    return strEq(op, Utils.functionIdToString(fid));
+  }
+
+  function sliceString(string memory str, uint start, uint length) public pure returns (string memory) {
+    bytes memory strBytes = bytes(str);
+    require(start + length <= strBytes.length, 'Out of bounds');
+
+    bytes memory result = new bytes(length);
+    for (uint i = 0; i < length; i++) {
+      result[i] = strBytes[start + i];
+    }
+
+    return string(result);
+  }
+
+  function logCtHash(uint256 ctHash) internal view returns (string memory) {
+    string memory hashStr = Strings.toString(ctHash);
+    uint256 length = bytes(hashStr).length;
+    if (length <= 6) {
+      return hashStr;
+    }
+
+    bool stored = inMockStorage[ctHash];
+    uint256 value = mockStorage[ctHash];
+    bool isBool = getIsBoolTypeFromHash(ctHash);
+
+    string memory valueString = isBool ? (value == 1 ? 'true' : 'false') : Strings.toString(value);
+
+    string memory truncated = string.concat(
+      getUtypeStringFromHash(ctHash),
+      '(',
+      sliceString(hashStr, 0, 4),
+      '..',
+      sliceString(hashStr, length - 4, 4),
+      ')[',
+      stored ? valueString : 'EMPTY',
+      ']'
+    );
+
+    return truncated;
+  }
+
+  string constant LOG_PREFIX = unicode'├ ';
+  string constant LOG_DIVIDER = unicode' | ';
+
+  function padRight(string memory input, uint256 length, bytes1 padChar) internal pure returns (string memory) {
+    bytes memory inputBytes = bytes(input);
+    if (inputBytes.length >= length) return input;
+
+    bytes memory padded = new bytes(length);
+    uint256 i = 0;
+    for (; i < inputBytes.length; i++) {
+      padded[i] = inputBytes[i];
+    }
+    for (; i < length; i++) {
+      padded[i] = padChar;
+    }
+    return string(padded);
+  }
+
+  function logOperation(string memory operation, string memory inputs, string memory output) internal view {
+    if (logOps)
+      console.log(string.concat(LOG_PREFIX, padRight(operation, 16, ' '), LOG_DIVIDER, inputs, '  =>  ', output));
+  }
+
+  function logAllow(string memory operation, uint256 ctHash, address account) internal view {
+    if (logOps)
+      console.log(
+        string.concat(
+          LOG_PREFIX,
+          padRight(operation, 16, ' '),
+          LOG_DIVIDER,
+          logCtHash(ctHash),
+          ' -> ',
+          Strings.toHexString(account)
+        )
+      );
+  }
+
+  // Storage functions
+
+  function _set(uint256 ctHash, uint256 value, bool log) internal {
+    mockStorage[ctHash] = value;
+    inMockStorage[ctHash] = true;
+
+    if (log) logOperation('set', '', logCtHash(ctHash));
+  }
+
+  function _set(uint256 ctHash, uint256 value) internal {
+    uint256 mask = getUtypeMask(ctHash);
+    _set(ctHash, value & mask, false);
+  }
+
+  function _set(uint256 ctHash, bool value) internal {
+    _set(ctHash, value ? 1 : 0);
+  }
+
+  function _get(uint256 ctHash) internal view returns (uint256) {
+    if (!inMockStorage[ctHash]) revert InputNotInMockStorage(ctHash);
+
+    uint256 mask = getUtypeMask(ctHash);
+    return mockStorage[ctHash] & mask;
+  }
+
+  // Public functions
+
+  function MOCK_setInEuintKey(uint256 ctHash, uint256 value) public {
+    _set(ctHash, value);
+  }
+
+  // Mock Log
+
+  function MOCK_logAllow(string memory operation, uint256 ctHash, address account) public view {
+    logAllow(operation, ctHash, account);
+  }
+
+  /// @dev Same as MOCK_logAllow, but the log-string building runs excluded from forge gas
+  ///      metering / reported via MockGasConsumed, like the rest of the mock-only work.
+  ///      With logging disabled the whole thing is skipped - the residual cost is negligible.
+  ///      Safe without the revert trampoline: logAllow only formats bounded strings.
+  function MOCK_trackedLogAllow(string memory operation, uint256 ctHash, address account) internal {
+    if (!logOps) return;
+    (MockGasMode mode, uint256 startGas) = _mockGasTrackStart();
+    logAllow(operation, ctHash, account);
+    _mockGasTrackEnd(mode, startGas);
+  }
+
+  // Mock functions
+
+  function MOCK_verifyKeyInStorage(uint256 ctHash) internal view {
+    if (!inMockStorage[ctHash]) revert InputNotInMockStorage(ctHash);
+  }
+
+  function MOCK_unaryOperation(uint256 ctHash, FunctionId funcId, uint256 input) internal {
+    if (funcId == FunctionId.random) {
+      _set(ctHash, uint256(blockhash(block.number - 1)));
+      if (logOps) logOperation('FHE.random', '', logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.cast) {
+      _set(ctHash, _get(input));
+      if (logOps) logOperation('FHE.cast', logCtHash(input), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.not) {
+      if (getIsBoolTypeFromHash(ctHash)) {
+        bool inputIsTruthy = _get(input) == 1;
+        _set(ctHash, !inputIsTruthy);
+      } else {
+        // bitwise NOT, masked to the type width by _set
+        _set(ctHash, ~_get(input));
+      }
+      if (logOps) logOperation('FHE.not', logCtHash(input), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.square) {
+      unchecked {
+        _set(ctHash, _get(input) * _get(input));
+      }
+      if (logOps) logOperation('FHE.square', string.concat(logCtHash(input), ' * ', logCtHash(input)), logCtHash(ctHash));
+      return;
+    }
+    revert InvalidUnaryOperation(Utils.functionIdToString(funcId));
+  }
+
+  function MOCK_twoInputOperation(uint256 ctHash, FunctionId funcId, uint256 input1, uint256 input2) internal {
+    if (funcId == FunctionId.sub) {
+      unchecked {
+        _set(ctHash, _get(input1) - _get(input2));
+      }
+      if (logOps) logOperation('FHE.sub', string.concat(logCtHash(input1), ' - ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.add) {
+      unchecked {
+        _set(ctHash, _get(input1) + _get(input2));
+      }
+      if (logOps) logOperation('FHE.add', string.concat(logCtHash(input1), ' + ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.xor) {
+      unchecked {
+        _set(ctHash, _get(input1) ^ _get(input2));
+      }
+      if (logOps) logOperation('FHE.xor', string.concat(logCtHash(input1), ' ^ ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.and) {
+      unchecked {
+        _set(ctHash, _get(input1) & _get(input2));
+      }
+      if (logOps) logOperation('FHE.and', string.concat(logCtHash(input1), ' & ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.or) {
+      unchecked {
+        _set(ctHash, _get(input1) | _get(input2));
+      }
+      if (logOps) logOperation('FHE.or', string.concat(logCtHash(input1), ' | ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.div) {
+      uint256 cleartext2 = _get(input2);
+      if (cleartext2 == 0) {
+        _set(ctHash, type(uint256).max);
+      } else {
+        unchecked {
+          _set(ctHash, _get(input1) / cleartext2);
+        }
+      }
+      if (logOps) logOperation('FHE.div', string.concat(logCtHash(input1), ' / ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.rem) {
+      // Like TFHE-rs, the remainder by zero returns the first input unchanged
+      uint256 cleartext2 = _get(input2);
+      if (cleartext2 == 0) {
+        _set(ctHash, _get(input1));
+      } else {
+        unchecked {
+          _set(ctHash, _get(input1) % cleartext2);
+        }
+      }
+      if (logOps) logOperation('FHE.rem', string.concat(logCtHash(input1), ' % ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.mul) {
+      unchecked {
+        _set(ctHash, _get(input1) * _get(input2));
+      }
+      if (logOps) logOperation('FHE.mul', string.concat(logCtHash(input1), ' * ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.shl) {
+      unchecked {
+        _set(ctHash, _get(input1) << _get(input2));
+      }
+      if (logOps) logOperation('FHE.shl', string.concat(logCtHash(input1), ' << ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.shr) {
+      unchecked {
+        _set(ctHash, _get(input1) >> _get(input2));
+      }
+      if (logOps) logOperation('FHE.shr', string.concat(logCtHash(input1), ' >> ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.gte) {
+      _set(ctHash, _get(input1) >= _get(input2));
+      if (logOps) logOperation('FHE.gte', string.concat(logCtHash(input1), ' >= ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.lte) {
+      _set(ctHash, _get(input1) <= _get(input2));
+      if (logOps) logOperation('FHE.lte', string.concat(logCtHash(input1), ' <= ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.lt) {
+      _set(ctHash, _get(input1) < _get(input2));
+      if (logOps) logOperation('FHE.lt', string.concat(logCtHash(input1), ' < ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.gt) {
+      _set(ctHash, _get(input1) > _get(input2));
+      if (logOps) logOperation('FHE.gt', string.concat(logCtHash(input1), ' > ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.min) {
+      uint256 min;
+      unchecked {
+        min = _get(input1) < _get(input2) ? _get(input1) : _get(input2);
+      }
+      _set(ctHash, min);
+
+      if (logOps)
+        logOperation(
+          'FHE.min',
+          string.concat('min(', logCtHash(input1), ', ', logCtHash(input2), ')'),
+          logCtHash(ctHash)
+        );
+      return;
+    }
+    if (funcId == FunctionId.max) {
+      uint256 max;
+      unchecked {
+        max = _get(input1) > _get(input2) ? _get(input1) : _get(input2);
+      }
+      _set(ctHash, max);
+
+      if (logOps)
+        logOperation(
+          'FHE.max',
+          string.concat('max(', logCtHash(input1), ', ', logCtHash(input2), ')'),
+          logCtHash(ctHash)
+        );
+      return;
+    }
+    if (funcId == FunctionId.eq) {
+      _set(ctHash, _get(input1) == _get(input2));
+
+      if (logOps) logOperation('FHE.eq', string.concat(logCtHash(input1), ' == ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.ne) {
+      _set(ctHash, _get(input1) != _get(input2));
+
+      if (logOps) logOperation('FHE.ne', string.concat(logCtHash(input1), ' != ', logCtHash(input2)), logCtHash(ctHash));
+      return;
+    }
+    if (funcId == FunctionId.rol) {
+      // rotation within the type width, amount modulo the width (TFHE-rs semantics); _set masks the result
+      uint256 bits = getUtypeBits(ctHash);
+      uint256 shift = _get(input2) % bits;
+      uint256 value = _get(input1);
+      _set(ctHash, shift == 0 ? value : (value << shift) | (value >> (bits - shift)));
+
+      if (logOps)
+        logOperation(
+          'FHE.rol',
+          string.concat('rol(', logCtHash(input1), ', ', logCtHash(input2), ')'),
+          logCtHash(ctHash)
+        );
+      return;
+    }
+    if (funcId == FunctionId.ror) {
+      uint256 bits = getUtypeBits(ctHash);
+      uint256 shift = _get(input2) % bits;
+      uint256 value = _get(input1);
+      _set(ctHash, shift == 0 ? value : (value >> shift) | (value << (bits - shift)));
+
+      if (logOps)
+        logOperation(
+          'FHE.ror',
+          string.concat('ror(', logCtHash(input1), ', ', logCtHash(input2), ')'),
+          logCtHash(ctHash)
+        );
+      return;
+    }
+    revert InvalidTwoInputOperation(Utils.functionIdToString(funcId));
+  }
+
+  function MOCK_threeInputOperation(
+    uint256 ctHash,
+    FunctionId funcId,
+    uint256 input1,
+    uint256 input2,
+    uint256 input3
+  ) internal {
+    if (funcId == FunctionId.trivialEncrypt) {
+      _set(ctHash, input1);
+
+      if (logOps)
+        logOperation(
+          string.concat('FHE.asE', removeFirstLetter(getUtypeStringFromHash(ctHash))),
+          string.concat(removeFirstLetter(getUtypeStringFromHash(ctHash)), '(', Strings.toString(input1), ')'),
+          logCtHash(ctHash)
+        );
+      return;
+    }
+    if (funcId == FunctionId.select) {
+      _set(ctHash, _get(input1) == 1 ? _get(input2) : _get(input3));
+
+      if (logOps)
+        logOperation(
+          'FHE.select',
+          string.concat(logCtHash(input1), ' ? ', logCtHash(input2), ' : ', logCtHash(input3)),
+          logCtHash(ctHash)
+        );
+      return;
+    }
+    revert InvalidThreeInputOperation(Utils.functionIdToString(funcId));
+  }
+}

@@ -1,0 +1,9 @@
+[profile.default]
+src = "src"
+test = "test"
+out = "out"
+libs = []
+solc = "0.8.25"
+evm_version = "osaka"
+remappings = ["forge-std/=<forge-std 1.11.0, impl/fhenix-port/vendor>/src/"]
+allow_paths = ["<forge-std 1.11.0, impl/fhenix-port/vendor>"]

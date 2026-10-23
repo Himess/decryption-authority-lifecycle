@@ -1,0 +1,13 @@
+# FOUNDRY_PROFILE=e2e forge test (Foundry default isolation); forge Version: 1.8.5
+No files changed, compilation skipped
+
+Ran 6 tests for e2e/test/FhenixE2E.t.sol:FhenixE2ETest
+[PASS] test_E2E_PermitDecryption_EndsWhenTheIssuerRetires() (gas: 669013)
+[PASS] test_E2E_PublicDecryptionIsUnchanged() (gas: 581072)
+[PASS] test_E2E_ShareRegistry_ARetiredIssuersShareIsNoLongerListed() (gas: 761882)
+[PASS] test_E2E_SharedPermit_EndsWhenEitherPartyRetires() (gas: 837813)
+[PASS] test_E2E_TheMockEngineTakesNoExemption() (gas: 462738)
+[PASS] test_E2E_TheVaultRefusesARetiredOwner_AndAnInboundTransferIsComputedButInert() (gas: 1030287)
+Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 7.80ms (16.60ms CPU time)
+
+Ran 1 test suite in 18.23ms (7.80ms CPU time): 6 tests passed, 0 failed, 0 skipped (6 total tests)

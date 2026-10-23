@@ -1,0 +1,79 @@
+Compiling 82 files with Solc 0.8.24
+Solc 0.8.24 finished in 13.56s
+Compiler run successful!
+
+Warning: the following cheatcode(s) are deprecated and will be removed in future versions:
+  lastCallGas(): replaced by `lastFrameGas`
+Ran 12 tests for test/acl/ACLRetirementGas.t.sol:ACLRetirementGasTest
+[PASS] test_Gas_Allow() (gas: 194965529)
+Logs:
+  GAS|amsterdam|allow (new pair)|24070|26368|2298
+
+[PASS] test_Gas_CallerSide() (gas: 677872318)
+Logs:
+  GAS|amsterdam|allow (new pair) (caller-side)|124582|126880|2298
+  GAS|amsterdam|CALL overhead into the ACL (caller-side minus frame)|2538|2538|0
+  GAS|amsterdam|ERC-7984 confidentialTransfer(to, euint64) by holder (caller-side)|1064528|1072657|8129
+  GAS|amsterdam|retireAccount (first, cold) (caller-side)|0|115067|115067
+
+[PASS] test_Gas_Carry_n1() (gas: 284691702)
+Logs:
+  GAS|amsterdam|carry n=1: multicall(allow x n) [base] vs same on v0.4.1 (frame)|27231|29573|2342
+  GAS|amsterdam|carry n=1: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (frame)|27231|43962|16731
+  GAS|amsterdam|carry n=1: multicall(allow x n) [base] vs same on v0.4.1 (caller-side)|127063|129405|2342
+  GAS|amsterdam|carry n=1: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (caller-side)|127063|242592|115529
+
+[PASS] test_Gas_Carry_n10() (gas: 287964690)
+Logs:
+  GAS|amsterdam|carry n=10: multicall(allow x n) [base] vs same on v0.4.1 (frame)|207086|212110|5024
+  GAS|amsterdam|carry n=10: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (frame)|207086|226501|19415
+  GAS|amsterdam|carry n=10: multicall(allow x n) [base] vs same on v0.4.1 (caller-side)|1197306|1202330|5024
+  GAS|amsterdam|carry n=10: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (caller-side)|1197306|1315519|118213
+
+[PASS] test_Gas_Carry_n100() (gas: 320765303)
+Logs:
+  GAS|amsterdam|carry n=100: multicall(allow x n) [base] vs same on v0.4.1 (frame)|2006734|2038578|31844
+  GAS|amsterdam|carry n=100: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (frame)|2006734|2052983|46249
+  GAS|amsterdam|carry n=100: multicall(allow x n) [base] vs same on v0.4.1 (caller-side)|11906658|11943110|36452
+  GAS|amsterdam|carry n=100: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (caller-side)|11906658|12061031|154373
+
+[PASS] test_Gas_Carry_n500() (gas: 467929088)
+Logs:
+  GAS|amsterdam|carry n=500: multicall(allow x n) [base] vs same on v0.4.1 (frame)|10029103|10180147|151044
+  GAS|amsterdam|carry n=500: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (frame)|10029103|10194613|165510
+  GAS|amsterdam|carry n=500: multicall(allow x n) [base] vs same on v0.4.1 (caller-side)|59593933|59842736|248803
+  GAS|amsterdam|carry n=500: multicall(allow x n) [base] vs v0.4.1 + retireAccount() (caller-side)|59593933|60054189|460256
+
+[PASS] test_Gas_DelegatedViews() (gas: 389964910)
+Logs:
+  GAS|amsterdam|isHandleDelegatedForUserDecryption (true)|12358|19108|6750
+  GAS|amsterdam|getUserDecryptionDelegationExpirationDate (non-zero)|5370|12059|6689
+
+[PASS] test_Gas_ERC7984() (gas: 395128528)
+Logs:
+  GAS|amsterdam|ERC-7984 confidentialTransfer(to, euint64) by holder|278569|286698|8129
+  GAS|amsterdam|ERC-7984 mint (token-internal grants only)|210142|214608|4466
+
+[SKIP] test_Gas_ExecutorOverheadAttribution() (gas: 0)
+[PASS] test_Gas_ExecutorPerOperand() (gas: 584377215)
+Logs:
+  GAS|amsterdam|executor fheAdd, 2 persisted operands|31040|31290|250
+  GAS|amsterdam|executor fheAdd, 2 transient operands|26424|26698|274
+  GAS|amsterdam|executor fheIfThenElse, 3 persisted operands|35194|35536|342
+
+[PASS] test_Gas_IsAllowed() (gas: 973632327)
+Logs:
+  GAS|amsterdam|isAllowed, non-executor caller, persisted pair (true)|5497|7818|2321
+  GAS|amsterdam|isAllowed, non-executor caller, no grant (false)|5497|7818|2321
+  GAS|amsterdam|isAllowed, executor caller, persisted pair|5497|5589|92
+  GAS|amsterdam|isAllowed, executor caller, transient grant|3191|3295|104
+  GAS|amsterdam|persistAllowed (true)|5155|7431|2276
+
+[PASS] test_Gas_RetireAccount() (gas: 89591864)
+Logs:
+  GAS|amsterdam|retireAccount (first, cold)|0|16635|16635
+  GAS|amsterdam|retireAccount (second, reverts AccountAlreadyRetired)|0|4889|4889
+
+Suite result: ok. 11 passed; 0 failed; 1 skipped; finished in 56.47ms (152.77ms CPU time)
+
+Ran 1 test suite in 59.14ms (56.47ms CPU time): 11 tests passed, 0 failed, 1 skipped (12 total tests)

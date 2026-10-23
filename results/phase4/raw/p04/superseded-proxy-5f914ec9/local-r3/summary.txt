@@ -1,0 +1,10 @@
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > the digest the crate computes is the EIP-712 digest ethers computes 29ms
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > row 1: unmodified verifiers accept the root key of an ECDSA-disabled account (the gap) 210ms
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > row 2: Profile H enforce refuses the root key: 0xef0101 is regular code, ERC-1271 only, no shim 140ms
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > row 3: Profile H enforce accepts the ML-DSA-44 signature at B_exec 2,000,000 662ms
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > reference: the same accounts as EIP-7702 delegations (0xef0100), no rewrite 860ms
+ ✓ p04-eip7851.test.ts > P0.4: EIP-7851 simulation (0xef0101 ‖ delegate) > row 5: the SDK pre-check agrees with the verifier 1320ms
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+vitest rc=0
+git status of the worktree (tracked files must be unchanged):

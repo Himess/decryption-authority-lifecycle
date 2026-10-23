@@ -1,0 +1,15 @@
+Compiling 1 files with Solc 0.8.27
+Solc 0.8.27 finished in 4.09s
+Compiler run successful!
+
+Ran 7 tests for test/CrossCheck.t.sol:UnmodifiedOZCrossCheckTest
+[PASS] test_Unmodified_AndCallToRetiredContractRecipientReverts() (gas: 952161)
+[PASS] test_Unmodified_ConfidentialTransferAndCallHandle() (gas: 1729342)
+[PASS] test_Unmodified_ConfidentialTransferFromAndCallHandle() (gas: 2107361)
+[PASS] test_Unmodified_ConfidentialTransferFromHandle() (gas: 1741289)
+[PASS] test_Unmodified_ConfidentialTransferHandle() (gas: 1359885)
+[PASS] test_Unmodified_InboundTransferToRetiredAccepted_AndInert() (gas: 664473)
+[PASS] test_Unmodified_RequestDiscloseEncryptedAmount() (gas: 1046591)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 7.89ms (25.52ms CPU time)
+
+Ran 1 test suite in 14.88ms (7.89ms CPU time): 7 tests passed, 0 failed, 0 skipped (7 total tests)

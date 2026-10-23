@@ -1,0 +1,84 @@
+0x002fe31551 erc1271  magic value                              sload=1 accounts=86
+0x05de1cf1fe shim     success, empty return data               sload=0 accounts=3
+0x0899f53a9f refused  revert (empty)                           sload=0 accounts=3
+0x0b6676f3a7 erc1271  magic value                              sload=0 accounts=4
+0x0b77e469f5 erc1271  magic value                              sload=0 accounts=802
+0x12966e3c18 shim     success, empty return data               sload=0 accounts=4
+0x1a6a18670d erc1271  magic value                              sload=0 accounts=1
+0x230751afc4 refused  revert (empty)                           sload=0 accounts=1
+0x23d3806cc2 erc1271  magic value                              sload=0 accounts=1
+0x26da2196ca shim     success, empty return data               sload=0 accounts=1
+0x2f23cf415f refused  revert (empty)                           sload=0 accounts=151
+0x2f71db9893 shim     success, empty return data               sload=0 accounts=1
+0x386e55cb86 erc1271  magic value                              sload=0 accounts=29
+0x3891d3e632 refused  revert (empty)                           sload=0 accounts=1
+0x3a8882ed1b refused  revert (empty)                           sload=0 accounts=5
+0x3f505db74c refused  revert (empty)                           sload=0 accounts=1
+0x4064fbab82 refused  revert (empty)                           sload=0 accounts=1
+0x42761a7b70 erc1271  magic value                              sload=0 accounts=5
+0x46fc4ecb19 erc1271  magic value                              sload=3 accounts=15
+0x4901822b8b shim     success, empty return data               sload=0 accounts=1
+0x517e0a9c2b shim     success, empty return data               sload=0 accounts=1
+0x5a15ca888b erc1271  magic value                              sload=0 accounts=184
+0x5c458bb631 erc1271  magic value                              sload=0 accounts=148
+0x5c69ebfb7d shim     success, empty return data               sload=0 accounts=1
+0x5d0a74db04 shim     success, empty return data               sload=0 accounts=3
+0x5e7b5977a0 erc1271  magic value                              sload=0 accounts=23
+0x6185e94286 erc1271  magic value                              sload=0 accounts=12
+0x64e7730326 refused  returned 0xffffffff00000000              sload=0 accounts=132
+0x6efc2a697c refused  revert (empty)                           sload=0 accounts=63
+0x7fa1bd2edb erc1271  magic value                              sload=0 accounts=20
+0x80565ee062 refused  revert (empty)                           sload=0 accounts=1
+0x82b9eb9589 erc1271  magic value                              sload=0 accounts=5
+0x82c1e6c0f8 erc1271  magic value                              sload=0 accounts=1
+0x836afe422a refused  returned 0xffffffff00000000              sload=0 accounts=21
+0x869201a1be shim     success, empty return data               sload=0 accounts=3
+0x88269c1d7c refused  revert (empty)                           sload=0 accounts=1
+0x9488536b67 refused  returned 0xffffffff00000000              sload=1 accounts=104
+0x9a5579d038 shim     success, empty return data               sload=0 accounts=1
+0x9d5ba38c6e shim     success, empty return data               sload=0 accounts=2
+0xb47811be4a erc1271  magic value                              sload=0 accounts=2
+0xb5ebf66a7f shim     success, empty return data               sload=0 accounts=1
+0xb9f729293f shim     success, empty return data               sload=0 accounts=1
+0xba5e6ba629 erc1271  magic value                              sload=0 accounts=7
+0xba697585ba erc1271  magic value                              sload=0 accounts=9
+0xbd96df2d19 refused  revert (empty)                           sload=0 accounts=99
+0xc0745699f4 shim     success, empty return data               sload=0 accounts=5
+0xc2484504b6 erc1271  magic value                              sload=0 accounts=1
+0xc526bba012 erc1271  magic value                              sload=0 accounts=1
+0xcc7b633aef erc1271  magic value                              sload=0 accounts=1
+0xcde2f4a390 refused  revert (empty)                           sload=0 accounts=1
+0xce58a1bffe shim     success, empty return data               sload=0 accounts=13
+0xd748c60606 refused  revert (empty)                           sload=0 accounts=10
+0xddc2d020d5 shim     success, empty return data               sload=0 accounts=1
+0xdfe8916744 refused  revert (empty)                           sload=0 accounts=1
+0xe056444d6f shim     success, empty return data               sload=0 accounts=1
+0xe8a65d1e2f erc1271  magic value                              sload=0 accounts=79
+0xecfc0328ce refused  revert 0x151d90fe                        sload=1 accounts=69
+0xef20878662 refused  revert (empty)                           sload=0 accounts=10
+0xef99e5554d shim     success, empty return data               sload=0 accounts=2
+0xf29e25bec1 shim     success, empty return data               sload=0 accounts=1
+0xf2e76ab785 refused  revert (empty)                           sload=0 accounts=3
+0xf9dce9432e refused  revert (empty)                           sload=0 accounts=2
+0xfac24354ac erc1271  magic value                              sload=0 accounts=1
+0xff0357b543 erc1271  magic value                              sload=0 accounts=57
+{
+ "erc1271": {
+  "codes": 24,
+  "accounts": 1494,
+  "accounts_M": 1393,
+  "accounts_E": 101
+ },
+ "shim": {
+  "codes": 19,
+  "accounts": 46,
+  "accounts_M": 46,
+  "accounts_E": 0
+ },
+ "refused": {
+  "codes": 21,
+  "accounts": 680,
+  "accounts_M": 507,
+  "accounts_E": 173
+ }
+}

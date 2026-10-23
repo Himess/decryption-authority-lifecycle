@@ -1,0 +1,30 @@
+{
+  "hardfork": "amsterdam",
+  "anvilNodeInfo": {
+    "hardFork": "Amsterdam",
+    "chainId": 31337
+  },
+  "note": "receipt gasUsed per transaction (includes 21,000 intrinsic and calldata); view_* = eth_estimateGas of a call to the view",
+  "v0_8_0": {
+    "retireAccount": 132519,
+    "view_isHandleDelegated_active": 38773,
+    "view_isAllowed_active": 26625
+  },
+  "v0_9_0": {
+    "retireAccount_noSuccessionRecord": 136884,
+    "view_isHandleDelegated_active": 38805,
+    "view_isAllowed_active": 26602,
+    "designateSuccessor": 144434,
+    "acceptSuccession": 41674,
+    "confirmSuccessor": 139992,
+    "view_isHandleDelegated_active_withConfirmedSuccessor": 38805,
+    "retireAccount_withConfirmedSuccessor": 136884,
+    "view_isHandleDelegated_successorPath": 36389,
+    "view_isHandleDelegated_retiredDelegator_otherDelegate": 36389,
+    "resignSuccession_afterRetirement": 28071,
+    "designateSuccessor_replacingPending": 46514,
+    "retireAccount_voidingPendingDesignation": 135495,
+    "cancelSuccessorDesignation": 29417,
+    "raiseSuccessorDelay": 135131
+  }
+}

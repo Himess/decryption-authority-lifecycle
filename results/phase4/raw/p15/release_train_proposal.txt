@@ -1,0 +1,18 @@
+release                              commit     line   ACL      Core  level  reinit
+zama v0.13.8                         fe3ca89b5  v0.13  0.4.0    False -      5
+lifecycle/level0 (v0.13)             06d769f29  v0.13  0.4.1    True  L0     1010 (was 6)
+lifecycle/level2 (v0.13)             588e63970  v0.13  0.4.2    True  E1     1020 (was 7)
+zama v0.14.4                         ccdd1ce0d  v0.14  0.5.0    False -      6
+lifecycle/level0-v0.14               a2fa91bff  v0.14  0.5.1    True  L0     1110 (was 7)
+zama main ed851716c                  ed851716c  main   0.7.0    False -      8
+lifecycle/level0 (main)              5e61f3de4  main   0.8.0    True  L0     1210 (was 9)
+lifecycle/level1 (main)              256306b68  main   0.8.0    True  L0     1210 (was 9)  same ACL as lifecycle/level0 (main)
+lifecycle/level2 (main)              c4482aba5  main   0.9.0    True  E1     1220 (was 10)
+lifecycle/level3 (main)              f1b440e7a  main   0.10.0   True  E2     1230 (was 11)
+lifecycle/level3-verifier (main)     538dc8887  main   0.8.0    True  L0     1210 (was 9)  same ACL as lifecycle/level0 (main)
+lifecycle/level3-connector (main)    564d7d170  main   0.8.0    True  L0     1210 (was 9)  same ACL as lifecycle/level0 (main)
+zama next v0.13 (projected)          -          v0.13  -        False -      6
+zama next v0.14 (projected)          -          v0.14  -        False -      7
+zama next main (projected)           -          main   -        False -      9
+
+plausible upgrade edges: 42; violations: 0

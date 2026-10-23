@@ -1,0 +1,16 @@
+run: /srv/lifecycle/runs/level2-v0.13.8-20261021T121323Z
+records=20 methods={'eth_call': 20} level0_selectors_seen=0
+eth_call shapes (keys, block): {(('input', 'to'), 'latest'): 20}
+deploy kind=level0 version=ACL v0.4.2 matches_reference=true proxy=0x6FF14E2d6Cc4e2AD6eA068b238ca684B57F6a251
+retire case=l2.legacy role=delegator-with-successor event=true isAccountRetired=true gas_used=54487
+OK   l2.legacy.delegate-d.u-active                        delegated Forwarded obs=Forwarded kms=4  err_ctr=0   calls=1   isHandleDelegatedForUserDecryption(U,D,C,h)=True x1
+OK   l2.legacy.successor-s.u-active                       delegated Rejected  obs=Rejected  kms=0  err_ctr=3   calls=3   isHandleDelegatedForUserDecryption(U,S,C,h)=False x3
+OK   l2.legacy.successor-s.u-retired                      delegated Forwarded obs=Forwarded kms=4  err_ctr=0   calls=1   isHandleDelegatedForUserDecryption(U,S,C,h)=True x1
+OK   l2.legacy.delegate-d.u-retired                       delegated Rejected  obs=Rejected  kms=0  err_ctr=3   calls=3   isHandleDelegatedForUserDecryption(U,D,C,h)=False x3
+OK   l2.legacy.successor-s-direct.u-retired               direct Rejected  obs=Rejected  kms=0  err_ctr=3   calls=6   isAllowed(h,C)=True x3; isAllowed(h,S)=False x3
+OK   l2.legacy.h2-holder-v                                direct Forwarded obs=Forwarded kms=4  err_ctr=0   calls=2   isAllowed(h,C)=True x1; isAllowed(h,V)=True x1
+OK   l2.legacy.successor-s.straggler-h2                   delegated Forwarded obs=Forwarded kms=4  err_ctr=0   calls=1   isHandleDelegatedForUserDecryption(U,S,C,h)=True x1
+OK   l2.legacy.successor-s.after-resign                   delegated Rejected  obs=Rejected  kms=0  err_ctr=3   calls=3   isHandleDelegatedForUserDecryption(U,S,C,h)=False x3
+latency-loop requests checked: 0 groups: 0
+requests: {'ok': 8}
+PROBLEMS: none

@@ -1,0 +1,33 @@
+# Control build on the UNMODIFIED vendored ACL (files from lifecycle/level0 06d769f), profile v13, FOUNDRY_SOLC_VERSION=0.8.35
+# vendored ACL.sol blob 87bed2bc6f3ccc1533fd27005830a0cede668df3; date_utc 2026-10-21T08:47:19Z; output to a scratch dir
+
+# --- full project build (same command that failed in M_forge_build_v13.log attempt 1) ---
+Unable to resolve imports:
+      "forge-std-1.11.0/Script.sol" in "<repo>/impl/fhevm-v0.13.8/sdk/js-sdk/contracts/test\FHETestHandles.t.sol"
+      "forge-std-1.11.0/Test.sol" in "<repo>/impl/fhevm-v0.13.8/sdk/js-sdk/contracts/test\FHETest.t.sol"
+      "forge-std-1.11.0/Script.sol" in "<repo>/impl/fhevm-v0.13.8/sdk/js-sdk/contracts/test\FHETest.t.sol"
+      "forge-std-1.11.0/Test.sol" in "<repo>/impl/fhevm-v0.13.8/sdk/js-sdk/contracts/test\FHETestHandles.t.sol"
+with remappings:
+Unable to resolve imports:
+      "forge-std-1.11.0/Script.sol" in "<repo>/impl/fhevm-v0.13.8/sdk/js-sdk/contracts\test/FHETest.t.sol"
+      "forge-std-1.11.0/Script.sol" in "<repo>/impl/fhevm-v0.13.8/sdk/js-sdk/contracts\test/FHETestHandles.t.sol"
+      "forge-std-1.11.0/Test.sol" in "<repo>/impl/fhevm-v0.13.8/sdk/js-sdk/contracts\test/FHETest.t.sol"
+      "forge-std-1.11.0/Test.sol" in "<repo>/impl/fhevm-v0.13.8/sdk/js-sdk/contracts\test/FHETestHandles.t.sol"
+with remappings:
+Warning: dynamic test linking disabled for 2 files: error: file forge-std-1.11.0/Script.sol not found
+Compiling 91 files with Solc 0.8.35
+Solc 0.8.35 finished in 173.41ms
+Error: Compiler run failed:
+Error: Error writing output JSON.
+rc=1
+
+# --- with --skip test --sizes ---
+Compiling 89 files with Solc 0.8.35
+Solc 0.8.35 finished in 12.07s
+Compiler run successful with warnings:
+| Contract                                                                                     | Runtime Size (B) | Initcode Size (B) | Runtime Margin (B) | Initcode Margin (B) |
+| ACL (src/v0.13.0/host-contracts/contracts/ACL.sol)                                           | 9,995            | 10,244            | 14,581             | 38,908              |
+| CleartextACL (src/v0.13.0/cleartext/CleartextACL.sol)                                        | 12,874           | 13,123            | 11,702             | 36,029              |
+| CleartextFHEVMExecutor (src/v0.13.0/cleartext/CleartextFHEVMExecutor.sol)                    | 26,573           | 26,822            | -1,997             | 22,330              |
+Error: some contracts exceed the runtime size limit (EIP-170: 24576 bytes)
+rc=1

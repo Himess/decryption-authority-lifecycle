@@ -1,0 +1,39 @@
+{
+ "date_utc": "2026-10-21T21:07:31Z",
+ "results": [
+  {
+   "chain": "ethereum-mainnet",
+   "chain_id": 1,
+   "block": 26243565,
+   "acl_proxy": "0xcA2E8f1F656CD25C01F05d0b243Ab1ecd4a8ffb6",
+   "implementation": "0x9a017e0ba4c19a325d5a89f5dd2112e605e85418",
+   "getVersion": "ACL v0.4.0",
+   "implementation_code_bytes": 10137,
+   "implementation_code_keccak": "0x2c49ef70b7c00f67c2338b4ab13ea4e8341d737eb60e5bde6fa6a6bf3db9e3a5",
+   "endpoint": "public census endpoint",
+   "sourcify": {
+    "match": "match",
+    "compiler": "0.8.24+commit.e11b9ed9",
+    "name": "ACL",
+    "path": "contracts/ACL.sol:ACL"
+   }
+  },
+  {
+   "chain": "sepolia",
+   "chain_id": 11155111,
+   "block": 11964983,
+   "acl_proxy": "0xf0Ffdc93b7E186bC2f8CB3dAA75D86d1930A433D",
+   "implementation": "0xf4f793e6a2ef47de60a94c0bc412292da5f7ab98",
+   "getVersion": "ACL v0.4.0",
+   "implementation_code_bytes": 10137,
+   "implementation_code_keccak": "0xff97165836a1171bfb656f8fd3727958c92860f4f6b06ef9a2e83ec01e51acb8",
+   "endpoint": "SEPOLIA_RPC_URL (.env)",
+   "sourcify": {
+    "match": "match",
+    "compiler": "0.8.24+commit.e11b9ed9",
+    "name": "ACL",
+    "path": "contracts/ACL.sol:ACL"
+   }
+  }
+ ]
+}

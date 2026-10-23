@@ -1,0 +1,421 @@
+From 0d02f3e00ac671ebfce36fd5525fe4a5b4d018f6 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 18:27:33 +0300
+Subject: [PATCH 3/6] test(host-contracts): E2 retirement-certificate tests
+ (TC19, TC24)
+
+The ERC's published vector (valid on 1 and 11155111, refused on 31337);
+wrong chain; successor mismatch; no successor; invalid, short, high-s and
+wrong-scope signatures; an ERC-1271 wallet; a 7702 account with no ECDSA
+fallback; while paused; a second submission; a retired submitter; a
+leaked certificate yields only the planned handover; scope across chains.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../test/acl/ACLRetirementCertificate.t.sol   | 339 ++++++++++++++++++
+ .../test/acl/retirement/CertificateMocks.sol  |  50 +++
+ 2 files changed, 389 insertions(+)
+ create mode 100644 host-contracts/test/acl/ACLRetirementCertificate.t.sol
+ create mode 100644 host-contracts/test/acl/retirement/CertificateMocks.sol
+
+diff --git a/host-contracts/test/acl/ACLRetirementCertificate.t.sol b/host-contracts/test/acl/ACLRetirementCertificate.t.sol
+new file mode 100644
+index 00000000..7974511a
+--- /dev/null
++++ b/host-contracts/test/acl/ACLRetirementCertificate.t.sol
+@@ -0,0 +1,339 @@
++// SPDX-License-Identifier: BSD-3-Clause-Clear
++pragma solidity ^0.8.24;
++
++import {Vm} from "forge-std/Vm.sol";
++import {ACL} from "../../contracts/ACL.sol";
++import {ACLEvents} from "../../contracts/ACLEvents.sol";
++import {PauserSet} from "../../contracts/immutable/PauserSet.sol";
++import {HostContractsDeployerTestUtils} from "../../fhevm-foundry/HostContractsDeployerTestUtils.sol";
++import {aclAdd, pauserSetAdd} from "../../addresses/FHEVMHostAddresses.sol";
++import {CertificateWallet1271, RootKeyDelegate7702, RejectAllDelegate7702} from "./retirement/CertificateMocks.sol";
++
++/**
++ * @title ACLRetirementCertificateTest
++ * @notice Level 3, extension E2 (Retirement Certificate) of the Decryption Authority Lifecycle draft, on ACL v0.10.0:
++ *         TC19 (rules C1-C8: the ERC's vector, wrong chain, successor mismatch, no successor, an ERC-1271 account, a
++ *         delegation-indicator account with no ECDSA fallback, while paused, a second submission, a leaked
++ *         certificate) and TC24 (scope across chains). Rule numbers refer to erc/ERC-XXXX-decryption-authority-lifecycle.md.
++ *         Two chains are two states of the same registry: a snapshot taken after the shared setup is chain A, the
++ *         same snapshot restored is chain B (the watchtower harness repeats TC24 on two real anvil chains).
++ */
++contract ACLRetirementCertificateTest is HostContractsDeployerTestUtils {
++    ACL internal acl;
++    PauserSet internal pauserSet;
++
++    address internal constant owner = address(456);
++    address internal constant pauser = address(789);
++
++    // The ERC's vector: index 0 and 1 of the public test mnemonic "test test ... junk".
++    address internal constant VECTOR_ACCOUNT = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
++    address internal constant VECTOR_SUCCESSOR = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
++    bytes32 internal constant VECTOR_DIGEST = 0xca933c116695438e119a68f3f457dac8b4b9050e77210d19cdaa2be05106e98a;
++    bytes internal constant VECTOR_SIGNATURE =
++        hex"2f2daa5d31e68624bed89cefce723bc9f21b880ea92b4f49f50d80ca00af115253f9db3981e50d97405d417aaf1992826d1e4d65cfe26881c2550ca600a55c371c";
++
++    uint256 internal constant SECP256K1_N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141;
++    bytes32 internal constant ACL_STORAGE_LOCATION = 0xa688f31953c2015baaf8c0a488ee1ee22eb0e05273cc1fd31ea4cbee42febc00;
++
++    address internal account;
++    uint256 internal accountKey;
++    address internal successor = makeAddr("successor");
++    address internal relayer = makeAddr("relayer");
++    address internal thief = makeAddr("thief");
++    address internal app = makeAddr("app");
++    bytes32 internal h1 = keccak256("certificate-handle-1");
++
++    function setUp() public {
++        _deployACL(owner);
++        acl = ACL(aclAdd);
++        _deployPauserSet();
++        pauserSet = PauserSet(pauserSetAdd);
++        vm.prank(owner);
++        pauserSet.addPauser(pauser);
++        (account, accountKey) = makeAddrAndKey("account");
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // helpers
++    ////////////////////////////////////////////////////////////////////////////
++
++    function _chains(uint256 a) internal pure returns (uint256[] memory c) {
++        c = new uint256[](1);
++        c[0] = a;
++    }
++
++    function _chains(uint256 a, uint256 b) internal pure returns (uint256[] memory c) {
++        c = new uint256[](2);
++        c[0] = a;
++        c[1] = b;
++    }
++
++    /// @dev The EIP-712 digest of a certificate, computed independently of the ACL.
++    function _digest(address who, address succ, uint256[] memory chainIds) internal pure returns (bytes32) {
++        bytes32 domain = keccak256(
++            abi.encode(
++                keccak256("EIP712Domain(string name,string version)"),
++                keccak256("DecryptionAuthorityLifecycle"),
++                keccak256("1")
++            )
++        );
++        bytes32 structHash = keccak256(
++            abi.encode(
++                keccak256("RetireAccount(address account,address successor,uint256[] chainIds)"),
++                who,
++                succ,
++                keccak256(abi.encodePacked(chainIds))
++            )
++        );
++        return keccak256(abi.encodePacked("\x19\x01", domain, structHash));
++    }
++
++    function _sign(uint256 key, bytes32 digest) internal pure returns (bytes memory) {
++        (uint8 v, bytes32 r, bytes32 s) = vm.sign(key, digest);
++        return abi.encodePacked(r, s, v);
++    }
++
++    /// @dev designate -> accept -> wait D -> confirm, sent by `from` (an EOA, or a wallet through `execute`).
++    function _confirm(address from, address to) internal {
++        vm.prank(from);
++        acl.designateSuccessor(to);
++        vm.prank(to);
++        acl.acceptSuccession(from);
++        vm.warp(block.timestamp + acl.successorDelayOf(from));
++        vm.prank(from);
++        acl.confirmSuccessor();
++    }
++
++    /// @dev The persisted pair [handle][holder], written directly: one storage write, so the test also runs under
++    ///      Foundry's default isolation, where a transient grant does not survive to the next top-level call.
++    function _persist(bytes32 handle, address holder) internal {
++        bytes32 inner = keccak256(abi.encode(handle, ACL_STORAGE_LOCATION));
++        vm.store(aclAdd, keccak256(abi.encode(holder, inner)), bytes32(uint256(1)));
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // TC19: certificates
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_TC19_SupportsInterface() public view {
++        assertTrue(acl.supportsInterface(0x4b9ec076), "E2");
++        assertEq(ACL.retireAccountWithSig.selector, bytes4(0x4b9ec076), "selector");
++        assertEq(ACL.CertificateWrongChain.selector, bytes4(0x904dd953));
++        assertEq(ACL.CertificateSuccessorMismatch.selector, bytes4(0x99155e67));
++        assertEq(ACL.InvalidRetirementCertificate.selector, bytes4(0xce6e5c6a));
++    }
++
++    /// @dev The ERC's published vector: valid on chains 1 and 11155111, refused on 31337.
++    function test_TC19_ErcVector() public {
++        assertEq(_digest(VECTOR_ACCOUNT, VECTOR_SUCCESSOR, _chains(1, 11155111)), VECTOR_DIGEST, "digest");
++        _confirm(VECTOR_ACCOUNT, VECTOR_SUCCESSOR);
++
++        vm.chainId(31337);
++        vm.expectRevert(abi.encodeWithSelector(ACL.CertificateWrongChain.selector, 31337));
++        acl.retireAccountWithSig(VECTOR_ACCOUNT, VECTOR_SUCCESSOR, _chains(1, 11155111), VECTOR_SIGNATURE);
++
++        vm.chainId(11155111);
++        vm.expectEmit(true, true, false, false, aclAdd);
++        emit ACLEvents.AccountRetired(VECTOR_ACCOUNT, VECTOR_SUCCESSOR);
++        vm.prank(relayer);
++        acl.retireAccountWithSig(VECTOR_ACCOUNT, VECTOR_SUCCESSOR, _chains(1, 11155111), VECTOR_SIGNATURE);
++        assertTrue(acl.isAccountRetired(VECTOR_ACCOUNT));
++        assertEq(acl.successorOf(VECTOR_ACCOUNT), VECTOR_SUCCESSOR);
++    }
++
++    function test_TC19_WrongChain() public {
++        _confirm(account, successor);
++        uint256[] memory chains = _chains(1, 11155111);
++        bytes memory sig = _sign(accountKey, _digest(account, successor, chains));
++        vm.expectRevert(abi.encodeWithSelector(ACL.CertificateWrongChain.selector, block.chainid));
++        acl.retireAccountWithSig(account, successor, chains, sig);
++        vm.expectRevert(abi.encodeWithSelector(ACL.CertificateWrongChain.selector, block.chainid));
++        acl.retireAccountWithSig(account, successor, new uint256[](0), sig);
++        assertFalse(acl.isAccountRetired(account));
++    }
++
++    function test_TC19_SuccessorMismatch() public {
++        _confirm(account, successor);
++        uint256[] memory chains = _chains(block.chainid);
++        bytes memory sig = _sign(accountKey, _digest(account, thief, chains));
++        vm.expectRevert(abi.encodeWithSelector(ACL.CertificateSuccessorMismatch.selector, successor, thief));
++        acl.retireAccountWithSig(account, thief, chains, sig);
++        assertFalse(acl.isAccountRetired(account));
++    }
++
++    /// @dev An account without a confirmed successor cannot use a certificate (it retires directly), not even one
++    ///      naming the null address or its pending, accepted designation.
++    function test_TC19_NoSuccessor() public {
++        uint256[] memory chains = _chains(block.chainid);
++        vm.expectRevert(abi.encodeWithSelector(ACL.CertificateSuccessorMismatch.selector, address(0), address(0)));
++        acl.retireAccountWithSig(account, address(0), chains, _sign(accountKey, _digest(account, address(0), chains)));
++
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        vm.prank(successor);
++        acl.acceptSuccession(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.CertificateSuccessorMismatch.selector, address(0), successor));
++        acl.retireAccountWithSig(account, successor, chains, _sign(accountKey, _digest(account, successor, chains)));
++        assertFalse(acl.isAccountRetired(account));
++    }
++
++    /// @dev C5 for an EOA: exactly 65 bytes, low s, signed by the account.
++    function test_TC19_InvalidSignatures() public {
++        _confirm(account, successor);
++        uint256[] memory chains = _chains(block.chainid);
++        bytes32 digest = _digest(account, successor, chains);
++        (, uint256 otherKey) = makeAddrAndKey("other");
++        bytes memory bad = abi.encodeWithSelector(ACL.InvalidRetirementCertificate.selector, account);
++
++        vm.expectRevert(bad);
++        acl.retireAccountWithSig(account, successor, chains, _sign(otherKey, digest));
++
++        (uint8 v, bytes32 r, bytes32 s) = vm.sign(accountKey, digest);
++        vm.expectRevert(bad); // 64 bytes (EIP-2098 compact form is not accepted)
++        acl.retireAccountWithSig(account, successor, chains, abi.encodePacked(r, s));
++        vm.expectRevert(bad); // high s, the malleated twin of a valid signature
++        acl.retireAccountWithSig(
++            account,
++            successor,
++            chains,
++            abi.encodePacked(r, bytes32(SECP256K1_N - uint256(s)), v == 27 ? uint8(28) : uint8(27))
++        );
++        vm.expectRevert(bad); // signed over another chain list
++        acl.retireAccountWithSig(
++            account,
++            successor,
++            chains,
++            _sign(accountKey, _digest(account, successor, _chains(1)))
++        );
++
++        acl.retireAccountWithSig(account, successor, chains, abi.encodePacked(r, s, v));
++        assertTrue(acl.isAccountRetired(account));
++    }
++
++    function test_TC19_Erc1271Account() public {
++        (address walletOwner, uint256 walletOwnerKey) = makeAddrAndKey("walletOwner");
++        CertificateWallet1271 wallet = new CertificateWallet1271(walletOwner);
++        vm.prank(walletOwner);
++        wallet.execute(aclAdd, abi.encodeCall(ACL.designateSuccessor, (successor)));
++        vm.prank(successor);
++        acl.acceptSuccession(address(wallet));
++        vm.warp(block.timestamp + 7 days);
++        vm.prank(walletOwner);
++        wallet.execute(aclAdd, abi.encodeCall(ACL.confirmSuccessor, ()));
++
++        uint256[] memory chains = _chains(block.chainid);
++        bytes32 digest = _digest(address(wallet), successor, chains);
++        vm.expectRevert(abi.encodeWithSelector(ACL.InvalidRetirementCertificate.selector, address(wallet)));
++        acl.retireAccountWithSig(address(wallet), successor, chains, _sign(accountKey, digest));
++
++        vm.prank(relayer);
++        acl.retireAccountWithSig(address(wallet), successor, chains, _sign(walletOwnerKey, digest));
++        assertTrue(acl.isAccountRetired(address(wallet)));
++    }
++
++    /// @dev C5 for an EOA with a 7702 delegation indicator: ERC-1271 only. A delegate that refuses every signature
++    ///      refuses the root key's valid ECDSA signature too: there is no fallback.
++    function test_TC19_DelegationIndicatorAccount_NoEcdsaFallback() public {
++        (address eoa, uint256 eoaKey) = makeAddrAndKey("eoa7702");
++        _confirm(eoa, successor);
++        uint256[] memory chains = _chains(block.chainid);
++        bytes memory rootSig = _sign(eoaKey, _digest(eoa, successor, chains));
++
++        vm.signAndAttachDelegation(address(new RejectAllDelegate7702()), eoaKey);
++        assertEq(eoa.code.length, 23, "delegation indicator");
++        vm.expectRevert(abi.encodeWithSelector(ACL.InvalidRetirementCertificate.selector, eoa));
++        acl.retireAccountWithSig(eoa, successor, chains, rootSig);
++
++        vm.signAndAttachDelegation(address(new RootKeyDelegate7702()), eoaKey);
++        acl.retireAccountWithSig(eoa, successor, chains, rootSig);
++        assertTrue(acl.isAccountRetired(eoa));
++    }
++
++    function test_TC19_WorksWhilePaused() public {
++        _confirm(account, successor);
++        vm.prank(pauser);
++        acl.pause();
++        assertTrue(acl.paused());
++        uint256[] memory chains = _chains(block.chainid);
++        acl.retireAccountWithSig(account, successor, chains, _sign(accountKey, _digest(account, successor, chains)));
++        assertTrue(acl.isAccountRetired(account));
++    }
++
++    /// @dev A second submission reverts and emits nothing; the submitter's own state does not matter (C3).
++    function test_TC19_SecondSubmissionReverts_SubmitterIrrelevant() public {
++        _confirm(account, successor);
++        vm.prank(relayer);
++        acl.retireAccount();
++        uint256[] memory chains = _chains(block.chainid);
++        bytes memory sig = _sign(accountKey, _digest(account, successor, chains));
++
++        vm.prank(relayer); // a retired submitter relays
++        acl.retireAccountWithSig(account, successor, chains, sig);
++        assertTrue(acl.isAccountRetired(account));
++
++        vm.recordLogs();
++        vm.expectRevert(abi.encodeWithSelector(ACL.AccountAlreadyRetired.selector, account));
++        acl.retireAccountWithSig(account, successor, chains, sig);
++        assertEq(vm.getRecordedLogs().length, 0);
++    }
++
++    /// @dev A leaked certificate in a thief's hands yields only the planned handover: the confirmed successor reads,
++    ///      the thief gets nothing, and nothing can be changed afterwards (C7).
++    function test_TC19_LeakedCertificate_OnlyPlannedHandover() public {
++        _persist(h1, account);
++        _persist(h1, app);
++        _confirm(account, successor);
++        uint256[] memory chains = _chains(block.chainid);
++        bytes memory leaked = _sign(accountKey, _digest(account, successor, chains));
++
++        vm.prank(thief);
++        acl.retireAccountWithSig(account, successor, chains, leaked);
++
++        assertEq(acl.successorOf(account), successor);
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, successor, app, h1), "the planned successor reads");
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, thief, app, h1), "the thief reads nothing");
++        assertFalse(acl.persistAllowed(h1, thief));
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.designateSuccessor(thief);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // TC24: scope across chains
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_TC24_RetireOnOneChainOnly_OtherChainUnaffected() public {
++        _confirm(account, successor);
++        uint256 shared = vm.snapshotState();
++
++        vm.chainId(1);
++        vm.prank(account);
++        acl.retireAccount();
++        assertTrue(acl.isAccountRetired(account), "chain A retired");
++
++        vm.revertToState(shared);
++        vm.chainId(10);
++        assertFalse(acl.isAccountRetired(account), "chain B unaffected");
++    }
++
++    function test_TC24_OneCertificateRetiresOnEveryListedChain() public {
++        _confirm(account, successor);
++        uint256[] memory chains = _chains(1, 10);
++        bytes memory sig = _sign(accountKey, _digest(account, successor, chains));
++        uint256 shared = vm.snapshotState();
++
++        vm.chainId(1);
++        acl.retireAccountWithSig(account, successor, chains, sig);
++        assertTrue(acl.isAccountRetired(account), "chain A");
++
++        vm.revertToState(shared);
++        vm.chainId(10);
++        acl.retireAccountWithSig(account, successor, chains, sig);
++        assertTrue(acl.isAccountRetired(account), "chain B");
++
++        vm.revertToState(shared);
++        vm.chainId(8453);
++        vm.expectRevert(abi.encodeWithSelector(ACL.CertificateWrongChain.selector, 8453));
++        acl.retireAccountWithSig(account, successor, chains, sig);
++    }
++}
+diff --git a/host-contracts/test/acl/retirement/CertificateMocks.sol b/host-contracts/test/acl/retirement/CertificateMocks.sol
+new file mode 100644
+index 00000000..b28b963b
+--- /dev/null
++++ b/host-contracts/test/acl/retirement/CertificateMocks.sol
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: BSD-3-Clause-Clear
++pragma solidity ^0.8.24;
++
++import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
++
++/**
++ * @notice Test-only ERC-1271 wallet for the retirement-certificate tests (E2): one ECDSA owner signs for it, and the
++ *         owner drives it through `execute` (for example to designate the wallet's successor).
++ */
++contract CertificateWallet1271 {
++    error NotOwner(address caller);
++
++    address public immutable owner;
++
++    constructor(address owner_) {
++        owner = owner_;
++    }
++
++    function isValidSignature(bytes32 hash, bytes calldata signature) external view returns (bytes4) {
++        (address recovered, ECDSA.RecoverError err, ) = ECDSA.tryRecover(hash, signature);
++        return err == ECDSA.RecoverError.NoError && recovered == owner ? bytes4(0x1626ba7e) : bytes4(0xffffffff);
++    }
++
++    function execute(address target, bytes calldata data) external returns (bytes memory ret) {
++        if (msg.sender != owner) revert NotOwner(msg.sender);
++        bool ok;
++        (ok, ret) = target.call(data);
++        if (!ok) {
++            assembly {
++                revert(add(ret, 32), mload(ret))
++            }
++        }
++    }
++}
++
++/// @notice Test-only EIP-7702 delegate that accepts only signatures by the delegating EOA's own key.
++contract RootKeyDelegate7702 {
++    function isValidSignature(bytes32 hash, bytes calldata signature) external view returns (bytes4) {
++        (address recovered, ECDSA.RecoverError err, ) = ECDSA.tryRecover(hash, signature);
++        return
++            err == ECDSA.RecoverError.NoError && recovered == address(this) ? bytes4(0x1626ba7e) : bytes4(0xffffffff);
++    }
++}
++
++/// @notice Test-only EIP-7702 delegate that refuses every signature.
++contract RejectAllDelegate7702 {
++    function isValidSignature(bytes32, bytes calldata) external pure returns (bytes4) {
++        return 0xffffffff;
++    }
++}

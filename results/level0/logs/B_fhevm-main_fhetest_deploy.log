@@ -1,0 +1,10 @@
+rpc-url:        http://127.0.0.1:18557
+ACL:            0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D
+KMSVerifier:    0x901F8942346f7AB3a01F6D7613119Bca447Bb030
+ProtocolConfig: 0x44aA028fd264C76BF4A8f8B4d8A5272f6AE25CAc
+Coprocessor:    0xe3a9105a3a932253A70F126eb1E3b589C643dD24
+deployer:       0xD11383d01F91Ec751464eE5a369D5F61B095ce5b
+balance:        0 wei
+🍟 Funding 0xD11383d01F91Ec751464eE5a369D5F61B095ce5b with 10000 ETH...
+✅ setCoprocessorConfig
+Error: Failed to estimate gas: server returned an error response: error code 3: execution reverted, data: "0x"

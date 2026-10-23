@@ -1,0 +1,1858 @@
+# mode=level0 records=1062 requests=222
+== lat.base-bindings.direct.fwd.00 [base-bindings direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=13.97
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.34 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=5.04 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=8.15 block=latest]
+== lat.base-bindings.delegated.fwd.00 [base-bindings delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=12.56
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.71 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=7.88 block=latest]
+== lat.base-bindings.v2-direct.fwd.00 [base-bindings v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=363.96
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=1.78 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=18.02 block=latest]
+== lat.base-bindings.v2-delegated.fwd.00 [base-bindings v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=50.52
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.86 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=9.20 block=latest]
+== lat.base-source.direct.fwd.00 [base-source direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=44.84
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=2.13 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=7.56 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=12.00 block=latest]
+== lat.base-source.delegated.fwd.00 [base-source delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=16.14
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=4.14 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=6.07 block=latest]
+== lat.base-source.v2-direct.fwd.00 [base-source v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=52.49
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=2.66 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=37.04 block=latest]
+== lat.base-source.v2-delegated.fwd.00 [base-source v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=63.47
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=7.60 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=12.47 block=latest]
+== lat.level0.direct.fwd.00 [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=21.50
+      isAllowed(h,U) -> True   [rpc_ms=2.24 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.09 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.02 block=latest]
+== lat.level0.delegated.fwd.00 [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=76.43
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.69 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=1.59 block=latest]
+== lat.level0.v2-direct.fwd.00 [level0 v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=19.48
+      isAllowed(h,Uk) -> True   [rpc_ms=2.78 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=3.84 block=latest]
+== lat.level0.v2-delegated.fwd.00 [level0 v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=88.39
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=10.83 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=21.50 block=latest]
+== lat.base-bindings.direct.fwd.01 [base-bindings direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=32.69
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.14 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=10.57 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=13.70 block=latest]
+== lat.base-bindings.delegated.fwd.01 [base-bindings delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=45.96
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.97 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=12.73 block=latest]
+== lat.base-bindings.v2-direct.fwd.01 [base-bindings v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=27.53
+      isAllowed(h,Uk) -> True   [rpc_ms=2.63 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=4.25 block=latest]
+== lat.base-bindings.v2-delegated.fwd.01 [base-bindings v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=19.66
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=3.92 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.40 block=latest]
+== lat.base-source.direct.fwd.01 [base-source direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=15.28
+      isAllowed(h,C) -> True   [rpc_ms=2.55 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=3.22 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.93 block=latest]
+== lat.base-source.delegated.fwd.01 [base-source delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=13.60
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.26 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=3.25 block=latest]
+== lat.base-source.v2-direct.fwd.01 [base-source v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=19.68
+      isAllowed(h,Uk) -> True   [rpc_ms=1.91 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=3.40 block=latest]
+== lat.base-source.v2-delegated.fwd.01 [base-source v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=60.42
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=8.84 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=10.22 block=latest]
+== lat.level0.direct.fwd.01 [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=21.33
+      isAllowed(h,C) -> True   [rpc_ms=3.16 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=2.23 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.59 block=latest]
+== lat.level0.delegated.fwd.01 [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=16.31
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.49 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=3.00 block=latest]
+== lat.level0.v2-direct.fwd.01 [level0 v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=34.69
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=5.00 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=4.95 block=latest]
+== lat.level0.v2-delegated.fwd.01 [level0 v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=20.12
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.69 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=2.23 block=latest]
+== lat.base-bindings.direct.fwd.02 [base-bindings direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=14.38
+      isAllowed(h,C) -> True   [rpc_ms=4.91 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=7.53 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=4.49 block=latest]
+== lat.base-bindings.delegated.fwd.02 [base-bindings delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=34.79
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.93 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=7.56 block=latest]
+== lat.base-bindings.v2-direct.fwd.02 [base-bindings v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=19.17
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=2.24 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=1.46 block=latest]
+== lat.base-bindings.v2-delegated.fwd.02 [base-bindings v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=20.98
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.21 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=5.77 block=latest]
+== lat.base-source.direct.fwd.02 [base-source direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=15.59
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.43 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=3.30 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.16 block=latest]
+== lat.base-source.delegated.fwd.02 [base-source delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=24.79
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=7.18 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=9.06 block=latest]
+== lat.base-source.v2-direct.fwd.02 [base-source v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=33.36
+      isAllowed(h,Uk) -> True   [rpc_ms=1.23 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=5.14 block=latest]
+== lat.base-source.v2-delegated.fwd.02 [base-source v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=34.46
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=7.51 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=11.68 block=latest]
+== lat.level0.direct.fwd.02 [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=26.29
+      isAllowed(h,U) -> True   [rpc_ms=3.11 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.86 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=6.69 block=latest]
+== lat.level0.delegated.fwd.02 [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=18.74
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.32 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=6.05 block=latest]
+== lat.level0.v2-direct.fwd.02 [level0 v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=49.87
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=2.95 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=5.81 block=latest]
+== lat.level0.v2-delegated.fwd.02 [level0 v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=46.58
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=18.71 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=17.80 block=latest]
+== lat.base-bindings.direct.fwd.03 [base-bindings direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=35.71
+      isAllowed(h,U) -> True   [rpc_ms=13.60 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=12.00 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=6.32 block=latest]
+== lat.base-bindings.delegated.fwd.03 [base-bindings delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=29.13
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.80 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=1.95 block=latest]
+== lat.base-bindings.v2-direct.fwd.03 [base-bindings v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=20.84
+      isAllowed(h,Uk) -> True   [rpc_ms=3.23 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=2.59 block=latest]
+== lat.base-bindings.v2-delegated.fwd.03 [base-bindings v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=30.24
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=1.40 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.77 block=latest]
+== lat.base-source.direct.fwd.03 [base-source direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=31.34
+      isAllowed(h,C) -> True   [rpc_ms=9.05 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=15.95 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=18.97 block=latest]
+== lat.base-source.delegated.fwd.03 [base-source delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=56.34
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=10.42 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=12.77 block=latest]
+== lat.base-source.v2-direct.fwd.03 [base-source v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=97.49
+      isAllowed(h,Uk) -> True   [rpc_ms=40.93 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=46.26 block=latest]
+== lat.base-source.v2-delegated.fwd.03 [base-source v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=284.86
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.46 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=62.83 block=latest]
+== lat.level0.direct.fwd.03 [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=23.17
+      isAllowed(h,U) -> True   [rpc_ms=7.68 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.91 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=11.99 block=latest]
+== lat.level0.delegated.fwd.03 [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=14.02
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=2.08 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=5.32 block=latest]
+== lat.level0.v2-direct.fwd.03 [level0 v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=35.95
+      isAllowed(h,Uk) -> True   [rpc_ms=1.61 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=4.95 block=latest]
+== lat.level0.v2-delegated.fwd.03 [level0 v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=20.98
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.24 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=3.31 block=latest]
+== lat.base-bindings.direct.fwd.04 [base-bindings direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=17.25
+      isAllowed(h,C) -> True   [rpc_ms=2.57 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.76 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=4.74 block=latest]
+== lat.base-bindings.delegated.fwd.04 [base-bindings delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=14.01
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.49 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=3.86 block=latest]
+== lat.base-bindings.v2-direct.fwd.04 [base-bindings v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=19.40
+      isAllowed(h,Uk) -> True   [rpc_ms=3.31 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=4.76 block=latest]
+== lat.base-bindings.v2-delegated.fwd.04 [base-bindings v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=43.91
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=3.27 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=9.25 block=latest]
+== lat.base-source.direct.fwd.04 [base-source direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=21.67
+      isAllowed(h,C) -> True   [rpc_ms=2.17 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=2.87 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.52 block=latest]
+== lat.base-source.delegated.fwd.04 [base-source delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=119.37
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=30.91 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=22.81 block=latest]
+== lat.base-source.v2-direct.fwd.04 [base-source v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=64.70
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=7.92 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=4.87 block=latest]
+== lat.base-source.v2-delegated.fwd.04 [base-source v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=71.14
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=6.59 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=41.38 block=latest]
+== lat.level0.direct.fwd.04 [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=36.50
+      isAllowed(h,C) -> True   [rpc_ms=3.06 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=20.73 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=16.25 block=latest]
+== lat.level0.delegated.fwd.04 [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=33.19
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.98 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=12.04 block=latest]
+== lat.level0.v2-direct.fwd.04 [level0 v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=49.73
+      isAllowed(h,Uk) -> True   [rpc_ms=22.52 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=28.65 block=latest]
+== lat.level0.v2-delegated.fwd.04 [level0 v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=33.21
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=12.61 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=14.99 block=latest]
+== lat.base-bindings.direct.fwd.05 [base-bindings direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=19.06
+      isAllowed(h,U) -> True   [rpc_ms=5.73 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=6.94 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=5.72 block=latest]
+== lat.base-bindings.delegated.fwd.05 [base-bindings delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=14.97
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.08 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=2.34 block=latest]
+== lat.base-source.direct.fwd.05 [base-source direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=18.56
+      isAllowed(h,U) -> True   [rpc_ms=3.57 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=5.21 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.60 block=latest]
+== lat.base-source.delegated.fwd.05 [base-source delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=30.30
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=8.72 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=17.98 block=latest]
+== lat.level0.direct.fwd.05 [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=14.28
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.20 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=2.48 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.95 block=latest]
+== lat.level0.delegated.fwd.05 [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=27.04
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.68 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=6.11 block=latest]
+== lat.base-bindings.direct.fwd.06 [base-bindings direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=14.81
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.19 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.82 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=4.45 block=latest]
+== lat.base-bindings.delegated.fwd.06 [base-bindings delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=25.24
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=2.79 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.85 block=latest]
+== lat.base-source.direct.fwd.06 [base-source direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=17.93
+      isAllowed(h,U) -> True   [rpc_ms=1.93 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=6.37 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.65 block=latest]
+== lat.base-source.delegated.fwd.06 [base-source delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=13.96
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=1.66 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.70 block=latest]
+== lat.level0.direct.fwd.06 [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=77.43
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=12.75 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=1.47 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=5.83 block=latest]
+== lat.level0.delegated.fwd.06 [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=24.70
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=4.34 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=5.66 block=latest]
+== lat.base-bindings.direct.fwd.07 [base-bindings direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=35.60
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.19 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=3.26 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.46 block=latest]
+== lat.base-bindings.delegated.fwd.07 [base-bindings delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=25.05
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.83 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=4.91 block=latest]
+== lat.base-source.direct.fwd.07 [base-source direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=28.41
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.71 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=3.86 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=10.99 block=latest]
+== lat.base-source.delegated.fwd.07 [base-source delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=16.63
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.81 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=2.57 block=latest]
+== lat.level0.direct.fwd.07 [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=17.30
+      isAllowed(h,U) -> True   [rpc_ms=4.86 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.74 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.96 block=latest]
+== lat.level0.delegated.fwd.07 [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=15.76
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=2.03 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=4.55 block=latest]
+== lat.base-bindings.direct.fwd.08 [base-bindings direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=23.67
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.86 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.05 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=4.53 block=latest]
+== lat.base-bindings.delegated.fwd.08 [base-bindings delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=14.53
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.66 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=3.30 block=latest]
+== lat.base-source.direct.fwd.08 [base-source direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=42.01
+      isAllowed(h,C) -> True   [rpc_ms=9.67 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=5.99 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=5.03 block=latest]
+== lat.base-source.delegated.fwd.08 [base-source delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=23.82
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.12 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=4.41 block=latest]
+== lat.level0.direct.fwd.08 [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=37.15
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=5.92 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.70 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=7.09 block=latest]
+== lat.level0.delegated.fwd.08 [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=17.97
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=5.10 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=8.43 block=latest]
+== lat.base-bindings.direct.fwd.09 [base-bindings direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=21.28
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=1.74 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=9.73 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=4.95 block=latest]
+== lat.base-bindings.delegated.fwd.09 [base-bindings delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=12.72
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.02 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=5.73 block=latest]
+== lat.base-source.direct.fwd.09 [base-source direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=33.70
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=7.19 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=14.22 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=9.91 block=latest]
+== lat.base-source.delegated.fwd.09 [base-source delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=17.11
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=3.89 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.82 block=latest]
+== lat.level0.direct.fwd.09 [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=39.89
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=5.60 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=6.72 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.79 block=latest]
+== lat.level0.delegated.fwd.09 [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=22.94
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=2.53 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.74 block=latest]
+== lat.base-bindings.direct.rej-noallow.00 [base-bindings direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=137.86
+      isAllowed(h,C) -> True   [rpc_ms=1.87 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.60 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=4.69 block=latest]
+   attempt 2 outcome=fail check_ms=39.68
+      isAllowed(h,V) -> False   [rpc_ms=1.41 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=11.51 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=9.49 block=latest]
+   attempt 3 outcome=fail check_ms=116.82
+      isAllowed(h,C) -> True   [rpc_ms=96.87 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=98.05 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=102.77 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.delegated.rej-noallow.00 [base-bindings delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=29.30
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.73 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.56 block=latest]
+   attempt 2 outcome=fail check_ms=16.18
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.40 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=3.60 block=latest]
+   attempt 3 outcome=fail check_ms=12.30
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.57 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=6.37 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.v2-direct.rej-noallow.00 [base-bindings v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=20.13
+      isAllowed(h,Vk) -> False   [rpc_ms=3.03 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=6.22 block=latest]
+   attempt 2 outcome=fail check_ms=65.08
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=43.73 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=2.38 block=latest]
+   attempt 3 outcome=fail check_ms=22.80
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=3.06 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=3.71 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-delegated.rej-noallow.00 [base-bindings v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=133.57
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.86 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=7.30 block=latest]
+   attempt 2 outcome=fail check_ms=50.99
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=5.20 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.71 block=latest]
+   attempt 3 outcome=fail check_ms=40.73
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=3.84 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=8.87 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-source.direct.rej-noallow.00 [base-source direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=47.71
+      isAllowed(h,C) -> True   [rpc_ms=4.38 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=9.23 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=16.13 block=latest]
+   attempt 2 outcome=fail check_ms=28.43
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.15 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=7.14 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=5.35 block=latest]
+   attempt 3 outcome=fail check_ms=50.75
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=9.06 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=17.11 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=18.81 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-source.delegated.rej-noallow.00 [base-source delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=8.32
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.16 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=4.91 block=latest]
+   attempt 2 outcome=fail check_ms=10.71
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.87 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.19 block=latest]
+   attempt 3 outcome=fail check_ms=19.04
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=9.97 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=8.88 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0xdF9647241201e4ff21E5807b1274eF8dC1678655 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-source.v2-direct.rej-noallow.00 [base-source v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=38.89
+      isAllowed(h,Vk) -> False   [rpc_ms=4.99 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=5.78 block=latest]
+   attempt 2 outcome=fail check_ms=24.58
+      isAllowed(h,Vk) -> False   [rpc_ms=2.04 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=14.54 block=latest]
+   attempt 3 outcome=fail check_ms=272.55
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=3.00 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=104.14 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-source.v2-delegated.rej-noallow.00 [base-source v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=38.92
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.50 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=10.68 block=latest]
+   attempt 2 outcome=fail check_ms=17.71
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.07 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=1.99 block=latest]
+   attempt 3 outcome=fail check_ms=31.02
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.03 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=2.23 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0xdF9647241201e4ff21E5807b1274eF8dC1678655 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.direct.rej-noallow.00 [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=24.96
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.22 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=2.24 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.00 block=latest]
+   attempt 2 outcome=fail check_ms=15.39
+      isAllowed(h,V) -> False   [rpc_ms=3.14 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.08 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=2.67 block=latest]
+   attempt 3 outcome=fail check_ms=12.59
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=4.02 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.66 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=3.90 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.delegated.rej-noallow.00 [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=37.77
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.42 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.37 block=latest]
+   attempt 2 outcome=fail check_ms=8.19
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=3.30 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.50 block=latest]
+   attempt 3 outcome=fail check_ms=18.92
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.53 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=3.25 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.v2-direct.rej-noallow.00 [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=20.09
+      isAllowed(h,Vk) -> False   [rpc_ms=2.39 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=4.45 block=latest]
+   attempt 2 outcome=fail check_ms=18.04
+      isAllowed(h,Vk) -> False   [rpc_ms=5.35 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=6.99 block=latest]
+   attempt 3 outcome=fail check_ms=155.30
+      isAllowed(h,Vk) -> False   [rpc_ms=112.68 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=38.54 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.v2-delegated.rej-noallow.00 [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=31.38
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.01 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=2.16 block=latest]
+   attempt 2 outcome=fail check_ms=29.18
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.91 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=10.29 block=latest]
+   attempt 3 outcome=fail check_ms=68.85
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.97 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=15.67 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.direct.rej-noallow.01 [base-bindings direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=23.79
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=6.70 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=9.55 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.63 block=latest]
+   attempt 2 outcome=fail check_ms=23.25
+      isAllowed(h,V) -> False   [rpc_ms=1.12 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.04 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.46 block=latest]
+   attempt 3 outcome=fail check_ms=64.02
+      isAllowed(h,V) -> False   [rpc_ms=12.05 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=39.42 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=12.87 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.delegated.rej-noallow.01 [base-bindings delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=17.93
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=3.39 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=7.12 block=latest]
+   attempt 2 outcome=fail check_ms=24.35
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.35 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.69 block=latest]
+   attempt 3 outcome=fail check_ms=48.51
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.89 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.40 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.v2-direct.rej-noallow.01 [base-bindings v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=23.41
+      isAllowed(h,Vk) -> False   [rpc_ms=1.40 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=2.33 block=latest]
+   attempt 2 outcome=fail check_ms=18.83
+      isAllowed(h,Vk) -> False   [rpc_ms=1.91 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=4.70 block=latest]
+   attempt 3 outcome=fail check_ms=26.07
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=1.53 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=2.17 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-delegated.rej-noallow.01 [base-bindings v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=26.67
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.82 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=6.46 block=latest]
+   attempt 2 outcome=fail check_ms=23.22
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=2.52 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.76 block=latest]
+   attempt 3 outcome=fail check_ms=19.49
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.62 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=4.57 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-source.direct.rej-noallow.01 [base-source direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=126.02
+      isAllowed(h,V) -> False   [rpc_ms=15.23 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=10.32 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.72 block=latest]
+   attempt 2 outcome=fail check_ms=24.37
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=1.35 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=4.34 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=6.93 block=latest]
+   attempt 3 outcome=fail check_ms=13.76
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.52 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=4.70 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.14 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-source.delegated.rej-noallow.01 [base-source delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=55.26
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=7.52 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=18.92 block=latest]
+   attempt 2 outcome=fail check_ms=47.31
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=6.14 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=9.41 block=latest]
+   attempt 3 outcome=fail check_ms=22.02
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=8.98 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=11.46 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0xdF9647241201e4ff21E5807b1274eF8dC1678655 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-source.v2-direct.rej-noallow.01 [base-source v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=26.35
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=4.32 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=9.01 block=latest]
+   attempt 2 outcome=fail check_ms=21.84
+      isAllowed(h,Vk) -> False   [rpc_ms=5.56 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=6.79 block=latest]
+   attempt 3 outcome=fail check_ms=18.75
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=2.32 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=2.12 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-source.v2-delegated.rej-noallow.01 [base-source v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=21.94
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=6.16 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=8.46 block=latest]
+   attempt 2 outcome=fail check_ms=21.03
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=10.94 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=10.57 block=latest]
+   attempt 3 outcome=fail check_ms=18.19
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.92 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=2.55 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0xdF9647241201e4ff21E5807b1274eF8dC1678655 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.direct.rej-noallow.01 [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=23.64
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=2.12 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.60 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=3.39 block=latest]
+   attempt 2 outcome=fail check_ms=28.81
+      isAllowed(h,C) -> True   [rpc_ms=6.97 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=13.77 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=14.11 block=latest]
+   attempt 3 outcome=fail check_ms=13.15
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.27 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.95 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=7.19 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.delegated.rej-noallow.01 [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=13.64
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.32 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.50 block=latest]
+   attempt 2 outcome=fail check_ms=46.92
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.99 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.80 block=latest]
+   attempt 3 outcome=fail check_ms=30.92
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.38 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.27 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.v2-direct.rej-noallow.01 [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=29.58
+      isAllowed(h,Vk) -> False   [rpc_ms=9.66 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=15.34 block=latest]
+   attempt 2 outcome=fail check_ms=22.05
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=4.05 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=3.17 block=latest]
+   attempt 3 outcome=fail check_ms=56.69
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=10.37 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=21.00 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.v2-delegated.rej-noallow.01 [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=29.45
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=1.34 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.37 block=latest]
+   attempt 2 outcome=fail check_ms=53.54
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=2.41 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.37 block=latest]
+   attempt 3 outcome=fail check_ms=18.31
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.34 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=1.84 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.direct.rej-noallow.02 [base-bindings direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=37.74
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=10.12 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=13.69 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=16.40 block=latest]
+   attempt 2 outcome=fail check_ms=11.17
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=1.95 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.03 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=4.01 block=latest]
+   attempt 3 outcome=fail check_ms=18.87
+      isAllowed(h,C) -> True   [rpc_ms=4.48 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=8.57 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=5.61 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.delegated.rej-noallow.02 [base-bindings delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=17.25
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.95 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=6.19 block=latest]
+   attempt 2 outcome=fail check_ms=44.42
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.52 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=17.12 block=latest]
+   attempt 3 outcome=fail check_ms=28.99
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=12.86 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=9.67 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.v2-direct.rej-noallow.02 [base-bindings v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=40.50
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=8.03 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=12.21 block=latest]
+   attempt 2 outcome=fail check_ms=36.42
+      isAllowed(h,Vk) -> False   [rpc_ms=4.68 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=6.06 block=latest]
+   attempt 3 outcome=fail check_ms=22.05
+      isAllowed(h,Vk) -> False   [rpc_ms=8.77 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=10.29 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-delegated.rej-noallow.02 [base-bindings v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=377.73
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=41.39 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=58.97 block=latest]
+   attempt 2 outcome=fail check_ms=24.13
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=4.82 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=8.14 block=latest]
+   attempt 3 outcome=fail check_ms=40.93
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=4.61 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=21.74 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-source.direct.rej-noallow.02 [base-source direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=19.23
+      isAllowed(h,C) -> True   [rpc_ms=1.63 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.90 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=9.89 block=latest]
+   attempt 2 outcome=fail check_ms=11.90
+      isAllowed(h,C) -> True   [rpc_ms=1.31 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.10 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=1.90 block=latest]
+   attempt 3 outcome=fail check_ms=125.80
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=9.44 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.95 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=4.94 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-source.delegated.rej-noallow.02 [base-source delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=15.76
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.51 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=3.02 block=latest]
+   attempt 2 outcome=fail check_ms=47.60
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.83 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.81 block=latest]
+   attempt 3 outcome=fail check_ms=11.59
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.37 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.18 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0xdF9647241201e4ff21E5807b1274eF8dC1678655 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-source.v2-direct.rej-noallow.02 [base-source v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=17.49
+      isAllowed(h,Vk) -> False   [rpc_ms=1.72 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=2.03 block=latest]
+   attempt 2 outcome=fail check_ms=20.72
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=2.25 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=3.88 block=latest]
+   attempt 3 outcome=fail check_ms=20.86
+      isAllowed(h,Vk) -> False   [rpc_ms=1.44 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=12.21 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-source.v2-delegated.rej-noallow.02 [base-source v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=63.99
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=23.37 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=1.72 block=latest]
+   attempt 2 outcome=fail check_ms=61.04
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.04 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=20.48 block=latest]
+   attempt 3 outcome=fail check_ms=23.33
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=3.21 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.17 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0xdF9647241201e4ff21E5807b1274eF8dC1678655 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.direct.rej-noallow.02 [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=36.59
+      isAllowed(h,V) -> False   [rpc_ms=4.61 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.51 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=6.78 block=latest]
+   attempt 2 outcome=fail check_ms=12.42
+      isAllowed(h,C) -> True   [rpc_ms=1.71 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=2.54 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.42 block=latest]
+   attempt 3 outcome=fail check_ms=20.44
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=5.03 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=5.67 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=6.66 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.delegated.rej-noallow.02 [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=18.88
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=7.67 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=5.20 block=latest]
+   attempt 2 outcome=fail check_ms=14.04
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=4.89 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=4.12 block=latest]
+   attempt 3 outcome=fail check_ms=18.29
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.19 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.86 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.v2-direct.rej-noallow.02 [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=24.51
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=6.81 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=3.98 block=latest]
+   attempt 2 outcome=fail check_ms=23.64
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=4.94 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=3.32 block=latest]
+   attempt 3 outcome=fail check_ms=24.24
+      isAllowed(h,Vk) -> False   [rpc_ms=5.87 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=5.16 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.v2-delegated.rej-noallow.02 [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=23.50
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.05 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=2.07 block=latest]
+   attempt 2 outcome=fail check_ms=67.36
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=6.18 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=5.93 block=latest]
+   attempt 3 outcome=fail check_ms=25.57
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=1.80 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=6.01 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.direct.rej-noallow.03 [base-bindings direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=62.61
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=5.08 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=6.48 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=18.60 block=latest]
+   attempt 2 outcome=fail check_ms=324.48
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=122.24 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=58.15 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=104.77 block=latest]
+   attempt 3 outcome=fail check_ms=33.26
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=7.97 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=8.49 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=10.28 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.delegated.rej-noallow.03 [base-bindings delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=33.79
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=6.12 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=6.07 block=latest]
+   attempt 2 outcome=fail check_ms=12.38
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.41 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=4.01 block=latest]
+   attempt 3 outcome=fail check_ms=43.13
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=14.01 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=28.27 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.v2-direct.rej-noallow.03 [base-bindings v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=90.75
+      isAllowed(h,Vk) -> False   [rpc_ms=4.65 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=5.43 block=latest]
+   attempt 2 outcome=fail check_ms=23.63
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=3.20 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=2.87 block=latest]
+   attempt 3 outcome=fail check_ms=29.94
+      isAllowed(h,Vk) -> False   [rpc_ms=6.42 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=11.73 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-delegated.rej-noallow.03 [base-bindings v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=21.45
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.71 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=4.68 block=latest]
+   attempt 2 outcome=fail check_ms=13.00
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.25 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=3.23 block=latest]
+   attempt 3 outcome=fail check_ms=20.83
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.77 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=4.12 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-source.direct.rej-noallow.03 [base-source direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=18.49
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=4.03 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.46 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=4.64 block=latest]
+   attempt 2 outcome=fail check_ms=50.99
+      isAllowed(h,V) -> False   [rpc_ms=1.57 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.16 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=1.99 block=latest]
+   attempt 3 outcome=fail check_ms=15.70
+      isAllowed(h,C) -> True   [rpc_ms=3.46 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=3.45 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=6.55 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-source.delegated.rej-noallow.03 [base-source delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=18.35
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=6.68 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=7.13 block=latest]
+   attempt 2 outcome=fail check_ms=25.49
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.78 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=4.05 block=latest]
+   attempt 3 outcome=fail check_ms=13.24
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.36 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=4.34 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0xdF9647241201e4ff21E5807b1274eF8dC1678655 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-source.v2-direct.rej-noallow.03 [base-source v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=25.53
+      isAllowed(h,Vk) -> False   [rpc_ms=2.37 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=7.05 block=latest]
+   attempt 2 outcome=fail check_ms=47.56
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=17.44 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=20.50 block=latest]
+   attempt 3 outcome=fail check_ms=58.53
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=3.49 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=2.96 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-source.v2-delegated.rej-noallow.03 [base-source v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=30.36
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.09 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=6.41 block=latest]
+   attempt 2 outcome=fail check_ms=27.75
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=5.13 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=11.68 block=latest]
+   attempt 3 outcome=fail check_ms=19.83
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=1.08 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.64 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0xdF9647241201e4ff21E5807b1274eF8dC1678655 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.direct.rej-noallow.03 [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=31.21
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=1.33 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=0.92 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.31 block=latest]
+   attempt 2 outcome=fail check_ms=51.44
+      isAllowed(h,V) -> False   [rpc_ms=11.90 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=39.14 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=100.14 block=latest]
+   attempt 3 outcome=fail check_ms=57.42
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=16.27 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=13.50 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=9.89 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.delegated.rej-noallow.03 [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=208.98
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=4.98 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=6.64 block=latest]
+   attempt 2 outcome=fail check_ms=23.49
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.50 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=9.19 block=latest]
+   attempt 3 outcome=fail check_ms=14.75
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=3.97 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=8.63 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.v2-direct.rej-noallow.03 [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=40.49
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=3.15 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=2.67 block=latest]
+   attempt 2 outcome=fail check_ms=24.71
+      isAllowed(h,Vk) -> False   [rpc_ms=4.48 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=9.77 block=latest]
+   attempt 3 outcome=fail check_ms=27.60
+      isAllowed(h,Vk) -> False   [rpc_ms=2.15 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=4.91 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.v2-delegated.rej-noallow.03 [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=23.62
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.89 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=1.39 block=latest]
+   attempt 2 outcome=fail check_ms=28.83
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=7.02 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=15.72 block=latest]
+   attempt 3 outcome=fail check_ms=25.12
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.74 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=5.19 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.direct.rej-noallow.04 [base-bindings direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=127.99
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=1.53 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=1.63 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=20.85 block=latest]
+   attempt 2 outcome=fail check_ms=19.31
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.27 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.77 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=10.36 block=latest]
+   attempt 3 outcome=fail check_ms=17.39
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=4.29 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=6.82 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=10.32 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.delegated.rej-noallow.04 [base-bindings delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=59.31
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=9.19 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=48.36 block=latest]
+   attempt 2 outcome=fail check_ms=103.84
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=6.22 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=4.13 block=latest]
+   attempt 3 outcome=fail check_ms=10.95
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.39 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=7.87 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.v2-direct.rej-noallow.04 [base-bindings v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=20.01
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=4.47 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=3.47 block=latest]
+   attempt 2 outcome=fail check_ms=17.87
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=2.86 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=3.47 block=latest]
+   attempt 3 outcome=fail check_ms=17.64
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=1.49 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=2.05 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-delegated.rej-noallow.04 [base-bindings v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=26.63
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=12.34 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.61 block=latest]
+   attempt 2 outcome=fail check_ms=19.96
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.70 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=4.20 block=latest]
+   attempt 3 outcome=fail check_ms=19.04
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.93 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=1.79 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-source.direct.rej-noallow.04 [base-source direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=20.38
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=6.56 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=5.00 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=10.07 block=latest]
+   attempt 2 outcome=fail check_ms=11.28
+      isAllowed(h,V) -> False   [rpc_ms=3.09 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=4.25 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.99 block=latest]
+   attempt 3 outcome=fail check_ms=13.00
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.99 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.05 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=3.37 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-source.delegated.rej-noallow.04 [base-source delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=12.01
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.65 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=6.12 block=latest]
+   attempt 2 outcome=fail check_ms=14.81
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.27 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=3.01 block=latest]
+   attempt 3 outcome=fail check_ms=16.83
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.37 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.77 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0xdF9647241201e4ff21E5807b1274eF8dC1678655 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-source.v2-direct.rej-noallow.04 [base-source v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=21.06
+      isAllowed(h,Vk) -> False   [rpc_ms=2.96 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=4.51 block=latest]
+   attempt 2 outcome=fail check_ms=49.77
+      isAllowed(h,Vk) -> False   [rpc_ms=1.79 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=1.62 block=latest]
+   attempt 3 outcome=fail check_ms=45.86
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=11.14 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=6.47 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-source.v2-delegated.rej-noallow.04 [base-source v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=26.07
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.05 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=2.72 block=latest]
+   attempt 2 outcome=fail check_ms=21.03
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.29 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=5.36 block=latest]
+   attempt 3 outcome=fail check_ms=23.74
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.56 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=3.12 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0xdF9647241201e4ff21E5807b1274eF8dC1678655 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.direct.rej-noallow.04 [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=18.64
+      isAllowed(h,V) -> False   [rpc_ms=3.24 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=4.97 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.74 block=latest]
+   attempt 2 outcome=fail check_ms=15.52
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=2.33 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=1.15 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.13 block=latest]
+   attempt 3 outcome=fail check_ms=13.86
+      isAllowed(h,C) -> True   [rpc_ms=1.96 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=2.27 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.76 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.delegated.rej-noallow.04 [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=17.62
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=4.05 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.23 block=latest]
+   attempt 2 outcome=fail check_ms=14.07
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=4.79 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=11.35 block=latest]
+   attempt 3 outcome=fail check_ms=19.30
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=5.82 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.72 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.v2-direct.rej-noallow.04 [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=26.22
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=3.10 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=4.39 block=latest]
+   attempt 2 outcome=fail check_ms=19.78
+      isAllowed(h,Vk) -> False   [rpc_ms=3.22 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=3.40 block=latest]
+   attempt 3 outcome=fail check_ms=18.77
+      isAllowed(h,Vk) -> False   [rpc_ms=3.69 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=4.84 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.v2-delegated.rej-noallow.04 [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=18.26
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.26 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=2.77 block=latest]
+   attempt 2 outcome=fail check_ms=53.53
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.82 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=3.46 block=latest]
+   attempt 3 outcome=fail check_ms=129.25
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=10.48 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=17.47 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.direct.rej-retired.00 [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,U) verified=3/3
+   attempt 1 outcome=fail check_ms=26.95
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=1.79 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=3.12 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.10 block=latest]
+   attempt 2 outcome=fail check_ms=13.34
+      isAllowed(h,U) -> False   [rpc_ms=5.24 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=7.20 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=6.97 block=latest]
+   attempt 3 outcome=fail check_ms=13.88
+      isAllowed(h,C) -> True   [rpc_ms=1.82 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.01 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=3.92 block=latest]
+   connector: 0x779E69966364a377dE66F9f96ad65D1e12494447 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.direct.rej-noallow-c.00 [base-bindings direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=18.04
+      isAllowed(h,C) -> True   [rpc_ms=2.34 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=5.62 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=4.51 block=latest]
+   attempt 2 outcome=fail check_ms=20.32
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=8.73 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=8.26 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.64 block=latest]
+   attempt 3 outcome=fail check_ms=20.25
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.75 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=11.31 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=10.78 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.delegated.rej-retired.00 [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=22.66
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=4.46 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=13.22 block=latest]
+   attempt 2 outcome=fail check_ms=30.07
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=1.57 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.48 block=latest]
+   attempt 3 outcome=fail check_ms=21.07
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=4.23 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=5.54 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.delegated.rej-noallow-c.00 [base-bindings delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=38.20
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.77 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.79 block=latest]
+   attempt 2 outcome=fail check_ms=22.71
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.01 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=5.75 block=latest]
+   attempt 3 outcome=fail check_ms=12.88
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.28 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=4.35 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.v2-direct.rej-retired.00 [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Uk) verified=3/3
+   attempt 1 outcome=fail check_ms=20.28
+      isAllowed(h,Uk) -> False   [rpc_ms=1.76 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=8.13 block=latest]
+   attempt 2 outcome=fail check_ms=60.36
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=7.44 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=11.90 block=latest]
+   attempt 3 outcome=fail check_ms=29.15
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=2.74 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=8.15 block=latest]
+   connector: 0x8918Da7DF51E136293e286195D03cEF98ca7f7E0 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-direct.rej-noallow-c.00 [base-bindings v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=24.89
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=1.81 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=2.70 block=latest]
+   attempt 2 outcome=fail check_ms=19.46
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=6.37 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=4.33 block=latest]
+   attempt 3 outcome=fail check_ms=17.24
+      isAllowed(h,Vk) -> False   [rpc_ms=2.43 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=2.15 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.v2-delegated.rej-retired.00 [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=19.68
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=2.07 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.23 block=latest]
+   attempt 2 outcome=fail check_ms=59.13
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.72 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=5.59 block=latest]
+   attempt 3 outcome=fail check_ms=18.48
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=1.49 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.80 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-delegated.rej-noallow-c.00 [base-bindings v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=65.72
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.16 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=3.26 block=latest]
+   attempt 2 outcome=fail check_ms=24.29
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.05 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=5.00 block=latest]
+   attempt 3 outcome=fail check_ms=21.19
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.15 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=5.44 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.direct.rej-retired.01 [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,U) verified=3/3
+   attempt 1 outcome=fail check_ms=35.78
+      isAllowed(h,C) -> True   [rpc_ms=6.41 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=9.54 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=5.63 block=latest]
+   attempt 2 outcome=fail check_ms=20.19
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.43 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=6.45 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=5.67 block=latest]
+   attempt 3 outcome=fail check_ms=18.32
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.44 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=5.46 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=5.87 block=latest]
+   connector: 0x779E69966364a377dE66F9f96ad65D1e12494447 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.direct.rej-noallow-c.01 [base-bindings direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=20.99
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=2.70 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=5.29 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=13.74 block=latest]
+   attempt 2 outcome=fail check_ms=13.36
+      isAllowed(h,V) -> False   [rpc_ms=1.99 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.83 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=4.58 block=latest]
+   attempt 3 outcome=fail check_ms=31.25
+      isAllowed(h,C) -> True   [rpc_ms=1.78 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=1.33 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=8.27 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.delegated.rej-retired.01 [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=15.54
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=1.79 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=1.71 block=latest]
+   attempt 2 outcome=fail check_ms=11.49
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=5.03 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=4.98 block=latest]
+   attempt 3 outcome=fail check_ms=12.03
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=3.02 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=7.20 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.delegated.rej-noallow-c.01 [base-bindings delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=16.81
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.67 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=4.72 block=latest]
+   attempt 2 outcome=fail check_ms=11.82
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.67 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.80 block=latest]
+   attempt 3 outcome=fail check_ms=16.89
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=5.17 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=7.27 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.v2-direct.rej-retired.01 [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Uk) verified=3/3
+   attempt 1 outcome=fail check_ms=18.22
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=1.69 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=2.48 block=latest]
+   attempt 2 outcome=fail check_ms=22.76
+      isAllowed(h,Uk) -> False   [rpc_ms=3.34 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=7.11 block=latest]
+   attempt 3 outcome=fail check_ms=20.49
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=3.37 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=3.47 block=latest]
+   connector: 0x8918Da7DF51E136293e286195D03cEF98ca7f7E0 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-direct.rej-noallow-c.01 [base-bindings v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=44.47
+      isAllowed(h,Vk) -> False   [rpc_ms=4.05 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=5.96 block=latest]
+   attempt 2 outcome=fail check_ms=41.32
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=8.03 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=8.11 block=latest]
+   attempt 3 outcome=fail check_ms=47.57
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=7.11 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=12.82 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.v2-delegated.rej-retired.01 [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=24.45
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=3.16 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.90 block=latest]
+   attempt 2 outcome=fail check_ms=48.69
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=2.17 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=19.27 block=latest]
+   attempt 3 outcome=fail check_ms=23.69
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.59 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=2.92 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-delegated.rej-noallow-c.01 [base-bindings v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=20.69
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=3.35 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.23 block=latest]
+   attempt 2 outcome=fail check_ms=22.92
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=1.54 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.57 block=latest]
+   attempt 3 outcome=fail check_ms=41.26
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=10.12 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=10.81 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.direct.rej-retired.02 [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,U) verified=3/3
+   attempt 1 outcome=fail check_ms=17.79
+      isAllowed(h,C) -> True   [rpc_ms=4.30 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=5.27 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=2.19 block=latest]
+   attempt 2 outcome=fail check_ms=11.51
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=1.50 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=1.00 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=1.32 block=latest]
+   attempt 3 outcome=fail check_ms=27.97
+      isAllowed(h,U) -> False   [rpc_ms=1.38 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.32 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=6.73 block=latest]
+   connector: 0x779E69966364a377dE66F9f96ad65D1e12494447 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.direct.rej-noallow-c.02 [base-bindings direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=19.71
+      isAllowed(h,C) -> True   [rpc_ms=3.30 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=4.85 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=4.85 block=latest]
+   attempt 2 outcome=fail check_ms=48.55
+      isAllowed(h,C) -> True   [rpc_ms=1.32 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=1.89 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=3.33 block=latest]
+   attempt 3 outcome=fail check_ms=31.36
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=4.19 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=6.81 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.30 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.delegated.rej-retired.02 [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=13.99
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=5.37 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=5.00 block=latest]
+   attempt 2 outcome=fail check_ms=11.86
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=2.95 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.32 block=latest]
+   attempt 3 outcome=fail check_ms=13.79
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=5.31 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=4.38 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.delegated.rej-noallow-c.02 [base-bindings delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=16.59
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=4.76 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=9.28 block=latest]
+   attempt 2 outcome=fail check_ms=15.03
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.29 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=7.44 block=latest]
+   attempt 3 outcome=fail check_ms=11.06
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.63 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=4.33 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.v2-direct.rej-retired.02 [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Uk) verified=3/3
+   attempt 1 outcome=fail check_ms=47.66
+      isAllowed(h,Uk) -> False   [rpc_ms=19.41 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=19.83 block=latest]
+   attempt 2 outcome=fail check_ms=37.01
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=1.84 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=16.79 block=latest]
+   attempt 3 outcome=fail check_ms=28.54
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=3.62 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=8.62 block=latest]
+   connector: 0x8918Da7DF51E136293e286195D03cEF98ca7f7E0 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-direct.rej-noallow-c.02 [base-bindings v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=20.67
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=5.40 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=7.13 block=latest]
+   attempt 2 outcome=fail check_ms=53.86
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=1.80 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=1.41 block=latest]
+   attempt 3 outcome=fail check_ms=25.55
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=10.47 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=10.04 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.v2-delegated.rej-retired.02 [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=31.82
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.24 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=15.35 block=latest]
+   attempt 2 outcome=fail check_ms=28.32
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=2.09 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.96 block=latest]
+   attempt 3 outcome=fail check_ms=19.45
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=2.57 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.36 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-delegated.rej-noallow-c.02 [base-bindings v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=71.56
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=12.28 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=10.91 block=latest]
+   attempt 2 outcome=fail check_ms=21.51
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=2.62 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.21 block=latest]
+   attempt 3 outcome=fail check_ms=30.01
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=9.12 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=13.79 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.direct.rej-retired.03 [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,U) verified=3/3
+   attempt 1 outcome=fail check_ms=34.91
+      isAllowed(h,U) -> False   [rpc_ms=9.41 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=10.55 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=15.13 block=latest]
+   attempt 2 outcome=fail check_ms=27.16
+      isAllowed(h,U) -> False   [rpc_ms=5.42 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=7.49 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.88 block=latest]
+   attempt 3 outcome=fail check_ms=13.84
+      isAllowed(h,C) -> True   [rpc_ms=1.66 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=3.52 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.96 block=latest]
+   connector: 0x779E69966364a377dE66F9f96ad65D1e12494447 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.direct.rej-noallow-c.03 [base-bindings direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=19.01
+      isAllowed(h,V) -> False   [rpc_ms=9.24 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=4.78 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=8.25 block=latest]
+   attempt 2 outcome=fail check_ms=50.55
+      isAllowed(h,V) -> False   [rpc_ms=1.41 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=3.56 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.94 block=latest]
+   attempt 3 outcome=fail check_ms=17.56
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=2.14 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=1.77 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.76 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.delegated.rej-retired.03 [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=16.97
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.43 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=2.63 block=latest]
+   attempt 2 outcome=fail check_ms=13.46
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.36 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=3.49 block=latest]
+   attempt 3 outcome=fail check_ms=55.51
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=27.00 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=39.97 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.delegated.rej-noallow-c.03 [base-bindings delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=34.55
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=7.45 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=11.50 block=latest]
+   attempt 2 outcome=fail check_ms=12.81
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=1.94 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=6.05 block=latest]
+   attempt 3 outcome=fail check_ms=17.89
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=10.39 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=9.24 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.v2-direct.rej-retired.03 [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Uk) verified=3/3
+   attempt 1 outcome=fail check_ms=20.57
+      isAllowed(h,Uk) -> False   [rpc_ms=2.36 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=7.42 block=latest]
+   attempt 2 outcome=fail check_ms=24.14
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=2.42 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=3.71 block=latest]
+   attempt 3 outcome=fail check_ms=27.49
+      isAllowed(h,Uk) -> False   [rpc_ms=9.87 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=13.79 block=latest]
+   connector: 0x8918Da7DF51E136293e286195D03cEF98ca7f7E0 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-direct.rej-noallow-c.03 [base-bindings v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=104.60
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=6.15 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=6.14 block=latest]
+   attempt 2 outcome=fail check_ms=27.00
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=8.30 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=7.28 block=latest]
+   attempt 3 outcome=fail check_ms=30.68
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=6.39 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=3.52 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.v2-delegated.rej-retired.03 [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=29.20
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.21 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=5.04 block=latest]
+   attempt 2 outcome=fail check_ms=29.29
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=2.52 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=7.31 block=latest]
+   attempt 3 outcome=fail check_ms=23.87
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.55 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=7.47 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-delegated.rej-noallow-c.03 [base-bindings v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=28.92
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.54 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=3.36 block=latest]
+   attempt 2 outcome=fail check_ms=33.12
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.58 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=16.12 block=latest]
+   attempt 3 outcome=fail check_ms=24.13
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=3.96 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=7.41 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.direct.rej-retired.04 [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,U) verified=3/3
+   attempt 1 outcome=fail check_ms=30.24
+      isAllowed(h,C) -> True   [rpc_ms=6.52 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=8.98 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=7.76 block=latest]
+   attempt 2 outcome=fail check_ms=23.36
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=12.70 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.90 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=15.74 block=latest]
+   attempt 3 outcome=fail check_ms=18.57
+      isAllowed(h,C) -> True   [rpc_ms=4.48 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=6.53 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=6.28 block=latest]
+   connector: 0x779E69966364a377dE66F9f96ad65D1e12494447 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.direct.rej-noallow-c.04 [base-bindings direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,V) verified=3/3
+   attempt 1 outcome=fail check_ms=26.04
+      isAllowed(h,V) -> False   [rpc_ms=6.78 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=11.71 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=8.29 block=latest]
+   attempt 2 outcome=fail check_ms=50.15
+      isAllowed(h,C) -> True   [rpc_ms=24.64 block=latest]
+      isAllowed(h,V) -> False   [rpc_ms=29.84 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=27.44 block=latest]
+   attempt 3 outcome=fail check_ms=13.57
+      isAllowed(h,V) -> False   [rpc_ms=5.60 block=latest]
+      decryptionSignatureInvalidatedBefore(V) -> 0   [rpc_ms=7.82 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=5.65 block=latest]
+   connector: 0x1898C266e36372B890400281d0C8a7A119E188c1 is not allowed to decrypt 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.delegated.rej-retired.04 [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=14.88
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.05 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=4.01 block=latest]
+   attempt 2 outcome=fail check_ms=24.73
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=1.74 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=21.88 block=latest]
+   attempt 3 outcome=fail check_ms=67.86
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=44.17 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=6.58 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.base-bindings.delegated.rej-noallow-c.04 [base-bindings delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=13.02
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=2.88 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.57 block=latest]
+   attempt 2 outcome=fail check_ms=53.05
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.49 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=3.55 block=latest]
+   attempt 3 outcome=fail check_ms=127.30
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=115.75 block=latest]
+      isHandleDelegatedForUserDecryption(V,D,C,h) -> False   [rpc_ms=117.90 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle 0xf2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500!
+== lat.level0.v2-direct.rej-retired.04 [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Uk) verified=3/3
+   attempt 1 outcome=fail check_ms=25.21
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=4.29 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=9.51 block=latest]
+   attempt 2 outcome=fail check_ms=69.06
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=7.65 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=17.33 block=latest]
+   attempt 3 outcome=fail check_ms=21.93
+      isAllowed(h,Uk) -> False   [rpc_ms=2.97 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=3.34 block=latest]
+   connector: 0x8918Da7DF51E136293e286195D03cEF98ca7f7E0 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-direct.rej-noallow-c.04 [base-bindings v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Vk) verified=3/3
+   attempt 1 outcome=fail check_ms=21.92
+      isAllowed(h,Vk) -> False   [rpc_ms=5.04 block=latest]
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=11.59 block=latest]
+   attempt 2 outcome=fail check_ms=47.61
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=16.86 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=1.98 block=latest]
+   attempt 3 outcome=fail check_ms=22.69
+      decryptionSignatureInvalidatedBefore(Vk) -> 0   [rpc_ms=4.12 block=latest]
+      isAllowed(h,Vk) -> False   [rpc_ms=2.22 block=latest]
+   connector: 0x202260Ba56dca7C90AAF4c9ceef1Ca4291D49C56 is not allowed to decrypt f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.level0.v2-delegated.rej-retired.04 [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=30.57
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=2.30 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=6.99 block=latest]
+   attempt 2 outcome=fail check_ms=52.73
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=9.08 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=5.80 block=latest]
+   attempt 3 outcome=fail check_ms=51.23
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=5.73 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=7.80 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x1f78CaCfe52dA5d673a9F933973dB95De55D2879 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== lat.base-bindings.v2-delegated.rej-noallow-c.04 [base-bindings v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(V,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=18.86
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.06 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=4.05 block=latest]
+   attempt 2 outcome=fail check_ms=25.40
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=6.69 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=8.67 block=latest]
+   attempt 3 outcome=fail check_ms=17.17
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.88 block=latest]
+      isHandleDelegatedForUserDecryption(V,Dk,C,h) -> False   [rpc_ms=3.68 block=latest]
+   connector: 0x8379363a49033780b8F36003cD5B05e5C7E6aA54 is not a delegate of 0x1898C266e36372B890400281d0C8a7A119E188c1 for contract 0x35472ba56dE8F3ef227cD1029Ae80119997B1138 and handle f2ff637411763114a3431cc2753f699ae7e750660aff00000000000030390500
+== direct.user-retired.default-config.before [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=18.35
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.31 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=5.70 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.11 block=latest]
+== direct.user-retired.default-config.after [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=20 calls=60 expect_false=isAllowed(h,U) verified=20/20
+   attempt 1 outcome=fail check_ms=16.07
+      isAllowed(h,U) -> False   [rpc_ms=1.66 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.35 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.63 block=latest]
+   attempt 2 outcome=fail check_ms=15.51
+      isAllowed(h,C) -> True   [rpc_ms=2.46 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=1.87 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.98 block=latest]
+   attempt 3 outcome=fail check_ms=19.48
+      isAllowed(h,U) -> False   [rpc_ms=9.05 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=7.80 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=13.38 block=latest]
+   attempt 4 outcome=fail check_ms=13.08
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.35 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=2.32 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=3.11 block=latest]
+   attempt 5 outcome=fail check_ms=21.22
+      isAllowed(h,C) -> True   [rpc_ms=1.28 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=3.36 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.84 block=latest]
+   attempt 6 outcome=fail check_ms=19.03
+      isAllowed(h,U) -> False   [rpc_ms=4.79 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.98 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=6.86 block=latest]
+   attempt 7 outcome=fail check_ms=18.41
+      isAllowed(h,U) -> False   [rpc_ms=4.45 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=8.49 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=7.92 block=latest]
+   attempt 8 outcome=fail check_ms=12.28
+      isAllowed(h,C) -> True   [rpc_ms=2.25 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.16 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=2.48 block=latest]
+   attempt 9 outcome=fail check_ms=12.72
+      isAllowed(h,U) -> False   [rpc_ms=2.27 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.58 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=4.83 block=latest]
+   attempt 10 outcome=fail check_ms=17.32
+      isAllowed(h,U) -> False   [rpc_ms=4.99 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=5.32 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=7.41 block=latest]
+   attempt 11 outcome=fail check_ms=18.58
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=2.91 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=6.65 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=5.37 block=latest]
+   attempt 12 outcome=fail check_ms=38.10
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=6.94 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=18.59 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=12.87 block=latest]
+   attempt 13 outcome=fail check_ms=11.91
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=3.83 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.69 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=2.96 block=latest]
+   attempt 14 outcome=fail check_ms=25.12
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=1.53 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=1.31 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=3.68 block=latest]
+   attempt 15 outcome=fail check_ms=32.45
+      isAllowed(h,U) -> False   [rpc_ms=3.35 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=17.58 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=14.60 block=latest]
+   attempt 16 outcome=fail check_ms=31.77
+      isAllowed(h,U) -> False   [rpc_ms=8.14 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=11.11 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=8.72 block=latest]
+   attempt 17 outcome=fail check_ms=16.99
+      isAllowed(h,U) -> False   [rpc_ms=3.19 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=8.04 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=6.53 block=latest]
+   attempt 18 outcome=fail check_ms=23.43
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.79 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=9.63 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=8.76 block=latest]
+   attempt 19 outcome=fail check_ms=26.23
+      isAllowed(h,U) -> False   [rpc_ms=9.05 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=10.24 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=15.80 block=latest]
+   attempt 20 outcome=fail check_ms=17.33
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=2.06 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=4.48 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.53 block=latest]
+   connector: 0x779E69966364a377dE66F9f96ad65D1e12494447 is not allowed to decrypt 0x439a576e8d213daacc3da301f4ec2d9497caf78acdff00000000000030390500!
+== direct.control-unrelated-retired.before [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=31.66
+      isAllowed(h,U) -> True   [rpc_ms=2.01 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=6.67 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=8.19 block=latest]
+== direct.control-unrelated-retired.after [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=22.75
+      isAllowed(h,U) -> True   [rpc_ms=4.06 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=6.57 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=7.12 block=latest]
+== direct.user-retired.before [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=15.72
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=2.33 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=1.67 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=2.17 block=latest]
+== direct.user-retired.after [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,U) verified=3/3
+   attempt 1 outcome=fail check_ms=18.08
+      isAllowed(h,U) -> False   [rpc_ms=8.15 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=5.60 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=11.95 block=latest]
+   attempt 2 outcome=fail check_ms=24.43
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=12.38 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=12.27 block=latest]
+      isAllowed(h,C) -> True   [rpc_ms=16.95 block=latest]
+   attempt 3 outcome=fail check_ms=13.36
+      isAllowed(h,C) -> True   [rpc_ms=1.86 block=latest]
+      isAllowed(h,U) -> False   [rpc_ms=5.51 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.14 block=latest]
+   connector: 0x779E69966364a377dE66F9f96ad65D1e12494447 is not allowed to decrypt 0x1c19880e5a169e49e1795e022d72ca72bb955bcf1dff00000000000030390500!
+== direct.contract-retired.before [level0 direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=42.13
+      isAllowed(h,C) -> True   [rpc_ms=6.82 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=11.11 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=18.87 block=latest]
+== direct.contract-retired.after [level0 direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,C) verified=3/3
+   attempt 1 outcome=fail check_ms=18.89
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=4.25 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=3.78 block=latest]
+      isAllowed(h,C) -> False   [rpc_ms=4.87 block=latest]
+   attempt 2 outcome=fail check_ms=67.57
+      isAllowed(h,C) -> False   [rpc_ms=4.65 block=latest]
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=5.73 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=19.65 block=latest]
+   attempt 3 outcome=fail check_ms=15.95
+      decryptionSignatureInvalidatedBefore(U) -> 0   [rpc_ms=9.12 block=latest]
+      isAllowed(h,C) -> False   [rpc_ms=7.34 block=latest]
+      isAllowed(h,U) -> True   [rpc_ms=9.77 block=latest]
+   connector: 0x11dC30f77caB9Ba26037A8e3a58Bc5C34BFcb27E is not allowed to decrypt 0xe5e4cb2972742015aafaccca0852d072c0fc00f6f1ff00000000000030390500!
+== delegated.control-unrelated-retired.before [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=18.61
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.47 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=3.65 block=latest]
+== delegated.control-unrelated-retired.after [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=19.58
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=3.69 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=3.36 block=latest]
+== delegated.delegator-retired.before [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=30.67
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=8.00 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=9.33 block=latest]
+== delegated.delegator-retired.after [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=17.98
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.83 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=2.60 block=latest]
+   attempt 2 outcome=fail check_ms=11.55
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=2.21 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=4.68 block=latest]
+   attempt 3 outcome=fail check_ms=12.06
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=2.61 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=1.17 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x49a44DC6f0d5f6f3Fa24288f0536E441645D4F8c and handle 0x8839166e9fa2eb09f32146ee8bb8401d6814a9ddf4ff00000000000030390500!
+== delegated.delegate-retired.before [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=13.97
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=5.88 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=5.73 block=latest]
+== delegated.delegate-retired.after [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=46.54
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=5.60 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=5.83 block=latest]
+   attempt 2 outcome=fail check_ms=51.69
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=34.67 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=34.13 block=latest]
+   attempt 3 outcome=fail check_ms=13.86
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=3.36 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=5.90 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0xb053018bB62c02440a30dfC6c5854B4FF191b2A4 and handle 0xa4b2151357817a6e3322726171e5169a4561464a6eff00000000000030390500!
+== delegated.contract-retired.before [level0 delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=16.74
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=7.40 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> True   [rpc_ms=6.08 block=latest]
+== delegated.contract-retired.after [level0 delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,D,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=21.20
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=6.90 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=6.23 block=latest]
+   attempt 2 outcome=fail check_ms=23.53
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=4.18 block=latest]
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=7.37 block=latest]
+   attempt 3 outcome=fail check_ms=19.03
+      decryptionSignatureInvalidatedBefore(D) -> 0   [rpc_ms=4.79 block=latest]
+      isHandleDelegatedForUserDecryption(U,D,C,h) -> False   [rpc_ms=4.61 block=latest]
+   connector: 0x2942DD056ddB04c4ce8f9c5710B460D03b75De92 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x4f2CCfC3275659Ad7a9e61dF5067a6A20A84Edf3 and handle 0xa8f74aea01de8a2a5f5c5b36a783df5844943523b9ff00000000000030390500!
+== v2-direct.control-unrelated-retired.before [level0 v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=289.74
+      isAllowed(h,Uk) -> True   [rpc_ms=56.21 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=143.20 block=latest]
+== v2-direct.control-unrelated-retired.after [level0 v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=37.64
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=16.88 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=3.27 block=latest]
+== v2-direct.user-retired.before [level0 v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=23.97
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=6.21 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=7.12 block=latest]
+== v2-direct.user-retired.after [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isAllowed(h,Uk) verified=3/3
+   attempt 1 outcome=fail check_ms=61.71
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=5.51 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=10.34 block=latest]
+   attempt 2 outcome=fail check_ms=31.34
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=7.29 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=3.42 block=latest]
+   attempt 3 outcome=fail check_ms=38.31
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=9.79 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=17.23 block=latest]
+   connector: 0x5DeF9FbC8A8d5b3d39201192cb98C68aACFfB868 is not allowed to decrypt d347dc781f09ac8ddaf2847dc113368099c7e126c9ff00000000000030390500
+== v2-direct-allowedcontracts.contract-retired.before [level0 v2-direct onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=3 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=27.69
+      isAllowed(h,C) -> True   [rpc_ms=4.53 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=8.71 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=9.26 block=latest]
+== v2-direct-allowedcontracts.contract-retired.after [level0 v2-direct onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=9 expect_false=isAllowed(h,C) verified=3/3
+   attempt 1 outcome=fail check_ms=53.20
+      isAllowed(h,C) -> False   [rpc_ms=4.38 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=15.17 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=16.89 block=latest]
+   attempt 2 outcome=fail check_ms=46.79
+      isAllowed(h,Uk) -> True   [rpc_ms=6.43 block=latest]
+      isAllowed(h,C) -> False   [rpc_ms=8.48 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=8.66 block=latest]
+   attempt 3 outcome=fail check_ms=43.63
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=8.51 block=latest]
+      isAllowed(h,C) -> False   [rpc_ms=16.60 block=latest]
+      isAllowed(h,Uk) -> True   [rpc_ms=17.21 block=latest]
+   connector: No contract in allowedContracts is allowed to decrypt handle 0xe2405f0eb4a1efff478ab16e74970228515d64ebb0ff00000000000030390500 (["0x69AC8b1c520F7B5eCa9e986A3c043a908DD5CbbC: not allowed"])
+== v2-delegated.control-unrelated-retired.before [level0 v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=20.93
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.65 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=4.96 block=latest]
+== v2-delegated.control-unrelated-retired.after [level0 v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=19.14
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.15 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=1.83 block=latest]
+== v2-delegated.owner-retired.before [level0 v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=21.89
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.83 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=1.84 block=latest]
+== v2-delegated.owner-retired.after [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=29.29
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.37 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=9.76 block=latest]
+   attempt 2 outcome=fail check_ms=20.34
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=3.76 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=3.17 block=latest]
+   attempt 3 outcome=fail check_ms=19.01
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=1.83 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=1.96 block=latest]
+   connector: 0x674A226681D47eb4C4d21E3Ef9DcdB12773b9753 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x148f9478D9e737Ca967eA0E26B4db47f8076015B and handle 8e9c68ff7652a6f05292b16381775e9f16e9a78d55ff00000000000030390500
+== v2-delegated.user-retired.before [level0 v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=19.21
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=2.00 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.35 block=latest]
+== v2-delegated.user-retired.after [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=59.06
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=5.18 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=4.47 block=latest]
+   attempt 2 outcome=fail check_ms=41.81
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=4.73 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=3.35 block=latest]
+   attempt 3 outcome=fail check_ms=31.66
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=10.85 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=11.11 block=latest]
+   connector: 0xfc8829cA36dF06b77Ed987a704De4c7d79349730 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x207e0379269BB39543f1C4DaF9c8398DF0E3C400 and handle 18b85cc2a8a746baadb9945140d878ab4f470dc7e9ff00000000000030390500
+== v2-delegated.contract-retired.before [level0 v2-delegated onchain] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=78.44
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=6.43 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> True   [rpc_ms=17.02 block=latest]
+== v2-delegated.contract-retired.after [level0 v2-delegated onchain] expected=Rejected observed=Rejected kms=0 attempts=3 calls=6 expect_false=isHandleDelegatedForUserDecryption(U,Dk,C,h) verified=3/3
+   attempt 1 outcome=fail check_ms=56.37
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=17.94 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=6.65 block=latest]
+   attempt 2 outcome=fail check_ms=18.86
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=4.11 block=latest]
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=6.90 block=latest]
+   attempt 3 outcome=fail check_ms=24.48
+      decryptionSignatureInvalidatedBefore(Dk) -> 0   [rpc_ms=2.21 block=latest]
+      isHandleDelegatedForUserDecryption(U,Dk,C,h) -> False   [rpc_ms=1.69 block=latest]
+   connector: 0x47C44bA5e64d4D9C0826236F9eff3d4a9FcBf701 is not a delegate of 0x779E69966364a377dE66F9f96ad65D1e12494447 for contract 0x61F2cD33Eecd04aFb246f024Cd97a17c291db264 and handle 572ae8df577bfe9aa68f3cab2a16c2ab2c1aa025f9ff00000000000030390500
+== v2-http-direct.user-retired.before [level0 v2-direct http] expected=Forwarded observed=Forwarded kms=4 attempts=1 calls=2 expect_false=- verified=0/1
+   attempt 1 outcome=success check_ms=23.25
+      isAllowed(h,Uk) -> True   [rpc_ms=1.68 block=latest]
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=3.91 block=latest]
+== v2-http-direct.user-retired.after [level0 v2-direct http] expected=Rejected observed=Rejected kms=0 attempts=1 calls=2 expect_false=isAllowed(h,Uk) verified=1/1
+   attempt 1 outcome=fail check_ms=36.67
+      decryptionSignatureInvalidatedBefore(Uk) -> 0   [rpc_ms=11.58 block=latest]
+      isAllowed(h,Uk) -> False   [rpc_ms=13.20 block=latest]
+   connector: 0xfebF736C0CdaE24c78C8c7561a37384E348F6282 is not allowed to decrypt c7856d3d2814537a6651aef3d991e31aa8f2b5773dff00000000000030390500. Storing `acl_denied` error response for the HTTP-sourced request...

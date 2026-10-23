@@ -1,0 +1,6 @@
+2026-10-21T05:24:23Z <live-service>=active load=[3.97 4.21 4.07] mem_avail_mb=6637 swap_used_mb=0 tag=before:build-v0.13.8
+WATCHDOG: guard tripped 2026-10-21T05:37:15Z; killing lifecycle-build-v0.13.8-1792560263.scope
+2026-10-21T05:37:15Z <live-service>=active load=[5.53 5.75 5.13] mem_avail_mb=812 swap_used_mb=860 tag=tripped:build-v0.13.8
+/srv/lifecycle/scripts/heavy.sh: line 42: 109792 Killed                  systemd-run --scope --quiet --unit="$unit" -p MemoryMax=3G -p MemorySwapMax=1G -p CPUQuota=200% nice -n 19 ionice -c3 "$L/scripts/inscope.sh" "$@" > "$log" 2>&1 < /dev/null
+HEAVY name=build-v0.13.8 unit=lifecycle-build-v0.13.8-1792560263 rc=137 wall_s=772 sampled_peak_anon_mb=2772 sampled_peak_cgroup_current_mb=3072 sampled_peak_swap_mb=536 tripped=1
+2026-10-21T05:37:15Z <live-service>=active load=[5.53 5.75 5.13] mem_avail_mb=1366 swap_used_mb=704 tag=after:build-v0.13.8

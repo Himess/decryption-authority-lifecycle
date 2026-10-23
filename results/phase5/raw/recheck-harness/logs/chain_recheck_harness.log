@@ -1,0 +1,64 @@
+2026-10-23T04:40:22Z TREE harness ed851716c, 10 changed or added files
+f3bb9f9648de7cf0d9455ed4f6c55a476047ba4ad87e18378b4956d69b9b0269  acl_tc13_faults.rs
+be9d4734365dfebeb0f49f5e26cf58f15f7be164aa272120615e35d8b719eeaa  acl_p02_decision_lag.rs
+66dbcffefec341c867b06337dca7cf78c457a493b71d93430131ecea081a1c6d  acl_p03_stored_results.rs
+28b9bb51659d6c8deca0686d395700c463b45c0a82bf1bf7670dd21fea51b224  acl_p04_eip7851.rs
+c453830b8041ec75e96256989f900f12d379a7e276fc3bdffc2b5c897adb55c3  acl_p503_eip8298.rs
+2026-10-23T04:40:22Z START rc-build-endpoint
+2026-10-23T05:14:32Z END rc-build-endpoint rc=0
+2026-10-23T05:14:32Z endpoint-main-harness 6a4ac1729c3f8801d5bf019b29d675160816ebdd7264d84fb2e2d38b4ac7a685 (Phase 4's kept as .phase4)
+2026-10-23T05:14:32Z START rc-build
+2026-10-23T05:43:14Z END rc-build rc=0
+2026-10-23T05:43:14Z path crates compiled: ciphertext-attestation@fhevm-main-harness connector-utils@fhevm-main-harness endpoint@fhevm-main-harness fhevm_gateway_bindings@fhevm-main-harness fhevm_host_bindings@fhevm-main-harness kms-connector-api@fhevm-main-harness kms-worker@fhevm-main-harness user-decryption-signature@fhevm-main-harness 
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 10 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-23T05:43:26Z START rc-tc13-main-rc1
+2026-10-23T05:56:20Z END rc-tc13-main-rc1 rc=0
+2026-10-23T05:56:20Z START rc-p02-main-rc1
+2026-10-23T05:56:51Z END rc-p02-main-rc1 rc=0
+2026-10-23T05:56:51Z START rc-p03-main-rc1
+2026-10-23T05:57:02Z END rc-p03-main-rc1 rc=0
+2026-10-23T05:57:02Z START rc-p04-main-rc1
+2026-10-23T05:57:34Z END rc-p04-main-rc1 rc=0
+2026-10-23T05:57:34Z START rc-p503-main-rc1
+2026-10-23T05:58:05Z END rc-p503-main-rc1 rc=0
+2026-10-23T05:58:05Z START rc-tc13-main-rc2
+2026-10-23T06:10:51Z END rc-tc13-main-rc2 rc=0
+2026-10-23T06:10:51Z START rc-p02-main-rc2
+2026-10-23T06:11:18Z END rc-p02-main-rc2 rc=0
+2026-10-23T06:11:18Z START rc-p03-main-rc2
+2026-10-23T06:11:28Z END rc-p03-main-rc2 rc=0
+2026-10-23T06:11:28Z START rc-p04-main-rc2
+2026-10-23T06:11:54Z END rc-p04-main-rc2 rc=0
+2026-10-23T06:11:54Z START rc-p503-main-rc2
+2026-10-23T06:12:20Z END rc-p503-main-rc2 rc=0
+2026-10-23T06:12:20Z START rc-zama-kms-worker-harness
+2026-10-23T06:18:01Z END rc-zama-kms-worker-harness rc=101
+2026-10-23T06:18:01Z rc-zama-kms-worker-harness: failures (see log)
+2026-10-23T06:18:02Z path crates compiled by the runs: kms-worker@fhevm-main-harness 
+2026-10-23T06:18:02Z containers now: 1
+2026-10-23T06:18:04Z lifecycle-pg removed
+2026-10-23T06:18:04Z CHAIN DONE
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 7 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-23T06:19:02Z START rc-tc13-main-rc3
+2026-10-23T06:32:09Z END rc-tc13-main-rc3 rc=0
+2026-10-23T06:32:09Z START rc-p02-main-rc3
+2026-10-23T06:32:41Z END rc-p02-main-rc3 rc=0
+2026-10-23T06:32:41Z START rc-p03-main-rc3
+2026-10-23T06:32:51Z END rc-p03-main-rc3 rc=0
+2026-10-23T06:32:51Z START rc-p04-main-rc3
+2026-10-23T06:33:23Z END rc-p04-main-rc3 rc=0
+2026-10-23T06:33:23Z START rc-p503-main-rc3
+2026-10-23T06:33:54Z END rc-p503-main-rc3 rc=0
+2026-10-23T06:33:54Z path crates compiled by round 3: 
+2026-10-23T06:33:55Z lifecycle-pg removed
+2026-10-23T06:33:55Z ROUND 3 DONE

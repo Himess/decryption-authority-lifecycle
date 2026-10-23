@@ -1,0 +1,629 @@
+From a15aaa67afa6706db4c8b80ff3463f9c25aa7419 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 23:01:45 +0300
+Subject: [PATCH 7/8] feat(kms-connector): H7 stored-result revalidation and
+ persistent H4 attempts (lifecycle Level 1)
+
+Profile H7 (rule V6) in the connector's HTTP endpoint: with
+`revalidate_stored_results`, a stored successful user decryption payload is
+not served as it is. The endpoint drops it and puts the request back to
+`pending`, so the kms-worker runs every check again at a fresh decision
+block; duplicates attach to that one revalidation. Public decryption
+results are served as stored. The content id already covers the signature
+and the validity window (EIP-712 hash of the whole request), so the
+endpoint's deduplication meets H7 unchanged.
+
+Profile H4 attempts are kept in the connector database
+(`profile_h_erc1271_attempts`, keyed by the request digest), so a worker
+restart no longer grants further ERC-1271 attempts.
+
+Tests: three endpoint integration tests (revalidation, duplicates, public
+payload) next to Zama's; the kms-worker test setup gets the attempt store.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ kms-connector/config/endpoint.toml            |   6 +
+ ...61021120000_profile_h_erc1271_attempts.sql |   9 ++
+ .../crates/endpoint/src/core/config.rs        |   9 ++
+ kms-connector/crates/endpoint/src/core/db.rs  |  36 +++++-
+ .../crates/endpoint/src/core/http/decrypt.rs  |  18 ++-
+ .../endpoint/src/core/http/public_decrypt.rs  |   7 +-
+ .../endpoint/src/core/http/user_decrypt.rs    |   9 +-
+ .../endpoint/tests/integration_tests.rs       | 113 ++++++++++++++++
+ .../src/core/event_processor/decryption.rs    | 122 +++++++++++++++---
+ .../crates/kms-worker/src/core/kms_worker.rs  |   4 +-
+ .../crates/kms-worker/tests/common/mod.rs     |   4 +-
+ .../crates/utils/src/tests/setup/db.rs        |   2 +
+ 12 files changed, 312 insertions(+), 27 deletions(-)
+ create mode 100644 kms-connector/connector-db/migrations/20261021120000_profile_h_erc1271_attempts.sql
+
+diff --git a/kms-connector/config/endpoint.toml b/kms-connector/config/endpoint.toml
+index 1fe8cbb5..f5a290ad 100644
+--- a/kms-connector/config/endpoint.toml
++++ b/kms-connector/config/endpoint.toml
+@@ -44,6 +44,12 @@ database_url = "postgres://postgres:postgres@localhost/kms-connector"
+ # ENV: KMS_CONNECTOR_SUPPORTED_CHAIN_IDS (comma-separated list, e.g. "11155111,1")
+ supported_chain_ids = [11155111]
+ 
++# [lifecycle Level 1, Profile H, H7] Rule V6: run every check again before serving a stored user
++# decryption result (optional, defaults to false). The stored row is dropped and the request goes back
++# to the kms-worker, which re-checks at a fresh decision block, then polls the KMS Core for the result.
++# ENV: KMS_CONNECTOR_REVALIDATE_STORED_RESULTS
++# revalidate_stored_results = false
++
+ # The endpoint used to monitor the connector components (optional, defaults to "0.0.0.0:9100")
+ # ENV: KMS_CONNECTOR_MONITORING_ENDPOINT
+ # monitoring_endpoint = "0.0.0.0:9100"
+diff --git a/kms-connector/connector-db/migrations/20261021120000_profile_h_erc1271_attempts.sql b/kms-connector/connector-db/migrations/20261021120000_profile_h_erc1271_attempts.sql
+new file mode 100644
+index 00000000..f9cf0d6f
+--- /dev/null
++++ b/kms-connector/connector-db/migrations/20261021120000_profile_h_erc1271_attempts.sql
+@@ -0,0 +1,9 @@
++-- [lifecycle Level 1, Profile H, rule H4] ERC-1271 attempt state of user decryption requests, keyed by the
++-- request's EIP-712 digest. Kept in the database, so a restart of the kms-worker no longer grants a request
++-- further attempts. A row is deleted when its request's signature is accepted.
++CREATE TABLE IF NOT EXISTS profile_h_erc1271_attempts (
++    digest BYTEA PRIMARY KEY,
++    negatives SMALLINT NOT NULL,
++    last_negative_block BIGINT,
++    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
++);
+diff --git a/kms-connector/crates/endpoint/src/core/config.rs b/kms-connector/crates/endpoint/src/core/config.rs
+index d271e39a..b81e730b 100644
+--- a/kms-connector/crates/endpoint/src/core/config.rs
++++ b/kms-connector/crates/endpoint/src/core/config.rs
+@@ -53,6 +53,11 @@ pub struct Config {
+     /// The host chain ids accepted in ciphertext handles.
+     #[serde(deserialize_with = "deserialize_one_or_many")]
+     pub supported_chain_ids: Vec<u64>,
++    /// [lifecycle Level 1, Profile H, H7] Rule V6: a stored user decryption result is not served as
++    /// is. Its response row is dropped and the request goes back to the kms-worker, which runs every
++    /// check again at a fresh decision block before polling the KMS Core for the result.
++    #[serde(default)]
++    pub revalidate_stored_results: bool,
+ 
+     /// The service name used for tracing.
+     #[serde(default = "default_service_name")]
+@@ -112,6 +117,7 @@ impl Default for Config {
+             max_body_bytes: default_max_body_bytes(),
+             max_allowed_contracts: default_max_allowed_contracts(),
+             supported_chain_ids: vec![11155111],
++            revalidate_stored_results: false,
+             service_name: default_service_name(),
+             monitoring_endpoint: default_monitoring_endpoint(),
+             healthcheck_timeout: default_healthcheck_timeout(),
+@@ -140,6 +146,7 @@ mod tests {
+             env::remove_var("KMS_CONNECTOR_MAX_BODY_BYTES");
+             env::remove_var("KMS_CONNECTOR_MAX_ALLOWED_CONTRACTS");
+             env::remove_var("KMS_CONNECTOR_SUPPORTED_CHAIN_IDS");
++            env::remove_var("KMS_CONNECTOR_REVALIDATE_STORED_RESULTS");
+             env::remove_var("KMS_CONNECTOR_SERVICE_NAME");
+             env::remove_var("KMS_CONNECTOR_MONITORING_ENDPOINT");
+             env::remove_var("KMS_CONNECTOR_HEALTHCHECK_TIMEOUT");
+@@ -172,6 +179,7 @@ mod tests {
+             env::set_var("KMS_CONNECTOR_MAX_BODY_BYTES", "2048");
+             env::set_var("KMS_CONNECTOR_MAX_ALLOWED_CONTRACTS", "3");
+             env::set_var("KMS_CONNECTOR_SUPPORTED_CHAIN_IDS", "1,31337");
++            env::set_var("KMS_CONNECTOR_REVALIDATE_STORED_RESULTS", "true");
+             env::set_var("KMS_CONNECTOR_SERVICE_NAME", "kms-connector-test");
+             env::set_var("KMS_CONNECTOR_MONITORING_ENDPOINT", "127.0.0.1:9101");
+             env::set_var("KMS_CONNECTOR_HEALTHCHECK_TIMEOUT", "7s");
+@@ -191,6 +199,7 @@ mod tests {
+         assert_eq!(config.max_body_bytes, 2048);
+         assert_eq!(config.max_allowed_contracts, 3);
+         assert_eq!(config.supported_chain_ids, vec![1, 31337]);
++        assert!(config.revalidate_stored_results);
+         assert_eq!(config.service_name, "kms-connector-test");
+         assert_eq!(
+             config.monitoring_endpoint,
+diff --git a/kms-connector/crates/endpoint/src/core/db.rs b/kms-connector/crates/endpoint/src/core/db.rs
+index 9dd4544b..b094d1b4 100644
+--- a/kms-connector/crates/endpoint/src/core/db.rs
++++ b/kms-connector/crates/endpoint/src/core/db.rs
+@@ -8,7 +8,7 @@ use anyhow::anyhow;
+ use connector_utils::monitoring::otlp::PropagationContext;
+ use kms_connector_api::{PublicDecryptionRequest, UserDecryptionRequest};
+ use sqlx::{
+-    PgExecutor,
++    PgConnection, PgExecutor,
+     postgres::PgQueryResult,
+     types::chrono::{DateTime, Utc},
+ };
+@@ -169,6 +169,40 @@ pub async fn upsert_user_decryption_request<'e>(
+     .map_err(anyhow::Error::from)
+ }
+ 
++/// [lifecycle Level 1, Profile H, H7] Prepares a stored HTTP-sourced user decryption result for
++/// revalidation (rule V6): drops its payload row and puts the request back to `pending` with a fresh
++/// attempt budget. `already_sent` is kept, so the kms-worker runs every check again at a fresh
++/// decision block and then polls the KMS Core for the result instead of sending a new request.
++///
++/// Returns `false`, and changes nothing, when there is no stored payload row to revalidate.
++pub async fn reset_user_decryption_for_revalidation(
++    conn: &mut PgConnection,
++    id: B256,
++) -> anyhow::Result<bool> {
++    let db_id = id_to_db_bytes(id);
++    let dropped = sqlx::query(
++        "DELETE FROM user_decryption_responses
++        WHERE decryption_id = $1 AND source = 'http' AND error_code IS NULL",
++    )
++    .bind(db_id.as_slice())
++    .execute(&mut *conn)
++    .await?
++    .rows_affected();
++    if dropped == 0 {
++        return Ok(false);
++    }
++    sqlx::query(
++        "UPDATE user_decryption_requests
++        SET status = 'pending', error_counter = 0, created_at = $2
++        WHERE decryption_id = $1 AND source = 'http'",
++    )
++    .bind(db_id.as_slice())
++    .bind(Utc::now())
++    .execute(&mut *conn)
++    .await?;
++    Ok(true)
++}
++
+ /// Converts an interface `decryption_id` into the bytes stored as primary key in the database.
+ pub fn id_to_db_bytes(id: B256) -> [u8; 32] {
+     U256::from_be_bytes(id.0).to_le_bytes()
+diff --git a/kms-connector/crates/endpoint/src/core/http/decrypt.rs b/kms-connector/crates/endpoint/src/core/http/decrypt.rs
+index c2813471..6393b7bd 100644
+--- a/kms-connector/crates/endpoint/src/core/http/decrypt.rs
++++ b/kms-connector/crates/endpoint/src/core/http/decrypt.rs
+@@ -17,7 +17,7 @@ use anyhow::anyhow;
+ use connector_utils::monitoring::otlp::PropagationContext;
+ use kms_connector_api::{ErrorCode, ErrorResponse};
+ use sqlx::{
+-    PgExecutor, Postgres, Transaction,
++    PgConnection, PgExecutor, Postgres, Transaction,
+     postgres::PgQueryResult,
+     types::chrono::{DateTime, Utc},
+ };
+@@ -42,6 +42,13 @@ pub trait DecryptionRoute {
+         otlp_ctx: &PropagationContext,
+     ) -> impl Future<Output = anyhow::Result<PgQueryResult>> + Send;
+ 
++    /// [lifecycle Level 1, Profile H, H7] Prepares the stored payload row of `id` for revalidation
++    /// (rule V6), or returns `false` when the route keeps serving stored payloads as is.
++    fn reset_for_revalidation(
++        conn: &mut PgConnection,
++        id: B256,
++    ) -> impl Future<Output = anyhow::Result<bool>> + Send;
++
+     /// The `error_code` of an error row, `None` for a payload row.
+     fn error_code(response_row: &Self::ResponseRow) -> Option<ErrorCode>;
+ 
+@@ -115,6 +122,11 @@ async fn find_response_or_store_request<R: DecryptionRoute>(
+ 
+     let mut old_response_created_at = None;
+     if let Some(row) = R::read_response(&mut *tx, id).await? {
++        // [lifecycle Level 1, Profile H, H7] Rule V6: a stored payload is served only after the
++        // kms-worker has run every check again at a fresh decision block.
++        let revalidate = R::error_code(&row).is_none()
++            && state.config.revalidate_stored_results
++            && R::reset_for_revalidation(&mut tx, id).await?;
+         match R::error_code(&row) {
+             Some(code)
+                 if code.retryable()
+@@ -126,6 +138,10 @@ async fn find_response_or_store_request<R: DecryptionRoute>(
+                 debug!(decryption_id = %id, "Reprocessing recoverable or expired `{}` error row", code.as_str());
+                 old_response_created_at = Some(R::created_at(&row));
+             }
++            None if revalidate => {
++                info!(decryption_id = %id, "PROFILE-H H7: revalidating a stored result before serving it");
++                old_response_created_at = Some(R::created_at(&row));
++            }
+             _ => {
+                 tx.commit().await?;
+                 debug!(decryption_id = %id, "Serving existing response row");
+diff --git a/kms-connector/crates/endpoint/src/core/http/public_decrypt.rs b/kms-connector/crates/endpoint/src/core/http/public_decrypt.rs
+index 54db6ea6..dc2655eb 100644
+--- a/kms-connector/crates/endpoint/src/core/http/public_decrypt.rs
++++ b/kms-connector/crates/endpoint/src/core/http/public_decrypt.rs
+@@ -19,7 +19,7 @@ use kms_connector_api::{
+     ErrorCode, ErrorResponse, PublicDecryptionRequest, PublicDecryptionResponse,
+ };
+ use sqlx::{
+-    PgExecutor,
++    PgConnection, PgExecutor,
+     postgres::PgQueryResult,
+     types::chrono::{DateTime, Utc},
+ };
+@@ -61,6 +61,11 @@ impl DecryptionRoute for PublicRoute {
+         upsert_public_decryption_request(executor, id, request, otlp_ctx).await
+     }
+ 
++    /// A public decryption result does not depend on an account's authority: it is served as is.
++    async fn reset_for_revalidation(_conn: &mut PgConnection, _id: B256) -> anyhow::Result<bool> {
++        Ok(false)
++    }
++
+     fn created_at(response_row: &Self::ResponseRow) -> DateTime<Utc> {
+         response_row.created_at
+     }
+diff --git a/kms-connector/crates/endpoint/src/core/http/user_decrypt.rs b/kms-connector/crates/endpoint/src/core/http/user_decrypt.rs
+index 8d12453c..91411b19 100644
+--- a/kms-connector/crates/endpoint/src/core/http/user_decrypt.rs
++++ b/kms-connector/crates/endpoint/src/core/http/user_decrypt.rs
+@@ -1,6 +1,7 @@
+ use crate::core::{
+     db::{
+-        UserDecryptionResponseRow, read_user_decryption_response, upsert_user_decryption_request,
++        UserDecryptionResponseRow, read_user_decryption_response,
++        reset_user_decryption_for_revalidation, upsert_user_decryption_request,
+     },
+     http::{
+         AppState,
+@@ -16,7 +17,7 @@ use alloy::primitives::B256;
+ use connector_utils::monitoring::otlp::PropagationContext;
+ use kms_connector_api::{ErrorCode, ErrorResponse, UserDecryptionRequest, UserDecryptionResponse};
+ use sqlx::{
+-    PgExecutor,
++    PgConnection, PgExecutor,
+     postgres::PgQueryResult,
+     types::chrono::{DateTime, Utc},
+ };
+@@ -58,6 +59,10 @@ impl DecryptionRoute for UserRoute {
+         upsert_user_decryption_request(executor, id, request, otlp_ctx).await
+     }
+ 
++    async fn reset_for_revalidation(conn: &mut PgConnection, id: B256) -> anyhow::Result<bool> {
++        reset_user_decryption_for_revalidation(conn, id).await
++    }
++
+     fn created_at(response_row: &Self::ResponseRow) -> DateTime<Utc> {
+         response_row.created_at
+     }
+diff --git a/kms-connector/crates/endpoint/tests/integration_tests.rs b/kms-connector/crates/endpoint/tests/integration_tests.rs
+index 9c015580..be327bb9 100644
+--- a/kms-connector/crates/endpoint/tests/integration_tests.rs
++++ b/kms-connector/crates/endpoint/tests/integration_tests.rs
+@@ -237,6 +237,119 @@ async fn test_existing_payload_row_is_served_immediately() -> anyhow::Result<()>
+     endpoint.stop().await
+ }
+ 
++/// [lifecycle Level 1, Profile H, H7] Rule V6. With `revalidate_stored_results`, a stored user decryption
++/// payload is not served as is: the endpoint drops it and puts the request back to `pending`, keeping
++/// `already_sent`, and the client gets what the kms-worker's new decision produces (here: a retirement).
++#[rstest]
++#[timeout(Duration::from_secs(60))]
++#[tokio::test]
++async fn test_h7_stored_user_payload_is_revalidated() -> anyhow::Result<()> {
++    let endpoint = setup_with(|config| Config {
++        revalidate_stored_results: true,
++        ..config
++    })
++    .await?;
++
++    info!("A first request, served by the worker...");
++    let request = user_request();
++    let id = request.id();
++    let first = endpoint.spawn_udec(&request);
++    wait_for_request_row(&endpoint.db, USER_REQUESTS, id).await;
++    sqlx::query(
++        "UPDATE user_decryption_requests SET status = 'completed', already_sent = TRUE, error_counter = 1
++        WHERE decryption_id = $1",
++    )
++    .bind(db_id(id).as_le_slice().to_vec())
++    .execute(&endpoint.db)
++    .await?;
++    complete_udec(&endpoint.db, id).await?;
++    assert_eq!(first.await?.status(), StatusCode::OK);
++
++    info!("The same request again: the stored payload goes back to the worker...");
++    let second = endpoint.spawn_udec(&request);
++    wait_for_request_status(&endpoint.db, USER_REQUESTS, id, "pending").await;
++    let row = wait_for_request_row(&endpoint.db, USER_REQUESTS, id).await;
++    assert!(row.get::<bool, _>("already_sent"));
++    assert_eq!(row.get::<i16, _>("error_counter"), 0);
++    assert_eq!(
++        count_rows(&endpoint.db, "user_decryption_responses").await,
++        0
++    );
++
++    info!("Playing the worker: the new decision refuses...");
++    fail_user(&endpoint.db, id, "account_retired", "the user has retired").await?;
++    assert_error(
++        second.await?,
++        StatusCode::FORBIDDEN,
++        ErrorCode::AccountRetired,
++        id,
++    )
++    .await;
++    endpoint.stop().await
++}
++
++/// [lifecycle Level 1, Profile H, H7] A stored payload with no request row (as left for an equivalent
++/// request) is revalidated too: the request is stored for the worker. A concurrent duplicate attaches to
++/// the same revalidation, and both get the new decision's payload.
++#[rstest]
++#[timeout(Duration::from_secs(60))]
++#[tokio::test]
++async fn test_h7_duplicates_attach_to_one_revalidation() -> anyhow::Result<()> {
++    let endpoint = setup_with(|config| Config {
++        revalidate_stored_results: true,
++        ..config
++    })
++    .await?;
++
++    let request = user_request();
++    let id = request.id();
++    complete_udec(&endpoint.db, id).await?;
++    let first = endpoint.spawn_udec(&request);
++    wait_for_request_status(&endpoint.db, USER_REQUESTS, id, "pending").await;
++    let second = endpoint.spawn_udec(&request);
++    tokio::time::sleep(Duration::from_millis(300)).await;
++    assert_eq!(count_rows(&endpoint.db, USER_REQUESTS).await, 1);
++    assert_eq!(
++        count_rows(&endpoint.db, "user_decryption_responses").await,
++        0
++    );
++
++    info!("Playing the worker: the new decision serves...");
++    let inserted = complete_udec(&endpoint.db, id).await?;
++    for pending in [first, second] {
++        let response = pending.await?;
++        assert_eq!(response.status(), StatusCode::OK);
++        let body: UserDecryptionResponse = response.json().await?;
++        assert_eq!(
++            body.user_decrypted_shares.to_vec(),
++            inserted.user_decrypted_shares
++        );
++    }
++    endpoint.stop().await
++}
++
++/// [lifecycle Level 1, Profile H, H7] Public decryption results do not depend on an account's authority:
++/// they are still served from the stored row.
++#[rstest]
++#[timeout(Duration::from_secs(60))]
++#[tokio::test]
++async fn test_h7_public_payload_is_served_as_is() -> anyhow::Result<()> {
++    let endpoint = setup_with(|config| Config {
++        revalidate_stored_results: true,
++        ..config
++    })
++    .await?;
++
++    let public = public_request();
++    let inserted = complete_public(&endpoint.db, public.id()).await?;
++    let response = endpoint.post_public(&public).await;
++    assert_eq!(response.status(), StatusCode::OK);
++    let body: PublicDecryptionResponse = response.json().await?;
++    assert_eq!(body.decrypted_result.to_vec(), inserted.decrypted_result);
++    assert_eq!(count_rows(&endpoint.db, PUBLIC_REQUESTS).await, 0);
++    endpoint.stop().await
++}
++
+ #[tokio::test]
+ async fn admitted_request_can_receive_result_after_expiry() -> anyhow::Result<()> {
+     let endpoint = setup().await?;
+diff --git a/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs b/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+index 3fe2c102..9a9d0a89 100644
+--- a/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
++++ b/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+@@ -29,7 +29,7 @@ use kms_connector_api::ErrorCode;
+ use kms_grpc::kms::v1::{
+     Eip712DomainMsg, PublicDecryptionRequest, SigningSchemeType, UserDecryptionRequest,
+ };
+-use sqlx::types::chrono::Utc;
++use sqlx::{Pool, Postgres, types::chrono::Utc};
+ use std::{
+     collections::HashMap,
+     sync::{Arc, Mutex},
+@@ -59,6 +59,10 @@ pub struct DecryptionProcessor<GP: Provider, HP: Provider> {
+ 
+     /// [lifecycle Level 1] Profile H, when enabled in the configuration.
+     profile_h: Option<ProfileH>,
++
++    /// [lifecycle Level 1, Profile H, H4] Where the ERC-1271 attempt state is kept
++    /// (`profile_h_erc1271_attempts`). Without it the state lives in memory only.
++    attempt_store: Option<Pool<Postgres>>,
+ }
+ 
+ /// [lifecycle Level 1] Runtime state of Profile H.
+@@ -66,8 +70,9 @@ pub struct DecryptionProcessor<GP: Provider, HP: Provider> {
+ struct ProfileH {
+     config: ProfileHConfig,
+     policy: SignaturePolicy,
+-    /// H4 attempt state per request, keyed by the request's EIP-712 digest. In memory: a restart forgets it, which
+-    /// can grant at most `max_erc1271_attempts` further attempts to a request already being retried.
++    /// H4 attempt state per request, keyed by the request's EIP-712 digest, when no `attempt_store` is set. In
++    /// memory: a restart forgets it, which can grant at most `max_erc1271_attempts` further attempts to a request
++    /// already being retried. With an `attempt_store` the database copy is used instead and survives restarts.
+     attempts: Arc<Mutex<HashMap<B256, AttemptState>>>,
+ }
+ 
+@@ -119,6 +124,96 @@ where
+                     attempts: Arc::default(),
+                 }
+             }),
++            attempt_store: None,
++        }
++    }
++
++    /// [lifecycle Level 1, Profile H, H4] Keeps the ERC-1271 attempt state in the connector's database, so a
++    /// restart of the worker grants a request no further attempts.
++    pub fn with_attempt_store(mut self, db_pool: Pool<Postgres>) -> Self {
++        self.attempt_store = Some(db_pool);
++        self
++    }
++
++    /// [lifecycle Level 1, Profile H, H4] The attempt state of the request `digest`. A database error is a
++    /// recoverable check failure: the state is unknown, so no attempt is granted.
++    async fn load_attempts(
++        &self,
++        profile_h: &ProfileH,
++        digest: B256,
++    ) -> Result<AttemptState, RequestCheckError> {
++        let Some(db) = &self.attempt_store else {
++            return Ok(profile_h
++                .attempts
++                .lock()
++                .expect("profile_h attempts lock")
++                .get(&digest)
++                .copied()
++                .unwrap_or_default());
++        };
++        let row: Option<(i16, Option<i64>)> = sqlx::query_as(
++            "SELECT negatives, last_negative_block FROM profile_h_erc1271_attempts WHERE digest = $1",
++        )
++        .bind(digest.as_slice())
++        .fetch_optional(db)
++        .await
++        .map_err(|e| RequestCheckError::network(anyhow!("PROFILE-H attempt state unavailable: {e}")))?;
++        Ok(
++            row.map_or_else(AttemptState::default, |(negatives, last)| AttemptState {
++                negatives: u8::try_from(negatives).unwrap_or(u8::MAX),
++                last_negative_block: last.map(|b| b.max(0) as u64),
++            }),
++        )
++    }
++
++    /// [lifecycle Level 1, Profile H, H4] Records the attempt state of the request `digest` after a rejection.
++    async fn save_attempts(
++        &self,
++        profile_h: &ProfileH,
++        digest: B256,
++        state: AttemptState,
++    ) -> Result<(), RequestCheckError> {
++        let Some(db) = &self.attempt_store else {
++            profile_h
++                .attempts
++                .lock()
++                .expect("profile_h attempts lock")
++                .insert(digest, state);
++            return Ok(());
++        };
++        sqlx::query(
++            "INSERT INTO profile_h_erc1271_attempts (digest, negatives, last_negative_block, updated_at)
++            VALUES ($1, $2, $3, NOW())
++            ON CONFLICT (digest) DO UPDATE SET
++                negatives = EXCLUDED.negatives,
++                last_negative_block = EXCLUDED.last_negative_block,
++                updated_at = NOW()",
++        )
++        .bind(digest.as_slice())
++        .bind(i16::from(state.negatives))
++        .bind(state.last_negative_block.map(|b| i64::try_from(b).unwrap_or(i64::MAX)))
++        .execute(db)
++        .await
++        .map_err(|e| RequestCheckError::network(anyhow!("PROFILE-H attempt state not saved: {e}")))?;
++        Ok(())
++    }
++
++    /// [lifecycle Level 1, Profile H, H4] Forgets the attempt state of the request `digest` once accepted.
++    async fn clear_attempts(&self, profile_h: &ProfileH, digest: B256) {
++        let Some(db) = &self.attempt_store else {
++            profile_h
++                .attempts
++                .lock()
++                .expect("profile_h attempts lock")
++                .remove(&digest);
++            return;
++        };
++        if let Err(e) = sqlx::query("DELETE FROM profile_h_erc1271_attempts WHERE digest = $1")
++            .bind(digest.as_slice())
++            .execute(db)
++            .await
++        {
++            warn!("PROFILE-H attempt state of an accepted request not cleared: {e}");
+         }
+     }
+ 
+@@ -170,13 +265,7 @@ where
+                 .await;
+         };
+         let input = SignatureInput::from_payload(payload, digest);
+-        let attempts = profile_h
+-            .attempts
+-            .lock()
+-            .expect("profile_h attempts lock")
+-            .get(&digest)
+-            .copied()
+-            .unwrap_or_default();
++        let attempts = self.load_attempts(profile_h, digest).await?;
+         let outcome = host_client
+             .verify_signature_profile_h(&input, &profile_h.policy, attempts)
+             .await;
+@@ -195,11 +284,7 @@ where
+         }
+         match outcome.result {
+             Ok(verification) => {
+-                profile_h
+-                    .attempts
+-                    .lock()
+-                    .expect("profile_h attempts lock")
+-                    .remove(&digest);
++                self.clear_attempts(profile_h, digest).await;
+                 info!(
+                     "PROFILE-H accepted signer={} path={:?} block={:?} code={:?} erc1271_calls={}",
+                     payload.userAddress,
+@@ -211,11 +296,8 @@ where
+                 Ok(())
+             }
+             Err(rejection) => {
+-                profile_h
+-                    .attempts
+-                    .lock()
+-                    .expect("profile_h attempts lock")
+-                    .insert(digest, outcome.attempts);
++                self.save_attempts(profile_h, digest, outcome.attempts)
++                    .await?;
+                 warn!(
+                     "PROFILE-H rejected signer={} error={} disposition={:?} block={:?} code={:?} erc1271_calls={} \
+                     attempts={:?}",
+diff --git a/kms-connector/crates/kms-worker/src/core/kms_worker.rs b/kms-connector/crates/kms-worker/src/core/kms_worker.rs
+index ddd82caa..1b028252 100644
+--- a/kms-connector/crates/kms-worker/src/core/kms_worker.rs
++++ b/kms-connector/crates/kms-worker/src/core/kms_worker.rs
+@@ -307,12 +307,14 @@ impl
+             DbContextManager::new(db_pool.clone(), &config, ethereum_provider.clone());
+         let ciphertext_manager =
+             CiphertextManager::connect(gateway_provider.clone(), &config, cancel_token).await?;
++        // [lifecycle Level 1, Profile H, H4] The ERC-1271 attempt state is kept in the database.
+         let decryption_processor = DecryptionProcessor::new(
+             &config,
+             gateway_provider.clone(),
+             host_clients,
+             ciphertext_manager,
+-        );
++        )
++        .with_attempt_store(db_pool.clone());
+         let kms_generation_processor = KMSGenerationProcessor::new(&config);
+         let protocol_config_processor = ProtocolConfigProcessor::new(&config, ethereum_provider);
+         let event_processor = DbEventProcessor::new(
+diff --git a/kms-connector/crates/kms-worker/tests/common/mod.rs b/kms-connector/crates/kms-worker/tests/common/mod.rs
+index 5509d372..cebc0081 100644
+--- a/kms-connector/crates/kms-worker/tests/common/mod.rs
++++ b/kms-connector/crates/kms-worker/tests/common/mod.rs
+@@ -74,8 +74,10 @@ where
+         .into_iter()
+         .map(|(chain_id, acl)| (chain_id, HostRpcClient::new(chain_id, acl)))
+         .collect();
++    // [lifecycle Level 1, Profile H, H4] As in production: the ERC-1271 attempt state is kept in the database.
+     let decryption_processor =
+-        DecryptionProcessor::new(&config, provider.clone(), host_clients, ciphertext_manager);
++        DecryptionProcessor::new(&config, provider.clone(), host_clients, ciphertext_manager)
++            .with_attempt_store(db.clone());
+     let kms_generation_processor = KMSGenerationProcessor::new(&config);
+     let protocol_config_processor = ProtocolConfigProcessor::new(&config, provider.clone());
+     let event_processor = DbEventProcessor::new(
+diff --git a/kms-connector/crates/utils/src/tests/setup/db.rs b/kms-connector/crates/utils/src/tests/setup/db.rs
+index 7bd7e08a..fb540a6d 100644
+--- a/kms-connector/crates/utils/src/tests/setup/db.rs
++++ b/kms-connector/crates/utils/src/tests/setup/db.rs
+@@ -175,6 +175,8 @@ async fn connect_admin_pool(admin_db_url: &str) -> anyhow::Result<Pool<Postgres>
+ /// Runs migrations and inserts the testing KMS context shared by all integration tests.
+ async fn prepare_db(pool: &Pool<Postgres>) -> anyhow::Result<()> {
+     info!("Running migrations...");
++    // `migrate!` embeds the directory's files when this crate is compiled; adding a migration needs a rebuild
++    // ([lifecycle Level 1] 20261021120000_profile_h_erc1271_attempts.sql).
+     sqlx::migrate!("../../connector-db/migrations")
+         .run(pool)
+         .await?;

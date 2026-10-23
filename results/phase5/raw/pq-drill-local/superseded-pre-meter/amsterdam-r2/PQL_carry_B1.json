@@ -1,0 +1,75 @@
+{
+  "options": {
+    "allowContract": [
+      "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+    ],
+    "balanceToken": [],
+    "fromBlock": 0,
+    "logRange": 10000,
+    "chunk": 400,
+    "signer": "env",
+    "rpc": "http://127.0.0.1:8761",
+    "acl": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "old": "0x50b02C4b298e97Ffe34cE6142BDF5966E89b18Aa",
+    "new": "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f",
+    "json": "<repo>\\results\\phase5\\raw\\pq-drill-local\\amsterdam-r2\\PQL_carry_B1.json"
+  },
+  "plan": {
+    "checks": {
+      "core": true,
+      "oldRetired": false,
+      "newRetired": false,
+      "oldDenied": false
+    },
+    "refuse": [],
+    "head": 60,
+    "logRequests": 1,
+    "grants": 3,
+    "handles": 3,
+    "breakdown": [
+      {
+        "caller": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+        "allowlisted": true,
+        "balanceToken": false,
+        "grants": 3,
+        "handles": 3,
+        "kept": 3,
+        "skipped": {}
+      }
+    ],
+    "kept": [
+      "0xbb1ea2d12ec138ab3aac9bc12eafd1efd27f81d8e9ff0000000000007a690500",
+      "0xe7d397b851360abcf05e46677a06727eae3250e8eaff0000000000007a690500",
+      "0x3123db91721f2318609bdf9fb9f6daf1adcf2d3fdbff0000000000007a690500"
+    ],
+    "chunks": [
+      [
+        "0xbb1ea2d12ec138ab3aac9bc12eafd1efd27f81d8e9ff0000000000007a690500",
+        "0xe7d397b851360abcf05e46677a06727eae3250e8eaff0000000000007a690500",
+        "0x3123db91721f2318609bdf9fb9f6daf1adcf2d3fdbff0000000000007a690500"
+      ]
+    ]
+  },
+  "result": {
+    "sent": [
+      {
+        "chunk": 0,
+        "handles": 3,
+        "retires": true,
+        "tx": "0xba35b7700e77185cbdc5542a5be06f8e790e67e64715db76c98282c4f928f7f1",
+        "status": 1,
+        "gasUsed": 503328,
+        "calldataBytes": 644
+      }
+    ],
+    "stopped": null,
+    "verified": {
+      "oldRetired": true,
+      "carried": 3,
+      "newHoldsAll": true,
+      "newMissing": [],
+      "oldStillUsable": 0,
+      "ok": true
+    }
+  }
+}

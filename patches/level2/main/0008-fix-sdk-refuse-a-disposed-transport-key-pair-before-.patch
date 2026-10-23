@@ -1,0 +1,39 @@
+From c4482aba59c1dd5c51d446edfc75c8cae5c7ab20 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 17:58:54 +0300
+Subject: [PATCH 8/8] fix(sdk): refuse a disposed transport key pair before
+ requesting shares
+
+A released key pair has its private key zero-filled, so it can never decrypt
+the reply. Fail before the relayer request instead of after it, so that no
+share is ever produced for a key nobody holds.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ sdk/js-sdk/src/core/kms/decryptValuesFromPairs.ts | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/sdk/js-sdk/src/core/kms/decryptValuesFromPairs.ts b/sdk/js-sdk/src/core/kms/decryptValuesFromPairs.ts
+index ae2f60bd..94f0721d 100644
+--- a/sdk/js-sdk/src/core/kms/decryptValuesFromPairs.ts
++++ b/sdk/js-sdk/src/core/kms/decryptValuesFromPairs.ts
+@@ -10,6 +10,7 @@ import type { SignedDecryptionPermit } from '../types/signedDecryptionPermit.js'
+ import type { TransportKeyPair } from './TransportKeyPair-p.js';
+ import type { FhevmClientFrozenContext } from '../types/fhevmClientFrozenContext-p.js';
+ import { decryptKmsSigncryptedShares } from './decryptKmsSigncryptedShares-p.js';
++import { isTransportKeyPair, isTransportKeyPairDisposed } from './TransportKeyPair-p.js';
+ import { fetchKmsSigncryptedSharesV1 } from './fetchKmsSigncryptedSharesV1-p.js';
+ import { fetchKmsSigncryptedSharesV2 } from './fetchKmsSigncryptedSharesV2-p.js';
+ 
+@@ -44,6 +45,11 @@ export type ReturnType = readonly TypedValue[];
+ export async function decryptValuesFromPairs(fhevm: Context, parameters: Parameters): Promise<ReturnType> {
+   const { transportKeyPair: transportKeyPair, fhevmContext } = parameters;
+ 
++  // A released key pair cannot decrypt the reply: refuse before asking for shares encrypted to it.
++  if (isTransportKeyPair(transportKeyPair) && isTransportKeyPairDisposed(transportKeyPair)) {
++    throw new Error('TransportKeyPair is disposed: use a fresh key pair for this request');
++  }
++
+   let kmsSigncryptedShares: KmsSigncryptedShares;
+ 
+   // Route on the permit's OWN version, never the resolved protocol version. A signed

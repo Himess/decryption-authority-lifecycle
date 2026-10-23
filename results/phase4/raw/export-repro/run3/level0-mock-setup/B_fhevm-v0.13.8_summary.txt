@@ -1,0 +1,23 @@
+=== Baseline B (v0.13.8) ===
+commit: a4b0c4f52a89f474a3af02e1456a84673827ed11 branch: lifecycle/repro
+rpc:    http://127.0.0.1:18557
+date_utc:   2026-10-22T08:38:02Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         jq-1.7.1
+git:        git version 2.47.1.windows.2
+jssdk_npm_ci rc=0 seconds=44 log=B_fhevm-v0.13.8_jssdk_npm_ci.log
+contracts_soldeer rc=0 seconds=12 log=B_fhevm-v0.13.8_contracts_soldeer.log
+{"hardFork":"Bpo1","chainId":31337,"gasLimit":"0x1c9c380","baseFee":"0x3b9aca00"}
+fhevm_deploy rc=0 seconds=50 log=B_fhevm-v0.13.8_fhevm_deploy.log
+fhetest_deploy rc=1 seconds=4 log=B_fhevm-v0.13.8_fhetest_deploy.log
+fhetest_deploy rc=1; FHETest 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0 codesize=12475
+Error: Failed to estimate gas: server returned an error response: error code 3: execution reverted, data: "0x"
+roundtrip rc=0 seconds=7 log=B_fhevm-v0.13.8_roundtrip.log
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+git status of the clone (tracked files must be unchanged):
+?? sdk/js-sdk/contracts/remappings.txt

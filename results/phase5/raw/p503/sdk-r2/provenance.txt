@@ -1,0 +1,11 @@
+run=r2 date=2026-10-22T18:41:44Z
+sdk worktree: dbb289039d6cca3212f92b095c60c2b1b62da282 (lifecycle/phase4-sdk-status)
+mock worktree: a3e6cbf8cdd107ed74aa0aa9a400e61b847c4368 (lifecycle/level2-mock)
+machine: AMD Ryzen 5 5600 6-Core Processor, 12 logical CPUs, 15.9 GiB RAM, Windows_NT 10.0.19045
+node: v22.13.0  anvil: anvil Version: 1.8.5  forge: forge Version: 1.8.5
+solc: FOUNDRY_SOLC_VERSION=0.8.35
+anvil: {"hardFork":"Bpo1","chainId":31337}
+4266446476b74f02cddb989cfd4df4821d458ad30c108274b732eebda0a31d21 *impl/harness/phase5/p503-sdk/p503-sdk-status.test.ts
+33f4178e44c60afcea53fc142afaf33bf3de5d756902d34e1447660915a63d68 *impl/harness/phase5/p503-sdk/vitest.config.mts
+46aa3b639ade6877794a18349339cee9fd452b2c7a5bde6a6e3049885653efa8 *impl/harness/phase4/fault_proxy.py
+ACL on chain: "ACL v0.4.2"

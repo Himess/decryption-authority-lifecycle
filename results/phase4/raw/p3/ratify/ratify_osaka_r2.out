@@ -1,0 +1,83 @@
+{
+"verify_true": true,
+"verify_estimateGas": 1288639,
+"verify_wrong_message_false": true,
+"propose_v2": {
+"accepted": true,
+"status": 1,
+"gasUsed": 49656,
+"calldataBytes": 100
+},
+"execute_before_delay_9": {
+"accepted": true,
+"status": 0,
+"gasUsed": 900960,
+"calldataBytes": 22980
+},
+"execute_8_signatures": {
+"accepted": true,
+"status": 0,
+"gasUsed": 803410,
+"calldataBytes": 20452
+},
+"execute_9_one_corrupted": {
+"accepted": true,
+"status": 0,
+"gasUsed": 6512514,
+"calldataBytes": 22980
+},
+"execute_9_out_of_order": {
+"accepted": true,
+"status": 0,
+"gasUsed": 1610787,
+"calldataBytes": 22980
+},
+"execute_9_estimateGas": 11473611,
+"execute_9": {
+"accepted": true,
+"status": 1,
+"gasUsed": 11468811,
+"calldataBytes": 22980
+},
+"registry_after_9": "0xc79e0db320696ad16162933da87eec6a3c0525bf",
+"registry_expected_v2": "0xc79e0db320696ad16162933da87eec6a3c0525bf",
+"repropose_v2": {
+"accepted": true,
+"status": 1,
+"gasUsed": 49656,
+"calldataBytes": 100
+},
+"replay_old_9": {
+"accepted": true,
+"status": 0,
+"gasUsed": 1611299,
+"calldataBytes": 22980
+},
+"propose_v3": {
+"accepted": true,
+"status": 1,
+"gasUsed": 49656,
+"calldataBytes": 100
+},
+"execute_13_estimateGas": 16486200,
+"execute_13_at_2^24": {
+"accepted": true,
+"status": 1,
+"gasUsed": 16481400,
+"calldataBytes": 33092
+},
+"execute_9_at_2^24": {
+"accepted": true,
+"status": 1,
+"gasUsed": 11427541,
+"calldataBytes": 22980
+},
+"execute_13": {
+"accepted": true,
+"status": 1,
+"gasUsed": 16481400,
+"calldataBytes": 33092
+},
+"registry_after_13": "0x68310823ac65db03bcdd336de9a486eb9c18bd9a",
+"registry_expected_v3": "0x68310823ac65db03bcdd336de9a486eb9c18bd9a"
+}

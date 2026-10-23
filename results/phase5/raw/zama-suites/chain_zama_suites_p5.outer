@@ -1,0 +1,21 @@
+2026-10-22T20:21:22Z START zama-kms-worker-l5-r1
+2026-10-22T20:21:22Z <live-service>=active load=[0.89 0.83 1.04] mem_avail_mb=7095 swap_used_mb=145 tag=before:zama-kms-worker-l5-r1
+HEAVY name=zama-kms-worker-l5-r1 unit=lifecycle-zama-kms-worker-l5-r1-1792700482 rc=101 wall_s=384 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=384 killed=no sampled_peak_anon_mb=776 sampled_peak_cgroup_current_mb=2540 sampled_peak_swap_mb=134
+2026-10-22T20:27:46Z <live-service>=active load=[1.46 1.11 1.07] mem_avail_mb=7094 swap_used_mb=145 tag=after:zama-kms-worker-l5-r1
+2026-10-22T20:27:46Z END zama-kms-worker-l5-r1 rc=101
+2026-10-22T20:27:46Z zama-kms-worker-l5-r1: failures (see log)
+2026-10-22T20:27:46Z START zama-kms-worker-l5-r2
+2026-10-22T20:27:46Z <live-service>=active load=[1.46 1.11 1.07] mem_avail_mb=7094 swap_used_mb=145 tag=before:zama-kms-worker-l5-r2
+HEAVY name=zama-kms-worker-l5-r2 unit=lifecycle-zama-kms-worker-l5-r2-1792700866 rc=101 wall_s=212 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=212 killed=no sampled_peak_anon_mb=142 sampled_peak_cgroup_current_mb=227 sampled_peak_swap_mb=0
+2026-10-22T20:31:18Z <live-service>=active load=[1.35 1.25 1.13] mem_avail_mb=7096 swap_used_mb=145 tag=after:zama-kms-worker-l5-r2
+2026-10-22T20:31:18Z END zama-kms-worker-l5-r2 rc=101
+2026-10-22T20:31:18Z zama-kms-worker-l5-r2: failures (see log)
+2026-10-22T20:31:18Z START zama-kms-worker-l3-p5
+2026-10-22T20:31:18Z <live-service>=active load=[1.35 1.25 1.13] mem_avail_mb=7096 swap_used_mb=145 tag=before:zama-kms-worker-l3-p5
+HEAVY name=zama-kms-worker-l3-p5 unit=lifecycle-zama-kms-worker-l3-p5-1792701078 rc=101 wall_s=402 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=402 killed=no sampled_peak_anon_mb=803 sampled_peak_cgroup_current_mb=1991 sampled_peak_swap_mb=0
+2026-10-22T20:38:00Z <live-service>=active load=[1.81 1.47 1.24] mem_avail_mb=7068 swap_used_mb=145 tag=after:zama-kms-worker-l3-p5
+2026-10-22T20:38:00Z END zama-kms-worker-l3-p5 rc=101
+2026-10-22T20:38:00Z zama-kms-worker-l3-p5: failures (see log)
+2026-10-22T20:38:00Z containers now: 1 (lifecycle-pg plus the host's own)
+2026-10-22T20:38:01Z lifecycle-pg removed
+2026-10-22T20:38:01Z CHAIN DONE

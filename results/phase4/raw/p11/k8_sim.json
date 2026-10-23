@@ -1,0 +1,454 @@
+{
+ "n": 13,
+ "t": 4,
+ "field": "GF(2^127 - 1)",
+ "source": "k8_crate_M1.txt",
+ "rows": [
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "rustcrypto",
+   "scheme": "ML-DSA-44",
+   "accepting": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "shares": 4,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "rustcrypto",
+   "scheme": "ML-DSA-65",
+   "accepting": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "shares": 4,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "rustcrypto",
+   "scheme": "ML-DSA-87",
+   "accepting": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "shares": 4,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "fips204",
+   "scheme": "ML-DSA-44",
+   "accepting": [
+    5,
+    6,
+    7
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "fips204",
+   "scheme": "ML-DSA-65",
+   "accepting": [
+    5,
+    6,
+    7
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "fips204",
+   "scheme": "ML-DSA-87",
+   "accepting": [
+    5,
+    6,
+    7
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "libcrux",
+   "scheme": "ML-DSA-44",
+   "accepting": [
+    8,
+    9,
+    10
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "libcrux",
+   "scheme": "ML-DSA-65",
+   "accepting": [
+    8,
+    9,
+    10
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "libcrux",
+   "scheme": "ML-DSA-87",
+   "accepting": [
+    8,
+    9,
+    10
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "pqclean",
+   "scheme": "ML-DSA-44",
+   "accepting": [
+    11,
+    12,
+    13
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "pqclean",
+   "scheme": "ML-DSA-65",
+   "accepting": [
+    11,
+    12,
+    13
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-4-3-3-3",
+   "k8_single_ok": true,
+   "faulty": "pqclean",
+   "scheme": "ML-DSA-87",
+   "accepting": [
+    11,
+    12,
+    13
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "rustcrypto",
+   "scheme": "ML-DSA-44",
+   "accepting": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "shares": 5,
+   "forgery_decrypts": true
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "rustcrypto",
+   "scheme": "ML-DSA-65",
+   "accepting": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "shares": 5,
+   "forgery_decrypts": true
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "rustcrypto",
+   "scheme": "ML-DSA-87",
+   "accepting": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "shares": 5,
+   "forgery_decrypts": true
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "fips204",
+   "scheme": "ML-DSA-44",
+   "accepting": [
+    6,
+    7,
+    8
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "fips204",
+   "scheme": "ML-DSA-65",
+   "accepting": [
+    6,
+    7,
+    8
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "fips204",
+   "scheme": "ML-DSA-87",
+   "accepting": [
+    6,
+    7,
+    8
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "libcrux",
+   "scheme": "ML-DSA-44",
+   "accepting": [
+    9,
+    10,
+    11
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "libcrux",
+   "scheme": "ML-DSA-65",
+   "accepting": [
+    9,
+    10,
+    11
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "libcrux",
+   "scheme": "ML-DSA-87",
+   "accepting": [
+    9,
+    10,
+    11
+   ],
+   "shares": 3,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "pqclean",
+   "scheme": "ML-DSA-44",
+   "accepting": [
+    12,
+    13
+   ],
+   "shares": 2,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "pqclean",
+   "scheme": "ML-DSA-65",
+   "accepting": [
+    12,
+    13
+   ],
+   "shares": 2,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "single-5-3-3-2",
+   "k8_single_ok": false,
+   "faulty": "pqclean",
+   "scheme": "ML-DSA-87",
+   "accepting": [
+    12,
+    13
+   ],
+   "shares": 2,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "rustcrypto",
+   "scheme": "ML-DSA-44",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "rustcrypto",
+   "scheme": "ML-DSA-65",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "rustcrypto",
+   "scheme": "ML-DSA-87",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "fips204",
+   "scheme": "ML-DSA-44",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "fips204",
+   "scheme": "ML-DSA-65",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "fips204",
+   "scheme": "ML-DSA-87",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "libcrux",
+   "scheme": "ML-DSA-44",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "libcrux",
+   "scheme": "ML-DSA-65",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "libcrux",
+   "scheme": "ML-DSA-87",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "pqclean",
+   "scheme": "ML-DSA-44",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "pqclean",
+   "scheme": "ML-DSA-65",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  },
+  {
+   "deployment": "agree-rotating",
+   "k8_single_ok": false,
+   "faulty": "pqclean",
+   "scheme": "ML-DSA-87",
+   "accepting": [],
+   "shares": 0,
+   "forgery_decrypts": false
+  }
+ ],
+ "summary": {
+  "single-4-3-3-3": {
+   "k8_single_ok": true,
+   "cases": 12,
+   "max_accepting": 4,
+   "decrypts": 0
+  },
+  "single-5-3-3-2": {
+   "k8_single_ok": false,
+   "cases": 12,
+   "max_accepting": 5,
+   "decrypts": 3
+  },
+  "agree-rotating": {
+   "k8_single_ok": false,
+   "cases": 12,
+   "max_accepting": 0,
+   "decrypts": 0
+  }
+ }
+}

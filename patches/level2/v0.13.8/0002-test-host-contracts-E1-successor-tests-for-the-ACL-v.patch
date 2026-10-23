@@ -1,0 +1,824 @@
+From dee719f468bb2491f626c50b42837c98bf00dd39 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 15:03:58 +0300
+Subject: [PATCH 2/4] test(host-contracts): E1 successor tests for the ACL
+ v0.4.2 backport (TC17, TC18)
+
+Ported from main (lifecycle/level2 a9748a6); the assertions on the
+main-only isDelegatedForUserDecryption view are dropped (9 lines).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ host-contracts/test/acl/ACLSuccession.t.sol | 803 ++++++++++++++++++++
+ 1 file changed, 803 insertions(+)
+ create mode 100644 host-contracts/test/acl/ACLSuccession.t.sol
+
+diff --git a/host-contracts/test/acl/ACLSuccession.t.sol b/host-contracts/test/acl/ACLSuccession.t.sol
+new file mode 100644
+index 0000000..a3545d3
+--- /dev/null
++++ b/host-contracts/test/acl/ACLSuccession.t.sol
+@@ -0,0 +1,803 @@
++// SPDX-License-Identifier: BSD-3-Clause-Clear
++pragma solidity ^0.8.24;
++
++import {Vm} from "forge-std/Vm.sol";
++import {PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
++import {ACL} from "../../contracts/ACL.sol";
++import {ACLEvents} from "../../contracts/ACLEvents.sol";
++import {PauserSet} from "../../contracts/immutable/PauserSet.sol";
++import {HostContractsDeployerTestUtils} from "../../fhevm-foundry/HostContractsDeployerTestUtils.sol";
++import {aclAdd, fhevmExecutorAdd, pauserSetAdd} from "../../addresses/FHEVMHostAddresses.sol";
++import {RetirementTestAccount} from "./retirement/RetirementMocks.sol";
++
++/**
++ * @title ACLSuccessionTest
++ * @notice Level 2, extension E1 (Successor) of the Decryption Authority Lifecycle draft, on the ACL v0.4.2 backport
++ *         (v0.13 line; ported from main, where the main-only view `isDelegatedForUserDecryption` is also checked):
++ *         TC17 (rules S1-S11: state machine, read right after retirement only, locked, frozen at retirement, delay,
++ *         decrypt-as only, no transitivity, pause) and TC18 (asserted residual: an unnoticed attacker designation
++ *         survives retirement). Rule numbers refer to erc/ERC-XXXX-decryption-authority-lifecycle.md.
++ */
++contract ACLSuccessionTest is HostContractsDeployerTestUtils {
++    ACL internal acl;
++    PauserSet internal pauserSet;
++
++    address internal constant owner = address(456);
++    address internal constant pauser = address(789);
++
++    bytes4 internal constant SUCCESSION_INTERFACE_ID = 0x7dc5e209;
++    bytes4 internal constant SUCCESSION_DELAY_INTERFACE_ID = 0xc61ca396;
++    bytes4 internal constant CORE_INTERFACE_ID = 0x556d2088;
++    uint64 internal constant D = 7 days;
++
++    address internal account = makeAddr("account");
++    address internal successor = makeAddr("successor");
++    address internal other = makeAddr("other");
++    address internal delegate = makeAddr("delegate");
++    address internal attacker = makeAddr("attacker");
++    address internal app;
++    address internal app2;
++
++    bytes32 internal h1 = keccak256("succession-handle-1");
++    bytes32 internal h2 = keccak256("succession-handle-2");
++    bytes32 internal h3 = keccak256("succession-handle-3");
++
++    function setUp() public {
++        _deployACL(owner);
++        acl = ACL(aclAdd);
++        _deployPauserSet();
++        pauserSet = PauserSet(pauserSetAdd);
++        vm.prank(owner);
++        pauserSet.addPauser(pauser);
++        app = address(new RetirementTestAccount());
++        app2 = address(new RetirementTestAccount());
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // helpers
++    ////////////////////////////////////////////////////////////////////////////
++
++    /// @dev Zama's grant sequence (acl.t.sol `_allowHandle`): executor transient grant, persist, clean.
++    function _allowHandle(bytes32 handle, address holder) internal {
++        vm.prank(fhevmExecutorAdd);
++        acl.allowTransient(handle, holder);
++        vm.prank(holder);
++        acl.allow(handle, holder);
++        acl.cleanTransientStorage();
++    }
++
++    function _retire(address who) internal {
++        vm.prank(who);
++        acl.retireAccount();
++    }
++
++    function _retireContract(address c) internal {
++        RetirementTestAccount(payable(c)).execute(aclAdd, 0, abi.encodeCall(ACL.retireAccount, ()));
++    }
++
++    /// @dev designate -> accept -> wait D -> confirm.
++    function _confirm(address from, address to) internal {
++        vm.prank(from);
++        acl.designateSuccessor(to);
++        vm.prank(to);
++        acl.acceptSuccession(from);
++        vm.warp(block.timestamp + acl.successorDelayOf(from));
++        vm.prank(from);
++        acl.confirmSuccessor();
++        assertEq(acl.successorOf(from), to);
++    }
++
++    function _pending(address who) internal view returns (address s, uint64 at, bool accepted) {
++        return acl.pendingSuccessorOf(who);
++    }
++
++    function _assertNoPending(address who) internal view {
++        (address s, uint64 at, bool accepted) = _pending(who);
++        assertEq(s, address(0), "no pending successor");
++        assertEq(at, 0, "no confirmableAt");
++        assertFalse(accepted, "no acceptance");
++    }
++
++    function _pause() internal {
++        vm.prank(pauser);
++        acl.pause();
++    }
++
++    /// @dev `account` holds h1 and h2 (h1 with `app`, h2 with `app2`).
++    function _seedAccountHandles() internal {
++        _allowHandle(h1, account);
++        _allowHandle(h1, app);
++        _allowHandle(h2, account);
++        _allowHandle(h2, app2);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // Interface, constants
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_SupportsInterface_E1AndDelay() public view {
++        assertTrue(acl.supportsInterface(CORE_INTERFACE_ID));
++        assertTrue(acl.supportsInterface(SUCCESSION_INTERFACE_ID));
++        assertTrue(acl.supportsInterface(SUCCESSION_DELAY_INTERFACE_ID));
++        assertTrue(acl.supportsInterface(0x01ffc9a7));
++        assertFalse(acl.supportsInterface(0xffffffff));
++        assertEq(acl.getVersion(), "ACL v0.4.2");
++    }
++
++    /// @dev The interface ids are the XOR of the selectors listed in the draft (recomputed here from the ABI).
++    function test_InterfaceIds_AreSelectorXor() public pure {
++        bytes4 e1 = ACL.designateSuccessor.selector ^
++            ACL.acceptSuccession.selector ^
++            ACL.cancelSuccessorDesignation.selector ^
++            ACL.confirmSuccessor.selector ^
++            ACL.resignSuccession.selector ^
++            ACL.successorDelay.selector ^
++            ACL.successorOf.selector ^
++            ACL.pendingSuccessorOf.selector;
++        assertEq(e1, SUCCESSION_INTERFACE_ID);
++        assertEq(ACL.raiseSuccessorDelay.selector ^ ACL.successorDelayOf.selector, SUCCESSION_DELAY_INTERFACE_ID);
++        assertEq(ACL.retireAccount.selector ^ ACL.isAccountRetired.selector, CORE_INTERFACE_ID);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // S1 designate
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_S1_Designate_SetsPendingFromEffectiveDelay() public {
++        uint64 expected = uint64(block.timestamp) + D;
++        vm.expectEmit(address(acl));
++        emit ACLEvents.SuccessorDesignated(account, successor, expected);
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        (address s, uint64 at, bool accepted) = _pending(account);
++        assertEq(s, successor);
++        assertEq(at, expected);
++        assertFalse(accepted);
++        assertEq(acl.successorOf(account), address(0), "nothing confirmed yet");
++    }
++
++    function test_S1_Designate_RevertsForRetiredCaller() public {
++        _retire(account);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.designateSuccessor(successor);
++    }
++
++    function test_S1_Designate_RevertsForInvalidSuccessor() public {
++        vm.startPrank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorInvalid.selector, address(0)));
++        acl.designateSuccessor(address(0));
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorInvalid.selector, account));
++        acl.designateSuccessor(account);
++        vm.stopPrank();
++        _retire(other);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorInvalid.selector, other));
++        acl.designateSuccessor(other);
++    }
++
++    function test_S1_Designate_RevertsWhenAConfirmedSuccessorExists() public {
++        _confirm(account, successor);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorAlreadyConfirmed.selector, successor));
++        acl.designateSuccessor(other);
++    }
++
++    function test_S1_Designate_ReplacesPendingAndClearsAcceptance() public {
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        vm.prank(successor);
++        acl.acceptSuccession(account);
++        vm.warp(block.timestamp + 1 days);
++
++        vm.prank(account);
++        acl.designateSuccessor(other);
++        (address s, uint64 at, bool accepted) = _pending(account);
++        assertEq(s, other);
++        assertEq(at, uint64(block.timestamp) + D, "confirmableAt restarts");
++        assertFalse(accepted, "acceptance cleared");
++        vm.prank(successor);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NotPendingSuccessor.selector, successor));
++        acl.acceptSuccession(account);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // S2 accept (mandatory)
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_S2_Accept_RecordsAcceptance() public {
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        vm.expectEmit(address(acl));
++        emit ACLEvents.SuccessionAccepted(account, successor);
++        vm.prank(successor);
++        acl.acceptSuccession(account);
++        (, , bool accepted) = _pending(account);
++        assertTrue(accepted);
++    }
++
++    function test_S2_Accept_OnlyThePendingSuccessor() public {
++        vm.prank(other);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NotPendingSuccessor.selector, other));
++        acl.acceptSuccession(account);
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        vm.prank(other);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NotPendingSuccessor.selector, other));
++        acl.acceptSuccession(account);
++        // The account cannot accept for its successor.
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NotPendingSuccessor.selector, account));
++        acl.acceptSuccession(account);
++    }
++
++    function test_S2_Accept_RevertsForRetiredSuccessor() public {
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        _retire(successor);
++        vm.prank(successor);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, successor));
++        acl.acceptSuccession(account);
++    }
++
++    /// @dev Retirement voids the pending designation (S6), so the successor is no longer pending: either applicable
++    ///      error is allowed by the draft ("any one of the applicable errors MAY be used").
++    function test_S2_Accept_RevertsForRetiredAccount() public {
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        _retire(account);
++        vm.prank(successor);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NotPendingSuccessor.selector, successor));
++        acl.acceptSuccession(account);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // S3 cancel
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_S3_Cancel_RemovesPending() public {
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        vm.prank(successor);
++        acl.acceptSuccession(account);
++        vm.expectEmit(address(acl));
++        emit ACLEvents.SuccessorDesignationCancelled(account, successor);
++        vm.prank(account);
++        acl.cancelSuccessorDesignation();
++        _assertNoPending(account);
++        vm.warp(block.timestamp + D);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NoPendingSuccessor.selector, account));
++        acl.confirmSuccessor();
++    }
++
++    function test_S3_Cancel_RevertsWithoutPendingAndForRetiredCaller() public {
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NoPendingSuccessor.selector, account));
++        acl.cancelSuccessorDesignation();
++        _retire(account);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.cancelSuccessorDesignation();
++    }
++
++    function test_S3_Cancel_DoesNotTouchConfirmedSuccessor() public {
++        _confirm(account, successor);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NoPendingSuccessor.selector, account));
++        acl.cancelSuccessorDesignation();
++        assertEq(acl.successorOf(account), successor);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // S4 confirm
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_S4_Confirm_RequiresAcceptanceAndDelay() public {
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        uint64 at = uint64(block.timestamp) + D;
++        vm.warp(at);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessionNotAccepted.selector, successor));
++        acl.confirmSuccessor();
++
++        vm.prank(successor);
++        acl.acceptSuccession(account);
++        vm.warp(at - 1);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorNotYetConfirmable.selector, successor, at));
++        acl.confirmSuccessor();
++
++        // Confirmable at exactly confirmableAt.
++        vm.warp(at);
++        vm.expectEmit(address(acl));
++        emit ACLEvents.SuccessorConfirmed(account, successor);
++        vm.prank(account);
++        acl.confirmSuccessor();
++        assertEq(acl.successorOf(account), successor);
++        _assertNoPending(account);
++    }
++
++    function test_S4_Confirm_RevertsWithoutPendingOrForRetiredParties() public {
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NoPendingSuccessor.selector, account));
++        acl.confirmSuccessor();
++
++        // The successor accepted, then retired: it cannot be confirmed.
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        vm.prank(successor);
++        acl.acceptSuccession(account);
++        _retire(successor);
++        vm.warp(block.timestamp + D);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorInvalid.selector, successor));
++        acl.confirmSuccessor();
++
++        // A retired account cannot confirm.
++        _retire(account);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.confirmSuccessor();
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // S5 locked, resignation
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_S5_Locked_OldKeyCannotReplaceOrCancel() public {
++        _confirm(account, successor);
++        vm.startPrank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorAlreadyConfirmed.selector, successor));
++        acl.designateSuccessor(attacker);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NoPendingSuccessor.selector, account));
++        acl.cancelSuccessorDesignation();
++        vm.expectRevert(abi.encodeWithSelector(ACL.NotSuccessor.selector, account));
++        acl.resignSuccession(account);
++        vm.stopPrank();
++        assertEq(acl.successorOf(account), successor);
++    }
++
++    function test_S5_Resign_OnlyTheSuccessor_AnyTime() public {
++        _confirm(account, successor);
++        vm.prank(other);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NotSuccessor.selector, other));
++        acl.resignSuccession(account);
++
++        // After the account's retirement and while paused.
++        _retire(account);
++        _pause();
++        vm.expectEmit(address(acl));
++        emit ACLEvents.SuccessionResigned(account, successor);
++        vm.prank(successor);
++        acl.resignSuccession(account);
++        assertEq(acl.successorOf(account), address(0));
++        vm.prank(successor);
++        vm.expectRevert(abi.encodeWithSelector(ACL.NotSuccessor.selector, successor));
++        acl.resignSuccession(account);
++    }
++
++    function test_S5_ResignThenRedesignate() public {
++        _confirm(account, successor);
++        vm.prank(successor);
++        acl.resignSuccession(account);
++        _confirm(account, other);
++        assertEq(acl.successorOf(account), other);
++    }
++
++    /// @dev A retired successor can still resign (resignation is never blocked).
++    function test_S5_RetiredSuccessorCanResign() public {
++        _confirm(account, successor);
++        _retire(successor);
++        vm.prank(successor);
++        acl.resignSuccession(account);
++        assertEq(acl.successorOf(account), address(0));
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // S6 frozen at retirement
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_S6_RetirementVoidsPendingDesignation() public {
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        vm.prank(successor);
++        acl.acceptSuccession(account);
++        vm.expectEmit(true, true, true, true, address(acl));
++        emit ACLEvents.AccountRetired(account, address(0));
++        _retire(account);
++        _assertNoPending(account);
++        assertEq(acl.successorOf(account), address(0));
++        vm.warp(block.timestamp + D);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.confirmSuccessor();
++    }
++
++    function test_S6_RetirementEmitsConfirmedSuccessor() public {
++        _confirm(account, successor);
++        vm.expectEmit(true, true, true, true, address(acl));
++        emit ACLEvents.AccountRetired(account, successor);
++        _retire(account);
++        assertEq(acl.successorOf(account), successor, "a confirmed successor survives retirement");
++    }
++
++    function test_S6_EverythingButResignationFrozen() public {
++        _confirm(account, successor);
++        _retire(account);
++        vm.startPrank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.designateSuccessor(other);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.cancelSuccessorDesignation();
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.confirmSuccessor();
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.raiseSuccessorDelay(30 days);
++        vm.stopPrank();
++        vm.prank(successor);
++        acl.resignSuccession(account);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // S7 delay
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_S7_DefaultDelay() public view {
++        assertEq(acl.successorDelay(), 7 days);
++        assertEq(acl.successorDelayOf(account), 7 days);
++    }
++
++    function test_S7_RaiseDelay_RaiseOnlyAndCapped() public {
++        vm.startPrank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorDelayInvalid.selector, uint64(7 days)));
++        acl.raiseSuccessorDelay(7 days);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorDelayInvalid.selector, uint64(6 days)));
++        acl.raiseSuccessorDelay(6 days);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorDelayInvalid.selector, uint64(365 days + 1)));
++        acl.raiseSuccessorDelay(365 days + 1);
++        vm.expectEmit(address(acl));
++        emit ACLEvents.SuccessorDelayRaised(account, 30 days);
++        acl.raiseSuccessorDelay(30 days);
++        assertEq(acl.successorDelayOf(account), 30 days);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorDelayInvalid.selector, uint64(30 days)));
++        acl.raiseSuccessorDelay(30 days);
++        acl.raiseSuccessorDelay(365 days);
++        vm.stopPrank();
++        assertEq(acl.successorDelayOf(account), 365 days);
++        assertEq(acl.successorDelayOf(other), 7 days, "per account");
++        assertEq(acl.successorDelay(), 7 days, "registry-wide D unchanged");
++    }
++
++    function test_S7_RaisedDelayAppliesToNewDesignationsOnly() public {
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        (, uint64 at, ) = _pending(account);
++        vm.prank(account);
++        acl.raiseSuccessorDelay(60 days);
++        (, uint64 atAfter, ) = _pending(account);
++        assertEq(atAfter, at, "a pending confirmableAt is not altered");
++        vm.prank(successor);
++        acl.acceptSuccession(account);
++        vm.warp(at);
++        vm.prank(account);
++        acl.confirmSuccessor();
++        assertEq(acl.successorOf(account), successor);
++
++        // The next designation (after a resignation) uses the raised delay.
++        vm.prank(successor);
++        acl.resignSuccession(account);
++        vm.prank(account);
++        acl.designateSuccessor(other);
++        (, uint64 at2, ) = _pending(account);
++        assertEq(at2, uint64(block.timestamp) + 60 days);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // S8 read right after retirement only
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_S8_NoRightWhileAccountIsActive() public {
++        _seedAccountHandles();
++        _confirm(account, successor);
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, successor, app, h1));
++        assertEq(acl.getUserDecryptionDelegationExpirationDate(account, successor, app), 0);
++        assertFalse(acl.isAllowed(h1, successor));
++    }
++
++    function test_S8_ReadRightAfterRetirement_AsAWildcardDelegation() public {
++        _seedAccountHandles();
++        _confirm(account, successor);
++        _retire(account);
++        // Every contract the account's handles are paired with, with no delegation row at all.
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, successor, app, h1));
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, successor, app2, h2));
++        // As a wildcard delegation would: the contract must hold the handle, and the account must hold it.
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, successor, app2, h1), "app2 does not hold h1");
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, successor, app, h3), "the account never held h3");
++        // The delegation-expiry getter describes delegation rows only (R14): 0 for a retired party.
++        assertEq(acl.getUserDecryptionDelegationExpirationDate(account, successor, app), 0);
++    }
++
++    function test_S8_EveryOtherDelegateRefused_EvenWithALiveDelegation() public {
++        _seedAccountHandles();
++        vm.prank(account);
++        acl.delegateForUserDecryption(delegate, app, uint64(block.timestamp + 365 days));
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, delegate, app, h1));
++        _confirm(account, successor);
++        _retire(account);
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, delegate, app, h1), "live row, retired delegator");
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, other, app, h1));
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, successor, app, h1));
++    }
++
++    /// @dev The read right does not depend on any delegation row, so it cannot expire.
++    function test_S8_NonExpiring() public {
++        _seedAccountHandles();
++        vm.prank(account);
++        acl.delegateForUserDecryption(successor, app, uint64(block.timestamp + 1 days));
++        _confirm(account, successor);
++        _retire(account);
++        vm.warp(block.timestamp + 10 * 365 days);
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, successor, app, h1));
++    }
++
++    /// @dev Stragglers: a handle granted to the account after its retirement (an inbound grant is inert for the
++    ///      account itself, R8) is readable by the successor.
++    function test_S8_StragglersReadable() public {
++        _seedAccountHandles();
++        _confirm(account, successor);
++        _retire(account);
++        // The app (holding h3) grants h3 to the retired account; the grant does not revert.
++        _allowHandle(h3, app);
++        RetirementTestAccount(payable(app)).execute(aclAdd, 0, abi.encodeCall(ACL.allow, (h3, account)));
++        assertFalse(acl.persistAllowed(h3, account), "inert for the retired account itself");
++        assertFalse(acl.isAllowed(h3, account));
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, successor, app, h3), "the successor reads it");
++    }
++
++    /// @dev R6 still applies to the successor and to the contract.
++    function test_S8_RetiredSuccessorOrContractRefused() public {
++        _seedAccountHandles();
++        _confirm(account, successor);
++        _retire(account);
++        _retireContract(app);
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, successor, app, h1), "retired contract");
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, successor, app2, h2), "other contracts unaffected");
++        _retire(successor);
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, successor, app2, h2), "retired successor");
++    }
++
++    /// @dev Resignation after retirement removes the read right for good; nobody can set a new successor.
++    function test_S8_ResignationAfterRetirementEndsTheRight() public {
++        _seedAccountHandles();
++        _confirm(account, successor);
++        _retire(account);
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, successor, app, h1));
++        vm.prank(successor);
++        acl.resignSuccession(account);
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, successor, app, h1));
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.designateSuccessor(successor);
++    }
++
++    /// @dev A designation voided by retirement, or never accepted (a key-derived address cannot accept), yields
++    ///      nothing.
++    function test_S8_VoidedOrUnacceptedDesignationYieldsNothing() public {
++        _seedAccountHandles();
++        address kda = address(uint160(uint256(keccak256("a key-derived address no key controls"))));
++        vm.prank(account);
++        acl.designateSuccessor(kda);
++        vm.warp(block.timestamp + D);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessionNotAccepted.selector, kda));
++        acl.confirmSuccessor();
++        _retire(account);
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, kda, app, h1));
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // S9 decrypt-as only, no transitivity
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_S9_SuccessorCannotUseGrantPublishOrDelegate() public {
++        _seedAccountHandles();
++        _confirm(account, successor);
++        _retire(account);
++        assertFalse(acl.isAllowed(h1, successor), "no use right");
++        assertFalse(acl.persistAllowed(h1, successor));
++        vm.startPrank(successor);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderNotAllowed.selector, successor));
++        acl.allow(h1, other);
++        bytes32[] memory list = new bytes32[](1);
++        list[0] = h1;
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderNotAllowed.selector, successor));
++        acl.allowForDecryption(list);
++        // The successor can delegate its own authority, but that never covers the account's handles.
++        acl.delegateForUserDecryption(other, app, uint64(block.timestamp + 1 days));
++        vm.stopPrank();
++        assertFalse(acl.isHandleDelegatedForUserDecryption(successor, other, app, h1));
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, other, app, h1));
++        assertFalse(acl.isAllowedForDecryption(h1));
++    }
++
++    function test_S9_NoTransitivity() public {
++        _seedAccountHandles();
++        _confirm(account, successor);
++        _confirm(successor, other);
++        _retire(account);
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, successor, app, h1));
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, other, app, h1), "successor's successor: nothing");
++        _retire(successor);
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, successor, app, h1), "retired successor");
++        assertFalse(acl.isHandleDelegatedForUserDecryption(successor, other, app, h1), "the successor never held h1");
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, other, app, h1));
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // S10 pause
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_S10_DesignateAcceptConfirmPauseGated_OthersNot() public {
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        vm.prank(successor);
++        acl.acceptSuccession(account);
++        vm.prank(other);
++        acl.designateSuccessor(delegate);
++        _pause();
++
++        vm.prank(account);
++        vm.expectRevert(PausableUpgradeable.EnforcedPause.selector);
++        acl.designateSuccessor(attacker);
++        vm.prank(delegate);
++        vm.expectRevert(PausableUpgradeable.EnforcedPause.selector);
++        acl.acceptSuccession(other);
++        vm.warp(block.timestamp + D);
++        vm.prank(account);
++        vm.expectRevert(PausableUpgradeable.EnforcedPause.selector);
++        acl.confirmSuccessor();
++
++        // Cancellation, raising the delay and retirement stay available while paused.
++        vm.prank(other);
++        acl.cancelSuccessorDesignation();
++        vm.prank(account);
++        acl.raiseSuccessorDelay(8 days);
++        _retire(account);
++        _assertNoPending(account);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // Never-retired accounts: the succession never changes a view while the account is active
++    ////////////////////////////////////////////////////////////////////////////
++
++    function testFuzz_ActiveAccountViewsUnaffected(address d, bool withDelegation) public {
++        vm.assume(d != address(0) && d != account && d != successor && d != app && d != fhevmExecutorAdd);
++        vm.assume(d != acl.WILDCARD_DELEGATION_ADDRESS());
++        _seedAccountHandles();
++        if (withDelegation) {
++            vm.prank(account);
++            // Long enough to outlive the confirmation delay below.
++            acl.delegateForUserDecryption(d, app, uint64(block.timestamp + 365 days));
++        }
++        bool before1 = acl.isHandleDelegatedForUserDecryption(account, d, app, h1);
++        _confirm(account, successor);
++        assertEq(acl.isHandleDelegatedForUserDecryption(account, d, app, h1), before1);
++        assertTrue(acl.isAllowed(h1, account));
++        assertTrue(acl.persistAllowed(h1, account));
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // TC18 asserted residual
++    ////////////////////////////////////////////////////////////////////////////
++
++    /// @dev Residual (draft, "What it leaves open"): a thief holding the key designates its own address, accepts it,
++    ///      and confirms after D days that nobody notices. The confirmed designation is locked against the old key and
++    ///      survives the holder's later retirement: the thief keeps reading. Surfacing pending designations (S11) is
++    ///      the only defence.
++    function test_TC18_UnnoticedAttackerDesignationSurvivesRetirement_AssertedResidual() public {
++        _seedAccountHandles();
++        vm.prank(account); // the thief, with the stolen key
++        acl.designateSuccessor(attacker);
++        vm.prank(attacker);
++        acl.acceptSuccession(account);
++        vm.warp(block.timestamp + D);
++        vm.prank(account);
++        acl.confirmSuccessor();
++        // The holder notices too late: it cannot replace the locked successor, and retiring does not remove it.
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SuccessorAlreadyConfirmed.selector, attacker));
++        acl.designateSuccessor(successor);
++        _retire(account);
++        assertTrue(acl.isHandleDelegatedForUserDecryption(account, attacker, app, h1), "residual: the attacker reads");
++    }
++
++    /// @dev The counterpart: while the attacker's designation is only pending, carry-and-retire now voids it.
++    function test_TC18_PendingAttackerDesignationVoidedByRetireNow() public {
++        _seedAccountHandles();
++        vm.prank(account); // the thief
++        acl.designateSuccessor(attacker);
++        vm.prank(attacker);
++        acl.acceptSuccession(account);
++        // The holder sees the pending designation (S11) and retires before confirmableAt.
++        vm.warp(block.timestamp + D - 1);
++        _retire(account);
++        vm.warp(block.timestamp + 1);
++        vm.prank(account);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, account));
++        acl.confirmSuccessor();
++        assertFalse(acl.isHandleDelegatedForUserDecryption(account, attacker, app, h1));
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // Gas, frame-level (Foundry), with the ACL's storage marked cold before each measured call
++    ////////////////////////////////////////////////////////////////////////////
++
++    function _frame() internal view returns (uint256) {
++        return vm.lastCallGas().gasTotalUsed;
++    }
++
++    function test_Gas_E1Lifecycle() public {
++        _seedAccountHandles();
++
++        vm.cool(aclAdd);
++        vm.prank(account);
++        acl.designateSuccessor(successor);
++        uint256 gDesignate = _frame();
++
++        vm.cool(aclAdd);
++        vm.prank(successor);
++        acl.acceptSuccession(account);
++        uint256 gAccept = _frame();
++
++        vm.warp(block.timestamp + D);
++        vm.cool(aclAdd);
++        vm.prank(account);
++        acl.confirmSuccessor();
++        uint256 gConfirm = _frame();
++
++        vm.cool(aclAdd);
++        vm.prank(account);
++        acl.retireAccount();
++        uint256 gRetireWithSuccessor = _frame();
++
++        vm.cool(aclAdd);
++        vm.prank(other);
++        acl.retireAccount();
++        uint256 gRetireNoSuccession = _frame();
++
++        vm.prank(delegate);
++        acl.designateSuccessor(attacker);
++        vm.cool(aclAdd);
++        vm.prank(delegate);
++        acl.retireAccount();
++        uint256 gRetireVoidingPending = _frame();
++
++        vm.cool(aclAdd);
++        bool readable = acl.isHandleDelegatedForUserDecryption(account, successor, app, h1);
++        uint256 gViewSuccessor = _frame();
++        assertTrue(readable);
++
++        vm.cool(aclAdd);
++        vm.prank(successor);
++        acl.resignSuccession(account);
++        uint256 gResign = _frame();
++
++        vm.cool(aclAdd);
++        vm.prank(app2);
++        acl.raiseSuccessorDelay(30 days);
++        uint256 gRaise = _frame();
++
++        emit log_named_uint("E1 frame gas: designateSuccessor (cold)", gDesignate);
++        emit log_named_uint("E1 frame gas: acceptSuccession (cold)", gAccept);
++        emit log_named_uint("E1 frame gas: confirmSuccessor (cold)", gConfirm);
++        emit log_named_uint("E1 frame gas: retireAccount with a confirmed successor (cold)", gRetireWithSuccessor);
++        emit log_named_uint("E1 frame gas: retireAccount, no succession record (cold)", gRetireNoSuccession);
++        emit log_named_uint("E1 frame gas: retireAccount voiding a pending designation (cold)", gRetireVoidingPending);
++        emit log_named_uint("E1 frame gas: isHandleDelegatedForUserDecryption, successor path (cold)", gViewSuccessor);
++        emit log_named_uint("E1 frame gas: resignSuccession (cold)", gResign);
++        emit log_named_uint("E1 frame gas: raiseSuccessorDelay (cold)", gRaise);
++    }
++}

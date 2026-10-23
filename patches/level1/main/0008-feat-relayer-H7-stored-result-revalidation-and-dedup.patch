@@ -1,0 +1,819 @@
+From 256306b68503e1511ae71210d61611a3b4ca175c Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 23:23:57 +0300
+Subject: [PATCH 8/8] feat(relayer): H7 stored-result revalidation and dedup
+ key (lifecycle Level 1)
+
+Profile H7 (rule V6) in the relayer, behind
+`user_decrypt_signature_check.profile_h.revalidate_stored_results`:
+
+- Deduplication of user decryption requests is keyed on the signature and
+  the validity window as well as the request content (`dedup_key`); today's
+  key ignores both, so an equivalent request with a new signature and window
+  is served the stored job.
+- Before the shares of a completed job are served on GET, the host ACL is
+  checked again (the same per-handle checks as the readiness check); a
+  refusal answers 400 `not_allowed_on_host_acl` and serves nothing.
+
+Also, from P0.4: two pre-check tests for an account whose code is an
+ECDSA-disabled delegation indicator (EIP-7851, `0xef0101 || delegate`):
+under Profile H `enforce` its root key is refused and the EIP-7702 shim does
+not apply.
+
+Tests: an integration test (tests/user_decrypt_v3_h7_test.rs) runs the
+same, and an equivalent, request after retirement with and without H7; a
+unit test covers the dedup key.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ relayer/config/local.mainnet.yaml.example     |   2 +
+ relayer/config/local.testnet.yaml.example     |   2 +
+ relayer/config/local.yaml.example             |   2 +
+ relayer/src/config/settings.rs                |  10 +
+ relayer/src/core/user_decrypt_request.rs      | 116 +++++++++-
+ relayer/src/host/acl_checker.rs               |  44 +++-
+ relayer/src/host/signature_prechecker.rs      |  42 ++++
+ .../endpoints/v2/handlers/user_decrypt.rs     |  92 +++++++-
+ relayer/src/http/server.rs                    |  26 ++-
+ relayer/src/startup.rs                        |   6 +
+ .../sql/repositories/user_decrypt_repo.rs     |  24 ++
+ relayer/tests/user_decrypt_v3_h7_test.rs      | 211 ++++++++++++++++++
+ 12 files changed, 570 insertions(+), 7 deletions(-)
+ create mode 100644 relayer/tests/user_decrypt_v3_h7_test.rs
+
+diff --git a/relayer/config/local.mainnet.yaml.example b/relayer/config/local.mainnet.yaml.example
+index 0f9bfc94..4e56d401 100644
+--- a/relayer/config/local.mainnet.yaml.example
++++ b/relayer/config/local.mainnet.yaml.example
+@@ -49,6 +49,8 @@ user_decrypt_signature_check:
+   #   max_extra_data_bytes: 1024
+   #   max_erc1271_attempts: 2
+   #   eip7702_fallback: true
++  #   revalidate_stored_results: false   # H7: re-check the host ACL before serving stored shares;
++  #                                      # dedup keyed on the signature and the validity window
+ 
+ gateway:
+   blockchain_rpc:
+diff --git a/relayer/config/local.testnet.yaml.example b/relayer/config/local.testnet.yaml.example
+index 598be816..8e0eff4a 100644
+--- a/relayer/config/local.testnet.yaml.example
++++ b/relayer/config/local.testnet.yaml.example
+@@ -44,6 +44,8 @@ user_decrypt_signature_check:
+   #   max_extra_data_bytes: 1024
+   #   max_erc1271_attempts: 2
+   #   eip7702_fallback: true
++  #   revalidate_stored_results: false   # H7: re-check the host ACL before serving stored shares;
++  #                                      # dedup keyed on the signature and the validity window
+ 
+ gateway:
+   blockchain_rpc:
+diff --git a/relayer/config/local.yaml.example b/relayer/config/local.yaml.example
+index f1e48a5f..afee217a 100644
+--- a/relayer/config/local.yaml.example
++++ b/relayer/config/local.yaml.example
+@@ -44,6 +44,8 @@ user_decrypt_signature_check:
+   #   max_extra_data_bytes: 1024
+   #   max_erc1271_attempts: 2
+   #   eip7702_fallback: true
++  #   revalidate_stored_results: false   # H7: re-check the host ACL before serving stored shares;
++  #                                      # dedup keyed on the signature and the validity window
+ 
+ gateway:
+   blockchain_rpc:
+diff --git a/relayer/src/config/settings.rs b/relayer/src/config/settings.rs
+index e427e997..e6ee4a0b 100644
+--- a/relayer/src/config/settings.rs
++++ b/relayer/src/config/settings.rs
+@@ -760,6 +760,10 @@ pub struct ProfileHPrecheckConfig {
+     pub max_erc1271_attempts: u8,
+     /// H2's narrow EIP-7702 fallback (Profile Q switches it off).
+     pub eip7702_fallback: bool,
++    /// [lifecycle Level 1, Profile H, H7] Stored user decryption results: the deduplication key also covers the
++    /// signature and the validity window, and stored shares are served again only after the host-ACL check
++    /// passes at a fresh decision block. Effective only while `enabled` is true.
++    pub revalidate_stored_results: bool,
+ }
+ 
+ impl Default for ProfileHPrecheckConfig {
+@@ -774,11 +778,17 @@ impl Default for ProfileHPrecheckConfig {
+             max_extra_data_bytes: policy.max_extra_data_bytes,
+             max_erc1271_attempts: policy.max_erc1271_attempts,
+             eip7702_fallback: policy.eip7702_fallback,
++            revalidate_stored_results: false,
+         }
+     }
+ }
+ 
+ impl ProfileHPrecheckConfig {
++    /// [lifecycle Level 1, Profile H, H7] Whether stored user decryption results are revalidated.
++    pub fn h7_enabled(&self) -> bool {
++        self.enabled && self.revalidate_stored_results
++    }
++
+     /// The shared-crate policy for these values, or `None` while Profile H is disabled.
+     pub fn signature_policy(&self) -> Result<Option<SignaturePolicy>, AppConfigError> {
+         if !self.enabled {
+diff --git a/relayer/src/core/user_decrypt_request.rs b/relayer/src/core/user_decrypt_request.rs
+index d0eaa92a..800e6037 100644
+--- a/relayer/src/core/user_decrypt_request.rs
++++ b/relayer/src/core/user_decrypt_request.rs
+@@ -1,8 +1,71 @@
+ use crate::core::event::UserDecryptRequest;
+ use crate::orchestrator::ContentHasher;
+ use sha2::{Digest, Sha256};
++use std::sync::atomic::{AtomicBool, Ordering};
++
++/// [lifecycle Level 1, Profile H, H7] Set once at startup from
++/// `user_decrypt_signature_check.profile_h`: the dedup key of a user decryption request then also
++/// covers its signature and validity window (see [`UserDecryptRequest::dedup_key`]). Process-wide
++/// because every component derives the job id from [`ContentHasher::content_hash`].
++static H7_DEDUP_KEY: AtomicBool = AtomicBool::new(false);
++
++/// [lifecycle Level 1, Profile H, H7] Turns the H7 dedup key on or off for this process.
++pub fn set_h7_dedup_key(on: bool) {
++    H7_DEDUP_KEY.store(on, Ordering::Relaxed);
++}
+ 
+ impl ContentHasher for UserDecryptRequest {
++    /// The dedup key of the request: [`UserDecryptRequest::dedup_key`], with H7 as configured.
++    fn content_hash(&self) -> [u8; 32] {
++        self.dedup_key(H7_DEDUP_KEY.load(Ordering::Relaxed))
++    }
++}
++
++impl UserDecryptRequest {
++    /// [lifecycle Level 1, Profile H, H7] The dedup key. Without H7, the content hash below. With H7, a
++    /// hash of that content hash, the signature and the validity window: only the very same signed
++    /// request deduplicates, so a stored result is never matched to a new authorization.
++    pub fn dedup_key(&self, h7: bool) -> [u8; 32] {
++        let base = self.base_content_hash();
++        if !h7 {
++            return base;
++        }
++        let (signature, start, duration) = match self {
++            UserDecryptRequest::LegacyDirect {
++                signature,
++                request_validity,
++                ..
++            }
++            | UserDecryptRequest::LegacyDelegated {
++                signature,
++                request_validity,
++                ..
++            } => (
++                signature,
++                request_validity.start_timestamp,
++                request_validity.duration_days,
++            ),
++            UserDecryptRequest::Eip712UnifiedV1 {
++                signature,
++                request_validity,
++                ..
++            } => (
++                signature,
++                request_validity.start_timestamp,
++                request_validity.duration_seconds,
++            ),
++        };
++        let mut hasher = Sha256::new();
++        hasher.update(b"h7:");
++        hasher.update(base);
++        hasher.update(b"signature:");
++        hasher.update(signature);
++        hasher.update(b"validity:");
++        hasher.update(start.to_be_bytes::<32>());
++        hasher.update(duration.to_be_bytes::<32>());
++        hasher.finalize().into()
++    }
++
+     /// Content hash used for dedup of in-flight requests.
+     ///
+     /// Bit-identical to the pre-refactor hash for each legacy EIP-712
+@@ -21,10 +84,10 @@ impl ContentHasher for UserDecryptRequest {
+     ///
+     /// `signature` and the validity-window fields are excluded — they're
+     /// consumed on-chain prior to receiving a decryption-id and shouldn't
+-    /// gate dedup.
++    /// gate dedup. ([lifecycle Level 1] Under H7, [`Self::dedup_key`] adds them.)
+     ///
+     /// TODO: Consider canonical ordering for list items.
+-    fn content_hash(&self) -> [u8; 32] {
++    fn base_content_hash(&self) -> [u8; 32] {
+         let mut hasher = Sha256::new();
+ 
+         match self {
+@@ -205,6 +268,55 @@ mod tests {
+         }
+     }
+ 
++    /// [lifecycle Level 1, Profile H, H7] Off, the dedup key is the content hash (today's key). On,
++    /// it is deterministic and changes with the signature or the validity window.
++    #[test]
++    fn h7_dedup_key_covers_signature_and_validity() {
++        for request in [
++            sample_legacy_direct(),
++            sample_legacy_delegated(),
++            sample_eip712_unified(),
++        ] {
++            assert_eq!(request.dedup_key(false), request.base_content_hash());
++            assert_eq!(request.dedup_key(true), request.dedup_key(true));
++            assert_ne!(request.dedup_key(true), request.dedup_key(false));
++
++            let mut resigned = request.clone();
++            let mut later = request.clone();
++            match (&mut resigned, &mut later) {
++                (
++                    UserDecryptRequest::LegacyDirect { signature, .. },
++                    UserDecryptRequest::LegacyDirect {
++                        request_validity, ..
++                    },
++                )
++                | (
++                    UserDecryptRequest::LegacyDelegated { signature, .. },
++                    UserDecryptRequest::LegacyDelegated {
++                        request_validity, ..
++                    },
++                ) => {
++                    *signature = Bytes::from(vec![0x01; 65]);
++                    request_validity.start_timestamp += U256::from(1);
++                }
++                (
++                    UserDecryptRequest::Eip712UnifiedV1 { signature, .. },
++                    UserDecryptRequest::Eip712UnifiedV1 {
++                        request_validity, ..
++                    },
++                ) => {
++                    *signature = Bytes::from(vec![0x01; 65]);
++                    request_validity.start_timestamp += U256::from(1);
++                }
++                _ => unreachable!(),
++            }
++            for other in [&resigned, &later] {
++                assert_eq!(other.dedup_key(false), request.dedup_key(false));
++                assert_ne!(other.dedup_key(true), request.dedup_key(true));
++            }
++        }
++    }
++
+     #[test]
+     fn legacy_direct_content_hash_deterministic() {
+         let request = sample_legacy_direct();
+diff --git a/relayer/src/host/acl_checker.rs b/relayer/src/host/acl_checker.rs
+index 22a32dd9..84f7fdee 100644
+--- a/relayer/src/host/acl_checker.rs
++++ b/relayer/src/host/acl_checker.rs
+@@ -1,7 +1,7 @@
+ use crate::{
+     config::settings::{HostChainConfig, RetrySettings},
+     core::{
+-        event::{HandleContractPair, HandleEntry},
++        event::{HandleContractPair, HandleEntry, UserDecryptRequest},
+         job_id::JobId,
+     },
+     host::{
+@@ -377,6 +377,48 @@ impl HostAclChecker {
+     ///
+     /// Calls are grouped by host chain id (extracted from the handle bytes)
+     /// and dispatched through one multicall per chain.
++    /// [lifecycle Level 1, Profile H, H7] The host-ACL check of a stored user decryption request, with
++    /// the per-variant dispatch the readiness check uses, at a fresh decision block (the latest one),
++    /// before its stored shares are served again.
++    pub async fn check_stored_user_decrypt(
++        &self,
++        job_id: &JobId,
++        request: &UserDecryptRequest,
++    ) -> Result<(), HostAclError> {
++        match request {
++            UserDecryptRequest::LegacyDirect {
++                ct_handle_contract_pairs,
++                user_address,
++                ..
++            } => {
++                self.check_user_decrypt(job_id, ct_handle_contract_pairs, *user_address)
++                    .await
++            }
++            UserDecryptRequest::LegacyDelegated {
++                ct_handle_contract_pairs,
++                delegator_address,
++                delegate_address,
++                ..
++            } => {
++                self.check_delegated_user_decrypt(
++                    job_id,
++                    ct_handle_contract_pairs,
++                    *delegator_address,
++                    *delegate_address,
++                )
++                .await
++            }
++            UserDecryptRequest::Eip712UnifiedV1 {
++                handles,
++                user_address,
++                ..
++            } => {
++                self.check_unified_user_decrypt(job_id, handles, *user_address)
++                    .await
++            }
++        }
++    }
++
+     pub async fn check_unified_user_decrypt(
+         &self,
+         job_id: &JobId,
+diff --git a/relayer/src/host/signature_prechecker.rs b/relayer/src/host/signature_prechecker.rs
+index ebf4afd2..c4873b6c 100644
+--- a/relayer/src/host/signature_prechecker.rs
++++ b/relayer/src/host/signature_prechecker.rs
+@@ -549,6 +549,48 @@ mod tests {
+             .unwrap();
+     }
+ 
++    /// An ECDSA-disabled delegation indicator (EIP-7851, Draft): `0xef0101 ‖ delegate`.
++    fn eip7851_code(delegate: Address) -> Bytes {
++        let mut code = vec![0xef, 0x01, 0x01];
++        code.extend_from_slice(delegate.as_slice());
++        Bytes::from(code)
++    }
++
++    #[tokio::test]
++    async fn profile_h_enforce_refuses_the_root_key_of_an_ecdsa_disabled_account() {
++        // [lifecycle Phase 4, P0.4] `0xef0101 ‖ delegate` is regular code for H2: the root key's
++        // ECDSA signature counts only through ERC-1271, and the delegate answers wrong magic.
++        let asserter = Asserter::new();
++        asserter.push_success(&U64::from(16));
++        asserter.push_success(&eip7851_code(Address::from([0x77; 20])));
++        asserter.push_success(&word([0xff, 0xff, 0xff, 0xff]));
++        let err = profile_h_checker(asserter, CodeFirstMode::Enforce)
++            .verify(&signed_request())
++            .await
++            .unwrap_err();
++        match err {
++            SigPreCheckError::Invalid { reason, .. } => {
++                assert!(reason.to_lowercase().contains("magic"), "{reason}")
++            }
++            other => panic!("expected Invalid, got {other:?}"),
++        }
++    }
++
++    #[tokio::test]
++    async fn profile_h_enforce_gives_no_shim_to_an_ecdsa_disabled_account() {
++        // [lifecycle Phase 4, P0.4] An empty success from the delegate of `0xef0101 ‖ delegate`
++        // does not open the narrow 7702 fallback: regular code is ERC-1271 only.
++        let asserter = Asserter::new();
++        asserter.push_success(&U64::from(16));
++        asserter.push_success(&eip7851_code(Address::from([0x77; 20])));
++        asserter.push_success(&Bytes::new());
++        let err = profile_h_checker(asserter, CodeFirstMode::Enforce)
++            .verify(&signed_request())
++            .await
++            .unwrap_err();
++        assert!(matches!(err, SigPreCheckError::Invalid { .. }), "{err:?}");
++    }
++
+     #[tokio::test]
+     async fn profile_h_empty_revert_is_retried_only_at_a_later_block() {
+         // H4: attempt 1 reverts with no reason at block 16; attempt 2 sees block 16 again and
+diff --git a/relayer/src/http/endpoints/v2/handlers/user_decrypt.rs b/relayer/src/http/endpoints/v2/handlers/user_decrypt.rs
+index b216bcdd..3a337c1e 100644
+--- a/relayer/src/http/endpoints/v2/handlers/user_decrypt.rs
++++ b/relayer/src/http/endpoints/v2/handlers/user_decrypt.rs
+@@ -13,7 +13,7 @@ use crate::core::event::{
+     ApiVersion, RelayerEvent, RelayerEventData, UserDecryptEventData, UserDecryptRequest,
+ };
+ use crate::core::job_id::JobId;
+-use crate::host::HostChainIdChecker;
++use crate::host::{HostAclChecker, HostAclError, HostChainIdChecker};
+ use crate::http::retry_after::{
+     DecryptQueueInfo, ReadinessQueueInfo, RequestStateInfo, RetryAfterState, TxQueueInfo,
+ };
+@@ -61,6 +61,9 @@ pub struct UserDecryptHandler {
+     retry_after_state: Arc<RetryAfterState>,
+     user_decrypt_wait_state: Arc<UserDecryptWaitState>,
+     host_chain_id_checker: Arc<HostChainIdChecker>,
++    /// [lifecycle Level 1, Profile H, H7] When set, stored shares are served again only after this
++    /// host-ACL check of the stored request passes at a fresh decision block.
++    stored_result_acl: Option<Arc<HostAclChecker>>,
+ }
+ 
+ impl UserDecryptHandler {
+@@ -84,6 +87,86 @@ impl UserDecryptHandler {
+             retry_after_state,
+             user_decrypt_wait_state,
+             host_chain_id_checker,
++            stored_result_acl: None,
++        }
++    }
++
++    /// [lifecycle Level 1, Profile H, H7] Revalidates stored results with `acl` before serving them.
++    pub fn with_stored_result_acl(mut self, acl: Arc<HostAclChecker>) -> Self {
++        self.stored_result_acl = Some(acl);
++        self
++    }
++
++    /// [lifecycle Level 1, Profile H, H7] Rule V6, before stored shares are served: the host-ACL check
++    /// of the stored request at a fresh decision block. `Some(response)` refuses, `None` serves.
++    async fn revalidate_stored_result(
++        &self,
++        job_id: Uuid,
++        request_id: Uuid,
++    ) -> Option<axum::response::Response> {
++        let acl = self.stored_result_acl.as_ref()?;
++        let refused = |status: StatusCode, error: V2ErrorResponseBody| {
++            Some(
++                (
++                    status,
++                    Json(UserDecryptStatusResponseJson {
++                        status: ApiResponseStatus::Failed,
++                        request_id: request_id.to_string(),
++                        result: None,
++                        error: Some(error),
++                    }),
++                )
++                    .into_response(),
++            )
++        };
++        let (int_job_id, request) = match self
++            .user_decrypt_repo
++            .find_request_by_ext_job_id(job_id)
++            .await
++        {
++            Ok(Some(found)) => found,
++            Ok(None) => {
++                error!(ext_job_id = %job_id, "PROFILE-H H7: stored request not found");
++                return refused(
++                    StatusCode::INTERNAL_SERVER_ERROR,
++                    V2ErrorResponseBody::internal_server_error("Internal server error"),
++                );
++            }
++            Err(e) => {
++                error!(ext_job_id = %job_id, error = %e, "PROFILE-H H7: stored request unreadable");
++                return refused(
++                    StatusCode::INTERNAL_SERVER_ERROR,
++                    V2ErrorResponseBody::internal_server_error("Internal server error"),
++                );
++            }
++        };
++        let Ok(job) = JobId::try_from(int_job_id.as_slice()) else {
++            return refused(
++                StatusCode::INTERNAL_SERVER_ERROR,
++                V2ErrorResponseBody::internal_server_error("Internal server error"),
++            );
++        };
++        match acl.check_stored_user_decrypt(&job, &request).await {
++            Ok(()) => {
++                info!(ext_job_id = %job_id, "PROFILE-H H7: stored result revalidated");
++                None
++            }
++            Err(e @ HostAclError::NotAllowed { .. }) => {
++                info!(ext_job_id = %job_id, error = %e, "PROFILE-H H7: stored result not served");
++                refused(
++                    StatusCode::BAD_REQUEST,
++                    V2ErrorResponseBody::not_allowed_on_host_acl(&format!(
++                        "{NOT_ALLOWED_ON_HOST_ACL_PREFIX} {e} (stored result revalidated, Profile H H7)"
++                    )),
++                )
++            }
++            Err(e) => {
++                warn!(ext_job_id = %job_id, error = %e, "PROFILE-H H7: revalidation failed; not serving");
++                refused(
++                    StatusCode::INTERNAL_SERVER_ERROR,
++                    V2ErrorResponseBody::host_acl_failed(&format!("{HOST_ACL_FAILED_PREFIX} {e}")),
++                )
++            }
+         }
+     }
+ 
+@@ -753,6 +836,13 @@ impl UserDecryptHandler {
+                                 )
+                                     .into_response()
+                             } else {
++                                // [lifecycle Level 1, Profile H, H7] Rule V6: a stored result is
++                                // served only after the host ACL allows it again.
++                                if let Some(refusal) =
++                                    self.revalidate_stored_result(job_id, request_id).await
++                                {
++                                    return refusal;
++                                }
+                                 // Convert from database model to API response
+                                 match UserDecryptResponseJson::try_from(response_model) {
+                                     Ok(api_response) => {
+diff --git a/relayer/src/http/server.rs b/relayer/src/http/server.rs
+index 10169d63..7af032e0 100644
+--- a/relayer/src/http/server.rs
++++ b/relayer/src/http/server.rs
+@@ -1,7 +1,7 @@
+ use crate::config::settings::Settings;
+ use crate::core::event::{ApiCategory, ApiVersion};
+ use crate::gateway::throttlers::BouncerThrottlers;
+-use crate::host::{HostChainIdChecker, UserDecryptSignaturePreChecker};
++use crate::host::{HostAclChecker, HostChainIdChecker, UserDecryptSignaturePreChecker};
+ use crate::http::admin::AdminConfigRegistry;
+ use crate::http::endpoints::{
+     admin, health_handler, liveness_handler,
+@@ -97,7 +97,7 @@ pub async fn run_http_server(
+         retry_after_state.clone(),
+     ));
+ 
+-    let user_decrypt_handler_v2 = Arc::new(UserDecryptHandlerV2::new(
++    let user_decrypt_handler_v2 = UserDecryptHandlerV2::new(
+         orchestrator.clone(),
+         api_version,
+         repositories.user_decrypt.clone(),
+@@ -116,7 +116,27 @@ pub async fn run_http_server(
+         retry_after_state.clone(),
+         user_decrypt_wait_state.clone(),
+         host_chain_id_checker.clone(),
+-    ));
++    );
++    // [lifecycle Level 1, Profile H, H7] Stored shares are revalidated against the host ACL before they
++    // are served again, with the readiness check's retry policy.
++    let user_decrypt_handler_v2 = Arc::new(
++        if settings.user_decrypt_signature_check.profile_h.h7_enabled() {
++            user_decrypt_handler_v2.with_stored_result_acl(Arc::new(
++                HostAclChecker::new(
++                    &settings.host_chains,
++                    settings
++                        .gateway
++                        .readiness_checker
++                        .host_acl_check
++                        .retry
++                        .clone(),
++                )
++                .expect("[lifecycle Level 1, H7] host ACL checker for stored results"),
++            ))
++        } else {
++            user_decrypt_handler_v2
++        },
++    );
+ 
+     let public_decrypt_handler_v2 = Arc::new(PublicDecryptHandlerV2::new(
+         orchestrator.clone(),
+diff --git a/relayer/src/startup.rs b/relayer/src/startup.rs
+index 045c6f41..c3769759 100644
+--- a/relayer/src/startup.rs
++++ b/relayer/src/startup.rs
+@@ -178,6 +178,12 @@ pub async fn run_fhevm_relayer(
+             .signature_policy()?,
+     )?);
+ 
++    // [lifecycle Level 1, Profile H, H7] The dedup key of user decryptions also covers the signature and the
++    // validity window. Set before any request or gateway event is processed.
++    crate::core::user_decrypt_request::set_h7_dedup_key(
++        settings.user_decrypt_signature_check.profile_h.h7_enabled(),
++    );
++
+     let mut settings = settings;
+ 
+     // === Services Phase (bind) ===
+diff --git a/relayer/src/store/sql/repositories/user_decrypt_repo.rs b/relayer/src/store/sql/repositories/user_decrypt_repo.rs
+index d22f2b3f..8758e1fc 100644
+--- a/relayer/src/store/sql/repositories/user_decrypt_repo.rs
++++ b/relayer/src/store/sql/repositories/user_decrypt_repo.rs
+@@ -1106,6 +1106,30 @@ impl UserDecryptRepository {
+     /// [`queue_depth`](crate::store::sql::repositories::queue_depth). It sits validly next to
+     /// `GROUP BY r.id`: it only references `r.id` and `r.req_status`, both functionally dependent
+     /// on the grouped primary key, like the other ungrouped `r.*` columns above it.
++    /// [lifecycle Level 1, Profile H, H7] The stored request of `ext_job_id` with its internal job id,
++    /// to revalidate its result before it is served again. A runtime-checked query (no offline data).
++    pub async fn find_request_by_ext_job_id(
++        &self,
++        ext_job_id: Uuid,
++    ) -> SqlResult<Option<(Vec<u8>, crate::core::event::UserDecryptRequest)>> {
++        let row: Option<(Vec<u8>, UserDecryptReqType, Value)> = sqlx::query_as(
++            "SELECT int_job_id, req_type, req FROM user_decrypt_req WHERE ext_job_id = $1",
++        )
++        .bind(ext_job_id)
++        .fetch_optional(&self.pool.get_app_pool())
++        .await?;
++        match row {
++            None => Ok(None),
++            Some((int_job_id, req_type, req)) => {
++                let request = crate::store::sql::models::user_decrypt_req_model::from_stored_value(
++                    req_type, req,
++                )
++                .map_err(|e| SqlError::conversion_error("req", ext_job_id, e))?;
++                Ok(Some((int_job_id, request)))
++            }
++        }
++    }
++
+     pub async fn find_req_and_shares_by_ext_job_id(
+         &self,
+         ext_job_id: Uuid,
+diff --git a/relayer/tests/user_decrypt_v3_h7_test.rs b/relayer/tests/user_decrypt_v3_h7_test.rs
+new file mode 100644
+index 00000000..5e83388b
+--- /dev/null
++++ b/relayer/tests/user_decrypt_v3_h7_test.rs
+@@ -0,0 +1,211 @@
++//! [lifecycle Level 1, Profile H, H7] Stored user decryption results, end to end through the v3
++//! endpoint with the in-process `TestSetup` harness and the `ethereum_rpc_mock` JSON-RPC mock.
++//!
++//! A request completes while the host ACL allows it. Then every host-ACL answer becomes false, as it
++//! does once the user retires on a registry with the Decryption Authority Lifecycle Core. The same
++//! request is sent again, and an equivalent one (the same user, handle and key, a new validity window
++//! and signature):
++//! - without H7 (today), both are deduplicated onto the stored job and its shares are served, with no
++//!   new host-ACL check;
++//! - with H7, the identical request still deduplicates but its stored shares are refused by the
++//!   revalidation (`not_allowed_on_host_acl`), and the equivalent one is a new job, refused by the
++//!   readiness check.
++//!
++//! Run with one test thread: the H7 dedup key is a process-wide switch set at relayer startup.
++
++mod common;
++
++use crate::common::utils::{
++    register_host_acl_deny_all, sign_v3_user_decrypt_envelope, user_decrypt_test_signer, TestSetup,
++};
++use alloy::primitives::{Address, B256};
++use ethereum_rpc_mock::fhevm::UserDecryptKind;
++use fhevm_relayer::http::endpoints::v2::types::error::ApiResponseStatus;
++use fhevm_relayer::http::endpoints::v2::types::user_decrypt::{
++    UserDecryptPostResponseJson, UserDecryptStatusResponseJson,
++};
++use serde_json::json;
++use std::str::FromStr;
++use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
++
++fn post_url(setup: &TestSetup) -> String {
++    format!("http://localhost:{}/v3/user-decrypt", setup.http_port)
++}
++
++fn get_url(setup: &TestSetup, job_id: &str) -> String {
++    format!(
++        "http://localhost:{}/v3/user-decrypt/{}",
++        setup.http_port, job_id
++    )
++}
++
++/// A unified v3 envelope for one direct handle, signed by the fixed test signer; `start` is the
++/// validity window's start (Unix seconds).
++fn envelope(handle: &str, contract: Address, public_key: &str, start: u64) -> serde_json::Value {
++    let signer = user_decrypt_test_signer();
++    let user = signer.address();
++    let mut envelope = json!({
++        "attestationType": "eip712-unified-user-decrypt-v1",
++        "attestedPayload": {
++            "version": "2.0",
++            "type": "user_decryption",
++            "handles": [{
++                "ctHandle": handle,
++                "contractAddress": format!("{:?}", contract),
++                "ownerAddress": format!("{:?}", user),
++            }],
++            "userAddress": format!("{:?}", user),
++            "allowedContracts": [format!("{:?}", contract)],
++            "requestValidity": {
++                "startTimestamp": start.to_string(),
++                "durationSeconds": "604800",
++            },
++            "publicKey": public_key,
++            "extraData": "0x00",
++        },
++        "signature": "0x",
++    });
++    sign_v3_user_decrypt_envelope(&mut envelope, &signer);
++    envelope
++}
++
++async fn post(setup: &TestSetup, payload: &serde_json::Value) -> String {
++    let response = reqwest::Client::new()
++        .post(post_url(setup))
++        .header("Content-Type", "application/json")
++        .timeout(Duration::from_secs(10))
++        .json(payload)
++        .send()
++        .await
++        .expect("POST failed");
++    assert_eq!(response.status(), reqwest::StatusCode::ACCEPTED);
++    let body: UserDecryptPostResponseJson = response.json().await.expect("POST body");
++    body.result.job_id
++}
++
++/// Polls GET until it is no longer 202: (HTTP status, API status, error label, share count).
++async fn get_terminal(setup: &TestSetup, job_id: &str) -> (u16, ApiResponseStatus, String, usize) {
++    let deadline = Instant::now() + Duration::from_secs(30);
++    loop {
++        tokio::time::sleep(Duration::from_millis(300)).await;
++        let response = reqwest::Client::new()
++            .get(get_url(setup, job_id))
++            .timeout(Duration::from_secs(10))
++            .send()
++            .await
++            .expect("GET failed");
++        let status = response.status();
++        if status == reqwest::StatusCode::ACCEPTED {
++            assert!(
++                Instant::now() < deadline,
++                "job {job_id} never reached a terminal state"
++            );
++            continue;
++        }
++        let body: UserDecryptStatusResponseJson = response.json().await.expect("GET body");
++        let label = body
++            .error
++            .as_ref()
++            .map(|e| e.label().to_string())
++            .unwrap_or_else(|| "-".to_string());
++        let shares = body.result.as_ref().map(|r| r.result.len()).unwrap_or(0);
++        return (status.as_u16(), body.status, label, shares);
++    }
++}
++
++async fn run(h7: bool) {
++    let variant = if h7 { "h7" } else { "unmodified" };
++    let setup = if h7 {
++        TestSetup::new_with_settings(|s| {
++            s.user_decrypt_signature_check.profile_h.enabled = true;
++            s.user_decrypt_signature_check
++                .profile_h
++                .revalidate_stored_results = true;
++        })
++        .await
++    } else {
++        TestSetup::new().await
++    }
++    .expect("test setup");
++
++    let now = SystemTime::now()
++        .duration_since(UNIX_EPOCH)
++        .unwrap()
++        .as_secs();
++    let handle = crate::common::utils::random_handle();
++    let contract = crate::common::utils::random_address();
++    let public_key = format!("0x{}", "ab".repeat(32));
++    let first = envelope(&handle, contract, &public_key, now - 2);
++    let handles: Vec<B256> =
++        vec![B256::from_str(handle.strip_prefix("0x").unwrap_or(&handle)).unwrap()];
++    let user = user_decrypt_test_signer().address();
++    setup.fhevm_mock.on_user_decrypt_success(
++        UserDecryptKind::Unified,
++        handles,
++        user,
++        ethereum_rpc_mock::SubscriptionTarget::All,
++    );
++
++    // 1. Served while the host ACL allows it.
++    let job = post(&setup, &first).await;
++    let (status, api, label, shares) = get_terminal(&setup, &job).await;
++    println!("H7-RESULT variant={variant} step=first status={status} api={api:?} error={label} shares={shares} job_same=-");
++    assert_eq!(status, 200, "{variant}: the first request must be served");
++
++    // 2. The user retires: every host-ACL answer is now false.
++    let acl = Address::from_str(&setup.settings.host_chains[0].acl_address).unwrap();
++    setup.host_server.reset_state();
++    register_host_acl_deny_all(&setup.host_server, acl);
++
++    // 3. The same request again.
++    let again = post(&setup, &first).await;
++    let (status, api, label, shares) = get_terminal(&setup, &again).await;
++    println!(
++        "H7-RESULT variant={variant} step=same-request-after-retirement status={status} api={api:?} error={label} shares={shares} job_same={}",
++        again == job
++    );
++    assert_eq!(again, job, "{variant}: an identical request deduplicates");
++    if h7 {
++        assert_eq!((status, label.as_str()), (400, "not_allowed_on_host_acl"));
++    } else {
++        assert_eq!(
++            (status, shares > 0),
++            (200, true),
++            "today the stored shares are served"
++        );
++    }
++
++    // 4. An equivalent request: a new validity window and signature.
++    let equivalent = envelope(&handle, contract, &public_key, now - 1);
++    let other = post(&setup, &equivalent).await;
++    let (status, api, label, shares) = get_terminal(&setup, &other).await;
++    println!(
++        "H7-RESULT variant={variant} step=equivalent-request-after-retirement status={status} api={api:?} error={label} shares={shares} job_same={}",
++        other == job
++    );
++    if h7 {
++        assert_ne!(
++            other, job,
++            "under H7 the dedup key covers the signature and the window"
++        );
++        assert_eq!((status, label.as_str()), (400, "not_allowed_on_host_acl"));
++    } else {
++        assert_eq!(
++            other, job,
++            "today the dedup key ignores the signature and the window"
++        );
++        assert_eq!((status, shares > 0), (200, true));
++    }
++
++    setup.shutdown().await;
++}
++
++#[tokio::test]
++async fn h7_stored_results_unmodified() {
++    run(false).await;
++}
++
++#[tokio::test]
++async fn h7_stored_results_revalidated() {
++    run(true).await;
++}

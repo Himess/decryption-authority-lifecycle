@@ -1,0 +1,35 @@
+
+ RUN  v4.1.9 <repo>/impl/harness/phase5/p503-local
+
+stdout | p503-eip8298.test.ts
+[P503/local] tx deploy Keccak-f1600 helper (upstream helpers/f1600_170.hex): 0x3c1de57938ecaf56c77ef4592f92b9d2246f6d7f76145d221ad1ccc6d9ea0103 block 1 gasUsed 4716322
+
+stdout | p503-eip8298.test.ts
+[P503/local] tx deploy MLDSA44Verifier: 0xb49fb732f2cddb9107e1ea7f647e9136273d173921bf13ade4b4fa4a392911b5 block 2 gasUsed 5166161
+
+stdout | p503-eip8298.test.ts
+[P503/local] tx deploy ML-DSA-44 pk blob (prepare.py output): 0x7a2bcc8256af2d636caf46a9b7d181559c603789fcfc2469ef73cf14db57953e block 3 gasUsed 4434717
+
+stdout | p503-eip8298.test.ts
+[P503/local] tx deploy MLDSA44Account1271: 0x954046410f32930b63284fe5da9f15a66321455b1cf3325e1b4dc278bfa8e479 block 4 gasUsed 317011
+
+stdout | p503-eip8298.test.ts
+[P503/local] tx deploy Erc1271GasMeter: 0xbcecae8260f7c338304a1bca50c4bf44013e37c8f90ca312323fa58076814879 block 5 gasUsed 223128
+
+stdout | p503-eip8298.test.ts
+[P503/local] tx deploy NoErc1271: 0xa46700b7e1f54f8a554aaacff35171155a8cda94071248353e5afdbad442d83d block 6 gasUsed 56439
+
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > the digest the crate computes is the EIP-712 digest ethers computes 29ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > reference: X as a plain EOA is accepted by every verifier 131ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > adoption: X takes the ML-DSA-44 wallet runtime, Y the NoErc1271 runtime (anvil_setCode) 58ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > the gap: unmodified verifiers accept the root key of an account holding regular code 210ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > Profile H enforce refuses the root key: regular code, ERC-1271 only, no shim 170ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > Profile H enforce accepts the wallet ML-DSA-44 signature at B_exec 2,000,000 775ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > the SDK pre-check agrees with the verifier 1337ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > the proxy rewrote nothing: every verifier read the node own answer 2ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  21:32:17
+   Duration  6.19s (transform 354ms, setup 0ms, import 978ms, tests 5.03s, environment 0ms)
+

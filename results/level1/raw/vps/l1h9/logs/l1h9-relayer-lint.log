@@ -1,0 +1,129 @@
+INSCOPE start=2026-10-21T16:45:26Z cgroup=/system.slice/lifecycle-l1h9-relayer-lint-1792601125.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/run_l1h9_relayer_lint.sh]
+== make clippy: cargo clippy --workspace --all-targets --all-features -- -D warnings
+ Downloading crates ...
+  Downloaded assert-json-diff v2.0.2
+  Downloaded deadpool-runtime v0.1.4
+  Downloaded route-recognizer v0.3.1
+  Downloaded jsonrpsee v0.26.0
+  Downloaded jsonrpsee-types v0.26.0
+  Downloaded deadpool v0.12.3
+  Downloaded jsonrpsee-proc-macros v0.26.0
+  Downloaded jsonrpsee-server v0.26.0
+  Downloaded jsonrpsee-core v0.26.0
+  Downloaded soketto v0.8.1
+  Downloaded tracing-chrome v0.7.2
+  Downloaded wiremock v0.6.5
+    Checking futures-core v0.3.34
+    Checking futures-channel v0.3.34
+    Checking futures-io v0.3.34
+    Checking futures-task v0.3.34
+    Checking futures-util v0.3.34
+    Checking tokio-util v0.7.19
+    Checking http-body-util v0.1.4
+    Checking sync_wrapper v1.0.2
+    Checking tower v0.5.3
+    Checking h2 v0.4.16
+    Checking hyper v1.11.0
+    Checking hyper-util v0.1.20
+    Checking aws-smithy-types v1.6.1
+    Checking aws-smithy-async v1.3.0
+    Checking aws-smithy-runtime-api v1.14.0
+    Checking hyper-rustls v0.27.9
+    Checking futures-executor v0.3.34
+    Checking aws-smithy-schema v0.2.0
+    Checking futures v0.3.34
+    Checking tokio-stream v0.1.19
+    Checking aws-credential-types v1.3.0
+    Checking aws-smithy-http v0.64.0
+    Checking aws-smithy-http-client v1.2.0
+    Checking aws-smithy-observability v0.3.0
+    Checking aws-sigv4 v1.5.1
+    Checking aws-smithy-runtime v1.12.1
+    Checking aws-types v1.5.0
+    Checking aws-runtime v1.9.1
+    Checking alloy-transport v2.3.0
+    Checking aws-smithy-json v0.63.0
+    Checking tower-http v0.6.11
+    Checking alloy-pubsub v2.3.0
+    Checking aws-smithy-xml v0.62.0
+    Checking reqwest v0.13.4
+    Checking tokio-tungstenite v0.29.0
+    Checking aws-smithy-query v0.62.0
+    Checking alloy-transport-ws v2.3.0
+    Checking alloy-transport-http v2.3.0
+    Checking async-stream v0.3.6
+    Checking alloy-rpc-client v2.3.0
+    Checking aws-sdk-sts v1.110.0
+    Checking aws-sdk-ssooidc v1.107.0
+    Checking aws-sdk-sso v1.105.0
+    Checking aho-corasick v1.1.5
+    Checking regex-syntax v0.8.11
+    Checking regex-automata v0.4.18
+    Checking alloy-provider v2.3.0
+    Checking aws-config v1.10.1
+    Checking aws-sdk-kms v1.114.0
+    Checking alloy-signer-aws v2.3.0
+    Checking alloy-contract v2.3.0
+    Checking alloy v2.3.0
+    Checking jsonrpsee-types v0.26.0
+    Checking rustc-hash v2.1.3
+    Checking jsonrpsee-core v0.26.0
+    Checking fhevm_gateway_bindings v0.15.0 (/srv/lifecycle/src/fhevm-main-l1h9/gateway-contracts/rust_bindings)
+    Checking regex v1.13.1
+    Checking soketto v0.8.1
+    Checking num_cpus v1.17.0
+    Checking deadpool-runtime v0.1.4
+    Checking route-recognizer v0.3.1
+    Checking jsonrpsee-server v0.26.0
+    Checking deadpool v0.12.3
+   Compiling jsonrpsee-proc-macros v0.26.0
+    Checking assert-json-diff v2.0.2
+    Checking wiremock v0.6.5
+    Checking jsonrpsee v0.26.0
+    Checking ciphertext-attestation v0.15.0 (/srv/lifecycle/src/fhevm-main-l1h9/shared/ciphertext-attestation)
+    Checking ethereum_rpc_mock v0.1.0 (/srv/lifecycle/src/fhevm-main-l1h9/relayer/test-support/ethereum_rpc_mock)
+    Checking futures-intrusive v0.5.0
+    Checking sqlx-core v0.8.6
+    Checking matchers v0.2.0
+    Checking axum-core v0.5.6
+    Checking tracing-subscriber v0.3.23
+    Checking sqlx-postgres v0.8.6
+    Checking axum v0.8.9
+   Compiling fhevm-relayer v0.14.0 (/srv/lifecycle/src/fhevm-main-l1h9/relayer)
+    Checking moka v0.12.16
+    Checking governor v0.10.4
+    Checking validator v0.20.0
+    Checking sqlx v0.8.6
+    Checking utoipa-redoc v6.0.0
+    Checking tracing-chrome v0.7.2
+    Checking user-decryption-signature v0.14.0 (/srv/lifecycle/src/fhevm-main-l1h9/shared/user-decryption-signature)
+    Checking fhevm_host_bindings v0.15.0 (/srv/lifecycle/src/fhevm-main-l1h9/host-contracts/rust_bindings)
+    Checking serial_test v3.5.0
+    Checking rstest v0.26.1
+    Finished `dev` profile [unoptimized] target(s) in 8m 16s
+CLIPPY-OK
+	Command being timed: "/srv/lifecycle/scripts/run_l1h9_relayer_lint.sh"
+	User time (seconds): 399.67
+	System time (seconds): 84.19
+	Percent of CPU this job got: 97%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 8:16.55
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2483100
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1910
+	Minor (reclaiming a frame) page faults: 4416441
+	Voluntary context switches: 8457
+	Involuntary context switches: 3667
+	Swaps: 0
+	File system inputs: 529640
+	File system outputs: 415160
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T16:53:42Z rc=0 cgroup_memory.peak_bytes=2684354560 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=l1h9-relayer-lint unit=lifecycle-l1h9-relayer-lint-1792601125 rc=0 wall_s=501 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=501 killed=no sampled_peak_anon_mb=2288 sampled_peak_cgroup_current_mb=2559 sampled_peak_swap_mb=0

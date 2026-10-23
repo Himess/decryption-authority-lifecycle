@@ -1,0 +1,12 @@
+2026-10-22T19:50:35Z START pq-drill-r2
+2026-10-22T19:50:35Z <live-service>=active load=[1.54 1.25 0.99] mem_avail_mb=7072 swap_used_mb=145 tag=before:pq-drill-r2
+HEAVY name=pq-drill-r2 unit=lifecycle-pq-drill-r2-1792698635 rc=0 wall_s=787 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=787 killed=no sampled_peak_anon_mb=205 sampled_peak_cgroup_current_mb=217 sampled_peak_swap_mb=0
+2026-10-22T20:03:43Z <live-service>=active load=[1.68 1.49 1.21] mem_avail_mb=6954 swap_used_mb=145 tag=after:pq-drill-r2
+2026-10-22T20:03:43Z END pq-drill-r2 rc=0
+2026-10-22T20:03:43Z START pq-drill-r3
+2026-10-22T20:03:43Z <live-service>=active load=[1.68 1.49 1.21] mem_avail_mb=6954 swap_used_mb=145 tag=before:pq-drill-r3
+HEAVY name=pq-drill-r3 unit=lifecycle-pq-drill-r3-1792699423 rc=0 wall_s=766 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=766 killed=no sampled_peak_anon_mb=207 sampled_peak_cgroup_current_mb=222 sampled_peak_swap_mb=0
+2026-10-22T20:16:30Z <live-service>=active load=[1.40 1.32 1.24] mem_avail_mb=6974 swap_used_mb=145 tag=after:pq-drill-r3
+2026-10-22T20:16:31Z END pq-drill-r3 rc=0
+2026-10-22T20:16:32Z lifecycle-pg removed
+2026-10-22T20:16:32Z CHAIN DONE

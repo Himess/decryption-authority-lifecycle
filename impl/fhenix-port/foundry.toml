@@ -1,0 +1,132 @@
+# Phase 4, P2.1: the Decryption Authority Lifecycle Core on Fhenix CoFHE (Vendor-2).
+# vendor/cofhe-contracts-b5c20ed/ holds Fhenix's contracts unmodified (FhenixProtocol/cofhe-contracts b5c20ed, MIT);
+# src/ holds the ported copies; test/ the TC1-TC12 analogues, TC6 (permit role) and the R10 negative test.
+# Compiler settings follow Fhenix's own build (contracts/internal/host-chain/hardhat.config.ts): solc 0.8.25, cancun,
+# optimizer on, 800 runs, via IR, no metadata hash.
+
+[profile.default]
+src = "src"
+test = "test"
+out = "out"
+cache_path = "cache"
+libs = ["vendor"]
+solc = "0.8.25"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 800
+via_ir = true
+bytecode_hash = "none"
+remappings = [
+    "@openzeppelin/contracts/=vendor/openzeppelin-contracts-5.2.0/",
+    "@openzeppelin/contracts-upgradeable/=vendor/openzeppelin-contracts-upgradeable-5.2.0/",
+    "@fhenixprotocol/cofhe-contracts/=vendor/cofhe-contracts-b5c20ed/",
+    "forge-std/=vendor/forge-std-1.11.0/src/",
+]
+
+[profile.default.fuzz]
+runs = 512
+
+# The baseline: Fhenix's contracts as published, compiled alone.
+[profile.baseline]
+src = "vendor/cofhe-contracts-b5c20ed/internal/host-chain/contracts"
+test = "test-baseline"
+out = "out-baseline"
+cache_path = "cache-baseline"
+libs = ["vendor"]
+solc = "0.8.25"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 800
+via_ir = true
+bytecode_hash = "none"
+remappings = [
+    "@openzeppelin/contracts/=vendor/openzeppelin-contracts-5.2.0/",
+    "@openzeppelin/contracts-upgradeable/=vendor/openzeppelin-contracts-upgradeable-5.2.0/",
+    "@fhenixprotocol/cofhe-contracts/=vendor/cofhe-contracts-b5c20ed/",
+    "forge-std/=vendor/forge-std-1.11.0/src/",
+]
+
+[lint]
+lint_on_build = false
+
+# The end-to-end run on Fhenix's published mock stack: @cofhe/mock-contracts 1.0.1 and @cofhe/foundry-plugin 1.0.1, with
+# the @fhenixprotocol/cofhe-contracts 1.0.0 they pin. The port's ACL and ACP share registry replace the mock ACL and the
+# package's registry (e2e/src/CofheTestPort.sol); the mock TaskManager, threshold network and ZK verifier run as
+# published. Same compiler as the port (0.8.25).
+[profile.e2e]
+src = "e2e/src"
+test = "e2e/test"
+out = "out-e2e"
+cache_path = "cache-e2e"
+libs = ["vendor"]
+solc = "0.8.25"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 800
+via_ir = true
+bytecode_hash = "none"
+remappings = [
+    "@openzeppelin/contracts/=vendor/openzeppelin-contracts-5.2.0/",
+    "@openzeppelin/contracts-upgradeable/=vendor/openzeppelin-contracts-upgradeable-5.2.0/",
+    "@fhenixprotocol/cofhe-contracts/=vendor/npm-cofhe-contracts-1.0.0/",
+    "@cofhe/mock-contracts/=vendor/cofhe-mock-contracts-1.0.1/",
+    "@cofhe/foundry-plugin/=vendor/cofhe-foundry-plugin-1.0.1/",
+    "@cofhe/test-setup/=vendor/cofhe-test-setup-04a69f8/",
+    "forge-std/=vendor/forge-std-1.11.0/src/",
+    # as the plugin maps it: the mocks' hardhat/console.sol is forge-std's console
+    "hardhat/=vendor/forge-std-1.11.0/src/",
+]
+auto_detect_remappings = false
+
+# The plugin's own tests (FhenixProtocol/cofhesdk 04a69f8, packages/foundry-plugin/test), on the unmodified mock stack
+# (vendor-baseline) and on the port (vendor-port, changed only to deploy through CofheTestPort). Their test setup
+# (@cofhe/test-setup, the repo's test/setup) needs solc ^0.8.28, so both sets compile with 0.8.28.
+[profile.e2e-vendor-baseline]
+src = "e2e/src"
+test = "e2e/vendor-baseline"
+out = "out-e2e-baseline"
+cache_path = "cache-e2e-baseline"
+libs = ["vendor"]
+solc = "0.8.28"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 800
+via_ir = true
+bytecode_hash = "none"
+remappings = [
+    "@openzeppelin/contracts/=vendor/openzeppelin-contracts-5.2.0/",
+    "@openzeppelin/contracts-upgradeable/=vendor/openzeppelin-contracts-upgradeable-5.2.0/",
+    "@fhenixprotocol/cofhe-contracts/=vendor/npm-cofhe-contracts-1.0.0/",
+    "@cofhe/mock-contracts/=vendor/cofhe-mock-contracts-1.0.1/",
+    "@cofhe/foundry-plugin/=vendor/cofhe-foundry-plugin-1.0.1/",
+    "@cofhe/test-setup/=vendor/cofhe-test-setup-04a69f8/",
+    "forge-std/=vendor/forge-std-1.11.0/src/",
+    # as the plugin maps it: the mocks' hardhat/console.sol is forge-std's console
+    "hardhat/=vendor/forge-std-1.11.0/src/",
+]
+auto_detect_remappings = false
+
+[profile.e2e-vendor-port]
+src = "e2e/src"
+test = "e2e/vendor-port"
+out = "out-e2e-vendor-port"
+cache_path = "cache-e2e-vendor-port"
+libs = ["vendor"]
+solc = "0.8.28"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 800
+via_ir = true
+bytecode_hash = "none"
+remappings = [
+    "@openzeppelin/contracts/=vendor/openzeppelin-contracts-5.2.0/",
+    "@openzeppelin/contracts-upgradeable/=vendor/openzeppelin-contracts-upgradeable-5.2.0/",
+    "@fhenixprotocol/cofhe-contracts/=vendor/npm-cofhe-contracts-1.0.0/",
+    "@cofhe/mock-contracts/=vendor/cofhe-mock-contracts-1.0.1/",
+    "@cofhe/foundry-plugin/=vendor/cofhe-foundry-plugin-1.0.1/",
+    "@cofhe/test-setup/=vendor/cofhe-test-setup-04a69f8/",
+    "forge-std/=vendor/forge-std-1.11.0/src/",
+    # as the plugin maps it: the mocks' hardhat/console.sol is forge-std's console
+    "hardhat/=vendor/forge-std-1.11.0/src/",
+]
+auto_detect_remappings = false

@@ -1,0 +1,1087 @@
+From 83f7312a2ebdbe2a50339f9c7ba76bbf5869ee57 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Thu, 22 Oct 2026 07:28:06 +0300
+Subject: [PATCH 6/6] test(conformance): add the Decryption Authority Lifecycle
+ conformance kit adapter
+
+Phase 4, P2.3. The vendor-neutral kit (DecryptionAuthorityLifecycle.t.sol,
+copied byte for byte from the project's conformance/ directory) and this
+line's adapter: grants (allow, allowTransient, allowForDecryption,
+delegateForUserDecryption, multicall), the use and on-behalf views, the
+executor's operand path, the upgrade guard and the previous ACL release
+without Core. Run from host-contracts/ with FOUNDRY_ISOLATE=false (and once
+with it on): 17 passed, 1 skipped (no on-chain permit).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../DecryptionAuthorityLifecycle.t.sol        | 844 ++++++++++++++++++
+ .../conformance/ZamaMainConformance.t.sol     | 209 +++++
+ 2 files changed, 1053 insertions(+)
+ create mode 100644 host-contracts/test/conformance/DecryptionAuthorityLifecycle.t.sol
+ create mode 100644 host-contracts/test/conformance/ZamaMainConformance.t.sol
+
+diff --git a/host-contracts/test/conformance/DecryptionAuthorityLifecycle.t.sol b/host-contracts/test/conformance/DecryptionAuthorityLifecycle.t.sol
+new file mode 100644
+index 00000000..bc9ffa96
+--- /dev/null
++++ b/host-contracts/test/conformance/DecryptionAuthorityLifecycle.t.sol
+@@ -0,0 +1,844 @@
++// SPDX-License-Identifier: CC0-1.0
++pragma solidity ^0.8.24;
++
++// Decryption Authority Lifecycle: registry conformance kit. TC1–TC12 (Core), TC17 (E1), TC19 (E2).
++//
++// An abstract Foundry suite. A registry passes it through an adapter: a test contract that inherits
++// `DecryptionAuthorityLifecycleConformance` and implements the functions in the "Adapter" section with the registry's
++// own deployment and paths (see conformance/README.md). Core, E1 and E2 are driven through the ERC's interfaces;
++// grants, views, the engine, delegation, permits and upgrades through the adapter. A sequence that needs a right
++// that lives for one transaction runs inside one call of a KitAccount, so the suite passes with and without
++// Foundry's isolation. Only forge-std is imported.
++
++import {Test, Vm} from "forge-std/Test.sol";
++
++interface IKitCore {
++    event AccountRetired(address indexed account, address indexed successor);
++    function retireAccount() external;
++    function isAccountRetired(address account) external view returns (bool);
++}
++
++interface IKitStorage {
++    function retirementStorageLocation() external view returns (bytes32);
++}
++
++interface IKitERC165 {
++    function supportsInterface(bytes4 id) external view returns (bool);
++}
++
++interface IKitE1 {
++    function designateSuccessor(address successor) external;
++    function acceptSuccession(address account) external;
++    function cancelSuccessorDesignation() external;
++    function confirmSuccessor() external;
++    function resignSuccession(address account) external;
++    function successorDelay() external view returns (uint64);
++    function successorOf(address account) external view returns (address);
++    function pendingSuccessorOf(address account) external view returns (address, uint64, bool);
++}
++
++interface IKitE2 {
++    function retireAccountWithSig(address account, address successor, uint256[] calldata chainIds, bytes calldata sig)
++        external;
++}
++
++/// @notice A contract account. Its owner runs calls through it in one transaction, with the account as `msg.sender`.
++///         It answers ERC-1271 for its owner's ECDSA signatures.
++contract KitAccount {
++    struct Call {
++        address target;
++        bytes data;
++    }
++
++    struct Result {
++        bool ok;
++        bytes ret;
++    }
++
++    address public immutable owner;
++
++    constructor(address owner_) {
++        owner = owner_;
++    }
++
++    /// @notice Every call, one transaction, each outcome recorded.
++    function run(Call[] calldata calls) external returns (Result[] memory results) {
++        require(msg.sender == owner, "KitAccount: not owner");
++        results = new Result[](calls.length);
++        for (uint256 i = 0; i < calls.length; i++) {
++            (bool ok, bytes memory ret) = calls[i].target.call(calls[i].data);
++            results[i] = Result(ok, ret);
++        }
++    }
++
++    /// @notice The word that `runAfter` replaces with the first call's 32-byte result, wherever it occurs.
++    bytes32 public constant RESULT = keccak256("DecryptionAuthorityLifecycle.kit.RESULT");
++
++    /// @notice One transaction: `first`, then every call of `rest` with each 32-byte occurrence of RESULT in its
++    ///         calldata (at any byte offset) replaced by `first`'s result. Every outcome is recorded.
++    function runAfter(Call calldata first, Call[] calldata rest)
++        external
++        returns (Result memory head, Result[] memory results)
++    {
++        require(msg.sender == owner, "KitAccount: not owner");
++        (bool ok, bytes memory ret) = first.target.call(first.data);
++        head = Result(ok, ret);
++        bytes32 value = ok && ret.length >= 32 ? abi.decode(ret, (bytes32)) : bytes32(0);
++        results = new Result[](rest.length);
++        for (uint256 i = 0; i < rest.length; i++) {
++            bytes memory data = rest[i].data;
++            for (uint256 j = 0; j + 32 <= data.length; j++) {
++                bytes32 w;
++                assembly {
++                    w := mload(add(add(data, 32), j))
++                }
++                if (w == RESULT) {
++                    assembly {
++                        mstore(add(add(data, 32), j), value)
++                    }
++                    j += 31;
++                }
++            }
++            (bool ok2, bytes memory ret2) = rest[i].target.call(data);
++            results[i] = Result(ok2, ret2);
++        }
++    }
++
++    /// @notice Every call, one transaction, all or nothing: the first failure's revert data is the batch's.
++    function runAtomic(Call[] calldata calls) external {
++        require(msg.sender == owner, "KitAccount: not owner");
++        for (uint256 i = 0; i < calls.length; i++) {
++            (bool ok, bytes memory ret) = calls[i].target.call(calls[i].data);
++            if (!ok) {
++                assembly {
++                    revert(add(ret, 32), mload(ret))
++                }
++            }
++        }
++    }
++
++    function isValidSignature(bytes32 hash, bytes calldata sig) external view returns (bytes4) {
++        if (sig.length != 65) return 0xffffffff;
++        bytes32 r = bytes32(sig[0:32]);
++        bytes32 s = bytes32(sig[32:64]);
++        uint8 v = uint8(sig[64]);
++        if (uint256(s) > 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0) return 0xffffffff;
++        address signer = ecrecover(hash, v, r, s);
++        return signer != address(0) && signer == owner ? bytes4(0x1626ba7e) : bytes4(0xffffffff);
++    }
++}
++
++/// @notice TC11 candidates. Each answers `proxiableUUID` so that a UUPS proxy would accept it once the guard passes.
++contract KitImplementation {
++    bytes32 internal constant IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
++    bool internal immutable core;
++    bytes32 internal immutable location;
++    bool internal immutable liar;
++
++    constructor(bool core_, bytes32 location_, bool liar_) {
++        core = core_;
++        location = location_;
++        liar = liar_;
++    }
++
++    function supportsInterface(bytes4 id) external view returns (bool) {
++        return id == 0x01ffc9a7 || (core && id == 0x556d2088);
++    }
++
++    function retirementStorageLocation() external view returns (bytes32) {
++        return location;
++    }
++
++    function proxiableUUID() external pure returns (bytes32) {
++        return IMPLEMENTATION_SLOT;
++    }
++
++    /// @dev The liar answers every account active (the asserted residual: only a canary catches it).
++    function isAccountRetired(address) external view returns (bool) {
++        return !liar;
++    }
++}
++
++abstract contract DecryptionAuthorityLifecycleConformance is Test {
++    event AccountRetired(address indexed account, address indexed successor);
++
++    bytes4 internal constant ERC165_ID = 0x01ffc9a7;
++    bytes4 internal constant CORE_ID = 0x556d2088;
++    bytes4 internal constant E1_ID = 0x7dc5e209;
++    bytes4 internal constant E1_DELAY_ID = 0xc61ca396;
++    bytes4 internal constant E2_ID = 0x4b9ec076;
++    bytes4 internal constant ACCOUNT_ALREADY_RETIRED = 0x9c0fa00d;
++    bytes4 internal constant SENDER_RETIRED = 0xb9e76275;
++    bytes4 internal constant UPGRADE_DROPS_RETIREMENT = 0x61b57965;
++    bytes4 internal constant SUCCESSOR_INVALID = 0xc6b4b14a;
++    bytes4 internal constant NOT_PENDING_SUCCESSOR = 0x7051e7e2;
++    bytes4 internal constant SUCCESSION_NOT_ACCEPTED = 0x9eb4e345;
++    bytes4 internal constant CERTIFICATE_WRONG_CHAIN = 0x904dd953;
++    bytes4 internal constant CERTIFICATE_SUCCESSOR_MISMATCH = 0x99155e67;
++
++    // =================================================================================================================
++    // Adapter: implemented by the registry's test contract
++    // =================================================================================================================
++
++    /// @notice The registry under test (its proxy, if it has one).
++    function kitRegistry() internal view virtual returns (address);
++
++    /// @notice Gives `holder` a persistent use right on a fresh handle, through the registry's own paths.
++    function kitGivePersistent(address holder, uint256 salt) internal virtual returns (bytes32 handle);
++
++    /// @notice The call by which `who` gets a transient use right on a fresh handle inside its own transaction
++    ///         (an input, or a computation), and that handle.
++    function kitTransientRight(KitAccount who, uint256 salt)
++        internal
++        virtual
++        returns (KitAccount.Call memory call, bytes32 handle);
++
++    /// @notice Every grant path (R7): the calls `grantor` makes to grant `handle` to `to`. The publication paths
++    ///         are listed too. Batched forms are listed with their batch call.
++    function kitGrantPaths(bytes32 handle, address to, address grantor)
++        internal
++        virtual
++        returns (KitAccount.Call[] memory calls, string[] memory names);
++
++    /// @notice Every use view of (`handle`, `account`), persistent and transient forms: calls returning a bool.
++    function kitUseViews(bytes32 handle, address account)
++        internal
++        virtual
++        returns (KitAccount.Call[] memory calls, string[] memory names);
++
++    /// @notice The public view of `handle` (a call returning a bool), and the call that publishes it.
++    function kitPublicView(bytes32 handle) internal virtual returns (KitAccount.Call memory);
++    function kitPublish(bytes32 handle) internal virtual returns (KitAccount.Call memory);
++
++    /// @notice The engine: the call that computes on `operand` for its caller and returns the output handle as its
++    ///         first 32-byte word.
++    function kitCompute(bytes32 operand) internal virtual returns (KitAccount.Call memory call);
++
++    /// @notice Whether the registry takes R10's engine exemption (a MAY).
++    function kitEngineExempt() internal view virtual returns (bool);
++
++    /// @notice On-behalf role: sets up `account` -> `delegate` for `contractAddr` on `handle` (both `account` and
++    ///         `contractAddr` must hold `handle` afterwards). Returns false if the registry has no on-behalf role.
++    function kitDelegate(address account, address delegate, address contractAddr, bytes32 handle)
++        internal
++        virtual
++        returns (bool supported);
++
++    /// @notice Every on-behalf view for (`account`, `delegate`, `contractAddr`, `handle`): calls returning a bool.
++    function kitOnBehalfViews(address account, address delegate, address contractAddr, bytes32 handle)
++        internal
++        virtual
++        returns (KitAccount.Call[] memory calls, string[] memory names);
++
++    /// @notice Permit role: the permit views for a permit of `issuer` on `handle`, shared with `recipient` if it is
++    ///         not 0. Returns supported = false if the registry has no on-chain permit.
++    function kitPermitViews(address issuer, uint256 issuerKey, address recipient, uint256 recipientKey, bytes32 handle)
++        internal
++        virtual
++        returns (bool supported, KitAccount.Call[] memory calls, string[] memory names);
++
++    /// @notice Upgrades (R11.4 applies to registries that authorize upgrades in their own code). The account that may
++    ///         upgrade, the upgrade call, and the implementations.
++    function kitUpgradeGuarded() internal view virtual returns (bool);
++    function kitUpgrader() internal view virtual returns (address);
++    function kitUpgradeCall(address implementation) internal view virtual returns (KitAccount.Call memory);
++    function kitNewCoreImplementation() internal virtual returns (address);
++    function kitImplementationWithoutCore() internal virtual returns (address);
++
++    /// @notice Caller-preserving batching offered by the registry (R13). supported = false if none.
++    function kitRegistryBatch(KitAccount.Call[] memory calls)
++        internal
++        view
++        virtual
++        returns (bool supported, KitAccount.Call memory batch);
++
++    /// @notice Conditions under which retirement must still succeed (R3): pause, deny lists, roles. Applies each
++    ///         one the registry has, to `account`, and names them.
++    function kitHostileConditions(address account) internal virtual returns (string[] memory applied);
++
++    /// @notice Whether grant reverts use `SenderRetired` (R7 SHOULD).
++    function kitUsesSenderRetired() internal view virtual returns (bool) {
++        return true;
++    }
++
++    // =================================================================================================================
++    // Helpers
++    // =================================================================================================================
++
++    uint256 private _salt = 1;
++
++    function _next() internal returns (uint256) {
++        return _salt++;
++    }
++
++    function _core() internal view returns (IKitCore) {
++        return IKitCore(kitRegistry());
++    }
++
++    function _retire(address a) internal {
++        vm.prank(a);
++        _core().retireAccount();
++    }
++
++    function _account(string memory label) internal returns (KitAccount account, address owner, uint256 key) {
++        (owner, key) = makeAddrAndKey(string.concat("kit-", label));
++        account = new KitAccount(owner);
++    }
++
++    function _run(KitAccount who, KitAccount.Call[] memory calls) internal returns (KitAccount.Result[] memory) {
++        vm.prank(who.owner());
++        return who.run(calls);
++    }
++
++    function _call(address target, bytes memory data) internal pure returns (KitAccount.Call memory) {
++        return KitAccount.Call(target, data);
++    }
++
++    function _execAs(KitAccount who, address target, bytes memory data) internal returns (bool, bytes memory) {
++        KitAccount.Call[] memory c = new KitAccount.Call[](1);
++        c[0] = _call(target, data);
++        KitAccount.Result[] memory r = _run(who, c);
++        return (r[0].ok, r[0].ret);
++    }
++
++    function _bool(KitAccount.Result memory r, string memory what) internal pure returns (bool) {
++        require(r.ok && r.ret.length == 32, string.concat(what, ": not a bool answer"));
++        return abi.decode(r.ret, (bool));
++    }
++
++    /// @dev Static views read through a call from this contract (one transaction each).
++    function _views(KitAccount.Call[] memory calls) internal view returns (bool[] memory out) {
++        out = new bool[](calls.length);
++        for (uint256 i = 0; i < calls.length; i++) {
++            (bool ok, bytes memory ret) = calls[i].target.staticcall(calls[i].data);
++            require(ok && ret.length == 32, "view did not answer a bool");
++            out[i] = abi.decode(ret, (bool));
++        }
++    }
++
++    function _concat(KitAccount.Call[] memory a, KitAccount.Call[] memory b)
++        internal
++        pure
++        returns (KitAccount.Call[] memory c)
++    {
++        c = new KitAccount.Call[](a.length + b.length);
++        for (uint256 i = 0; i < a.length; i++) c[i] = a[i];
++        for (uint256 i = 0; i < b.length; i++) c[a.length + i] = b[i];
++    }
++
++    function _one(KitAccount.Call memory a) internal pure returns (KitAccount.Call[] memory c) {
++        c = new KitAccount.Call[](1);
++        c[0] = a;
++    }
++
++    function _supports(bytes4 id) internal view returns (bool) {
++        (bool ok, bytes memory ret) =
++            kitRegistry().staticcall(abi.encodeWithSelector(IKitERC165.supportsInterface.selector, id));
++        return ok && ret.length == 32 && abi.decode(ret, (uint256)) == 1;
++    }
++
++    // =================================================================================================================
++    // TC1 (R1, R5)
++    // =================================================================================================================
++
++    function test_kit_TC1_RetireOnce_SecondRevertsWithoutAnEvent() public {
++        address a = makeAddr("kit-tc1");
++        vm.expectEmit(true, true, false, false, kitRegistry());
++        emit AccountRetired(a, address(0));
++        _retire(a);
++        assertTrue(_core().isAccountRetired(a));
++        vm.recordLogs();
++        vm.prank(a);
++        vm.expectRevert(abi.encodeWithSelector(ACCOUNT_ALREADY_RETIRED, a));
++        _core().retireAccount();
++        assertEq(vm.getRecordedLogs().length, 0);
++    }
++
++    /// @dev R5: in one transaction, a transient right is usable, the account retires, and the next call sees it.
++    function test_kit_TC1_R5_TheNextCallInTheSameTransaction() public {
++        (KitAccount r,,) = _account("tc1-r5");
++        (KitAccount.Call memory get, bytes32 h) = kitTransientRight(r, _next());
++        (KitAccount.Call[] memory views,) = kitUseViews(h, address(r));
++        (KitAccount.Call[] memory grants,) = kitGrantPaths(h, makeAddr("kit-tc1-to"), address(r));
++        KitAccount.Call[] memory seq = _concat(_one(get), views);
++        seq = _concat(seq, _one(_call(kitRegistry(), abi.encodeCall(IKitCore.retireAccount, ()))));
++        seq = _concat(seq, views);
++        seq = _concat(seq, _one(grants[0]));
++        KitAccount.Result[] memory res = _run(r, seq);
++        assertTrue(res[0].ok, "transient right");
++        bool anyBefore = false;
++        for (uint256 i = 0; i < views.length; i++) anyBefore = anyBefore || _bool(res[1 + i], "view before");
++        assertTrue(anyBefore, "some use view sees the transient right before retirement");
++        assertTrue(res[1 + views.length].ok, "retire");
++        for (uint256 i = 0; i < views.length; i++) {
++            assertFalse(_bool(res[2 + views.length + i], "view after"), "every use view false after retirement");
++        }
++        assertFalse(res[res.length - 1].ok, "a grant in the same transaction reverts");
++    }
++
++    // =================================================================================================================
++    // TC2 (R3)
++    // =================================================================================================================
++
++    function test_kit_TC2_RetireUnderHostileConditions_AsAContract_WithNoHandles() public {
++        address a = makeAddr("kit-tc2");
++        kitHostileConditions(a);
++        _retire(a);
++        assertTrue(_core().isAccountRetired(a));
++        (KitAccount c,,) = _account("tc2-contract");
++        (bool ok,) = _execAs(c, kitRegistry(), abi.encodeCall(IKitCore.retireAccount, ()));
++        assertTrue(ok && _core().isAccountRetired(address(c)));
++    }
++
++    // =================================================================================================================
++    // TC3 (R6): accounts that never retire are unaffected by others' retirement
++    // =================================================================================================================
++
++    function test_kit_TC3_NeverRetiredAccountsUnaffected() public {
++        _retire(makeAddr("kit-tc3-bystander"));
++        (KitAccount g,,) = _account("tc3-grantor");
++        bytes32 h = kitGivePersistent(address(g), _next());
++        (KitAccount.Call[] memory views, string[] memory vnames) = kitUseViews(h, address(g));
++        bool[] memory v = _views(views);
++        for (uint256 i = 0; i < v.length; i++) {
++            if (bytes(vnames[i]).length > 0 && _isPersistentView(vnames[i])) {
++                assertTrue(v[i], string.concat("never-retired holder: ", vnames[i]));
++            }
++        }
++        (KitAccount.Call[] memory grants, string[] memory names) = kitGrantPaths(h, makeAddr("kit-tc3-to"), address(g));
++        KitAccount.Result[] memory res = _run(g, grants);
++        for (uint256 i = 0; i < res.length; i++) {
++            assertTrue(res[i].ok, string.concat("never-retired grantor: ", names[i]));
++        }
++    }
++
++    /// @dev A view whose name ends in "(transient)" reads a transient right; every other one is persistent.
++    function _isPersistentView(string memory name) internal pure returns (bool) {
++        bytes memory b = bytes(name);
++        bytes memory t = bytes("(transient)");
++        if (b.length < t.length) return true;
++        for (uint256 i = 0; i < t.length; i++) {
++            if (b[b.length - t.length + i] != t[i]) return true;
++        }
++        return false;
++    }
++
++    // =================================================================================================================
++    // TC4 (R6 use role, R9, R10)
++    // =================================================================================================================
++
++    function test_kit_TC4_EveryUseViewFalse_PublicUnchanged() public {
++        address u = makeAddr("kit-tc4-user");
++        bytes32 h = kitGivePersistent(u, _next());
++        (KitAccount p,,) = _account("tc4-publisher");
++        bytes32 hp = kitGivePersistent(address(p), _next());
++        KitAccount.Call memory publish = kitPublish(hp);
++        (bool ok,) = _execAs(p, publish.target, publish.data);
++        assertTrue(ok, "publish");
++        _retire(u);
++        (KitAccount.Call[] memory views, string[] memory names) = kitUseViews(h, u);
++        bool[] memory v = _views(views);
++        for (uint256 i = 0; i < v.length; i++) assertFalse(v[i], names[i]);
++        assertTrue(_views(_one(kitPublicView(hp)))[0], "R9: a public handle stays public");
++        // The retired account's use views on a public handle follow R6, not R9.
++        (views, names) = kitUseViews(hp, u);
++        v = _views(views);
++        for (uint256 i = 0; i < v.length; i++) assertFalse(v[i], string.concat("public handle, ", names[i]));
++    }
++
++    function _runAfter(KitAccount who, KitAccount.Call memory first, KitAccount.Call[] memory rest)
++        internal
++        returns (KitAccount.Result memory head, KitAccount.Result[] memory results)
++    {
++        vm.prank(who.owner());
++        return who.runAfter(first, rest);
++    }
++
++    function test_kit_TC4_R10_TheEngineAndTheOutput() public {
++        (KitAccount r,,) = _account("tc4-engine");
++        bytes32 h = kitGivePersistent(address(r), _next());
++        (bool ok,) = _execAs(r, kitRegistry(), abi.encodeCall(IKitCore.retireAccount, ()));
++        assertTrue(ok);
++        bytes32 out = r.RESULT();
++        (KitAccount.Call[] memory views,) = kitUseViews(out, address(r));
++        (KitAccount.Result memory head, KitAccount.Result[] memory res) = _runAfter(r, kitCompute(h), views);
++        assertEq(head.ok, kitEngineExempt(), "the engine computes for a retired account iff the exemption is taken");
++        if (head.ok) {
++            for (uint256 i = 0; i < views.length; i++) assertFalse(_bool(res[i], "output view"));
++        }
++    }
++
++    // =================================================================================================================
++    // TC5 (R6 on-behalf role)
++    // =================================================================================================================
++
++    function test_kit_TC5_OnBehalfFalseForEachRetiredParty() public {
++        address account = makeAddr("kit-tc5-account");
++        address delegate = makeAddr("kit-tc5-delegate");
++        (KitAccount app,,) = _account("tc5-app");
++        bytes32 h = kitGivePersistent(account, _next());
++        if (!kitDelegate(account, delegate, address(app), h)) {
++            vm.skip(true); // no on-behalf role
++            return;
++        }
++        (KitAccount.Call[] memory views, string[] memory names) = kitOnBehalfViews(account, delegate, address(app), h);
++        bool[] memory v = _views(views);
++        for (uint256 i = 0; i < v.length; i++) assertTrue(v[i], string.concat("before: ", names[i]));
++        address[3] memory parties = [account, delegate, address(app)];
++        for (uint256 p = 0; p < 3; p++) {
++            uint256 snap = vm.snapshotState();
++            _retire(parties[p]);
++            v = _views(views);
++            for (uint256 i = 0; i < v.length; i++) assertFalse(v[i], string.concat("party retired: ", names[i]));
++            vm.revertToState(snap);
++        }
++    }
++
++    // =================================================================================================================
++    // TC6 (R6 permit role)
++    // =================================================================================================================
++
++    function test_kit_TC6_PermitFalseForARetiredIssuerOrRecipient() public {
++        (address issuer, uint256 issuerKey) = makeAddrAndKey("kit-tc6-issuer");
++        (address recipient, uint256 recipientKey) = makeAddrAndKey("kit-tc6-recipient");
++        bytes32 h = kitGivePersistent(issuer, _next());
++        (bool supported, KitAccount.Call[] memory self, string[] memory names) =
++            kitPermitViews(issuer, issuerKey, address(0), 0, h);
++        if (!supported) {
++            vm.skip(true); // no on-chain permit
++            return;
++        }
++        (, KitAccount.Call[] memory shared,) = kitPermitViews(issuer, issuerKey, recipient, recipientKey, h);
++        bool[] memory v = _views(_concat(self, shared));
++        for (uint256 i = 0; i < v.length; i++) assertTrue(v[i], "permit before");
++        uint256 snap = vm.snapshotState();
++        _retire(issuer);
++        v = _views(_concat(self, shared));
++        for (uint256 i = 0; i < v.length; i++) assertFalse(v[i], "issuer retired");
++        vm.revertToState(snap);
++        _retire(recipient);
++        v = _views(shared);
++        for (uint256 i = 0; i < v.length; i++) assertFalse(v[i], string.concat("recipient retired: ", names[0]));
++        assertTrue(_views(self)[0], "the issuer's own permit is unaffected by the recipient");
++    }
++
++    // =================================================================================================================
++    // TC7 (R7)
++    // =================================================================================================================
++
++    function test_kit_TC7_ARetiredGrantorRevertsOnEveryPath() public {
++        (KitAccount g,,) = _account("tc7-grantor");
++        bytes32 h = kitGivePersistent(address(g), _next());
++        (bool ok,) = _execAs(g, kitRegistry(), abi.encodeCall(IKitCore.retireAccount, ()));
++        assertTrue(ok);
++        (KitAccount.Call[] memory grants, string[] memory names) = kitGrantPaths(h, makeAddr("kit-tc7-to"), address(g));
++        KitAccount.Result[] memory res = _run(g, grants);
++        for (uint256 i = 0; i < res.length; i++) {
++            assertFalse(res[i].ok, string.concat("reverts: ", names[i]));
++            if (kitUsesSenderRetired()) {
++                assertEq(
++                    keccak256(res[i].ret),
++                    keccak256(abi.encodeWithSelector(SENDER_RETIRED, address(g))),
++                    string.concat("SenderRetired: ", names[i])
++                );
++            }
++        }
++    }
++
++    // =================================================================================================================
++    // TC8 (R8)
++    // =================================================================================================================
++
++    function test_kit_TC8_GrantsToARetiredAccountSucceed_AndAreInert() public {
++        address to = makeAddr("kit-tc8-retired");
++        _retire(to);
++        (KitAccount g,,) = _account("tc8-grantor");
++        bytes32 h = kitGivePersistent(address(g), _next());
++        (KitAccount.Call[] memory grants, string[] memory names) = kitGrantPaths(h, to, address(g));
++        (KitAccount.Call[] memory views,) = kitUseViews(h, to);
++        KitAccount.Result[] memory res = _run(g, _concat(grants, views));
++        for (uint256 i = 0; i < grants.length; i++) {
++            assertTrue(res[i].ok, string.concat("not refused: ", names[i]));
++        }
++        for (uint256 i = 0; i < views.length; i++) {
++            assertFalse(_bool(res[grants.length + i], "view"), "inert");
++        }
++    }
++
++    // =================================================================================================================
++    // TC9 (R10): a retired account computes, then every export reverts
++    // =================================================================================================================
++
++    function test_kit_TC9_ComputeThenEveryExportReverts() public {
++        if (!kitEngineExempt()) {
++            vm.skip(true); // no exemption: TC4 shows the engine refuses a retired account
++            return;
++        }
++        (KitAccount r,,) = _account("tc9-retired");
++        bytes32 h = kitGivePersistent(address(r), _next());
++        (bool ok,) = _execAs(r, kitRegistry(), abi.encodeCall(IKitCore.retireAccount, ()));
++        assertTrue(ok);
++        (KitAccount.Call[] memory exportsOut, string[] memory names) = kitGrantPaths(r.RESULT(), makeAddr("kit-tc9-to"), address(r));
++        (KitAccount.Call[] memory exportsIn,) = kitGrantPaths(h, makeAddr("kit-tc9-to"), address(r));
++        (KitAccount.Result memory head, KitAccount.Result[] memory res) =
++            _runAfter(r, kitCompute(h), _concat(exportsOut, exportsIn));
++        assertTrue(head.ok, "compute");
++        for (uint256 i = 0; i < res.length; i++) {
++            assertFalse(res[i].ok, string.concat("export reverts: ", names[i % names.length]));
++        }
++    }
++
++    // =================================================================================================================
++    // TC10 (R13)
++    // =================================================================================================================
++
++    function test_kit_TC10_GrantsThenRetireAtomic_RetireThenGrantReverts() public {
++        address to = makeAddr("kit-tc10-to");
++        (KitAccount a,,) = _account("tc10-a");
++        bytes32 h = kitGivePersistent(address(a), _next());
++        (KitAccount.Call[] memory grants,) = kitGrantPaths(h, to, address(a));
++        KitAccount.Call[] memory batch = new KitAccount.Call[](2);
++        batch[0] = grants[0];
++        batch[1] = _call(kitRegistry(), abi.encodeCall(IKitCore.retireAccount, ()));
++        (bool supported, KitAccount.Call memory registryBatch) = kitRegistryBatch(batch);
++        if (supported) {
++            (bool ok,) = _execAs(a, registryBatch.target, registryBatch.data);
++            assertTrue(ok, "registry batch: grants then retire");
++        } else {
++            vm.prank(a.owner());
++            a.runAtomic(batch);
++        }
++        assertTrue(_core().isAccountRetired(address(a)));
++
++        (KitAccount b,,) = _account("tc10-b");
++        bytes32 hb = kitGivePersistent(address(b), _next());
++        (grants,) = kitGrantPaths(hb, to, address(b));
++        batch[0] = _call(kitRegistry(), abi.encodeCall(IKitCore.retireAccount, ()));
++        batch[1] = grants[0];
++        (supported, registryBatch) = kitRegistryBatch(batch);
++        if (supported) {
++            (bool ok,) = _execAs(b, registryBatch.target, registryBatch.data);
++            assertFalse(ok, "registry batch: retire then grant reverts");
++        } else {
++            vm.prank(b.owner());
++            vm.expectRevert();
++            b.runAtomic(batch);
++        }
++        assertFalse(_core().isAccountRetired(address(b)), "atomic: the retirement rolled back too");
++    }
++
++    // =================================================================================================================
++    // TC11 (R11)
++    // =================================================================================================================
++
++    function _upgrade(address implementation) internal returns (bool ok, bytes memory ret) {
++        KitAccount.Call memory c = kitUpgradeCall(implementation);
++        vm.prank(kitUpgrader());
++        (ok, ret) = c.target.call(c.data);
++    }
++
++    function test_kit_TC11_TheUpgradeGuard() public {
++        if (!kitUpgradeGuarded()) {
++            vm.skip(true); // the registry does not authorize upgrades in its own code
++            return;
++        }
++        address u = makeAddr("kit-tc11");
++        bytes32 h = kitGivePersistent(u, _next());
++        _retire(u);
++        bytes32 location = IKitStorage(kitRegistry()).retirementStorageLocation();
++
++        address[4] memory refused = [
++            kitImplementationWithoutCore(),
++            address(new KitImplementation(true, keccak256("another location"), false)),
++            address(new KitImplementation(false, location, false)),
++            makeAddr("kit-no-code")
++        ];
++        string[4] memory why = ["the vendor's own, without Core", "another location", "the location without Core", "no code"];
++        for (uint256 i = 0; i < refused.length; i++) {
++            (bool ok, bytes memory ret) = _upgrade(refused[i]);
++            assertFalse(ok, why[i]);
++            assertEq(keccak256(ret), keccak256(abi.encodeWithSelector(UPGRADE_DROPS_RETIREMENT, refused[i])), why[i]);
++        }
++        (bool accepted,) = _upgrade(kitNewCoreImplementation());
++        assertTrue(accepted, "a Core implementation at the same location");
++        assertTrue(_core().isAccountRetired(u), "state kept");
++        (KitAccount.Call[] memory views,) = kitUseViews(h, u);
++        bool[] memory v = _views(views);
++        for (uint256 i = 0; i < v.length; i++) assertFalse(v[i], "enforcement kept");
++
++        (bool liarAccepted,) = _upgrade(address(new KitImplementation(true, location, true)));
++        assertTrue(liarAccepted, "the asserted residual: a lying implementation passes the guard");
++        assertFalse(_core().isAccountRetired(u), "... and only a canary catches it");
++    }
++
++    // =================================================================================================================
++    // TC12 (R12)
++    // =================================================================================================================
++
++    function test_kit_TC12_ERC165() public view {
++        assertTrue(_supports(ERC165_ID));
++        assertTrue(_supports(CORE_ID));
++        assertFalse(_supports(0xffffffff));
++        if (_supports(E1_DELAY_ID)) assertTrue(_supports(E1_ID), "the E1 delay requires E1");
++        if (_supports(E2_ID)) assertTrue(_supports(E1_ID), "E2 requires E1 (C1)");
++    }
++
++    // =================================================================================================================
++    // TC17 (E1)
++    // =================================================================================================================
++
++    function _confirm(address account, address successor) internal {
++        IKitE1 e1 = IKitE1(kitRegistry());
++        vm.prank(account);
++        e1.designateSuccessor(successor);
++        vm.prank(successor);
++        e1.acceptSuccession(account);
++        (, uint64 confirmableAt,) = e1.pendingSuccessorOf(account);
++        vm.warp(confirmableAt);
++        vm.prank(account);
++        e1.confirmSuccessor();
++        assertEq(e1.successorOf(account), successor);
++    }
++
++    function test_kit_TC17_TheSuccessorReadsOnlyAfterRetirement_AndNothingMore() public {
++        if (!_supports(E1_ID)) {
++            vm.skip(true); // E1 not implemented
++            return;
++        }
++        IKitE1 e1 = IKitE1(kitRegistry());
++        address a = makeAddr("kit-tc17-account");
++        address s = makeAddr("kit-tc17-successor");
++        address other = makeAddr("kit-tc17-other");
++        (KitAccount app,,) = _account("tc17-app");
++        bytes32 h = kitGivePersistent(a, _next());
++        // The contract must hold the handle for the on-behalf view (R6 still applies to it).
++        bool onBehalf = kitDelegate(a, other, address(app), h);
++        _confirm(a, s);
++        if (onBehalf) {
++            (KitAccount.Call[] memory views, string[] memory names) = kitOnBehalfViews(a, s, address(app), h);
++            bool[] memory v = _views(views);
++            for (uint256 i = 0; i < v.length; i++) assertFalse(v[i], string.concat("no right before: ", names[i]));
++        }
++        vm.expectEmit(true, true, false, false, kitRegistry());
++        emit AccountRetired(a, s);
++        _retire(a);
++        if (onBehalf) {
++            (KitAccount.Call[] memory views, string[] memory names) = kitOnBehalfViews(a, s, address(app), h);
++            bool[] memory v = _views(views);
++            for (uint256 i = 0; i < v.length; i++) assertTrue(v[i], string.concat("S8 read right: ", names[i]));
++            (views,) = kitOnBehalfViews(a, other, address(app), h);
++            v = _views(views);
++            for (uint256 i = 0; i < v.length; i++) assertFalse(v[i], "S8: every other delegate false");
++        }
++        // S9: no use right for the successor on the account's handle.
++        (KitAccount.Call[] memory useViews,) = kitUseViews(h, s);
++        bool[] memory u = _views(useViews);
++        for (uint256 i = 0; i < u.length; i++) assertFalse(u[i], "S9: no use right");
++        // S5: resignation remains available after retirement.
++        vm.prank(s);
++        e1.resignSuccession(a);
++        assertEq(e1.successorOf(a), address(0));
++    }
++
++    function test_kit_TC17_DesignationRules() public {
++        if (!_supports(E1_ID)) {
++            vm.skip(true); // E1 not implemented
++            return;
++        }
++        IKitE1 e1 = IKitE1(kitRegistry());
++        address a = makeAddr("kit-tc17b-account");
++        address s = makeAddr("kit-tc17b-successor");
++        vm.prank(a);
++        vm.expectRevert(abi.encodeWithSelector(SUCCESSOR_INVALID, a));
++        e1.designateSuccessor(a);
++        vm.prank(a);
++        e1.designateSuccessor(s);
++        vm.prank(makeAddr("kit-tc17b-stranger"));
++        vm.expectRevert();
++        e1.acceptSuccession(a);
++        // Not accepted (and not yet confirmable): S4 lets the registry use either applicable error.
++        vm.prank(a);
++        vm.expectRevert();
++        e1.confirmSuccessor();
++        assertGe(e1.successorDelay(), 7 days, "S7: at least 7 days");
++        // S6: retirement voids the pending designation; nothing can be accepted afterwards.
++        _retire(a);
++        (address pending,,) = e1.pendingSuccessorOf(a);
++        assertEq(pending, address(0), "S6: voided");
++        vm.prank(s);
++        vm.expectRevert();
++        e1.acceptSuccession(a);
++        assertEq(e1.successorOf(a), address(0));
++    }
++
++    // =================================================================================================================
++    // TC19 (E2)
++    // =================================================================================================================
++
++    address internal constant VECTOR_ACCOUNT = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
++    address internal constant VECTOR_SUCCESSOR = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
++    bytes internal constant VECTOR_SIGNATURE =
++        hex"2f2daa5d31e68624bed89cefce723bc9f21b880ea92b4f49f50d80ca00af115253f9db3981e50d97405d417aaf1992826d1e4d65cfe26881c2550ca600a55c371c";
++
++    function _vectorChains() internal pure returns (uint256[] memory c) {
++        c = new uint256[](2);
++        c[0] = 1;
++        c[1] = 11155111;
++    }
++
++    function test_kit_TC19_TheERCVector() public {
++        if (!_supports(E2_ID)) {
++            vm.skip(true); // E2 not implemented
++            return;
++        }
++        IKitE2 e2 = IKitE2(kitRegistry());
++        vm.etch(VECTOR_ACCOUNT, ""); // the vector's account has no code
++        vm.chainId(31337);
++        vm.expectRevert(abi.encodeWithSelector(CERTIFICATE_WRONG_CHAIN, uint256(31337)));
++        e2.retireAccountWithSig(VECTOR_ACCOUNT, VECTOR_SUCCESSOR, _vectorChains(), VECTOR_SIGNATURE);
++
++        vm.chainId(11155111);
++        vm.expectRevert(abi.encodeWithSelector(CERTIFICATE_SUCCESSOR_MISMATCH, address(0), VECTOR_SUCCESSOR));
++        e2.retireAccountWithSig(VECTOR_ACCOUNT, VECTOR_SUCCESSOR, _vectorChains(), VECTOR_SIGNATURE);
++
++        _confirm(VECTOR_ACCOUNT, VECTOR_SUCCESSOR);
++        vm.expectEmit(true, true, false, false, kitRegistry());
++        emit AccountRetired(VECTOR_ACCOUNT, VECTOR_SUCCESSOR);
++        vm.prank(makeAddr("kit-tc19-relayer"));
++        e2.retireAccountWithSig(VECTOR_ACCOUNT, VECTOR_SUCCESSOR, _vectorChains(), VECTOR_SIGNATURE);
++        assertTrue(_core().isAccountRetired(VECTOR_ACCOUNT));
++        vm.expectRevert(abi.encodeWithSelector(ACCOUNT_ALREADY_RETIRED, VECTOR_ACCOUNT));
++        e2.retireAccountWithSig(VECTOR_ACCOUNT, VECTOR_SUCCESSOR, _vectorChains(), VECTOR_SIGNATURE);
++    }
++
++    function test_kit_TC19_AContractAccountSignsThroughERC1271Only() public {
++        if (!_supports(E2_ID)) {
++            vm.skip(true); // E2 not implemented
++            return;
++        }
++        IKitE2 e2 = IKitE2(kitRegistry());
++        (KitAccount a, address owner, uint256 key) = _account("tc19-contract");
++        address s = makeAddr("kit-tc19-successor");
++        _confirm(address(a), s);
++        uint256[] memory chains = new uint256[](1);
++        chains[0] = block.chainid;
++        bytes32 digest = keccak256(
++            abi.encodePacked(
++                "\x19\x01",
++                bytes32(0xe16ad8114bca96b9be6acfdb949a5dad1eb876411203b58a5898f27f3cc4d10b),
++                keccak256(
++                    abi.encode(
++                        bytes32(0xf224379ad7473578295885cb7fd6795dbf8c4d718c2bd07d70c8f1e5ecaac54b),
++                        address(a),
++                        s,
++                        keccak256(abi.encodePacked(chains))
++                    )
++                )
++            )
++        );
++        (uint8 v, bytes32 r, bytes32 ss) = vm.sign(key, digest);
++        e2.retireAccountWithSig(address(a), s, chains, abi.encodePacked(r, ss, v));
++        assertTrue(_core().isAccountRetired(address(a)));
++        owner;
++    }
++}
+diff --git a/host-contracts/test/conformance/ZamaMainConformance.t.sol b/host-contracts/test/conformance/ZamaMainConformance.t.sol
+new file mode 100644
+index 00000000..f7204382
+--- /dev/null
++++ b/host-contracts/test/conformance/ZamaMainConformance.t.sol
+@@ -0,0 +1,209 @@
++// SPDX-License-Identifier: BSD-3-Clause-Clear
++pragma solidity ^0.8.24;
++
++// Phase 4, P2.3: the conformance kit's adapter for Zama fhEVM `main` with the lifecycle (Core, E1, E2), branch
++// lifecycle/level3. The kit itself (DecryptionAuthorityLifecycle.t.sol in this directory) is a byte-identical copy
++// of conformance/DecryptionAuthorityLifecycle.t.sol in the project.
++
++import {ACL} from "../../contracts/ACL.sol";
++import {FHEVMExecutor} from "../../contracts/FHEVMExecutor.sol";
++import {FheType} from "../../contracts/shared/FheType.sol";
++import {PauserSet} from "../../contracts/immutable/PauserSet.sol";
++import {HostContractsDeployerTestUtils} from "../../fhevm-foundry/HostContractsDeployerTestUtils.sol";
++import {aclAdd, fhevmExecutorAdd, pauserSetAdd} from "../../addresses/FHEVMHostAddresses.sol";
++import {ACL as ACL_v0_7_0} from "../acl/retirement/fixtures/ACL_v0_7_0.sol";
++import {DecryptionAuthorityLifecycleConformance, KitAccount} from "./DecryptionAuthorityLifecycle.t.sol";
++
++/// @dev Issues real handles through the executor and grants them, in one call.
++contract ZamaKitMinter {
++    function mint(uint256 pt, address holder) external returns (bytes32 h) {
++        h = FHEVMExecutor(fhevmExecutorAdd).trivialEncrypt(pt, FheType.Uint64);
++        ACL(aclAdd).allow(h, holder);
++        ACL(aclAdd).allow(h, address(this));
++    }
++
++    function grant(bytes32 h, address to) external {
++        ACL(aclAdd).allow(h, to);
++    }
++
++    function giveTransient(bytes32 h, address to) external {
++        ACL(aclAdd).allowTransient(h, to);
++    }
++}
++
++contract ZamaMainConformanceTest is HostContractsDeployerTestUtils, DecryptionAuthorityLifecycleConformance {
++    address internal constant OWNER = address(456);
++    address internal constant PAUSER = address(789);
++    address internal constant DELEGATION_CONTRACT = address(0xC0FFEE);
++
++    ACL internal acl;
++    ZamaKitMinter internal minter;
++
++    function setUp() public {
++        _deployACL(OWNER);
++        acl = ACL(aclAdd);
++        _deployPauserSet();
++        vm.prank(OWNER);
++        PauserSet(pauserSetAdd).addPauser(PAUSER);
++        _deployFHEVMExecutor(OWNER);
++        _deployHCULimit(OWNER);
++        minter = new ZamaKitMinter();
++    }
++
++    function kitRegistry() internal view override returns (address) {
++        return aclAdd;
++    }
++
++    function kitGivePersistent(address holder, uint256 salt) internal override returns (bytes32) {
++        return minter.mint(salt, holder);
++    }
++
++    function kitTransientRight(KitAccount who, uint256 salt)
++        internal
++        override
++        returns (KitAccount.Call memory, bytes32 h)
++    {
++        h = minter.mint(salt, address(minter));
++        return (KitAccount.Call(address(minter), abi.encodeCall(ZamaKitMinter.giveTransient, (h, address(who)))), h);
++    }
++
++    function kitGrantPaths(bytes32 h, address to, address)
++        internal
++        view
++        override
++        returns (KitAccount.Call[] memory calls, string[] memory names)
++    {
++        calls = new KitAccount.Call[](5);
++        names = new string[](5);
++        bytes32[] memory list = new bytes32[](1);
++        list[0] = h;
++        bytes[] memory inner = new bytes[](1);
++        inner[0] = abi.encodeCall(ACL.allow, (h, to));
++        calls[0] = KitAccount.Call(aclAdd, abi.encodeCall(ACL.allow, (h, to)));
++        names[0] = "allow";
++        calls[1] = KitAccount.Call(aclAdd, abi.encodeCall(ACL.allowTransient, (h, to)));
++        names[1] = "allowTransient";
++        calls[2] = KitAccount.Call(aclAdd, abi.encodeCall(ACL.allowForDecryption, (list)));
++        names[2] = "allowForDecryption";
++        calls[3] = KitAccount.Call(
++            aclAdd,
++            abi.encodeCall(ACL.delegateForUserDecryption, (to, DELEGATION_CONTRACT, uint64(block.timestamp + 1 days)))
++        );
++        names[3] = "delegateForUserDecryption";
++        calls[4] = KitAccount.Call(aclAdd, abi.encodeWithSignature("multicall(bytes[])", inner));
++        names[4] = "multicall(allow)";
++    }
++
++    function kitUseViews(bytes32 h, address a)
++        internal
++        pure
++        override
++        returns (KitAccount.Call[] memory calls, string[] memory names)
++    {
++        calls = new KitAccount.Call[](2);
++        names = new string[](2);
++        calls[0] = KitAccount.Call(aclAdd, abi.encodeCall(ACL.isAllowed, (h, a)));
++        names[0] = "isAllowed";
++        calls[1] = KitAccount.Call(aclAdd, abi.encodeCall(ACL.persistAllowed, (h, a)));
++        names[1] = "persistAllowed";
++    }
++
++    function kitPublicView(bytes32 h) internal pure override returns (KitAccount.Call memory) {
++        return KitAccount.Call(aclAdd, abi.encodeCall(ACL.isAllowedForDecryption, (h)));
++    }
++
++    function kitPublish(bytes32 h) internal pure override returns (KitAccount.Call memory) {
++        bytes32[] memory list = new bytes32[](1);
++        list[0] = h;
++        return KitAccount.Call(aclAdd, abi.encodeCall(ACL.allowForDecryption, (list)));
++    }
++
++    function kitCompute(bytes32 operand) internal pure override returns (KitAccount.Call memory) {
++        return KitAccount.Call(fhevmExecutorAdd, abi.encodeCall(FHEVMExecutor.fheAdd, (operand, operand, bytes1(0x00))));
++    }
++
++    function kitEngineExempt() internal pure override returns (bool) {
++        return true;
++    }
++
++    function kitDelegate(address account, address delegate, address contractAddr, bytes32 h)
++        internal
++        override
++        returns (bool)
++    {
++        minter.grant(h, contractAddr);
++        vm.prank(account);
++        acl.delegateForUserDecryption(delegate, contractAddr, uint64(block.timestamp + 30 days));
++        return true;
++    }
++
++    function kitOnBehalfViews(address account, address delegate, address contractAddr, bytes32 h)
++        internal
++        pure
++        override
++        returns (KitAccount.Call[] memory calls, string[] memory names)
++    {
++        calls = new KitAccount.Call[](2);
++        names = new string[](2);
++        calls[0] = KitAccount.Call(
++            aclAdd, abi.encodeCall(ACL.isHandleDelegatedForUserDecryption, (account, delegate, contractAddr, h))
++        );
++        names[0] = "isHandleDelegatedForUserDecryption";
++        calls[1] =
++            KitAccount.Call(aclAdd, abi.encodeCall(ACL.isDelegatedForUserDecryption, (account, delegate, contractAddr)));
++        names[1] = "isDelegatedForUserDecryption";
++    }
++
++    function kitPermitViews(address, uint256, address, uint256, bytes32)
++        internal
++        pure
++        override
++        returns (bool, KitAccount.Call[] memory, string[] memory)
++    {
++        return (false, new KitAccount.Call[](0), new string[](0)); // no on-chain permit
++    }
++
++    function kitUpgradeGuarded() internal pure override returns (bool) {
++        return true;
++    }
++
++    function kitUpgrader() internal pure override returns (address) {
++        return OWNER;
++    }
++
++    function kitUpgradeCall(address implementation) internal pure override returns (KitAccount.Call memory) {
++        return KitAccount.Call(aclAdd, abi.encodeWithSignature("upgradeToAndCall(address,bytes)", implementation, ""));
++    }
++
++    function kitNewCoreImplementation() internal override returns (address) {
++        return address(new ACL());
++    }
++
++    function kitImplementationWithoutCore() internal override returns (address) {
++        return address(new ACL_v0_7_0());
++    }
++
++    function kitRegistryBatch(KitAccount.Call[] memory calls)
++        internal
++        pure
++        override
++        returns (bool, KitAccount.Call memory)
++    {
++        bytes[] memory inner = new bytes[](calls.length);
++        for (uint256 i = 0; i < calls.length; i++) {
++            if (calls[i].target != aclAdd) return (false, KitAccount.Call(address(0), ""));
++            inner[i] = calls[i].data;
++        }
++        return (true, KitAccount.Call(aclAdd, abi.encodeWithSignature("multicall(bytes[])", inner)));
++    }
++
++    function kitHostileConditions(address account) internal override returns (string[] memory applied) {
++        vm.prank(PAUSER);
++        acl.pause();
++        vm.prank(OWNER);
++        acl.blockAccount(account);
++        applied = new string[](2);
++        applied[0] = "paused";
++        applied[1] = "deny-listed";
++    }
++}

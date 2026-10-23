@@ -1,0 +1,186 @@
+Compiling 87 files with Solc 0.8.28
+Solc 0.8.28 finished in 83.63s
+Compiler run successful!
+
+Ran 3 tests for e2e/vendor-port/ACPShareRegistry.t.sol:ACPShareRegistryTest
+[PASS] testInitializedBehindTheProxy() (gas: 59246)
+[PASS] testServedByTheAcl() (gas: 15234)
+[PASS] testSharesAndLists() (gas: 262999)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 9.33ms (2.58ms CPU time)
+
+Ran 3 tests for e2e/vendor-port/MockNegativeSecurityZone.t.sol:MockNegativeSecurityZoneTest
+[PASS] testAllowGrantsNegativeZoneHandle() (gas: 342589)
+[PASS] testNegativeZoneHandleIsNotAllowedForOthers() (gas: 261695)
+[PASS] testZeroZoneHandleIsNotAllowedForOthers() (gas: 240890)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 10.35ms (3.44ms CPU time)
+
+Ran 3 tests for e2e/vendor-port/MockIsPubliclyAllowed.t.sol:MockIsPubliclyAllowedTest
+[FAIL: ACLNotAllowed(115747559174423067489356306390877806995718991284442275570070818829210672923648 [1.157e77], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testAllowThisIsNotPublic() (gas: 206575)
+[FAIL: ACLNotAllowed(115747559174423067489356306390877806995718991284442275570070818829210672923648 [1.157e77], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testNotPubliclyAllowedByDefault() (gas: 205802)
+[FAIL: ACLNotAllowed(115747559174423067489356306390877806995718991284442275570070818829210672923648 [1.157e77], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testPubliclyAllowedAfterAllowGlobal() (gas: 206182)
+Suite result: FAILED. 0 passed; 3 failed; 0 skipped; finished in 10.97ms (3.12ms CPU time)
+
+Ran 2 tests for e2e/vendor-port/GasMetering.t.sol:GasMeteringRevertTest
+[PASS] test_meteringResumesAfterDecryptRevert() (gas: 362317)
+[PASS] test_meteringResumesAfterMockRevert() (gas: 370186)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 11.46ms (3.57ms CPU time)
+
+Ran 5 tests for e2e/vendor-port/BatchVerifyInput.t.sol:BatchVerifyInputTest
+[PASS] testDebugBypass_worksWithZeroSigner() (gas: 355951)
+[PASS] testTamperedInput_reverts() (gas: 242982)
+[PASS] testValidBatch_storesAllValuesInOrder() (gas: 664740)
+[PASS] testWrongConsumingContract_reverts() (gas: 606425)
+[PASS] testWrongSigner_reverts() (gas: 271392)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 13.75ms (5.20ms CPU time)
+
+Ran 24 tests for e2e/vendor-port/CofhePlugin.t.sol:CofheTestUtilsTest
+[PASS] testCreateCofheClient_returnsValidClient() (gas: 2916205)
+[FAIL: EvmError: Revert] testDeployMocks_contractsExist() (gas: 22985)
+[PASS] testDeployMocks_contractsLinked() (gas: 42706)
+[PASS] testDeployMocks_signersFunded() (gas: 2780)
+[PASS] testEnableLogs_smokeTest() (gas: 61101)
+[PASS] testExpectPlaintext_eaddress() (gas: 86905)
+[PASS] testExpectPlaintext_eaddress_withMessage() (gas: 86348)
+[PASS] testExpectPlaintext_ebool() (gas: 86720)
+[PASS] testExpectPlaintext_ebool_withMessage() (gas: 86469)
+[PASS] testExpectPlaintext_euint128() (gas: 86091)
+[PASS] testExpectPlaintext_euint16() (gas: 86719)
+[PASS] testExpectPlaintext_euint64() (gas: 86636)
+[PASS] testExpectPlaintext_euint8() (gas: 85528)
+[PASS] testExpectPlaintext_withMessage() (gas: 85942)
+[PASS] testGetPlaintext_bytes32() (gas: 85740)
+[PASS] testGetPlaintext_eaddress() (gas: 85753)
+[PASS] testGetPlaintext_ebool() (gas: 174296)
+[PASS] testGetPlaintext_euint128() (gas: 85999)
+[PASS] testGetPlaintext_euint16() (gas: 86572)
+[PASS] testGetPlaintext_euint32() (gas: 86585)
+[PASS] testGetPlaintext_euint64() (gas: 86776)
+[PASS] testGetPlaintext_euint8() (gas: 86460)
+[PASS] testGetPlaintext_reverts_nonExistent() (gas: 13899)
+[PASS] testGetPlaintext_storedValue() (gas: 85444)
+Suite result: FAILED. 23 passed; 1 failed; 0 skipped; finished in 14.99ms (8.14ms CPU time)
+
+Ran 7 tests for e2e/vendor-port/MockTrivialEncrypt.t.sol:MockTrivialEncryptTest
+[PASS] testEuint128OutOfRangeReverts() (gas: 42387)
+[PASS] testEuint16OutOfRangeReverts() (gas: 42076)
+[PASS] testEuint32OutOfRangeReverts() (gas: 41945)
+[PASS] testEuint64OutOfRangeReverts() (gas: 42914)
+[PASS] testEuint8OutOfRangeReverts() (gas: 42416)
+[PASS] testInvalidSecurityZoneReverts() (gas: 42175)
+[PASS] testMaxValuesStillEncrypt() (gas: 449368)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 15.51ms (6.21ms CPU time)
+
+Ran 4 tests for e2e/vendor-port/MockSecurityZones.t.sol:MockSecurityZonesTest
+[PASS] testSetSecurityZoneMaxBelowMinReverts() (gas: 36821)
+[PASS] testSetSecurityZoneMinAboveMaxReverts() (gas: 36104)
+[PASS] testSetSecurityZonesAcceptsSingleZoneRange() (gas: 164197)
+[PASS] testSetSecurityZonesRejectsInvertedRange() (gas: 117919)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 5.63ms (1.41ms CPU time)
+
+Ran 4 tests for e2e/vendor-port/MockRandom.t.sol:MockRandomTest
+[PASS] testRandomHandleCarriesTypeAndZone() (gas: 96937)
+[FAIL: SenderNotAllowed(0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testRandomHandleIsUsable() (gas: 143113)
+[PASS] testRandomRejectsInvalidSecurityZone() (gas: 37774)
+[PASS] testRandomValuesDifferWithinOneTransaction() (gas: 187969)
+Suite result: FAILED. 3 passed; 1 failed; 0 skipped; finished in 101.05ms (1.19ms CPU time)
+
+Ran 5 tests for e2e/vendor-port/MockRem.t.sol:MockRemTest
+[FAIL: ACLNotAllowed(58987091995684738003792170482790603898293116650100526271892317299985749606912 [5.898e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testRem() (gas: 206872)
+[FAIL: ACLNotAllowed(105504986754250010078293220739489842075738097800964857424208232717304470537728 [1.055e77], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testRemByZeroEuint128() (gas: 207537)
+[FAIL: ACLNotAllowed(15149534483620602611338766390430472721563811741581996527398606775623916946432 [1.514e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testRemByZeroEuint32() (gas: 206961)
+[FAIL: ACLNotAllowed(38582402214033300838075847683269785642806337002162507681595915141204006830592 [3.858e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testRemByZeroEuint8() (gas: 206687)
+[FAIL: ACLNotAllowed(82108850692008182469866800715463521123688889535423822541247880361260389532672 [8.21e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496); counterexample: calldata=0x6d8a4fff000000000000000000000000000000000000000000000000000000000aa44809 args=[178538505 [1.785e8]]] testRemByZeroFuzz(uint32) (runs: 0, μ: 0, ~: 0)
+Suite result: FAILED. 0 passed; 5 failed; 0 skipped; finished in 132.01ms (125.67ms CPU time)
+
+Ran 6 tests for e2e/vendor-port/MockDecryptResultBatch.t.sol:MockDecryptResultBatchTest
+[PASS] testPublishDecryptResultBatchEmitsCallerAsRequestor() (gas: 265169)
+[PASS] testPublishDecryptResultBatchRevertsOnExtraResult() (gas: 88222)
+[PASS] testPublishDecryptResultBatchRevertsOnMissingSignature() (gas: 74874)
+[PASS] testVerifyDecryptResultBatchAcceptsMatchingArrays() (gas: 104653)
+[PASS] testVerifyDecryptResultBatchRevertsOnLengthMismatch() (gas: 42720)
+[PASS] testVerifyDecryptResultBatchSafeRevertsOnLengthMismatch() (gas: 44208)
+Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 133.16ms (2.26ms CPU time)
+
+Ran 7 tests for e2e/vendor-port/GasMetering.t.sol:GasMeteringTest
+[PASS] test_adjustedMatchesExcluded_logsOff() (gas: 3961263)
+[PASS] test_adjustedMatchesExcluded_logsOn() (gas: 4747632)
+[PASS] test_exclusionReducesReportedGas() (gas: 3937815)
+[PASS] test_noEventsWhenExcluded() (gas: 1614133)
+[PASS] test_resultsUnchangedWithExclusion() (gas: 1344682)
+[PASS] test_userOwnedPauseNotClobbered() (gas: 959686)
+[PASS] test_worksWithLogsEnabled() (gas: 980281)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 138.03ms (79.19ms CPU time)
+
+Ran 31 tests for e2e/vendor-port/CofhePlugin.t.sol:CofheClientTest
+[PASS] testACPCreateSelf_isValid() (gas: 69015)
+[PASS] testACPCreateSelf_revertsWhenNotConnected() (gas: 2925572)
+[PASS] testACPCreateShared_isValid() (gas: 46634)
+[PASS] testACPExportImportShared() (gas: 3116542)
+[PASS] testACPImportShared_recipientMismatch_reverts() (gas: 3048361)
+[PASS] testACPSharedDecryptFlow() (gas: 3367740)
+[PASS] testAccount_revertsWhenNotConnected() (gas: 2921043)
+[PASS] testConnect_canReconnect() (gas: 47165)
+[PASS] testConnect_setsAccount() (gas: 11237)
+[PASS] testCreateEuint32sBatch_revertsWhenConsumedByWrongContract() (gas: 1646080)
+[PASS] testCreateExternalEaddress() (gas: 311258)
+[PASS] testCreateExternalEbool_false() (gas: 291188)
+[PASS] testCreateExternalEbool_true() (gas: 309944)
+[PASS] testCreateExternalEuint128() (gas: 309991)
+[PASS] testCreateExternalEuint16() (gas: 309824)
+[PASS] testCreateExternalEuint32_fuzz(uint32) (runs: 512, μ: 310215, ~: 311073)
+[PASS] testCreateExternalEuint32_revertsWhenConsumedByWrongContract() (gas: 1588781)
+[PASS] testCreateExternalEuint32_revertsWhenConsumingContractIsZeroAddress() (gas: 36412)
+[PASS] testCreateExternalEuint32_revertsWhenNotConnected() (gas: 2946298)
+[PASS] testCreateExternalEuint64() (gas: 310189)
+[PASS] testCreateExternalEuint8() (gas: 311397)
+[PASS] testDecryptForTx_revertsWhenNotConnected() (gas: 2921884)
+[PASS] testDecryptForTx_withACP() (gas: 353944)
+[PASS] testDecryptForTx_withACP_revertsWithoutAllow() (gas: 272555)
+[PASS] testDecryptForTx_withoutACP() (gas: 295795)
+[PASS] testDecryptForTx_withoutACP_revertsIfNotGlobal() (gas: 208018)
+[PASS] testDecryptForView() (gas: 339242)
+[PASS] testDecryptForView_revertsWhenNotConnected() (gas: 2925157)
+[PASS] testDecryptForView_revertsWithoutPermission() (gas: 261459)
+[PASS] testPublishDecryptResult_fullFlow() (gas: 430648)
+[PASS] testPublishDecryptResult_getResultSafe() (gas: 447290)
+Suite result: ok. 31 passed; 0 failed; 0 skipped; finished in 138.04ms (151.74ms CPU time)
+
+Ran 4 tests for e2e/vendor-port/SimpleTest.t.sol:SimpleTestTest
+[FAIL: ACLNotAllowed(105504986754250010078293220739489842075738097800964857424208232717304470537728 [1.055e77], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] test128BitsNoOverflow() (gas: 206966)
+[FAIL: ACLNotAllowed(38582402214033300838075847683269785642806337002162507681595915141204006830592 [3.858e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testDivideByZero() (gas: 206618)
+[FAIL: ACLNotAllowed(38582402214033300838075847683269785642806337002162507681595915141204006830592 [3.858e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testOverflow() (gas: 206222)
+[PASS] testSetNumberFuzz(uint32) (runs: 512, μ: 330904, ~: 331684)
+Suite result: FAILED. 1 passed; 3 failed; 0 skipped; finished in 137.19ms (128.09ms CPU time)
+
+Ran 14 test suites in 141.13ms (871.47ms CPU time): 95 tests passed, 13 failed, 0 skipped (108 total tests)
+
+Failing tests:
+Encountered 1 failing test in e2e/vendor-port/CofhePlugin.t.sol:CofheTestUtilsTest
+[FAIL: EvmError: Revert] testDeployMocks_contractsExist() (gas: 22985)
+
+Encountered 3 failing tests in e2e/vendor-port/MockIsPubliclyAllowed.t.sol:MockIsPubliclyAllowedTest
+[FAIL: ACLNotAllowed(115747559174423067489356306390877806995718991284442275570070818829210672923648 [1.157e77], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testAllowThisIsNotPublic() (gas: 206575)
+[FAIL: ACLNotAllowed(115747559174423067489356306390877806995718991284442275570070818829210672923648 [1.157e77], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testNotPubliclyAllowedByDefault() (gas: 205802)
+[FAIL: ACLNotAllowed(115747559174423067489356306390877806995718991284442275570070818829210672923648 [1.157e77], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testPubliclyAllowedAfterAllowGlobal() (gas: 206182)
+
+Encountered 1 failing test in e2e/vendor-port/MockRandom.t.sol:MockRandomTest
+[FAIL: SenderNotAllowed(0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testRandomHandleIsUsable() (gas: 143113)
+
+Encountered 5 failing tests in e2e/vendor-port/MockRem.t.sol:MockRemTest
+[FAIL: ACLNotAllowed(58987091995684738003792170482790603898293116650100526271892317299985749606912 [5.898e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testRem() (gas: 206872)
+[FAIL: ACLNotAllowed(105504986754250010078293220739489842075738097800964857424208232717304470537728 [1.055e77], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testRemByZeroEuint128() (gas: 207537)
+[FAIL: ACLNotAllowed(15149534483620602611338766390430472721563811741581996527398606775623916946432 [1.514e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testRemByZeroEuint32() (gas: 206961)
+[FAIL: ACLNotAllowed(38582402214033300838075847683269785642806337002162507681595915141204006830592 [3.858e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testRemByZeroEuint8() (gas: 206687)
+[FAIL: ACLNotAllowed(82108850692008182469866800715463521123688889535423822541247880361260389532672 [8.21e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496); counterexample: calldata=0x6d8a4fff000000000000000000000000000000000000000000000000000000000aa44809 args=[178538505 [1.785e8]]] testRemByZeroFuzz(uint32) (runs: 0, μ: 0, ~: 0)
+
+Encountered 3 failing tests in e2e/vendor-port/SimpleTest.t.sol:SimpleTestTest
+[FAIL: ACLNotAllowed(105504986754250010078293220739489842075738097800964857424208232717304470537728 [1.055e77], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] test128BitsNoOverflow() (gas: 206966)
+[FAIL: ACLNotAllowed(38582402214033300838075847683269785642806337002162507681595915141204006830592 [3.858e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testDivideByZero() (gas: 206618)
+[FAIL: ACLNotAllowed(38582402214033300838075847683269785642806337002162507681595915141204006830592 [3.858e76], 0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496)] testOverflow() (gas: 206222)
+
+Encountered a total of 13 failing tests, 95 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 13 failed tests
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger
+
+Fuzz seed: 0x6bd94a0cd7f7a9ce78c735d9c941b26e681974035031c3f9b9deb1e90137d914 (use `--fuzz-seed` to reproduce)

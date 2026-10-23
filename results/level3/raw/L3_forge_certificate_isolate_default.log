@@ -1,0 +1,21 @@
+Compiling 2 files with Solc 0.8.24
+Solc 0.8.24 finished in 12.43s
+Compiler run successful!
+
+Ran 13 tests for test/acl/ACLRetirementCertificate.t.sol:ACLRetirementCertificateTest
+[PASS] test_TC19_DelegationIndicatorAccount_NoEcdsaFallback() (gas: 677435)
+[PASS] test_TC19_Erc1271Account() (gas: 656926)
+[PASS] test_TC19_ErcVector() (gas: 314958)
+[PASS] test_TC19_InvalidSignatures() (gas: 445742)
+[PASS] test_TC19_LeakedCertificate_OnlyPlannedHandover() (gas: 406098)
+[PASS] test_TC19_NoSuccessor() (gas: 203098)
+[PASS] test_TC19_SecondSubmissionReverts_SubmitterIrrelevant() (gas: 377481)
+[PASS] test_TC19_SuccessorMismatch() (gas: 244934)
+[PASS] test_TC19_SupportsInterface() (gas: 11150)
+[PASS] test_TC19_WorksWhilePaused() (gas: 343546)
+[PASS] test_TC19_WrongChain() (gas: 274814)
+[PASS] test_TC24_OneCertificateRetiresOnEveryListedChain() (gas: 391175)
+[PASS] test_TC24_RetireOnOneChainOnly_OtherChainUnaffected() (gas: 269572)
+Suite result: ok. 13 passed; 0 failed; 0 skipped; finished in 4.33ms (24.45ms CPU time)
+
+Ran 1 test suite in 17.37ms (4.33ms CPU time): 13 tests passed, 0 failed, 0 skipped (13 total tests)

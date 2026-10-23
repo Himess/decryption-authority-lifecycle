@@ -1,0 +1,23 @@
+run=r2 date=2026-10-21T21:14:18Z machine=M1 (Windows 10 Pro 19045, Ryzen 5 5600) anvil Version: 1.8.5 bench=82a0ba37337d906c crate=lifecycle/level3-connector 564d7d17
+ecdsa, unmodified (RFC-012)                    ecrecover                          rpcs=0 ok=true p50=180us p95=190us mean=181us min=176us
+ecdsa, Profile H enforce                       code read + ecrecover              rpcs=2 ok=true p50=467us p95=557us mean=475us min=441us
+erc1271 ML-DSA-44 account, unmodified 250k     isValidSignature at 250,000        rpcs=1 ok=false p50=633us p95=730us mean=646us min=596us
+erc1271 ML-DSA-44 account, Profile H B_exec 2M code read + isValidSignature       rpcs=3 ok=true p50=2737us p95=3014us mean=2768us min=2575us
+kda ML-DSA-44 single:rustcrypto                code read + native verify          rpcs=1 ok=true p50=245us p95=292us mean=251us min=232us
+kda ML-DSA-44 agree:rustcrypto,fips204         code read + native verify          rpcs=1 ok=true p50=341us p95=410us mean=351us min=331us
+native ML-DSA-44 rustcrypto                    no RPC                             rpcs=0 ok=true p50=80us p95=82us mean=79us min=78us
+native ML-DSA-44 fips204                       no RPC                             rpcs=0 ok=true p50=86us p95=98us mean=87us min=85us
+native ML-DSA-44 libcrux                       no RPC                             rpcs=0 ok=true p50=32us p95=33us mean=32us min=31us
+native ML-DSA-44 pqclean                       no RPC                             rpcs=0 ok=true p50=85us p95=95us mean=86us min=84us
+kda ML-DSA-65 single:rustcrypto                code read + native verify          rpcs=1 ok=true p50=300us p95=361us mean=306us min=281us
+kda ML-DSA-65 agree:rustcrypto,fips204         code read + native verify          rpcs=1 ok=true p50=450us p95=523us mean=459us min=434us
+native ML-DSA-65 rustcrypto                    no RPC                             rpcs=0 ok=true p50=124us p95=128us mean=124us min=123us
+native ML-DSA-65 fips204                       no RPC                             rpcs=0 ok=true p50=142us p95=150us mean=143us min=140us
+native ML-DSA-65 libcrux                       no RPC                             rpcs=0 ok=true p50=54us p95=55us mean=53us min=53us
+native ML-DSA-65 pqclean                       no RPC                             rpcs=0 ok=true p50=138us p95=171us mean=142us min=136us
+kda ML-DSA-87 single:rustcrypto                code read + native verify          rpcs=1 ok=true p50=420us p95=503us mean=429us min=389us
+kda ML-DSA-87 agree:rustcrypto,fips204         code read + native verify          rpcs=1 ok=true p50=641us p95=750us mean=655us min=617us
+native ML-DSA-87 rustcrypto                    no RPC                             rpcs=0 ok=true p50=203us p95=213us mean=203us min=200us
+native ML-DSA-87 fips204                       no RPC                             rpcs=0 ok=true p50=235us p95=270us mean=239us min=233us
+native ML-DSA-87 libcrux                       no RPC                             rpcs=0 ok=true p50=86us p95=107us mean=88us min=84us
+native ML-DSA-87 pqclean                       no RPC                             rpcs=0 ok=true p50=232us p95=263us mean=236us min=225us

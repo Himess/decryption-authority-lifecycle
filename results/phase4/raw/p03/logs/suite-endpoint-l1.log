@@ -1,0 +1,164 @@
+INSCOPE start=2026-10-21T19:35:03Z cgroup=/system.slice/lifecycle-suite-endpoint-l1-1792611303.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/kw.sh main cargo test -p endpoint --locked -- --test-threads=1]
+KW ver=main tree=l1 step=cargo commit=ed851716c9a6b799996a23399ece2858336f96db date=2026-10-21T19:35:03Z host=VPS nproc=4
+KW dirty-files:  M kms-connector/config/endpoint.toml  M kms-connector/crates/api/src/error.rs  M kms-connector/crates/endpoint/src/core/config.rs  M kms-connector/crates/endpoint/src/core/db.rs  M kms-connector/crates/endpoint/src/core/http/decrypt.rs  M kms-connector/crates/endpoint/src/core/http/public_decrypt.rs  M kms-connector/crates/endpoint/src/core/http/user_decrypt.rs  M kms-connector/crates/endpoint/tests/integration_tests.rs  M kms-connector/crates/kms-worker/src/core/config.rs  M kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs  M kms-connector/crates/kms-worker/src/core/event_processor/error.rs  M kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs  M kms-connector/crates/kms-worker/src/core/kms_worker.rs  M kms-connector/crates/kms-worker/src/core/mod.rs  M kms-connector/crates/kms-worker/tests/common/mod.rs  M kms-connector/crates/utils/src/tests/setup/db.rs  M kms-connector/crates/utils/src/tests/setup/host.rs  M shared/user-decryption-signature/src/lib.rs ?? kms-connector/connector-db/migrations/20261021120000_profile_h_erc1271_attempts.sql ?? kms-connector/crates/kms-worker/tests/acl_p03_stored_results_h.rs ?? kms-connector/crates/kms-worker/tests/acl_p04_eip7851_h.rs ?? kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs ?? shared/user-decryption-signature/src/profile_h.rs ?? shared/user-decryption-signature/tests/ 
+KW toolchain=1.99.1-x86_64-unknown-linux-gnu (overridden by '/srv/lifecycle/src/fhevm-main-l1/kms-connector/rust-toolchain.toml') | rustc 1.99.1 (58cf8f9c3 2026-10-13) | cargo 1.99.1 (5f94df478 2026-08-27) | libprotoc 34.1 | jobs=1
+   Compiling alloy-sol-types v1.7.1
+   Compiling alloy-eips v2.2.0
+   Compiling alloy-consensus v2.2.0
+   Compiling alloy-network-primitives v2.2.0
+   Compiling alloy-consensus-any v2.2.0
+   Compiling alloy-json-rpc v2.2.0
+   Compiling alloy-rpc-types-eth v2.2.0
+   Compiling alloy-transport v2.2.0
+   Compiling alloy-rpc-types-any v2.2.0
+   Compiling alloy-network v2.2.0
+   Compiling alloy-pubsub v2.2.0
+   Compiling aws-runtime v1.7.0
+   Compiling alloy-hardforks v0.2.13
+   Compiling alloy-transport-ws v2.2.0
+   Compiling alloy-transport-http v2.2.0
+   Compiling alloy-signer-local v2.2.0
+   Compiling alloy-rpc-types-trace v2.2.0
+   Compiling alloy-genesis v2.2.0
+   Compiling alloy-rpc-types-debug v2.2.0
+   Compiling alloy-dyn-abi v1.7.1
+   Compiling aws-sdk-sts v1.98.0
+   Compiling alloy-node-bindings v2.2.0
+   Compiling alloy-rpc-client v2.2.0
+   Compiling alloy-rpc-types-anvil v2.2.0
+   Compiling alloy-provider v2.2.0
+   Compiling aws-config v1.8.6
+   Compiling aws-sdk-kms v1.86.0
+   Compiling alloy-signer-aws v2.2.0
+   Compiling alloy-contract v2.2.0
+   Compiling alloy-core v1.6.0
+   Compiling alloy-rpc-types v2.2.0
+   Compiling alloy v2.2.0
+   Compiling fhevm_gateway_bindings v0.15.0 (/srv/lifecycle/src/fhevm-main-l1/gateway-contracts/rust_bindings)
+   Compiling ciphertext-attestation v0.15.0 (/srv/lifecycle/src/fhevm-main-l1/shared/ciphertext-attestation)
+   Compiling kms-grpc v0.15.0-1 (https://github.com/zama-ai/kms.git?rev=511ac7e0521a5277e231abe729b163dcd0940e83#511ac7e0)
+   Compiling fhevm_host_bindings v0.15.0 (/srv/lifecycle/src/fhevm-main-l1/host-contracts/rust_bindings)
+   Compiling connector-utils v0.15.0 (/srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/utils)
+   Compiling kms-connector-api v0.15.0 (/srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/api)
+   Compiling endpoint v0.15.0 (/srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/endpoint)
+    Finished `test` profile [unoptimized] target(s) in 6m 06s
+     Running unittests src/lib.rs (/srv/lifecycle/target/main/debug/deps/endpoint-697d1c77c2c0e8cf)
+
+running 27 tests
+test core::config::tests::test_load_from_env ... 2026-10-21T19:41:11.923936Z  INFO connector_utils::config::deserialize: Loading config using environment variables only
+2026-10-21T19:41:11.924031Z  INFO connector_utils::config::deserialize: Adding environment variables with prefix KMS_CONNECTOR_
+ok
+test core::config::tests::test_load_valid_config_from_file ... 2026-10-21T19:41:11.925502Z  INFO connector_utils::config::deserialize: Loading config from: /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/endpoint/../../config/endpoint.toml
+2026-10-21T19:41:11.925593Z  INFO connector_utils::config::deserialize: Adding environment variables with prefix KMS_CONNECTOR_
+ok
+test core::config::tests::test_missing_required_field_fails ... 2026-10-21T19:41:11.931174Z  INFO connector_utils::config::deserialize: Loading config from: /srv/lifecycle/tmp/endpoint-cfg-271479.toml
+2026-10-21T19:41:11.931259Z  INFO connector_utils::config::deserialize: Adding environment variables with prefix KMS_CONNECTOR_
+2026-10-21T19:41:11.931616Z ERROR connector_utils::config::deserialize: missing configuration field "database_url"
+ok
+test core::config::tests::test_single_supported_chain_id_from_env ... 2026-10-21T19:41:11.934347Z  INFO connector_utils::config::deserialize: Loading config using environment variables only
+2026-10-21T19:41:11.934434Z  INFO connector_utils::config::deserialize: Adding environment variables with prefix KMS_CONNECTOR_
+ok
+test core::config::tests::test_single_supported_chain_id_from_file ... 2026-10-21T19:41:11.937327Z  INFO connector_utils::config::deserialize: Loading config from: /srv/lifecycle/tmp/endpoint-cfg-271479.toml
+2026-10-21T19:41:11.937372Z  INFO connector_utils::config::deserialize: Adding environment variables with prefix KMS_CONNECTOR_
+ok
+test core::db::tests::db_encoding_matches_gw_listener_encoding ... ok
+test core::db::tests::id_round_trips_through_db_encoding ... ok
+test core::db::tests::notification_payload_decodes ... ok
+test core::validation::tests::bad_fhe_type ... ok
+test core::validation::tests::bit_size_budget ... ok
+test core::validation::tests::empty_handles ... ok
+test core::validation::tests::extra_data_accepts_known_versions_and_trailing_bytes ... ok
+test core::validation::tests::extra_data_rejects_unknown_version_and_truncation ... ok
+test core::validation::tests::mixed_chains ... ok
+test core::validation::tests::non_decryptable_fhe_type ... ok
+test core::validation::tests::request_validity_out_of_range ... ok
+test core::validation::tests::too_many_allowed_contracts ... ok
+test core::validation::tests::unsupported_attestation_type ... ok
+test core::validation::tests::unsupported_chain ... ok
+test core::validation::tests::valid_requests_pass ... ok
+test core::waiters::tests::clear_empties_the_map_and_fails_every_waiter ... ok
+test core::waiters::tests::dropped_waiter_only_unsubscribes_itself_and_releases_its_permit ... ok
+test core::waiters::tests::dropping_cleared_waiter_keeps_new_entry_of_same_id ... ok
+test core::waiters::tests::dropping_last_waiter_removes_the_entry ... ok
+test core::waiters::tests::two_waiters_on_one_id_are_both_woken ... ok
+test core::waiters::tests::wake_between_two_waits_is_not_lost ... ok
+test monitoring::health::tests::test_version_url_uses_loopback_for_unspecified_ip ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running unittests src/bin/endpoint.rs (/srv/lifecycle/target/main/debug/deps/endpoint-d871f22efb371e64)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/health.rs (/srv/lifecycle/target/main/debug/deps/health-b81dd60426c9c5db)
+
+running 1 test
+test test_healthcheck_endpoint ... 2026-10-21T19:41:18.932012Z  INFO connector_utils::monitoring::health: Healthcheck success: HealthStatus { healthy: true, database_connected: true, http_server_reachable: true, in_flight_decryptions: 0, max_in_flight_decryptions: 1000, details: "" }
+2026-10-21T19:41:24.582121Z ERROR connector_utils::monitoring::health: Healthcheck failed: HealthStatus { healthy: false, database_connected: false, http_server_reachable: true, in_flight_decryptions: 0, max_in_flight_decryptions: 1000, details: "Database connection timed out: deadline has elapsed" }
+2026-10-21T19:41:30.156212Z  INFO connector_utils::monitoring::health: Healthcheck success: HealthStatus { healthy: true, database_connected: true, http_server_reachable: true, in_flight_decryptions: 0, max_in_flight_decryptions: 1000, details: "" }
+2026-10-21T19:41:30.311008Z ERROR connector_utils::monitoring::health: Healthcheck failed: HealthStatus { healthy: false, database_connected: true, http_server_reachable: false, in_flight_decryptions: 0, max_in_flight_decryptions: 1000, details: "HTTP server connection failed: error sending request for url (http://127.0.0.1:32999/version)" }
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 19.56s
+
+     Running tests/integration_tests.rs (/srv/lifecycle/target/main/debug/deps/integration_tests-835c3f22c0f7d98e)
+
+running 22 tests
+test admitted_request_can_receive_result_after_expiry ... ok
+test test_client_disconnect_releases_permit ... ok
+test test_decryption_timeout_answers_504_and_releases_permit ... ok
+test test_duplicate_submissions_share_one_request ... ok
+test test_error_row_notified_while_waiting ... ok
+test test_existing_payload_row_is_served_immediately ... ok
+test test_expired_irrecoverable_error_is_reprocessed::case_1_fresh_error ... ok
+test test_expired_irrecoverable_error_is_reprocessed::case_2_success ... ok
+test test_h7_duplicates_attach_to_one_revalidation ... ok
+test test_h7_public_payload_is_served_as_is ... ok
+test test_h7_stored_user_payload_is_revalidated ... ok
+test test_listener_reconnection_fails_in_flight_requests_fast ... ok
+test test_malformed_requests_answer_400_without_db_access ... ok
+test test_non_retryable_error_row_is_served::case_1 ... ok
+test test_non_retryable_error_row_is_served::case_2 ... ok
+test test_non_retryable_error_row_is_served::case_3 ... ok
+test test_overloaded_replica_answers_503 ... ok
+test test_public_decrypt_happy_path ... ok
+test test_retryable_error_row_resets_failed_request ... ok
+test test_retryable_or_expired_error_row_attaches_to_reprocessing::case_1_recoverable ... ok
+test test_retryable_or_expired_error_row_attaches_to_reprocessing::case_2_expired_irrecoverable ... ok
+test test_user_decrypt_happy_path ... ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 55.86s
+
+   Doc-tests endpoint
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+	Command being timed: "/srv/lifecycle/scripts/kw.sh main cargo test -p endpoint --locked -- --test-threads=1"
+	User time (seconds): 329.81
+	System time (seconds): 73.45
+	Percent of CPU this job got: 90%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 7:25.61
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2502556
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 2241
+	Minor (reclaiming a frame) page faults: 3997766
+	Voluntary context switches: 15662
+	Involuntary context switches: 4326
+	Swaps: 0
+	File system inputs: 521776
+	File system outputs: 2165032
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T19:42:29Z rc=0 cgroup_memory.peak_bytes=2684354560 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=suite-endpoint-l1 unit=lifecycle-suite-endpoint-l1-1792611303 rc=0 wall_s=447 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=447 killed=no sampled_peak_anon_mb=2291 sampled_peak_cgroup_current_mb=2559 sampled_peak_swap_mb=0

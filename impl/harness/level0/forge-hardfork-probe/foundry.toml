@@ -1,0 +1,10 @@
+# Primitive gas costs per hardfork in forge (revm spec selected with --evm-version): frame gas vs caller-side gas.
+[profile.default]
+src = 'test'
+test = 'test'
+out = 'out'
+cache_path = 'cache'
+libs = []
+solc = '0.8.24'
+allow_paths = ['<repo>/impl/fhevm-main/host-contracts']
+remappings = ['forge-std/=<repo>/impl/fhevm-main/host-contracts/dependencies/forge-std-1.11.0/src/']

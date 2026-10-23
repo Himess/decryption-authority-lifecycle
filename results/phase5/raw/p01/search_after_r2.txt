@@ -1,0 +1,3 @@
+# P0.1 search, run 2, 2026-10-22T18:10:37Z
+# grep -rniE "only adds? rights|adds? rights only|only add rights|yalnızca hak ekler" erc docs drafts export/README.md results/RESULTS.md (excluding erc/archive/ and the briefs)
+# matches: 0

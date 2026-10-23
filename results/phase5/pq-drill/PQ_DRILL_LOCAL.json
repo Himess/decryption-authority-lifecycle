@@ -1,0 +1,4478 @@
+{
+ "runs": {
+  "osaka": [
+   "osaka-r1",
+   "osaka-r2",
+   "osaka-r3"
+  ],
+  "amsterdam": [
+   "amsterdam-r1",
+   "amsterdam-r2",
+   "amsterdam-r3"
+  ]
+ },
+ "hardforks": {
+  "amsterdam": {
+   "rows": [
+    {
+     "kind": "path",
+     "path": "B1",
+     "what": "carry",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"handles\": 3, \"verified\": true}"
+     ]
+    },
+    {
+     "kind": "path",
+     "path": "B2",
+     "what": "successor confirmed, retired (B2d) and certified (B2c)",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"delaySeconds\": 604800}"
+     ]
+    },
+    {
+     "kind": "path",
+     "path": "B3",
+     "what": "delegated, keyed; B3a rewritten to 0xef0101, B3b adopted",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B1",
+     "what": "A",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"empty\", \"retired\": true, \"successor\": null}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B1",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": false}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B2d",
+     "what": "A",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"empty\", \"retired\": true, \"successor\": \"0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E\"}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B2d",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": false}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B2c",
+     "what": "A",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"empty\", \"retired\": true, \"successor\": \"0x851356ae760d987E095750cCeb3bC6014560891C\"}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B2c",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": false}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3a",
+     "what": "A",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"eip7851\", \"retired\": false, \"successor\": null}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3a",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"eip7851\", \"retired\": false}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3b",
+     "what": "A",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": false, \"successor\": null}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3b",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": false}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B1",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B1",
+     "what": "old key",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B2d",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B2d",
+     "what": "old key",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B2c",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B2c",
+     "what": "old key",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B3a",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B3a",
+     "what": "old key",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": false, \"error\": \"Erc1271WrongMagicError\"}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B3b",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B3b",
+     "what": "old key",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": false, \"error\": \"Erc1271WrongMagicError\"}"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T1.allow",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T2.allowForDecryption",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T3.delegate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T4.designateSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T5.confirmSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T6.certificate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T8.retireAccount",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T1.allow",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T2.allowForDecryption",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T3.delegate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T4.designateSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T5.confirmSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T6.certificate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T8.retireAccount",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T1.allow",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T2.allowForDecryption",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T3.delegate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T4.designateSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T5.confirmSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T6.certificate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T8.retireAccount",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T1.allow",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T2.allowForDecryption",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T3.delegate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T4.designateSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T5.confirmSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SuccessionNotAccepted)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T6.certificate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (CertificateSuccessorMismatch)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T1.allow",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T2.allowForDecryption",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T3.delegate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T4.designateSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T5.confirmSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SuccessionNotAccepted)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T6.certificate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (CertificateSuccessorMismatch)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "undo",
+     "path": "B3a",
+     "what": "holder undoes",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"delegatedToAttacker\": false, \"pendingSuccessor\": \"0x0000000000000000000000000000000000000000\"}"
+     ]
+    },
+    {
+     "kind": "undo",
+     "path": "B3b",
+     "what": "holder undoes",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"delegatedToAttacker\": false, \"pendingSuccessor\": \"0x0000000000000000000000000000000000000000\"}"
+     ]
+    },
+    {
+     "kind": "canary",
+     "path": "-",
+     "what": "before any upgrade",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "OK"
+     ]
+    },
+    {
+     "kind": "b5",
+     "path": "-",
+     "what": "the Core release, 8 signatures",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (NotEnoughSignatures, gas 1323928)"
+     ]
+    },
+    {
+     "kind": "b5",
+     "path": "-",
+     "what": "the Core release, 9 signatures",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-, gas 11557470)"
+     ]
+    },
+    {
+     "kind": "canary",
+     "path": "-",
+     "what": "after the Core release",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "OK"
+     ]
+    },
+    {
+     "kind": "b5",
+     "path": "-",
+     "what": "the release without Core, 9 signatures",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (UpgradeDropsRetirement, gas 11451062)"
+     ]
+    },
+    {
+     "kind": "canary",
+     "path": "-",
+     "what": "after the refused release",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "OK"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T1.allow.after-upgrade",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "b8-erc1271",
+     "path": "B1",
+     "what": "erc1271",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1236568\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.00\", \"msMin\": \"3.81\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1236568\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.40\", \"msMin\": \"14.88\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1236568\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"16.04\", \"msMin\": \"15.80\", \"returned\": \"0x1626ba7e\"}"
+     ]
+    },
+    {
+     "kind": "b8-erc1271",
+     "path": "B2d",
+     "what": "erc1271",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1236059\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.50\", \"msMin\": \"14.56\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1236059\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.63\", \"msMin\": \"13.15\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1236059\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.79\", \"msMin\": \"3.17\", \"returned\": \"0x1626ba7e\"}"
+     ]
+    },
+    {
+     "kind": "b8-erc1271",
+     "path": "B2c",
+     "what": "erc1271",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1236072\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.85\", \"msMin\": \"14.97\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1236072\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.86\", \"msMin\": \"14.78\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1236072\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.97\", \"msMin\": \"15.19\", \"returned\": \"0x1626ba7e\"}"
+     ]
+    },
+    {
+     "kind": "b8-erc1271",
+     "path": "B3a",
+     "what": "erc1271",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"252513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1238715\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.66\", \"msMin\": \"14.90\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"252513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1238715\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.80\", \"msMin\": \"15.06\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"252513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1238715\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.98\", \"msMin\": \"14.44\", \"returned\": \"0x1626ba7e\"}"
+     ]
+    },
+    {
+     "kind": "b8-erc1271",
+     "path": "B3b",
+     "what": "erc1271",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233983\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.43\", \"msMin\": \"15.28\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233983\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.60\", \"msMin\": \"15.22\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249513\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233983\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.78\", \"msMin\": \"15.22\", \"returned\": \"0x1626ba7e\"}"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T8.retireAccount",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3a",
+     "what": "A after T8",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"eip7851\", \"retired\": true}"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "P4.wallet-after-retirement",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (B3a wallet acts after A's retirement: reverted (CallFailed)) (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T8.retireAccount",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3b",
+     "what": "A after T8",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": true}"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "P4.wallet-after-retirement",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (B3b wallet acts after A's retirement: reverted (CallFailed)) (-)"
+     ]
+    }
+   ],
+   "receipts": [
+    {
+     "step": "EmptyUUPSProxyACL",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4588176"
+     ]
+    },
+    {
+     "step": "ERC1967 proxy",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "754178"
+     ]
+    },
+    {
+     "step": "ACL v0.10.0 implementation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "25120508"
+     ]
+    },
+    {
+     "step": "upgradeToAndCall(ACL, initializeFromEmptyProxy())",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "62458"
+     ]
+    },
+    {
+     "step": "DappStub",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "953317"
+     ]
+    },
+    {
+     "step": "Keccak-f1600 helper (data contract)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "33632276"
+     ]
+    },
+    {
+     "step": "MLDSA44Verifier",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "37233691"
+     ]
+    },
+    {
+     "step": "PQWallet code without a key",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4199676"
+     ]
+    },
+    {
+     "step": "operator 0 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917917"
+     ]
+    },
+    {
+     "step": "operator 1 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917689"
+     ]
+    },
+    {
+     "step": "operator 2 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917929"
+     ]
+    },
+    {
+     "step": "operator 3 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917917"
+     ]
+    },
+    {
+     "step": "operator 4 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917785"
+     ]
+    },
+    {
+     "step": "operator 5 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917797"
+     ]
+    },
+    {
+     "step": "operator 6 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917869"
+     ]
+    },
+    {
+     "step": "operator 7 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917665"
+     ]
+    },
+    {
+     "step": "operator 8 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917809"
+     ]
+    },
+    {
+     "step": "operator 9 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917785"
+     ]
+    },
+    {
+     "step": "operator 10 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917773"
+     ]
+    },
+    {
+     "step": "operator 11 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917869"
+     ]
+    },
+    {
+     "step": "operator 12 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917809"
+     ]
+    },
+    {
+     "step": "OperatorRatifiedRegistryOwner",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "7465556"
+     ]
+    },
+    {
+     "step": "ACL.transferOwnership(upgrader)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "135226"
+     ]
+    },
+    {
+     "step": "upgrader.acceptRegistryOwnership()",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "43069"
+     ]
+    },
+    {
+     "step": "B1 holder key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917905"
+     ]
+    },
+    {
+     "step": "B1 wallet W",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4425121"
+     ]
+    },
+    {
+     "step": "B1 grant h0",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265859",
+      "265883"
+     ]
+    },
+    {
+     "step": "B1 grant h1",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265871",
+      "265883"
+     ]
+    },
+    {
+     "step": "B1 grant h2",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265871",
+      "265883"
+     ]
+    },
+    {
+     "step": "B1 grant hv to V",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265859",
+      "265871"
+     ]
+    },
+    {
+     "step": "B1 V delegates to A",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140457",
+      "140469"
+     ]
+    },
+    {
+     "step": "B1 A delegates to Dk",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140469"
+     ]
+    },
+    {
+     "step": "B2d holder key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917701"
+     ]
+    },
+    {
+     "step": "B2d wallet W",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4425109"
+     ]
+    },
+    {
+     "step": "B2d grant h0",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265871",
+      "265883"
+     ]
+    },
+    {
+     "step": "B2d grant h1",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265871",
+      "265883"
+     ]
+    },
+    {
+     "step": "B2d grant h2",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265871",
+      "265883"
+     ]
+    },
+    {
+     "step": "B2d grant hv to V",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265859",
+      "265871"
+     ]
+    },
+    {
+     "step": "B2d V delegates to A",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140457",
+      "140469"
+     ]
+    },
+    {
+     "step": "B2d A delegates to Dk",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140469"
+     ]
+    },
+    {
+     "step": "B2c holder key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917785"
+     ]
+    },
+    {
+     "step": "B2c wallet W",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4425121"
+     ]
+    },
+    {
+     "step": "B2c grant h0",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265871",
+      "265883"
+     ]
+    },
+    {
+     "step": "B2c grant h1",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265871",
+      "265883"
+     ]
+    },
+    {
+     "step": "B2c grant h2",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265871",
+      "265883"
+     ]
+    },
+    {
+     "step": "B2c grant hv to V",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265859",
+      "265871"
+     ]
+    },
+    {
+     "step": "B2c V delegates to A",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140457",
+      "140469"
+     ]
+    },
+    {
+     "step": "B2c A delegates to Dk",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140469"
+     ]
+    },
+    {
+     "step": "B3a grant h0",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265883"
+     ]
+    },
+    {
+     "step": "B3a grant h1",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265871",
+      "265883"
+     ]
+    },
+    {
+     "step": "B3a grant h2",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265883"
+     ]
+    },
+    {
+     "step": "B3a grant hv to V",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265871"
+     ]
+    },
+    {
+     "step": "B3a V delegates to A",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140469"
+     ]
+    },
+    {
+     "step": "B3a A delegates to Dk",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140469"
+     ]
+    },
+    {
+     "step": "B3b grant h0",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265883"
+     ]
+    },
+    {
+     "step": "B3b grant h1",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265883"
+     ]
+    },
+    {
+     "step": "B3b grant h2",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265883"
+     ]
+    },
+    {
+     "step": "B3b grant hv to V",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "265859",
+      "265871"
+     ]
+    },
+    {
+     "step": "B3b V delegates to A",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140469"
+     ]
+    },
+    {
+     "step": "B3b A delegates to Dk",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140469"
+     ]
+    },
+    {
+     "step": "B1 carry tool tx 0 (3 handles + retireAccount())",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "503316",
+      "503328"
+     ]
+    },
+    {
+     "step": "B2d designateSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "144548"
+     ]
+    },
+    {
+     "step": "B2d W accepts (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1429756",
+      "1430724",
+      "1430933"
+     ]
+    },
+    {
+     "step": "B2c designateSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "144548"
+     ]
+    },
+    {
+     "step": "B2c W accepts (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1428682",
+      "1429640",
+      "1430148"
+     ]
+    },
+    {
+     "step": "B2d confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140060"
+     ]
+    },
+    {
+     "step": "B2c confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140060"
+     ]
+    },
+    {
+     "step": "B2d retireAccount",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "136936"
+     ]
+    },
+    {
+     "step": "B2c certificate relayed by the watchtower",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "148530"
+     ]
+    },
+    {
+     "step": "B3a key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917797"
+     ]
+    },
+    {
+     "step": "B3a type-4 delegation and initialize (one transaction)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "284017"
+     ]
+    },
+    {
+     "step": "B3b key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "31917605"
+     ]
+    },
+    {
+     "step": "B3b type-4 delegation and initialize (one transaction)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "284005"
+     ]
+    },
+    {
+     "step": "B1 holder declares its KDA (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1528573",
+      "1529122",
+      "1530699"
+     ]
+    },
+    {
+     "step": "B2d holder declares its KDA (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1429586",
+      "1431613",
+      "1433214"
+     ]
+    },
+    {
+     "step": "B2c holder declares its KDA (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1431003",
+      "1431372",
+      "1431408"
+     ]
+    },
+    {
+     "step": "B3a holder declares its KDA (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1530588",
+      "1531501",
+      "1533086"
+     ]
+    },
+    {
+     "step": "B3b holder declares its KDA (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1529070",
+      "1529557",
+      "1530408"
+     ]
+    },
+    {
+     "step": "B1 T1.allow",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "28592",
+      "28604"
+     ]
+    },
+    {
+     "step": "B1 T2.allowForDecryption",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "29091"
+     ]
+    },
+    {
+     "step": "B1 T3.delegate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "26288"
+     ]
+    },
+    {
+     "step": "B1 T4.designateSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "25611"
+     ]
+    },
+    {
+     "step": "B1 T5.confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "25060"
+     ]
+    },
+    {
+     "step": "B1 T6.certificate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "35736"
+     ]
+    },
+    {
+     "step": "B1 T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "132700"
+     ]
+    },
+    {
+     "step": "B1 T8.retireAccount",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "22877"
+     ]
+    },
+    {
+     "step": "B2d T1.allow",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "28604"
+     ]
+    },
+    {
+     "step": "B2d T2.allowForDecryption",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "29091"
+     ]
+    },
+    {
+     "step": "B2d T3.delegate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "26288"
+     ]
+    },
+    {
+     "step": "B2d T4.designateSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "25611"
+     ]
+    },
+    {
+     "step": "B2d T5.confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "25060"
+     ]
+    },
+    {
+     "step": "B2d T6.certificate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "35736"
+     ]
+    },
+    {
+     "step": "B2d T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "132700"
+     ]
+    },
+    {
+     "step": "B2d T8.retireAccount",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "22877"
+     ]
+    },
+    {
+     "step": "B2c T1.allow",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "28604"
+     ]
+    },
+    {
+     "step": "B2c T2.allowForDecryption",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "29091"
+     ]
+    },
+    {
+     "step": "B2c T3.delegate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "26288"
+     ]
+    },
+    {
+     "step": "B2c T4.designateSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "25611"
+     ]
+    },
+    {
+     "step": "B2c T5.confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "25060"
+     ]
+    },
+    {
+     "step": "B2c T6.certificate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "35736"
+     ]
+    },
+    {
+     "step": "B2c T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "132700"
+     ]
+    },
+    {
+     "step": "B2c T8.retireAccount",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "22877"
+     ]
+    },
+    {
+     "step": "B3a T1.allow",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "143106"
+     ]
+    },
+    {
+     "step": "B3a T2.allowForDecryption",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "143875",
+      "143887"
+     ]
+    },
+    {
+     "step": "B3a T3.delegate",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140469"
+     ]
+    },
+    {
+     "step": "B3a T4.designateSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "144548"
+     ]
+    },
+    {
+     "step": "B3a T5.confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "27433"
+     ]
+    },
+    {
+     "step": "B3a T6.certificate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "35736"
+     ]
+    },
+    {
+     "step": "B3a T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "132700"
+     ]
+    },
+    {
+     "step": "B3b T1.allow",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "143106"
+     ]
+    },
+    {
+     "step": "B3b T2.allowForDecryption",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "143887"
+     ]
+    },
+    {
+     "step": "B3b T3.delegate",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "140469"
+     ]
+    },
+    {
+     "step": "B3b T4.designateSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "144548"
+     ]
+    },
+    {
+     "step": "B3b T5.confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "27433"
+     ]
+    },
+    {
+     "step": "B3b T6.certificate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "35736"
+     ]
+    },
+    {
+     "step": "B3b T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "132700"
+     ]
+    },
+    {
+     "step": "B3a holder revokes the attacker's delegation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1330388",
+      "1330769",
+      "1332406"
+     ]
+    },
+    {
+     "step": "B3a holder revokes Dk's delegation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1330579",
+      "1330614",
+      "1331964"
+     ]
+    },
+    {
+     "step": "B3a holder cancels the attacker's designation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1317883",
+      "1318038",
+      "1319867"
+     ]
+    },
+    {
+     "step": "B3b holder revokes the attacker's delegation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1326974",
+      "1328546",
+      "1329324"
+     ]
+    },
+    {
+     "step": "B3b holder revokes Dk's delegation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1325628",
+      "1328269",
+      "1329120"
+     ]
+    },
+    {
+     "step": "B3b holder cancels the attacker's designation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1314488",
+      "1315496",
+      "1315821"
+     ]
+    },
+    {
+     "step": "ACL v0.10.0 implementation, second deployment (a Core release)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "25120508"
+     ]
+    },
+    {
+     "step": "ACL v0.7.0 implementation (a release without Core)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "16069010"
+     ]
+    },
+    {
+     "step": "propose the Core release, 8 signatures",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "131698"
+     ]
+    },
+    {
+     "step": "execute the Core release, 8 signatures with 8 signatures",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "1323928"
+     ]
+    },
+    {
+     "step": "execute the Core release with 9 signatures",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "11557470"
+     ]
+    },
+    {
+     "step": "propose the release without Core, 9 signatures",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "131698"
+     ]
+    },
+    {
+     "step": "execute the release without Core, 9 signatures with 9 signatures",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "11451062"
+     ]
+    },
+    {
+     "step": "B1 T1.allow after the upgrade",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "28604"
+     ]
+    },
+    {
+     "step": "Erc1271GasMeter (E4, test only)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1429908"
+     ]
+    },
+    {
+     "step": "B3a T8.retireAccount",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "136936"
+     ]
+    },
+    {
+     "step": "B3a wallet acts after A's retirement",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "1316547",
+      "1317146",
+      "1318486"
+     ]
+    },
+    {
+     "step": "B3b T8.retireAccount",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "136936"
+     ]
+    },
+    {
+     "step": "B3b wallet acts after A's retirement",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "1315045",
+      "1315500",
+      "1316251"
+     ]
+    }
+   ],
+   "summary": {
+    "rows": 81,
+    "conforming": 81,
+    "rows_all_runs": 81
+   }
+  },
+  "osaka": {
+   "rows": [
+    {
+     "kind": "path",
+     "path": "B1",
+     "what": "carry",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"handles\": 3, \"verified\": true}"
+     ]
+    },
+    {
+     "kind": "path",
+     "path": "B2",
+     "what": "successor confirmed, retired (B2d) and certified (B2c)",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"delaySeconds\": 604800}"
+     ]
+    },
+    {
+     "kind": "path",
+     "path": "B3",
+     "what": "delegated, keyed; B3a rewritten to 0xef0101, B3b adopted",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B1",
+     "what": "A",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"empty\", \"retired\": true, \"successor\": null}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B1",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": false}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B2d",
+     "what": "A",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"empty\", \"retired\": true, \"successor\": \"0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E\"}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B2d",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": false}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B2c",
+     "what": "A",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"empty\", \"retired\": true, \"successor\": \"0x851356ae760d987E095750cCeb3bC6014560891C\"}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B2c",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": false}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3a",
+     "what": "A",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"eip7851\", \"retired\": false, \"successor\": null}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3a",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"eip7851\", \"retired\": false}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3b",
+     "what": "A",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": false, \"successor\": null}"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3b",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": false}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B1",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B1",
+     "what": "old key",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B2d",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B2d",
+     "what": "old key",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B2c",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B2c",
+     "what": "old key",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B3a",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B3a",
+     "what": "old key",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": false, \"error\": \"Erc1271WrongMagicError\"}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B3b",
+     "what": "holder",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": true}"
+     ]
+    },
+    {
+     "kind": "sdk-precheck",
+     "path": "B3b",
+     "what": "old key",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"accepted\": false, \"error\": \"Erc1271WrongMagicError\"}"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T1.allow",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T2.allowForDecryption",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T3.delegate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T4.designateSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T5.confirmSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T6.certificate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T8.retireAccount",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T1.allow",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T2.allowForDecryption",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T3.delegate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T4.designateSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T5.confirmSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T6.certificate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2d",
+     "what": "T8.retireAccount",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T1.allow",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T2.allowForDecryption",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T3.delegate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T4.designateSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T5.confirmSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T6.certificate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B2c",
+     "what": "T8.retireAccount",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (AccountAlreadyRetired)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T1.allow",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T2.allowForDecryption",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T3.delegate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T4.designateSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T5.confirmSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SuccessionNotAccepted)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T6.certificate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (CertificateSuccessorMismatch)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T1.allow",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T2.allowForDecryption",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T3.delegate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T4.designateSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T5.confirmSuccessor",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SuccessionNotAccepted)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T6.certificate",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (CertificateSuccessorMismatch)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "undo",
+     "path": "B3a",
+     "what": "holder undoes",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"delegatedToAttacker\": false, \"pendingSuccessor\": \"0x0000000000000000000000000000000000000000\"}"
+     ]
+    },
+    {
+     "kind": "undo",
+     "path": "B3b",
+     "what": "holder undoes",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"delegatedToAttacker\": false, \"pendingSuccessor\": \"0x0000000000000000000000000000000000000000\"}"
+     ]
+    },
+    {
+     "kind": "canary",
+     "path": "-",
+     "what": "before any upgrade",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "OK"
+     ]
+    },
+    {
+     "kind": "b5",
+     "path": "-",
+     "what": "the Core release, 8 signatures",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (NotEnoughSignatures, gas 802540)"
+     ]
+    },
+    {
+     "kind": "b5",
+     "path": "-",
+     "what": "the Core release, 9 signatures",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-, gas 11453066)"
+     ]
+    },
+    {
+     "kind": "canary",
+     "path": "-",
+     "what": "after the Core release",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "OK"
+     ]
+    },
+    {
+     "kind": "b5",
+     "path": "-",
+     "what": "the release without Core, 9 signatures",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (UpgradeDropsRetirement, gas 11427962)"
+     ]
+    },
+    {
+     "kind": "canary",
+     "path": "-",
+     "what": "after the refused release",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "OK"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B1",
+     "what": "T1.allow.after-upgrade",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (SenderRetired)"
+     ]
+    },
+    {
+     "kind": "b8-erc1271",
+     "path": "B1",
+     "what": "erc1271",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233968\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"14.88\", \"msMin\": \"3.72\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233968\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.43\", \"msMin\": \"14.73\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233968\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.44\", \"msMin\": \"15.13\", \"returned\": \"0x1626ba7e\"}"
+     ]
+    },
+    {
+     "kind": "b8-erc1271",
+     "path": "B2d",
+     "what": "erc1271",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233459\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.29\", \"msMin\": \"14.86\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233459\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.59\", \"msMin\": \"15.19\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233459\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.63\", \"msMin\": \"15.27\", \"returned\": \"0x1626ba7e\"}"
+     ]
+    },
+    {
+     "kind": "b8-erc1271",
+     "path": "B2c",
+     "what": "erc1271",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233472\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.56\", \"msMin\": \"3.31\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233472\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.59\", \"msMin\": \"15.25\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1233472\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.71\", \"msMin\": \"15.07\", \"returned\": \"0x1626ba7e\"}"
+     ]
+    },
+    {
+     "kind": "b8-erc1271",
+     "path": "B3a",
+     "what": "erc1271",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"251707\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1235715\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.55\", \"msMin\": \"14.51\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"251707\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1235715\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.68\", \"msMin\": \"14.85\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"251707\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1235715\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.87\", \"msMin\": \"14.46\", \"returned\": \"0x1626ba7e\"}"
+     ]
+    },
+    {
+     "kind": "b8-erc1271",
+     "path": "B3b",
+     "what": "erc1271",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1231383\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.70\", \"msMin\": \"15.00\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1231383\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.72\", \"msMin\": \"14.93\", \"returned\": \"0x1626ba7e\"}",
+      "{\"calldataBytes\": 2532, \"cap250k\": {\"gasUsed\": \"249107\", \"magic\": \"0xffffffff\", \"ok\": true}, \"meterGasUsed\": \"1231383\", \"meterMagic\": \"0x1626ba7e\", \"meterOk\": true, \"msMedian\": \"15.88\", \"msMin\": \"15.49\", \"returned\": \"0x1626ba7e\"}"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "T8.retireAccount",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3a",
+     "what": "A after T8",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"eip7851\", \"retired\": true}"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3a",
+     "what": "P4.wallet-after-retirement",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (B3a wallet acts after A's retirement: reverted (CallFailed)) (-)"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "T8.retireAccount",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "mined (-)"
+     ]
+    },
+    {
+     "kind": "sdk-status",
+     "path": "B3b",
+     "what": "A after T8",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "{\"code\": \"regular\", \"retired\": true}"
+     ]
+    },
+    {
+     "kind": "tx",
+     "path": "B3b",
+     "what": "P4.wallet-after-retirement",
+     "runs": 3,
+     "conforms": true,
+     "observed": [
+      "reverted (B3b wallet acts after A's retirement: reverted (CallFailed)) (-)"
+     ]
+    }
+   ],
+   "receipts": [
+    {
+     "step": "EmptyUUPSProxyACL",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "675564"
+     ]
+    },
+    {
+     "step": "ERC1967 proxy",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "172634"
+     ]
+    },
+    {
+     "step": "ACL v0.10.0 implementation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "3546996"
+     ]
+    },
+    {
+     "step": "upgradeToAndCall(ACL, initializeFromEmptyProxy())",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "53058"
+     ]
+    },
+    {
+     "step": "DappStub",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "157561"
+     ]
+    },
+    {
+     "step": "Keccak-f1600 helper (data contract)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4716360"
+     ]
+    },
+    {
+     "step": "MLDSA44Verifier",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "5166161"
+     ]
+    },
+    {
+     "step": "PQWallet code without a key",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "613190"
+     ]
+    },
+    {
+     "step": "operator 0 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434609"
+     ]
+    },
+    {
+     "step": "operator 1 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434381"
+     ]
+    },
+    {
+     "step": "operator 2 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434621"
+     ]
+    },
+    {
+     "step": "operator 3 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434609"
+     ]
+    },
+    {
+     "step": "operator 4 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434477"
+     ]
+    },
+    {
+     "step": "operator 5 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434489"
+     ]
+    },
+    {
+     "step": "operator 6 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434561"
+     ]
+    },
+    {
+     "step": "operator 7 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434357"
+     ]
+    },
+    {
+     "step": "operator 8 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434501"
+     ]
+    },
+    {
+     "step": "operator 9 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434477"
+     ]
+    },
+    {
+     "step": "operator 10 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434465"
+     ]
+    },
+    {
+     "step": "operator 11 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434561"
+     ]
+    },
+    {
+     "step": "operator 12 key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434501"
+     ]
+    },
+    {
+     "step": "OperatorRatifiedRegistryOwner",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1171580"
+     ]
+    },
+    {
+     "step": "ACL.transferOwnership(upgrader)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "52806"
+     ]
+    },
+    {
+     "step": "upgrader.acceptRegistryOwnership()",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "39236"
+     ]
+    },
+    {
+     "step": "B1 holder key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434597"
+     ]
+    },
+    {
+     "step": "B1 wallet W",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "662195"
+     ]
+    },
+    {
+     "step": "B1 grant h0",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231",
+      "94243"
+     ]
+    },
+    {
+     "step": "B1 grant h1",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231",
+      "94243"
+     ]
+    },
+    {
+     "step": "B1 grant h2",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231",
+      "94243"
+     ]
+    },
+    {
+     "step": "B1 grant hv to V",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231"
+     ]
+    },
+    {
+     "step": "B1 V delegates to A",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58037",
+      "58049"
+     ]
+    },
+    {
+     "step": "B1 A delegates to Dk",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58049"
+     ]
+    },
+    {
+     "step": "B2d holder key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434393"
+     ]
+    },
+    {
+     "step": "B2d wallet W",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "662183"
+     ]
+    },
+    {
+     "step": "B2d grant h0",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231",
+      "94243"
+     ]
+    },
+    {
+     "step": "B2d grant h1",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231",
+      "94243"
+     ]
+    },
+    {
+     "step": "B2d grant h2",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94219",
+      "94243"
+     ]
+    },
+    {
+     "step": "B2d grant hv to V",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231"
+     ]
+    },
+    {
+     "step": "B2d V delegates to A",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58037",
+      "58049"
+     ]
+    },
+    {
+     "step": "B2d A delegates to Dk",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58049"
+     ]
+    },
+    {
+     "step": "B2c holder key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434477"
+     ]
+    },
+    {
+     "step": "B2c wallet W",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "662195"
+     ]
+    },
+    {
+     "step": "B2c grant h0",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94243"
+     ]
+    },
+    {
+     "step": "B2c grant h1",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94243"
+     ]
+    },
+    {
+     "step": "B2c grant h2",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94243"
+     ]
+    },
+    {
+     "step": "B2c grant hv to V",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231"
+     ]
+    },
+    {
+     "step": "B2c V delegates to A",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58049"
+     ]
+    },
+    {
+     "step": "B2c A delegates to Dk",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58049"
+     ]
+    },
+    {
+     "step": "B3a grant h0",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231",
+      "94243"
+     ]
+    },
+    {
+     "step": "B3a grant h1",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94243"
+     ]
+    },
+    {
+     "step": "B3a grant h2",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231",
+      "94243"
+     ]
+    },
+    {
+     "step": "B3a grant hv to V",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94219",
+      "94231"
+     ]
+    },
+    {
+     "step": "B3a V delegates to A",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58049"
+     ]
+    },
+    {
+     "step": "B3a A delegates to Dk",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58049"
+     ]
+    },
+    {
+     "step": "B3b grant h0",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231",
+      "94243"
+     ]
+    },
+    {
+     "step": "B3b grant h1",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231",
+      "94243"
+     ]
+    },
+    {
+     "step": "B3b grant h2",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94243"
+     ]
+    },
+    {
+     "step": "B3b grant hv to V",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "94231"
+     ]
+    },
+    {
+     "step": "B3b V delegates to A",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58049"
+     ]
+    },
+    {
+     "step": "B3b A delegates to Dk",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58049"
+     ]
+    },
+    {
+     "step": "B1 carry tool tx 0 (3 handles + retireAccount())",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "156448"
+     ]
+    },
+    {
+     "step": "B2d designateSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "62128"
+     ]
+    },
+    {
+     "step": "B2d W accepts (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1336560",
+      "1337527",
+      "1337751"
+     ]
+    },
+    {
+     "step": "B2c designateSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "62128"
+     ]
+    },
+    {
+     "step": "B2c W accepts (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1336510",
+      "1337224",
+      "1337715"
+     ]
+    },
+    {
+     "step": "B2d confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "57256"
+     ]
+    },
+    {
+     "step": "B2c confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "57256"
+     ]
+    },
+    {
+     "step": "B2d retireAccount",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "54516"
+     ]
+    },
+    {
+     "step": "B2c certificate relayed by the watchtower",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "65610",
+      "65622"
+     ]
+    },
+    {
+     "step": "B3a key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434489"
+     ]
+    },
+    {
+     "step": "B3a type-4 delegation and initialize (one transaction)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "83071"
+     ]
+    },
+    {
+     "step": "B3b key blob",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "4434297"
+     ]
+    },
+    {
+     "step": "B3b type-4 delegation and initialize (one transaction)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "83059"
+     ]
+    },
+    {
+     "step": "B1 holder declares its KDA (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1355563",
+      "1356272",
+      "1356362"
+     ]
+    },
+    {
+     "step": "B2d holder declares its KDA (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1338039",
+      "1338133",
+      "1339081"
+     ]
+    },
+    {
+     "step": "B2c holder declares its KDA (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1338902",
+      "1339045",
+      "1339771"
+     ]
+    },
+    {
+     "step": "B3a holder declares its KDA (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1356469",
+      "1356767",
+      "1357570"
+     ]
+    },
+    {
+     "step": "B3b holder declares its KDA (execute)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1355329",
+      "1356418",
+      "1358249"
+     ]
+    },
+    {
+     "step": "B1 T1.allow",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "34204"
+     ]
+    },
+    {
+     "step": "B1 T2.allowForDecryption",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "34691"
+     ]
+    },
+    {
+     "step": "B1 T3.delegate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "31888"
+     ]
+    },
+    {
+     "step": "B1 T4.designateSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "31211"
+     ]
+    },
+    {
+     "step": "B1 T5.confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "30660"
+     ]
+    },
+    {
+     "step": "B1 T6.certificate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "31886",
+      "31898"
+     ]
+    },
+    {
+     "step": "B1 T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "50280"
+     ]
+    },
+    {
+     "step": "B1 T8.retireAccount",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "28477"
+     ]
+    },
+    {
+     "step": "B2d T1.allow",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "34204"
+     ]
+    },
+    {
+     "step": "B2d T2.allowForDecryption",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "34691"
+     ]
+    },
+    {
+     "step": "B2d T3.delegate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "31888"
+     ]
+    },
+    {
+     "step": "B2d T4.designateSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "31211"
+     ]
+    },
+    {
+     "step": "B2d T5.confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "30660"
+     ]
+    },
+    {
+     "step": "B2d T6.certificate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "31874",
+      "31898"
+     ]
+    },
+    {
+     "step": "B2d T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "50280"
+     ]
+    },
+    {
+     "step": "B2d T8.retireAccount",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "28477"
+     ]
+    },
+    {
+     "step": "B2c T1.allow",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "34204"
+     ]
+    },
+    {
+     "step": "B2c T2.allowForDecryption",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "34691"
+     ]
+    },
+    {
+     "step": "B2c T3.delegate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "31888"
+     ]
+    },
+    {
+     "step": "B2c T4.designateSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "31211"
+     ]
+    },
+    {
+     "step": "B2c T5.confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "30660"
+     ]
+    },
+    {
+     "step": "B2c T6.certificate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "31886",
+      "31898"
+     ]
+    },
+    {
+     "step": "B2c T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "50280"
+     ]
+    },
+    {
+     "step": "B2c T8.retireAccount",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "28477"
+     ]
+    },
+    {
+     "step": "B3a T1.allow",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "60674",
+      "60686"
+     ]
+    },
+    {
+     "step": "B3a T2.allowForDecryption",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "61467"
+     ]
+    },
+    {
+     "step": "B3a T3.delegate",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58049"
+     ]
+    },
+    {
+     "step": "B3a T4.designateSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "62128"
+     ]
+    },
+    {
+     "step": "B3a T5.confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "33033"
+     ]
+    },
+    {
+     "step": "B3a T6.certificate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "34373"
+     ]
+    },
+    {
+     "step": "B3a T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "50280"
+     ]
+    },
+    {
+     "step": "B3b T1.allow",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "60674",
+      "60686"
+     ]
+    },
+    {
+     "step": "B3b T2.allowForDecryption",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "61455",
+      "61467"
+     ]
+    },
+    {
+     "step": "B3b T3.delegate",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "58049"
+     ]
+    },
+    {
+     "step": "B3b T4.designateSuccessor",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "62128"
+     ]
+    },
+    {
+     "step": "B3b T5.confirmSuccessor",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "33033"
+     ]
+    },
+    {
+     "step": "B3b T6.certificate",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "34373"
+     ]
+    },
+    {
+     "step": "B3b T7.invalidateSignaturesBefore",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "50280"
+     ]
+    },
+    {
+     "step": "B3a holder revokes the attacker's delegation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1315021",
+      "1315613",
+      "1316572"
+     ]
+    },
+    {
+     "step": "B3a holder revokes Dk's delegation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1316000",
+      "1316319",
+      "1317903"
+     ]
+    },
+    {
+     "step": "B3a holder cancels the attacker's designation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1310438",
+      "1311469",
+      "1312000"
+     ]
+    },
+    {
+     "step": "B3b holder revokes the attacker's delegation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1314529",
+      "1316852",
+      "1317536"
+     ]
+    },
+    {
+     "step": "B3b holder revokes Dk's delegation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1314936",
+      "1316798",
+      "1316900"
+     ]
+    },
+    {
+     "step": "B3b holder cancels the attacker's designation",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "1311493",
+      "1312684",
+      "1312899"
+     ]
+    },
+    {
+     "step": "ACL v0.10.0 implementation, second deployment (a Core release)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "3546996"
+     ]
+    },
+    {
+     "step": "ACL v0.7.0 implementation (a release without Core)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "2281086"
+     ]
+    },
+    {
+     "step": "propose the Core release, 8 signatures",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "49678"
+     ]
+    },
+    {
+     "step": "execute the Core release, 8 signatures with 8 signatures",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "802540"
+     ]
+    },
+    {
+     "step": "execute the Core release with 9 signatures",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "11453066"
+     ]
+    },
+    {
+     "step": "propose the release without Core, 9 signatures",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "49678"
+     ]
+    },
+    {
+     "step": "execute the release without Core, 9 signatures with 9 signatures",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "11427962"
+     ]
+    },
+    {
+     "step": "B1 T1.allow after the upgrade",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "34204"
+     ]
+    },
+    {
+     "step": "Erc1271GasMeter (E4, test only)",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "223128"
+     ]
+    },
+    {
+     "step": "B3a T8.retireAccount",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "54516"
+     ]
+    },
+    {
+     "step": "B3a wallet acts after A's retirement",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "1310422",
+      "1310644",
+      "1311116"
+     ]
+    },
+    {
+     "step": "B3b T8.retireAccount",
+     "runs": 3,
+     "status": [
+      "1"
+     ],
+     "gasUsed": [
+      "54516"
+     ]
+    },
+    {
+     "step": "B3b wallet acts after A's retirement",
+     "runs": 3,
+     "status": [
+      "0"
+     ],
+     "gasUsed": [
+      "1310133",
+      "1310529",
+      "1311283"
+     ]
+    }
+   ],
+   "summary": {
+    "rows": 81,
+    "conforming": 81,
+    "rows_all_runs": 81
+   }
+  }
+ }
+}

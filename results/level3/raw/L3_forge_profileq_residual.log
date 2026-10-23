@@ -1,0 +1,10 @@
+Compiling 131 files with Solc 0.8.24
+Solc 0.8.24 finished in 17.64s
+Compiler run successful!
+
+Ran 2 tests for test/acl/ACLProfileQResidual.t.sol:ACLProfileQResidualTest
+[PASS] test_TC22_OnChainDoorStaysOpen_AssertedResidual() (gas: 100265)
+[PASS] test_TC22_RetirementBeforehandClosesTheDoor() (gas: 81027)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 59.70ms (9.26ms CPU time)
+
+Ran 1 test suite in 83.98ms (59.70ms CPU time): 2 tests passed, 0 failed, 0 skipped (2 total tests)

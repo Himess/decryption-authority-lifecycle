@@ -1,0 +1,466 @@
+{
+ "proposal": false,
+ "releases": [
+  {
+   "version": "0.4.0",
+   "reinit": 5,
+   "core": false,
+   "level": -1,
+   "commit": "fe3ca89b5",
+   "name": "zama v0.13.8",
+   "line": 0,
+   "origin": "zama",
+   "duplicate_of": null
+  },
+  {
+   "version": "0.4.1",
+   "reinit": 6,
+   "core": true,
+   "level": 0,
+   "commit": "06d769f29",
+   "name": "lifecycle/level0 (v0.13)",
+   "line": 0,
+   "origin": "lifecycle",
+   "duplicate_of": null
+  },
+  {
+   "version": "0.4.2",
+   "reinit": 7,
+   "core": true,
+   "level": 1,
+   "commit": "588e63970",
+   "name": "lifecycle/level2 (v0.13)",
+   "line": 0,
+   "origin": "lifecycle",
+   "duplicate_of": null
+  },
+  {
+   "version": "0.5.0",
+   "reinit": 6,
+   "core": false,
+   "level": -1,
+   "commit": "ccdd1ce0d",
+   "name": "zama v0.14.4",
+   "line": 1,
+   "origin": "zama",
+   "duplicate_of": null
+  },
+  {
+   "version": "0.5.1",
+   "reinit": 7,
+   "core": true,
+   "level": 0,
+   "commit": "a2fa91bff",
+   "name": "lifecycle/level0-v0.14",
+   "line": 1,
+   "origin": "lifecycle",
+   "duplicate_of": null
+  },
+  {
+   "version": "0.7.0",
+   "reinit": 8,
+   "core": false,
+   "level": -1,
+   "commit": "ed851716c",
+   "name": "zama main ed851716c",
+   "line": 2,
+   "origin": "zama",
+   "duplicate_of": null
+  },
+  {
+   "version": "0.8.0",
+   "reinit": 9,
+   "core": true,
+   "level": 0,
+   "commit": "5e61f3de4",
+   "name": "lifecycle/level0 (main)",
+   "line": 2,
+   "origin": "lifecycle",
+   "duplicate_of": null
+  },
+  {
+   "version": "0.8.0",
+   "reinit": 9,
+   "core": true,
+   "level": 0,
+   "commit": "256306b68",
+   "name": "lifecycle/level1 (main)",
+   "line": 2,
+   "origin": "lifecycle",
+   "duplicate_of": "lifecycle/level0 (main)"
+  },
+  {
+   "version": "0.9.0",
+   "reinit": 10,
+   "core": true,
+   "level": 1,
+   "commit": "c4482aba5",
+   "name": "lifecycle/level2 (main)",
+   "line": 2,
+   "origin": "lifecycle",
+   "duplicate_of": null
+  },
+  {
+   "version": "0.10.0",
+   "reinit": 11,
+   "core": true,
+   "level": 2,
+   "commit": "f1b440e7a",
+   "name": "lifecycle/level3 (main)",
+   "line": 2,
+   "origin": "lifecycle",
+   "duplicate_of": null
+  },
+  {
+   "version": "0.8.0",
+   "reinit": 9,
+   "core": true,
+   "level": 0,
+   "commit": "538dc8887",
+   "name": "lifecycle/level3-verifier (main)",
+   "line": 2,
+   "origin": "lifecycle",
+   "duplicate_of": "lifecycle/level0 (main)"
+  },
+  {
+   "version": "0.8.0",
+   "reinit": 9,
+   "core": true,
+   "level": 0,
+   "commit": "564d7d170",
+   "name": "lifecycle/level3-connector (main)",
+   "line": 2,
+   "origin": "lifecycle",
+   "duplicate_of": "lifecycle/level0 (main)"
+  },
+  {
+   "name": "zama next v0.13 (projected)",
+   "commit": "-",
+   "version": "-",
+   "reinit": 6,
+   "core": false,
+   "level": -1,
+   "line": 0,
+   "origin": "projected",
+   "duplicate_of": null
+  },
+  {
+   "name": "zama next v0.14 (projected)",
+   "commit": "-",
+   "version": "-",
+   "reinit": 7,
+   "core": false,
+   "level": -1,
+   "line": 1,
+   "origin": "projected",
+   "duplicate_of": null
+  },
+  {
+   "name": "zama next main (projected)",
+   "commit": "-",
+   "version": "-",
+   "reinit": 9,
+   "core": false,
+   "level": -1,
+   "line": 2,
+   "origin": "projected",
+   "duplicate_of": null
+  }
+ ],
+ "edges": [
+  {
+   "from": "zama v0.13.8",
+   "to": "lifecycle/level0 (v0.13)",
+   "from_reinit": 5,
+   "to_reinit": 6,
+   "ok": true
+  },
+  {
+   "from": "zama v0.13.8",
+   "to": "lifecycle/level2 (v0.13)",
+   "from_reinit": 5,
+   "to_reinit": 7,
+   "ok": true
+  },
+  {
+   "from": "zama v0.13.8",
+   "to": "zama v0.14.4",
+   "from_reinit": 5,
+   "to_reinit": 6,
+   "ok": true
+  },
+  {
+   "from": "zama v0.13.8",
+   "to": "lifecycle/level0-v0.14",
+   "from_reinit": 5,
+   "to_reinit": 7,
+   "ok": true
+  },
+  {
+   "from": "zama v0.13.8",
+   "to": "zama main ed851716c",
+   "from_reinit": 5,
+   "to_reinit": 8,
+   "ok": true
+  },
+  {
+   "from": "zama v0.13.8",
+   "to": "lifecycle/level0 (main)",
+   "from_reinit": 5,
+   "to_reinit": 9,
+   "ok": true
+  },
+  {
+   "from": "zama v0.13.8",
+   "to": "lifecycle/level2 (main)",
+   "from_reinit": 5,
+   "to_reinit": 10,
+   "ok": true
+  },
+  {
+   "from": "zama v0.13.8",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 5,
+   "to_reinit": 11,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level0 (v0.13)",
+   "to": "lifecycle/level2 (v0.13)",
+   "from_reinit": 6,
+   "to_reinit": 7,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level0 (v0.13)",
+   "to": "lifecycle/level0-v0.14",
+   "from_reinit": 6,
+   "to_reinit": 7,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level0 (v0.13)",
+   "to": "lifecycle/level0 (main)",
+   "from_reinit": 6,
+   "to_reinit": 9,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level0 (v0.13)",
+   "to": "lifecycle/level2 (main)",
+   "from_reinit": 6,
+   "to_reinit": 10,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level0 (v0.13)",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 6,
+   "to_reinit": 11,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level2 (v0.13)",
+   "to": "lifecycle/level2 (main)",
+   "from_reinit": 7,
+   "to_reinit": 10,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level2 (v0.13)",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 7,
+   "to_reinit": 11,
+   "ok": true
+  },
+  {
+   "from": "zama v0.14.4",
+   "to": "lifecycle/level0-v0.14",
+   "from_reinit": 6,
+   "to_reinit": 7,
+   "ok": true
+  },
+  {
+   "from": "zama v0.14.4",
+   "to": "zama main ed851716c",
+   "from_reinit": 6,
+   "to_reinit": 8,
+   "ok": true
+  },
+  {
+   "from": "zama v0.14.4",
+   "to": "lifecycle/level0 (main)",
+   "from_reinit": 6,
+   "to_reinit": 9,
+   "ok": true
+  },
+  {
+   "from": "zama v0.14.4",
+   "to": "lifecycle/level2 (main)",
+   "from_reinit": 6,
+   "to_reinit": 10,
+   "ok": true
+  },
+  {
+   "from": "zama v0.14.4",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 6,
+   "to_reinit": 11,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level0-v0.14",
+   "to": "lifecycle/level0 (main)",
+   "from_reinit": 7,
+   "to_reinit": 9,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level0-v0.14",
+   "to": "lifecycle/level2 (main)",
+   "from_reinit": 7,
+   "to_reinit": 10,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level0-v0.14",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 7,
+   "to_reinit": 11,
+   "ok": true
+  },
+  {
+   "from": "zama main ed851716c",
+   "to": "lifecycle/level0 (main)",
+   "from_reinit": 8,
+   "to_reinit": 9,
+   "ok": true
+  },
+  {
+   "from": "zama main ed851716c",
+   "to": "lifecycle/level2 (main)",
+   "from_reinit": 8,
+   "to_reinit": 10,
+   "ok": true
+  },
+  {
+   "from": "zama main ed851716c",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 8,
+   "to_reinit": 11,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level0 (main)",
+   "to": "lifecycle/level2 (main)",
+   "from_reinit": 9,
+   "to_reinit": 10,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level0 (main)",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 9,
+   "to_reinit": 11,
+   "ok": true
+  },
+  {
+   "from": "lifecycle/level2 (main)",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 10,
+   "to_reinit": 11,
+   "ok": true
+  },
+  {
+   "from": "zama next v0.13 (projected)",
+   "to": "lifecycle/level0 (v0.13)",
+   "from_reinit": 6,
+   "to_reinit": 6,
+   "ok": false
+  },
+  {
+   "from": "zama next v0.13 (projected)",
+   "to": "lifecycle/level2 (v0.13)",
+   "from_reinit": 6,
+   "to_reinit": 7,
+   "ok": true
+  },
+  {
+   "from": "zama next v0.13 (projected)",
+   "to": "lifecycle/level0-v0.14",
+   "from_reinit": 6,
+   "to_reinit": 7,
+   "ok": true
+  },
+  {
+   "from": "zama next v0.13 (projected)",
+   "to": "lifecycle/level0 (main)",
+   "from_reinit": 6,
+   "to_reinit": 9,
+   "ok": true
+  },
+  {
+   "from": "zama next v0.13 (projected)",
+   "to": "lifecycle/level2 (main)",
+   "from_reinit": 6,
+   "to_reinit": 10,
+   "ok": true
+  },
+  {
+   "from": "zama next v0.13 (projected)",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 6,
+   "to_reinit": 11,
+   "ok": true
+  },
+  {
+   "from": "zama next v0.14 (projected)",
+   "to": "lifecycle/level0-v0.14",
+   "from_reinit": 7,
+   "to_reinit": 7,
+   "ok": false
+  },
+  {
+   "from": "zama next v0.14 (projected)",
+   "to": "lifecycle/level0 (main)",
+   "from_reinit": 7,
+   "to_reinit": 9,
+   "ok": true
+  },
+  {
+   "from": "zama next v0.14 (projected)",
+   "to": "lifecycle/level2 (main)",
+   "from_reinit": 7,
+   "to_reinit": 10,
+   "ok": true
+  },
+  {
+   "from": "zama next v0.14 (projected)",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 7,
+   "to_reinit": 11,
+   "ok": true
+  },
+  {
+   "from": "zama next main (projected)",
+   "to": "lifecycle/level0 (main)",
+   "from_reinit": 9,
+   "to_reinit": 9,
+   "ok": false
+  },
+  {
+   "from": "zama next main (projected)",
+   "to": "lifecycle/level2 (main)",
+   "from_reinit": 9,
+   "to_reinit": 10,
+   "ok": true
+  },
+  {
+   "from": "zama next main (projected)",
+   "to": "lifecycle/level3 (main)",
+   "from_reinit": 9,
+   "to_reinit": 11,
+   "ok": true
+  }
+ ]
+}

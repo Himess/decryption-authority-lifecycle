@@ -1,0 +1,22 @@
+=== Baseline A (main, scope=acl) ===
+commit: d037c9752c80799d8e46c3ee16e3447a972126e1 branch: lifecycle/repro
+date_utc:   2026-10-22T07:32:22Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         
+git:        git version 2.47.1.windows.2
+hardhat_test_acl rc=0 seconds=111 log=A_fhevm-main_hardhat_test_acl.log
+deploy_emptyProxies rc=0 seconds=16 log=A_fhevm-main_deploy_emptyProxies.log
+forge_test_acl_isolate-default rc=1 seconds=79 log=A_fhevm-main_forge_test_acl_isolate-default.log
+forge_test_acl_isolate-false rc=0 seconds=31 log=A_fhevm-main_forge_test_acl_isolate-false.log
+--- suite results
+[A_fhevm-main_hardhat_test_acl.log]
+  3 passing (104ms)
+[A_fhevm-main_forge_test_acl_isolate-default.log]
+Ran 12 test suites in 15.79s (28.71s CPU time): 144 tests passed, 82 failed, 0 skipped (226 total tests)
+[A_fhevm-main_forge_test_acl_isolate-false.log]
+Ran 12 test suites in 28.71s (115.05s CPU time): 226 tests passed, 0 failed, 0 skipped (226 total tests)
+git status (must be empty):

@@ -1,0 +1,93 @@
+[2m2026-10-22T07:29:07.323034Z[0m [31mERROR[0m [2mfoundry_compilers_artifacts_solc::sources[0m[2m:[0m [3merror[0m[2m=[0m"<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts/dependencies/forge-std-1.11.0/src/Vm.sol": Sistem belirtilen yolu bulamıyor. (os error 3)
+[2m2026-10-22T07:29:07.324352Z[0m [31mERROR[0m [2mfoundry_compilers_artifacts_solc::sources[0m[2m:[0m [3merror[0m[2m=[0m"<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts/dependencies/forge-std-1.11.0/src/console.sol": Sistem belirtilen yolu bulamıyor. (os error 3)
+[2m2026-10-22T07:29:07.325155Z[0m [31mERROR[0m [2mfoundry_compilers_artifacts_solc::sources[0m[2m:[0m [3merror[0m[2m=[0m"<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts/dependencies/forge-std-1.11.0/src/StdStorage.sol": Sistem belirtilen yolu bulamıyor. (os error 3)
+[2m2026-10-22T07:29:07.333345Z[0m [31mERROR[0m [2mfoundry_compilers_artifacts_solc::sources[0m[2m:[0m [3merror[0m[2m=[0m"<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts/dependencies/forge-std-1.11.0/src/Test.sol": Sistem belirtilen yolu bulamıyor. (os error 3)
+[2m2026-10-22T07:29:07.334384Z[0m [31mERROR[0m [2mfoundry_compilers_artifacts_solc::sources[0m[2m:[0m [3merror[0m[2m=[0m"<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts/dependencies/forge-std-1.11.0/src/Vm.sol": Sistem belirtilen yolu bulamıyor. (os error 3)
+[2m2026-10-22T07:29:07.338202Z[0m [31mERROR[0m [2mfoundry_compilers_artifacts_solc::sources[0m[2m:[0m [3merror[0m[2m=[0m"<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts/dependencies/forge-std-1.11.0/src/Vm.sol": Sistem belirtilen yolu bulamıyor. (os error 3)
+[2m2026-10-22T07:29:07.338334Z[0m [31mERROR[0m [2mfoundry_compilers_artifacts_solc::sources[0m[2m:[0m [3merror[0m[2m=[0m"<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts/dependencies/forge-std-1.11.0/src/console.sol": Sistem belirtilen yolu bulamıyor. (os error 3)
+[2m2026-10-22T07:29:07.340497Z[0m [31mERROR[0m [2mfoundry_compilers_artifacts_solc::sources[0m[2m:[0m [3merror[0m[2m=[0m"<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts/dependencies/forge-std-1.11.0/src/Vm.sol": Sistem belirtilen yolu bulamıyor. (os error 3)
+[2m2026-10-22T07:29:07.340641Z[0m [31mERROR[0m [2mfoundry_compilers_artifacts_solc::sources[0m[2m:[0m [3merror[0m[2m=[0m"<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts/dependencies/forge-std-1.11.0/src/console.sol": Sistem belirtilen yolu bulamıyor. (os error 3)
+Error: Compiler run failed:
+Error (6275): Source "dependencies/forge-std-1.11.0/src/Test.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/Test.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> fhevm-foundry/HostContractsDeployerTestUtils.sol:4:1:
+  |
+4 | import {Test} from "forge-std/Test.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> node_modules/@openzeppelin/foundry-upgrades/src/Upgrades.sol:9:1:
+  |
+9 | import {Vm} from "forge-std/Vm.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> node_modules/@openzeppelin/foundry-upgrades/src/internal/Core.sol:4:1:
+  |
+4 | import {Vm} from "forge-std/Vm.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/console.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/console.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> node_modules/@openzeppelin/foundry-upgrades/src/internal/Core.sol:5:1:
+  |
+5 | import {console} from "forge-std/console.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> node_modules/@openzeppelin/foundry-upgrades/src/internal/DefenderDeploy.sol:4:1:
+  |
+4 | import {Vm} from "forge-std/Vm.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/console.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/console.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> node_modules/@openzeppelin/foundry-upgrades/src/internal/DefenderDeploy.sol:5:1:
+  |
+5 | import {console} from "forge-std/console.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> node_modules/@openzeppelin/foundry-upgrades/src/internal/Utils.sol:4:1:
+  |
+4 | import {Vm} from "forge-std/Vm.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/console.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/console.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> node_modules/@openzeppelin/foundry-upgrades/src/internal/Utils.sol:5:1:
+  |
+5 | import {console} from "forge-std/console.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> test/acl/ACLRetirement.t.sol:4:1:
+  |
+4 | import {Vm} from "forge-std/Vm.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/Vm.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> test/acl/ACLRetirementExemption.t.sol:4:1:
+  |
+4 | import {Vm, VmSafe} from "forge-std/Vm.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/console.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/console.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> test/acl/ACLRetirementGas.t.sol:4:1:
+  |
+4 | import {console} from "forge-std/console.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Error (6275): Source "dependencies/forge-std-1.11.0/src/StdStorage.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ParserError: Source "dependencies/forge-std-1.11.0/src/StdStorage.sol" not found: File not found. Searched the following locations: "<repo>/.stage/r8/impl/fhevm-v0.13.8/host-contracts".
+ --> test/acl/acl.t.sol:5:1:
+  |
+5 | import {StdStorage, stdStorage} from "forge-std/StdStorage.sol";
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

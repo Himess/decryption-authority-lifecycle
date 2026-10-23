@@ -1,0 +1,88 @@
+Decryption Authority Lifecycle: third-party code and licences
+==============================================================
+
+Our own code is under the MIT licence in LICENSE. The draft standard and its assets (erc/, including
+erc/assets/erc-XXXX/) and the conformance kit (conformance/) are dedicated to the public domain under CC0-1.0, as the
+ERC's Copyright section states. Everything below keeps its own licence.
+
+Zama fhEVM (BSD 3-Clause Clear License, Copyright (c) ZAMA)
+-----------------------------------------------------------
+- patches/ holds our changes to zama-ai/fhevm as git format-patch series against pinned commits and tags
+  (main ed851716c9a6b799996a23399ece2858336f96db; v0.13.8 fe3ca89b5111ca2b4abb220bf3c78417b821ceb5; v0.14.4
+  ccdd1ce0). They are not copies of Zama's repository: the targets in the Makefile fetch the repository and apply them.
+- The files under results/level0/harness/, results/level1/harness/, results/level2/harness/ and
+  results/phase4/harness/ and results/phase5/harness/ are built on Zama's kms-connector test code and are derivative
+  works under the same licence.
+- Five of our test contracts follow Zama's and carry its licence header (SPDX-License-Identifier: BSD-3-Clause-Clear):
+  impl/harness/level0-mock/contracts/src/RetirableVault.sol,
+  impl/harness/level0/oz-unmodified-crosscheck/test/CrossCheck.t.sol, impl/harness/level2/carry/src/CarryMockApp.sol,
+  results/level0/raw/vps/harness_sol/src/DappStub.sol and results/level0/raw/vps/harness_sol/src/ExecutorStub.sol.
+- results/level2/vps-artifacts/*.json and results/phase5/vps-artifacts/*.json are Foundry build artifacts (compiled
+  code) of Zama's ACL, unmodified and with our patches, of its proxy, and of the two test contracts above.
+- The licence text is LICENSES/BSD-3-Clause-Clear-ZAMA.txt (fhevm's LICENSE, identical at both pinned commits).
+- The ML-DSA test vectors that some series add (shared/user-decryption-signature/tests/vectors/) keep their own
+  terms: NIST ACVP-Server data under the NIST software notice (LICENSES/NIST-ACVP-Server-notice.txt), and C2SP
+  Wycheproof under the Apache License 2.0 (LICENSES/Apache-2.0-Wycheproof.txt). Their sources are in the series'
+  PROVENANCE-K8.md.
+
+Fhenix CoFHE (MIT, Copyright (c) 2024 Fhenix)
+---------------------------------------------
+- impl/fhenix-port/vendor/cofhe-contracts-b5c20ed/ is FhenixProtocol/cofhe-contracts at b5c20ed, byte for byte. The
+  repository's LICENSE is MIT. Some of its source files carry the header "SPDX-License-Identifier:
+  BSD-3-Clause-Clear" (for example ACL.sol and TaskManager.sol); the port's copies in impl/fhenix-port/src/ keep
+  those headers.
+- impl/fhenix-port/vendor/cofhe-mock-contracts-1.0.1/ and cofhe-foundry-plugin-1.0.1/ are the npm packages
+  @cofhe/mock-contracts@1.0.1 and @cofhe/foundry-plugin@1.0.1, whose package.json declares MIT. Some files carry
+  other SPDX headers; they are included as published. The packages ship no licence text, and FhenixProtocol/cofhesdk
+  has no LICENSE file at its root (commit 04a69f8); the MIT text Fhenix uses for cofhe-contracts is in
+  impl/fhenix-port/vendor/cofhe-contracts-b5c20ed/LICENSE.
+- Not included, because no licence was found: the npm package @fhenixprotocol/cofhe-contracts@1.0.0, and
+  FhenixProtocol/cofhesdk's test/setup contracts and plugin test files (commit 04a69f8). The Fhenix end-to-end
+  profiles need them; impl/fhenix-port/vendor/FETCH_E2E.md says how to fetch them. The port's own suite and the
+  conformance kit do not need them.
+
+OpenZeppelin (MIT)
+------------------
+- @openzeppelin/contracts and @openzeppelin/contracts-upgradeable 5.2.0 (impl/fhenix-port/vendor/) and 5.6.1
+  (impl/p14-oz-stock/vendor/).
+- @openzeppelin/confidential-contracts 0.5.3 (impl/p14-oz-stock/vendor/).
+- The npm packages ship no licence file. OpenZeppelin's MIT notices, from each repository's LICENSE at the matching
+  tag, are LICENSES/MIT-OpenZeppelin-2016-2024.txt (5.2.0) and LICENSES/MIT-OpenZeppelin-2016-2026.txt (5.6.1 and
+  confidential-contracts 0.5.3).
+- encrypted-types 0.0.4 (impl/p14-oz-stock/vendor/; MIT, with its LICENCE file).
+
+Foundry's forge-std 1.11.0 (MIT OR Apache-2.0)
+----------------------------------------------
+impl/fhenix-port/vendor/forge-std-1.11.0/.
+
+Fireblocks evm-ml-dsa-verifier (MIT, Copyright (c) 2026 Fireblocks Ltd.)
+------------------------------------------------------------------------
+impl/p3-operator-ratification/vendor/evm-ml-dsa-verifier-cca262b5/ is fireblocks-labs/evm-ml-dsa-verifier at
+cca262b5, byte for byte. It is unaudited research code, used by the P3 prototype, by the Part B test wallet
+(impl/pq-wallet/, which compiles it from that directory) and by the operator-ratified owner.
+
+Licence texts in LICENSES/ (fetched 2026-10-22, byte for byte)
+--------------------------------------------------------------
+| File | Source | SHA-256 |
+|---|---|---|
+| BSD-3-Clause-Clear-ZAMA.txt | zama-ai/fhevm LICENSE at ed851716c9a6b799996a23399ece2858336f96db | 5ac91e74b573c8afe1338cc475a64cc9479b1ff50b4a1641d040af9463b7d1ab |
+| MIT-OpenZeppelin-2016-2024.txt | OpenZeppelin/openzeppelin-contracts LICENSE at v5.2.0 (same in contracts-upgradeable v5.2.0) | 8b3fddff3cff904ab9bd7c48a9288fb08ab4f47b179c07af6df7886b12cb04d6 |
+| MIT-OpenZeppelin-2016-2026.txt | OpenZeppelin/openzeppelin-contracts LICENSE at v5.6.1 (same in contracts-upgradeable v5.6.1 and confidential-contracts v0.5.3) | 20aebc68b11c063133aa2af0ef4bb29875477c6d16d715718f0daec563938b84 |
+| Apache-2.0-Wycheproof.txt | C2SP/wycheproof LICENSE at 20b256949ea8f21a11375619b1825027ca0668bd | 58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd |
+| NIST-ACVP-Server-notice.txt | usnistgov/ACVP-Server README.md "License" section at a7f283cdc87d2d6dd93c1bac59e5622c5f9f8324, with one source line added on top | e3ddfc7e4bf63b820cb54fd10c59d5e80cef687a84a7bc7b6e2fb4e3771448bd |
+
+Not included
+------------
+- Inco Lightning (BUSL-1.1): read for results/phase4/INCO_MAPPING.md; no Inco code is in this repository.
+- dilithium-py and the Rust ML-DSA and ML-KEM crates: fetched by their tools (pip or cargo) at the versions the
+  reports name.
+- The rest of fireblocks-labs/evm-ml-dsa-verifier (its Python reference, key preparation and fixtures): `make pq-drill`
+  fetches the repository at cca262b5 for the drill's test signer, experiments/E4/pq/mldsa_tool.py.
+- polyntt, the NTT that the verifier's Python reference imports: `make pq-drill` installs it with pip from
+  ZKNoxHQ/NTT at 3ac5f5dc (assets/pythonref), as the verifier's pythonref/requirements.txt pins it. No licence file
+  was found in that repository at that commit, so nothing of it is in this repository.
+
+Our files with another licence header
+-------------------------------------
+- experiments/contracts/src/Erc1271GasMeter.sol carries SPDX-License-Identifier: Apache-2.0; the Apache License 2.0
+  text is LICENSES/Apache-2.0-Wycheproof.txt.

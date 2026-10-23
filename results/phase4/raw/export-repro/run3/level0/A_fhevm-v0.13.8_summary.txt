@@ -1,0 +1,24 @@
+=== Baseline A (v0.13.8, scope=acl) ===
+commit: a6da9dec82b2d14b8552318e56b0cce88ab09d44 branch: lifecycle/repro
+date_utc:   2026-10-22T08:23:34Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         
+git:        git version 2.47.1.windows.2
+npm_ci rc=0 seconds=224 log=A_fhevm-v0.13.8_npm_ci.log
+npm_rebuild_sqlite3 rc=0 seconds=8 log=A_fhevm-v0.13.8_npm_rebuild_sqlite3.log
+hardhat_test_acl rc=0 seconds=75 log=A_fhevm-v0.13.8_hardhat_test_acl.log
+soldeer_install rc=0 seconds=2 log=A_fhevm-v0.13.8_soldeer_install.log
+forge_test_acl_isolate-default rc=1 seconds=38 log=A_fhevm-v0.13.8_forge_test_acl_isolate-default.log
+forge_test_acl_isolate-false rc=0 seconds=38 log=A_fhevm-v0.13.8_forge_test_acl_isolate-false.log
+--- suite results
+[A_fhevm-v0.13.8_hardhat_test_acl.log]
+  3 passing (79ms)
+[A_fhevm-v0.13.8_forge_test_acl_isolate-default.log]
+Ran 6 test suites in 25.29s (72.84s CPU time): 69 tests passed, 59 failed, 0 skipped (128 total tests)
+[A_fhevm-v0.13.8_forge_test_acl_isolate-false.log]
+Ran 6 test suites in 35.51s (143.16s CPU time): 128 tests passed, 0 failed, 0 skipped (128 total tests)
+git status (must be empty):

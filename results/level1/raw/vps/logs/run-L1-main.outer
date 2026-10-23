@@ -1,0 +1,3 @@
+2026-10-21T13:31:51Z <live-service>=active load=[0.81 0.67 0.46] mem_avail_mb=7174 swap_used_mb=149 tag=before:run-L1-main
+HEAVY name=run-L1-main unit=lifecycle-run-L1-main-1792589511 rc=0 wall_s=84 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=84 killed=no sampled_peak_anon_mb=158 sampled_peak_cgroup_current_mb=183 sampled_peak_swap_mb=0
+2026-10-21T13:33:15Z <live-service>=active load=[0.89 0.77 0.52] mem_avail_mb=7153 swap_used_mb=149 tag=after:run-L1-main

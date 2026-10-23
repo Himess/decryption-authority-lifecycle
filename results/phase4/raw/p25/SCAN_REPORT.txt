@@ -1,0 +1,13 @@
+raw_scrub_scan of p25: 7 files
+mnemonic-word=0
+private-key-word=0
+hex-secret=0
+password-assignment=0
+url-credentials=0
+ipv4-public=0
+path-c-users=0
+path-home=0
+hostname-left=0
+files=7
+binary=0
+RESULT secret_or_hostname_hits=0

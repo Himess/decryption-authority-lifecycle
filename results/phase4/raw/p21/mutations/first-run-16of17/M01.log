@@ -1,0 +1,86 @@
+Compiling 9 files with Solc 0.8.25
+Solc 0.8.25 finished in 102.53s
+Compiler run successful!
+
+Ran 10 tests for test/FhenixCoreBatchUpgrade.t.sol:FhenixCoreBatchUpgradeTest
+[PASS] testFuzz_TC11_TheRoleCheckComesFirst(address) (runs: 512, μ: 200675, ~: 200675)
+[PASS] test_TC10_GrantsThenRetire_OneAtomicBatch() (gas: 1162613)
+[PASS] test_TC10_RetireThenGrant_TheWholeBatchReverts() (gas: 871809)
+[PASS] test_TC10_TheRegistryOffersNoCallerPreservingBatch() (gas: 67827)
+[PASS] test_TC11_ACoreImplementationAtAnotherLocation_Reverts() (gas: 190779)
+[PASS] test_TC11_ACoreImplementationAtTheSameLocation_Accepted_StateAndEnforcementKept() (gas: 361651)
+[PASS] test_TC11_ALyingImplementation_Accepted_TheAssertedResidual_TheCanaryCatchesIt() (gas: 486887)
+[PASS] test_TC11_AnImplementationWithoutCore_Fhenixs_Reverts() (gas: 3303020)
+[PASS] test_TC11_FromFhenixsUnmodifiedACL_StateKept_CoreActive() (gas: 5020311)
+[PASS] test_TC11_MalformedRevertingOrMissingAnswers_Revert() (gas: 370348)
+Suite result: ok. 10 passed; 0 failed; 0 skipped; finished in 155.62ms (164.02ms CPU time)
+
+Ran 14 tests for test/FhenixCorePermit.t.sol:FhenixCorePermitTest
+[PASS] test_TC6_AnInvalidStructureStillRevertsFirst() (gas: 131651)
+[PASS] test_TC6_ERC1271Issuer_FalseOnceRetired() (gas: 909638)
+[PASS] test_TC6_HandleAndContractScopes() (gas: 435627)
+[PASS] test_TC6_Registry_ARetiredIssuerCannotPost() (gas: 162161)
+[PASS] test_TC6_Registry_AShareIsInvalidOnceItsIssuerRetires() (gas: 430082)
+[PASS] test_TC6_Registry_AShareIsInvalidOnceItsRecipientRetires() (gas: 361612)
+[PASS] test_TC6_Registry_FailsClosedWithoutAnAnswer() (gas: 721180)
+[PASS] test_TC6_Registry_OnlyTheAdminSetsTheLink() (gas: 48944)
+[PASS] test_TC6_Registry_PostingToARetiredRecipientIsAccepted_AndInert() (gas: 338571)
+[PASS] test_TC6_Registry_RemovalStaysOpenToRetiredParties() (gas: 728575)
+[PASS] test_TC6_SelfPermit_TrueThenFalseOnceTheIssuerRetires() (gas: 259439)
+[PASS] test_TC6_SharedPermit_FalseOnceTheIssuerRetires() (gas: 270393)
+[PASS] test_TC6_SharedPermit_FalseOnceTheRecipientRetires() (gas: 342918)
+[PASS] test_TC6_ThirdPartyRetirementChangesNothing() (gas: 244452)
+Suite result: ok. 14 passed; 0 failed; 0 skipped; finished in 158.01ms (15.76ms CPU time)
+
+Ran 7 tests for test/FhenixCoreEngine.t.sol:FhenixCoreEngineTest
+[PASS] testFuzz_R10_OnlyTheTaskManagerMayCallTheOperandCheck(address) (runs: 512, μ: 19792, ~: 19792)
+[PASS] testFuzz_R10_TheOperandCheckAgreesWithTheUseViewForActiveAccounts(uint256,bool,bool) (runs: 512, μ: 843104, ~: 800509)
+[FAIL: assertion failed] test_R10_Negative_ACallerIdentityExemptionExemptsGrantsAndThePermitCheck() (gas: 6728185)
+[PASS] test_R10_NonComputationIdsTakeTheGatedView() (gas: 4073975)
+[PASS] test_TC9_ARetiredAccountComputes_ThenEveryExportReverts() (gas: 2143091)
+[PASS] test_TC9_Control_TheSameSequenceSucceedsForAnActiveAccount() (gas: 2210599)
+[PASS] test_TC9_Residual_AFreshInputStillVerifies_AndCannotLeave() (gas: 1137719)
+Suite result: FAILED. 6 passed; 1 failed; 0 skipped; finished in 158.39ms (230.35ms CPU time)
+
+Ran 3 tests for test/FhenixCoreDifferential.t.sol:FhenixCoreDifferentialTest
+[PASS] testFuzz_TC3_NeverRetiredAccountsSeeTheSameRegistry(uint256,uint8[12]) (runs: 256, μ: 15064555, ~: 15051436)
+[PASS] test_TC3_AFixedScriptGrantsSharesComputesAndPublishes() (gas: 8671141)
+[PASS] test_TC3_NegativeControl_ARetiredActorIsCaught() (gas: 2147709)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 1.06s (1.08s CPU time)
+
+Ran 20 tests for test/FhenixCoreRegistry.t.sol:FhenixCoreRegistryTest
+[PASS] testFuzz_TC12_UnknownIdsAnswerFalse(bytes4) (runs: 512, μ: 14208, ~: 14208)
+[PASS] testFuzz_TC1_RetireOnce_SecondReverts_NoSecondEvent(address) (runs: 512, μ: 117169, ~: 117169)
+[PASS] testFuzz_TC4_TheAnswerDoesNotDependOnTheCaller(address) (runs: 512, μ: 278718, ~: 278718)
+[PASS] test_ConstantsMatchTheERC() (gas: 24908)
+[PASS] test_R2_AdminSettersAndACoreUpgradeLeaveRetirementInPlace() (gas: 254588)
+[PASS] test_TC12_ERC165() (gas: 68027)
+[PASS] test_TC1_R5_TheNextCallInTheSameTransactionAlreadySeesIt() (gas: 1331088)
+[PASS] test_TC2_AContractRetiresItself() (gas: 663565)
+[PASS] test_TC2_AnAccountWithNoHandleRetires() (gas: 70145)
+[PASS] test_TC2_RetireWhileTheEngineIsDisabled_DenyListed_OffTheAccessList() (gas: 205755)
+[PASS] test_TC4_R10_ARetiredAccountStillComputes_OutputInertInViews() (gas: 1557607)
+[PASS] test_TC4_RetiredAccount_TransientUseViewsFalse_OthersUnaffected() (gas: 1966837)
+[FAIL: isAllowed] test_TC4_RetiredUser_EveryPersistentUseViewFalse_PublicUnchanged_OthersUnaffected() (gas: 540137)
+[PASS] test_TC5_OnBehalfFalseWhenTheAccountTheDelegateeOrTheContractIsRetired() (gas: 509911)
+[PASS] test_TC5_StorageLayoutAsRead() (gas: 7899)
+[PASS] test_TC7_ARetiredGrantorRevertsOnEveryPathTheTaskManagerRelays() (gas: 1323688)
+[PASS] test_TC7_RemovalOnlyPathsStayOpen_TheRevoker() (gas: 167122)
+[PASS] test_TC7_TheBatchFormAndTheDelegationPathAreGatedAtTheACL() (gas: 228189)
+[PASS] test_TC7_TypedErrorPrecedence() (gas: 357903)
+[PASS] test_TC8_GrantsToARetiredAccountSucceed_AndAreInert() (gas: 2215329)
+Suite result: FAILED. 19 passed; 1 failed; 0 skipped; finished in 1.06s (3.11s CPU time)
+
+Ran 5 test suites in 1.06s (2.59s CPU time): 52 tests passed, 2 failed, 0 skipped (54 total tests)
+
+Failing tests:
+Encountered 1 failing test in test/FhenixCoreEngine.t.sol:FhenixCoreEngineTest
+[FAIL: assertion failed] test_R10_Negative_ACallerIdentityExemptionExemptsGrantsAndThePermitCheck() (gas: 6728185)
+
+Encountered 1 failing test in test/FhenixCoreRegistry.t.sol:FhenixCoreRegistryTest
+[FAIL: isAllowed] test_TC4_RetiredUser_EveryPersistentUseViewFalse_PublicUnchanged_OthersUnaffected() (gas: 540137)
+
+Encountered a total of 2 failing tests, 52 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 2 failed tests
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger

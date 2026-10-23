@@ -1,0 +1,24 @@
+2026-10-21T19:43:21.850260Z  INFO connector_utils::config::deserialize: Loading config using environment variables only
+2026-10-21T19:43:21.850400Z  INFO connector_utils::config::deserialize: Adding environment variables with prefix KMS_CONNECTOR_
+2026-10-21T19:43:21.853645Z  INFO connector_utils::conn: Attempting connection to DB... (1/5)
+2026-10-21T19:43:21.951413Z  INFO connector_utils::conn: Connected to Postgres database successfully
+2026-10-21T19:43:21.980180Z  INFO connector_utils::monitoring::server: Monitoring server listening at: 127.0.0.1:58548
+2026-10-21T19:43:21.980531Z  INFO endpoint::core::endpoint: Starting Endpoint
+2026-10-21T19:43:21.981526Z  INFO actix_server::builder: starting 2 workers
+2026-10-21T19:43:21.981645Z  INFO endpoint::core::endpoint: HTTP server listening at: 127.0.0.1:58547
+2026-10-21T19:43:21.982315Z  INFO actix_server::builder: starting 1 workers
+2026-10-21T19:43:21.982422Z  INFO actix_server::server: Tokio runtime found; starting in existing Tokio runtime
+2026-10-21T19:43:21.982470Z  INFO actix_server::server: starting service: "actix-web-service-127.0.0.1:58548", workers: 1, listening on: 127.0.0.1:58548
+2026-10-21T19:43:21.982712Z  INFO actix_server::server: Tokio runtime found; starting in existing Tokio runtime
+2026-10-21T19:43:21.984318Z  INFO actix_server::server: starting service: "actix-web-service-127.0.0.1:58547", workers: 2, listening on: 127.0.0.1:58547
+2026-10-21T19:43:21.987333Z  INFO endpoint::core::response_listener: Starting ResponseListener
+2026-10-21T19:43:22.407034Z  INFO user_decrypt{decryption_id="0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c"}: endpoint::core::http::decrypt: Decryption request stored in DB decryption_id=0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c
+2026-10-21T19:43:22.697764Z  INFO endpoint::core::response_listener: Waiting connection(s) woken up decryption_id=0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c
+2026-10-21T19:43:23.081344Z  INFO user_decrypt{decryption_id="0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c"}: endpoint::core::http::decrypt: PROFILE-H H7: revalidating a stored result before serving it decryption_id=0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c
+2026-10-21T19:43:23.231177Z  INFO endpoint::core::response_listener: Waiting connection(s) woken up decryption_id=0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c
+2026-10-21T19:43:23.672017Z  INFO user_decrypt{decryption_id="0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c"}: endpoint::core::http::decrypt: PROFILE-H H7: revalidating a stored result before serving it decryption_id=0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c
+2026-10-21T19:43:23.801489Z  INFO endpoint::core::response_listener: Waiting connection(s) woken up decryption_id=0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c
+2026-10-21T19:43:24.143270Z  INFO user_decrypt{decryption_id="0xe4139cc8f3d3974c9966d6e95a5c55d010e400bcfdc081800802d2bc4d0ea38d"}: endpoint::core::http::decrypt: Decryption request stored in DB decryption_id=0xe4139cc8f3d3974c9966d6e95a5c55d010e400bcfdc081800802d2bc4d0ea38d
+2026-10-21T19:43:24.238715Z  INFO endpoint::core::response_listener: Waiting connection(s) woken up decryption_id=0xe4139cc8f3d3974c9966d6e95a5c55d010e400bcfdc081800802d2bc4d0ea38d
+2026-10-21T19:43:24.587634Z  INFO user_decrypt{decryption_id="0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c"}: endpoint::core::http::decrypt: Retrying failed decryption request decryption_id=0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c
+2026-10-21T19:43:24.705226Z  INFO endpoint::core::response_listener: Waiting connection(s) woken up decryption_id=0x1d8831cd56068b86a862efb5b640b054e4145d4cae5bb8d4a38224e051f91e7c

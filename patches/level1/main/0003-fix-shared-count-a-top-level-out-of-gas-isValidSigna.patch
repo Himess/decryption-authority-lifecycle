@@ -1,0 +1,135 @@
+From aea7d37c47241349e068282724bc6756de8d8d1b Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 15:38:30 +0300
+Subject: [PATCH 3/8] fix(shared): count a top-level out-of-gas
+ isValidSignature as an empty revert (Profile H4)
+
+Found on a real EVM (anvil, Osaka): an isValidSignature call that runs out
+of gas at the top level comes back as a JSON-RPC error without revert data
+(anvil: -32003 "EVM error OutOfGas"; geth and reth: "out of gas"), which the
+generic mapping classifies as a transport error. Profile H leaves transport
+errors to the caller's own retry policy, so such a call escaped the H4 bound
+of two attempts on exactly the most expensive path (each attempt burns the
+whole budget). The Profile H call path now maps an out-of-gas error without
+revert data to EmptyRevert, a counted negative; any other node error without
+data stays a transport error. verify_signature is unchanged.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../src/profile_h.rs                          | 29 ++++++++++-
+ .../tests/profile_h.rs                        | 51 +++++++++++++++++++
+ 2 files changed, 79 insertions(+), 1 deletion(-)
+
+diff --git a/shared/user-decryption-signature/src/profile_h.rs b/shared/user-decryption-signature/src/profile_h.rs
+index c303156e..91471972 100644
+--- a/shared/user-decryption-signature/src/profile_h.rs
++++ b/shared/user-decryption-signature/src/profile_h.rs
+@@ -41,6 +41,7 @@ use alloy::{
+     providers::Provider,
+     rpc::types::TransactionRequest,
+     sol_types::SolCall,
++    transports::{RpcError, TransportError},
+ };
+ use fhevm_gateway_bindings::decryption::IDecryption::UserDecryptionRequestPayload;
+ use std::{fmt, str::FromStr};
+@@ -590,7 +591,7 @@ impl<'a, P: Provider> Ctx<'a, P> {
+         self.calls = self.calls.saturating_add(1);
+         let result = match self.provider.call(tx).block(BlockId::number(block)).await {
+             Ok(returndata) => Ok(classify_return(&returndata)),
+-            Err(e) => Err(map_erc1271_call_error(self.input.signer, e)),
++            Err(e) => Err(classify_call_error(self.input.signer, e)),
+         };
+         self.call = Some(result.clone());
+         result
+@@ -673,6 +674,32 @@ impl<'a, P: Provider> Ctx<'a, P> {
+     }
+ }
+ 
++/// Maps an `isValidSignature` call error: [`map_erc1271_call_error`], except that an out-of-gas error without revert
++/// data is an empty revert, a counted negative (H2, H4), not a transport failure. A node reports a top-level
++/// out-of-gas `eth_call` as a JSON-RPC error with no `data` (anvil: code -32003 "EVM error OutOfGas"; geth and reth:
++/// "out of gas"), which the generic mapping would treat as a transport error, left to the caller's own (longer) retry
++/// policy: an `isValidSignature` that exhausts its budget would then escape the H4 attempt bound, on the most
++/// expensive path. An out-of-gas inside a nested call already arrives as an empty revert.
++fn classify_call_error(addr: Address, err: TransportError) -> Erc1271Error {
++    if let RpcError::ErrorResp(payload) = &err
++        && payload.as_revert_data().is_none()
++        && is_out_of_gas(&payload.message)
++    {
++        return Erc1271Error::EmptyRevert(addr);
++    }
++    map_erc1271_call_error(addr, err)
++}
++
++/// Whether a JSON-RPC error message reports an out-of-gas execution ("out of gas", "OutOfGas", ...).
++fn is_out_of_gas(message: &str) -> bool {
++    let compact: String = message
++        .chars()
++        .filter(char::is_ascii_alphanumeric)
++        .collect::<String>()
++        .to_ascii_lowercase();
++    compact.contains("outofgas")
++}
++
+ /// Maps a reverted or malformed ERC-1271 result to a counted negative (never a fallback).
+ fn negative_or_transport(error: Erc1271Error) -> Step {
+     match error {
+diff --git a/shared/user-decryption-signature/tests/profile_h.rs b/shared/user-decryption-signature/tests/profile_h.rs
+index d25cace1..2796ab56 100644
+--- a/shared/user-decryption-signature/tests/profile_h.rs
++++ b/shared/user-decryption-signature/tests/profile_h.rs
+@@ -731,3 +731,54 @@ async fn h8_shadow_eoa_agrees() {
+     assert_eq!(s.code_first, VerdictSummary::Accept(AcceptPath::Ecrecover));
+     assert_eq!(s.code, Some(AccountCode::Empty));
+ }
++
++////////////////////////////////////////////////////////////////////////////////////////////////////
++// Out of gas at the top level is a counted negative (found on a real EVM, see results/level1)
++////////////////////////////////////////////////////////////////////////////////////////////////////
++
++fn node_error(code: i64, message: &'static str) -> ErrorPayload {
++    ErrorPayload {
++        code,
++        message: Cow::Borrowed(message),
++        data: None,
++    }
++}
++
++#[tokio::test]
++async fn h4_top_level_out_of_gas_is_an_empty_revert_not_transport() {
++    let digest = B256::repeat_byte(24);
++    let signer = Address::repeat_byte(25);
++    let sig = vec![0x66u8; 32];
++    // anvil ("EVM error OutOfGas", -32003), geth and reth ("out of gas", -32000): no revert data.
++    for (code, message) in [(-32003, "EVM error OutOfGas"), (-32000, "out of gas")] {
++        let a = Asserter::new();
++        push_block(&a, BLOCK);
++        a.push_success(&regular_code());
++        a.push_failure(node_error(code, message));
++        let out = verify_user_decryption_signature(
++            &provider(&a),
++            &input(signer, digest, &sig),
++            &policy(CodeFirstMode::Enforce),
++            AttemptState::default(),
++        )
++        .await;
++        let r = out.result.unwrap_err();
++        assert_eq!(r.error, Erc1271Error::EmptyRevert(signer), "{message}");
++        assert_eq!(r.disposition, Disposition::RetryNextBlock);
++        assert_eq!(out.attempts.negatives, 1, "counted against H4");
++    }
++    // Any other node error without revert data stays a transport error.
++    let a = Asserter::new();
++    push_block(&a, BLOCK);
++    a.push_success(&regular_code());
++    a.push_failure(node_error(-32000, "header not found"));
++    let out = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Enforce),
++        AttemptState::default(),
++    )
++    .await;
++    assert_eq!(out.result.unwrap_err().disposition, Disposition::Transport);
++    assert_eq!(out.attempts, AttemptState::default());
++}

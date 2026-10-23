@@ -1,0 +1,7 @@
+run=r3 date=2026-10-22T18:32:28Z
+worktree commit: 256306b68503e1511ae71210d61611a3b4ca175c (lifecycle/level1)
+anvil: anvil Version: 1.8.5
+udsig-h: cf0cf9fa5b63a6ac153875717b618b07f4e156367b5f2f2fc62b939a9e457515 (impl/harness/phase4/udsig-h-l1)
+47421111a820563aa86bb7a973cdfb3ffe66c01c798acbe83632f0fa7bd66d3b *impl/harness/phase5/p503-local/p503-eip8298.test.ts
+3e61bd039e5df25b45403d16bb2b598ec61d07fc54ce4f2d69f1d7da423070df *impl/harness/phase5/p503-local/vitest.config.mts
+46aa3b639ade6877794a18349339cee9fd452b2c7a5bde6a6e3049885653efa8 *impl/harness/phase4/fault_proxy.py

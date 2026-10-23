@@ -1,0 +1,34 @@
+{
+ "hardfork": "amsterdam",
+ "code_bytes": 11827,
+ "cap": 16777216,
+ "runs": [
+  {
+   "cap_check": false,
+   "gas_limit": 16777216,
+   "accepted": true,
+   "status": "0x0",
+   "gas_used": 16777216
+  },
+  {
+   "cap_check": false,
+   "gas_limit": 30000000,
+   "accepted": true,
+   "status": "0x1",
+   "gas_used": 18214293
+  },
+  {
+   "cap_check": true,
+   "gas_limit": 16777216,
+   "accepted": true,
+   "status": "0x0",
+   "gas_used": 16777216
+  },
+  {
+   "cap_check": true,
+   "gas_limit": 30000000,
+   "accepted": false,
+   "error": "intrinsic gas too high -- tx.gas_limit > resolved tx gas limit cap"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+No files changed, compilation skipped
+
+Ran 6 tests for test/acl/ACLGovernance.t.sol:ACLGovernanceTest
+[PASS] test_Gov_Canary_CatchesTheLyingUpgrade() (gas: 2223025)
+[PASS] test_Gov_Canary_HonestUpgrade() (gas: 139016)
+[PASS] test_Gov_Canary_MissesTheBackdoor_PinningCatchesIt() (gas: 3438125)
+[PASS] test_Gov_ExecutorFollowsTheACLOwner() (gas: 106604)
+[PASS] test_Gov_GuardBlocksACorelessUpgradeThroughTheTimelock() (gas: 2210961)
+[PASS] test_Gov_TimelockOwnsTheACL_DelayEnforced() (gas: 132396)
+Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 3.25ms (4.32ms CPU time)
+
+Ran 1 test suite in 15.79ms (3.25ms CPU time): 6 tests passed, 0 failed, 0 skipped (6 total tests)

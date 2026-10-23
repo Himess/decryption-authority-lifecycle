@@ -1,0 +1,21 @@
+== DirectUserU: 2 eth_call(s) to the ACL
+    isAllowed(h, U) -> True   [to=0xc50f3a0533ac8f9715376b25a290e1695e6e183e block=latest]
+    isAllowed(h, C) -> True   [to=0xc50f3a0533ac8f9715376b25a290e1695e6e183e block=latest]
+== DirectUserV: 6 eth_call(s) to the ACL
+    isAllowed(h, V) -> False   [to=0x015bdf1aedae0723bcf06150dbb74b5905fe9fe4 block=latest]
+    isAllowed(h, C) -> True   [to=0x015bdf1aedae0723bcf06150dbb74b5905fe9fe4 block=latest]
+    isAllowed(h, C) -> True   [to=0x015bdf1aedae0723bcf06150dbb74b5905fe9fe4 block=latest]
+    isAllowed(h, V) -> False   [to=0x015bdf1aedae0723bcf06150dbb74b5905fe9fe4 block=latest]
+    isAllowed(h, V) -> False   [to=0x015bdf1aedae0723bcf06150dbb74b5905fe9fe4 block=latest]
+    isAllowed(h, C) -> True   [to=0x015bdf1aedae0723bcf06150dbb74b5905fe9fe4 block=latest]
+== DelegatedUToD: 1 eth_call(s) to the ACL
+    isHandleDelegatedForUserDecryption(U, D, C, h) -> True   [to=0x9dc5c7a12d77535fcdaaa00d460ce03945966061 block=latest]
+== DelegatedVToD: 3 eth_call(s) to the ACL
+    isHandleDelegatedForUserDecryption(V, D, C, h) -> False   [to=0x9dae61f14b4135f94b0796014d19cdca937d2808 block=latest]
+    isHandleDelegatedForUserDecryption(V, D, C, h) -> False   [to=0x9dae61f14b4135f94b0796014d19cdca937d2808 block=latest]
+    isHandleDelegatedForUserDecryption(V, D, C, h) -> False   [to=0x9dae61f14b4135f94b0796014d19cdca937d2808 block=latest]
+== DelegatedUToV: 3 eth_call(s) to the ACL
+    isHandleDelegatedForUserDecryption(U, V, C, h) -> False   [to=0x13a80b45c83ffe59ffa446803076bc1dd9d85c8b block=latest]
+    isHandleDelegatedForUserDecryption(U, V, C, h) -> False   [to=0x13a80b45c83ffe59ffa446803076bc1dd9d85c8b block=latest]
+    isHandleDelegatedForUserDecryption(U, V, C, h) -> False   [to=0x13a80b45c83ffe59ffa446803076bc1dd9d85c8b block=latest]
+== non-eth_call methods seen on the connector's host-chain endpoint: none

@@ -1,0 +1,13 @@
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > the digest the crate computes is the EIP-712 digest ethers computes 96ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > reference: X as a plain EOA is accepted by every verifier 221ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > adoption: X takes the ML-DSA-44 wallet runtime, Y the NoErc1271 runtime (anvil_setCode) 74ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > the gap: unmodified verifiers accept the root key of an account holding regular code 213ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > Profile H enforce refuses the root key: regular code, ERC-1271 only, no shim 129ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > Profile H enforce accepts the wallet ML-DSA-44 signature at B_exec 2,000,000 790ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > the SDK pre-check agrees with the verifier 1290ms
+ ✓ p503-eip8298.test.ts > P0.3: EIP-8298 simulation (adopted regular code) > the proxy rewrote nothing: every verifier read the node own answer 2ms
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+vitest rc=0
+git status of the worktree (tracked files must be unchanged):
+RESULT secret_or_hostname_hits=0

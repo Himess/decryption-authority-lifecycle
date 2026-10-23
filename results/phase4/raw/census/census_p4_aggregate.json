@@ -1,0 +1,99 @@
+{
+ "meta": {
+  "what": "Phase 4 census refresh (read-only eth_getLogs, eth_getCode, eth_call); aggregates only",
+  "acl": "0xcA2E8f1F656CD25C01F05d0b243Ab1ecd4a8ffb6 (ACL v0.4.0)",
+  "blocks": [
+   23832647,
+   26243993
+  ],
+  "head_utc": "2026-10-21T22:33:11Z",
+  "run_started_utc": "2026-10-21T22:32:10Z",
+  "run_finished_utc": "2026-10-21T22:47:06Z",
+  "endpoints": [
+   "https://gateway.tenderly.co/public/mainnet",
+   "https://rpc.mevblocker.io",
+   "https://ethereum-rpc.publicnode.com"
+  ],
+  "active_days": 90,
+  "max_calls_per_sec": 8,
+  "probe": {
+   "signature_bytes": 2420,
+   "calldata_bytes": 2532,
+   "gas_profile_h": 2183048,
+   "gas_zama": 250000
+  }
+ },
+ "reproduces_phase2_window": {
+  "allowed_events_total": [
+   939889,
+   939889,
+   true
+  ],
+  "self_allow_events": [
+   455183,
+   455183,
+   true
+  ],
+  "distinct_callers": [
+   336,
+   336,
+   true
+  ],
+  "accounts_receiving_allows": [
+   12792,
+   12792,
+   true
+  ],
+  "end_accounts": [
+   12720,
+   12720,
+   true
+  ],
+  "real_end_accounts": [
+   12714,
+   12714,
+   true
+  ]
+ },
+ "totals_to_head": {
+  "allowed_events_total": 945966,
+  "self_allow_events": 458058,
+  "distinct_callers": 340,
+  "accounts_receiving_allows": 12808,
+  "end_accounts": 12736,
+  "real_end_accounts": 12730
+ },
+ "active_end_accounts": 1713,
+ "active_by_code": {
+  "eoa": 1216,
+  "eoa_7702": 414,
+  "eip7851": 0,
+  "contract": 83
+ },
+ "active_handles_by_code": {
+  "eoa": 123028,
+  "eoa_7702": 13771,
+  "eip7851": 0,
+  "contract": 14264
+ },
+ "contract_probe_profile_h_gas": {
+  "empty_revert": 75,
+  "returned_32+": 1,
+  "revert_with_data": 7
+ },
+ "contract_probe_zama_gas": {
+  "empty_revert": 75,
+  "returned_32+": 1,
+  "revert_with_data": 7
+ },
+ "delegations_active_at_head": 695,
+ "readiness": {
+  "population": "real end accounts active in the last 90 days (Phase 2 definitions)",
+  "proven_pq_capable_accounts": 0,
+  "kda_declarations_identifiable": 0,
+  "candidates_contracts_completing_erc1271_within_b_exec": 8,
+  "share_accounts_proven": 0.0,
+  "share_accounts_upper_bound": 0.00467,
+  "share_handles_upper_bound": 0.00033
+ }
+}

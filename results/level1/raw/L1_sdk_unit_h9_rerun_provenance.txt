@@ -1,0 +1,7 @@
+SDK unit suite rerun (Level 1, rule H9), 2026-10-22, M1 (Windows 10 Pro 19045, Git Bash), Node 22.13.0, vitest 4.1.9.
+Logs: L1_sdk_unit_h9_rerun_r1.log, L1_sdk_unit_h9_rerun_r2.log (910 passed of 910, 35 files, both runs).
+Tree: the worktree of branch lifecycle/level1 at 256306b68503e1511ae71210d61611a3b4ca175c. Its sdk/ subtree equals
+that of 5b69260 (SDK, H9), the commit Phase 3's run used: `git diff --name-only 5b69260 HEAD -- sdk/` lists 0 files;
+the later commits change the relayer and the connector only.
+Command, in sdk/js-sdk: node node_modules/vitest/vitest.mjs run --config src/vitest.config.ts
+Secret scan of both logs: SCAN_REPORT_sdk_rerun.txt (no hit).

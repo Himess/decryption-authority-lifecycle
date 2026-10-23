@@ -1,0 +1,112 @@
+{
+ "steps": {
+  "ercVector": {
+   "digest": "0xca933c116695438e119a68f3f457dac8b4b9050e77210d19cdaa2be05106e98a",
+   "digestMatchesErc": true,
+   "signatureMatchesErc": true
+  },
+  "certificate": {
+   "account": "0x2d52523eDA689Bd3404C56858CC4Cc532e35a822",
+   "successor": "0x8432cAD85f4e81023e0c2f33320D3C48bcd1039c",
+   "chainIds": [
+    31337,
+    31338
+   ],
+   "signatureBytes": 65,
+   "digest": "0xc9b32a9a15a74ec577b29c75e1c338000c4217453d683eb5657b34b220921c8d"
+  },
+  "quietPass": {
+   "signals": [],
+   "relays": []
+  },
+  "thiefDelegationActiveBefore": true,
+  "watch": {
+   "signals": [
+    {
+     "chain": "B",
+     "block": 9,
+     "kind": "wildcard delegation",
+     "delegate": "0xfe650dBea67B0D7357C43913c267155042d3AeD3"
+    }
+   ],
+   "relays": [
+    {
+     "chain": "A",
+     "chainId": 31337,
+     "tx": "0xbe0edc6bb45b8a1417b7eeed819af348bf15d47a1472d024b1570927fd4a5cac",
+     "status": 1,
+     "gasUsed": 65754,
+     "block": 9,
+     "calldataBytes": 356
+    },
+    {
+     "chain": "B",
+     "chainId": 31338,
+     "tx": "0xfc8ea9077f8ea4fe973273747b7efce8952066d1f7d796ee07e07fa8ca0d7cc6",
+     "status": 1,
+     "gasUsed": 65867,
+     "block": 10,
+     "calldataBytes": 356
+    },
+    {
+     "chain": "C",
+     "chainId": 31339,
+     "skipped": "not listed in the certificate"
+    }
+   ],
+   "detectAndRelayMs": 376,
+   "thiefBlock": 9
+  },
+  "relayAgain": [
+   {
+    "chain": "A",
+    "chainId": 31337,
+    "skipped": "already retired"
+   },
+   {
+    "chain": "B",
+    "chainId": 31338,
+    "skipped": "already retired"
+   },
+   {
+    "chain": "C",
+    "chainId": 31339,
+    "skipped": "not listed in the certificate"
+   }
+  ],
+  "cli": {
+   "exit": 0,
+   "lines": [
+    "relay [manual] {\"chain\":\"A\",\"chainId\":31337,\"status\":1,\"gasUsed\":65742,\"block\":14,\"calldataBytes\":356}",
+    "relay [manual] {\"chain\":\"B\",\"chainId\":31338,\"status\":1,\"gasUsed\":65855,\"block\":15,\"calldataBytes\":356}",
+    "relay [manual] {\"chain\":\"C\",\"chainId\":31339,\"skipped\":\"not listed in the certificate\"}"
+   ],
+   "retiredA": true,
+   "retiredB": true,
+   "retiredC": false
+  }
+ },
+ "after": {
+  "A": {
+   "retired": true,
+   "successorOf": "0x8432cAD85f4e81023e0c2f33320D3C48bcd1039c",
+   "successorReads": true,
+   "thiefReads": false,
+   "accountUsable": false
+  },
+  "B": {
+   "retired": true,
+   "successorOf": "0x8432cAD85f4e81023e0c2f33320D3C48bcd1039c",
+   "successorReads": true,
+   "thiefReads": false,
+   "accountUsable": false
+  },
+  "C": {
+   "retired": false,
+   "successorOf": "0x8432cAD85f4e81023e0c2f33320D3C48bcd1039c",
+   "successorReads": false,
+   "thiefReads": false,
+   "accountUsable": true
+  }
+ }
+}

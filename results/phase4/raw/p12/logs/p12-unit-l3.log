@@ -1,0 +1,40 @@
+INSCOPE start=2026-10-21T22:31:18Z cgroup=/system.slice/lifecycle-p12-unit-l3-1792621877.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/kw.sh main cargo test -p kms-worker --lib --locked profile_q]
+KW ver=main tree=l3 step=cargo commit=ed851716c9a6b799996a23399ece2858336f96db date=2026-10-21T22:31:18Z host=VPS nproc=4
+KW dirty-files:  M kms-connector/Cargo.lock  M kms-connector/config/endpoint.toml  M kms-connector/crates/api/src/error.rs  M kms-connector/crates/endpoint/src/core/config.rs  M kms-connector/crates/endpoint/src/core/db.rs  M kms-connector/crates/endpoint/src/core/http/decrypt.rs  M kms-connector/crates/endpoint/src/core/http/public_decrypt.rs  M kms-connector/crates/endpoint/src/core/http/user_decrypt.rs  M kms-connector/crates/endpoint/tests/integration_tests.rs  M kms-connector/crates/kms-worker/Cargo.toml  M kms-connector/crates/kms-worker/src/core/config.rs  M kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs  M kms-connector/crates/kms-worker/src/core/event_processor/error.rs  M kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs  M kms-connector/crates/kms-worker/src/core/kms_worker.rs  M kms-connector/crates/kms-worker/src/core/mod.rs  M kms-connector/crates/kms-worker/tests/common/mod.rs  M kms-connector/crates/utils/src/tests/setup/db.rs  M kms-connector/crates/utils/src/tests/setup/host.rs  M shared/user-decryption-signature/Cargo.lock  M shared/user-decryption-signature/Cargo.toml  M shared/user-decryption-signature/src/lib.rs ?? kms-connector/connector-db/migrations/20261021120000_profile_h_erc1271_attempts.sql ?? kms-connector/crates/kms-worker/src/core/profile_q.rs ?? kms-connector/crates/kms-worker/tests/acl_p03_stored_results_h.rs ?? kms-connector/crates/kms-worker/tests/acl_p04_eip7851_h.rs ?? kms-connector/crates/kms-worker/tests/acl_p11_e3_h.rs ?? kms-connector/crates/kms-worker/tests/acl_p12_profile_q.rs ?? kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs ?? shared/user-decryption-signature/src/kda.rs ?? shared/user-decryption-signature/src/profile_h.rs ?? shared/user-decryption-signature/tests/ 
+KW toolchain=1.99.1-x86_64-unknown-linux-gnu (overridden by '/srv/lifecycle/src/fhevm-main-l3/kms-connector/rust-toolchain.toml') | rustc 1.99.1 (58cf8f9c3 2026-10-13) | cargo 1.99.1 (5f94df478 2026-08-27) | libprotoc 34.1 | jobs=1
+    Finished `test` profile [unoptimized] target(s) in 2.24s
+     Running unittests src/lib.rs (/srv/lifecycle/target/main/debug/deps/kms_worker-2e9df1f3fd54086b)
+
+running 4 tests
+test core::profile_q::tests::cutoff_applies_to_ecdsa_rooted_and_eip7851_delegators_only ... ok
+test core::profile_q::tests::delegation_slot_matches_an_independent_computation ... ok
+test core::profile_q::tests::record_decodes_the_packed_fields_lowest_first ... ok
+test core::profile_q::tests::statement_message_layout ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 53 filtered out; finished in 0.01s
+
+	Command being timed: "/srv/lifecycle/scripts/kw.sh main cargo test -p kms-worker --lib --locked profile_q"
+	User time (seconds): 1.38
+	System time (seconds): 1.42
+	Percent of CPU this job got: 92%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.04
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 157064
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64014
+	Voluntary context switches: 1204
+	Involuntary context switches: 24
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 480
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T22:31:21Z rc=0 cgroup_memory.peak_bytes=146866176 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=p12-unit-l3 unit=lifecycle-p12-unit-l3-1792621877 rc=0 wall_s=5 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=5 killed=no sampled_peak_anon_mb=0 sampled_peak_cgroup_current_mb=0 sampled_peak_swap_mb=0

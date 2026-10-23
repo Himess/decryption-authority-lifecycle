@@ -1,0 +1,24 @@
+=== Baseline A (main, scope=acl) ===
+commit: ed851716c9a6b799996a23399ece2858336f96db branch: lifecycle/base
+date_utc:   2026-10-21T05:42:25Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         jq-1.7.1
+git:        git version 2.47.1.windows.2
+hardhat_test_acl rc=0 seconds=80 log=A_fhevm-main_hardhat_test_acl.log
+deploy_emptyProxies rc=0 seconds=15 log=A_fhevm-main_deploy_emptyProxies.log
+forge_test_acl_isolate-default rc=1 seconds=20 log=A_fhevm-main_forge_test_acl_isolate-default.log
+forge_test_acl_isolate-false rc=0 seconds=31 log=A_fhevm-main_forge_test_acl_isolate-false.log
+--- suite results
+[A_fhevm-main_hardhat_test_acl.log]
+  3 passing (117ms)
+[A_fhevm-main_hardhat_test_acl_noscripts.log]
+[A_fhevm-main_forge_test_acl_isolate-default.log]
+Ran 2 test suites in 16.05s (16.06s CPU time): 48 tests passed, 15 failed, 0 skipped (63 total tests)
+[A_fhevm-main_forge_test_acl_isolate-false.log]
+Ran 2 test suites in 29.56s (29.56s CPU time): 63 tests passed, 0 failed, 0 skipped (63 total tests)
+git status (must be empty):
+?? sdk/js-sdk/contracts/remappings.txt

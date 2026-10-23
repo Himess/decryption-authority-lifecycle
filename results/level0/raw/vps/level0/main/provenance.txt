@@ -1,0 +1,22 @@
+date=2026-10-21T11:29:53Z host=VPS nproc=4 kernel=6.8.0-139-generic
+harness HEAD=ed851716c9a6b799996a23399ece2858336f96db pristine HEAD=ed851716c9a6b799996a23399ece2858336f96db
+== git status --porcelain (harness worktree; only test files may appear)
+ M kms-connector/crates/utils/src/tests/setup/host.rs
+?? kms-connector/crates/kms-worker/tests/acl_real_chain.rs
+?? kms-connector/crates/kms-worker/tests/acl_retirement_real_chain.rs
+== git status --porcelain (pristine worktree; must be empty)
+== diff -rq pristine vs harness kms-connector, excluding directories named 'tests'
+IDENTICAL
+tree-sha256 crates/kms-worker/src (excluding ./tests): harness=8718ddd7d46f5d16134e5a0d63d8decf71bd094e7c62abef70fad11c6bd830c7 pristine=8718ddd7d46f5d16134e5a0d63d8decf71bd094e7c62abef70fad11c6bd830c7 EQUAL
+tree-sha256 crates/utils/src (excluding ./tests): harness=5c6b4fa4535f57a638aa676c1deac9ae311cd1b148415da3ab576a56c08080e0 pristine=5c6b4fa4535f57a638aa676c1deac9ae311cd1b148415da3ab576a56c08080e0 EQUAL
+== harness inputs
+a2df85549eaa9d17a9024a8c9da679dd8a88e2d5eb92ea3fd995098636e43fca  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_retirement_real_chain.rs
+f77d80a57ae7025c22f79d9a6cd3eeba9ec9159aaee32b8829a82056ec19355a  /srv/lifecycle/harness/level0/base_acl_main.json
+b6c9361d70ab108e773dfaea81183fb4428e333a32ec47878c46cb289153b2b7  /srv/lifecycle/harness/level0/level0_acl_main.json
+4605658bedb1872fb595ea9ac6f4094cab169adacb4094480f63b278b694797d  /srv/lifecycle/harness/level0/level0_acl_v0.13.8.json
+c535fb0cbf87776524f6f968f169e504853b1bc5b91f4792a5b9c58df1151bad  /srv/lifecycle/harness/sol/src/DappStub.sol
+613348ca2fe17f2d8057247a6476617b8d7dac24a68ab6438eb854b049bc7b08  /srv/lifecycle/harness/sol/src/ExecutorStub.sol
+37d0516d3e7c123bbf981774a2ab5ae26d25c5f61e53b23584aa81bcb97034ff  /srv/lifecycle/harness/sol/src/Proxy.sol
+ad23f33970285b6acf27ab88db86a366127e27d2c5d9a7fea07a8d536bcc3c9c  /srv/lifecycle/scripts/rpc_recorder.py
+0aaa299e941890db68266b2ad28b3ae165ba066988d4bb2616f34c4e3c06c117  /srv/lifecycle/scripts/run_level0.sh
+1e59ea7be91ab07adf84aa08e71b1fa3668783d4321d296a4ab489db80f5c738  /srv/lifecycle/scripts/decode_level0.py

@@ -1,0 +1,14 @@
+# Test-only helper contracts for the lifecycle real-chain connector harness.
+# Same compiler settings as fhevm host-contracts (solc 0.8.24, cancun, no CBOR metadata).
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc = "0.8.24"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 800
+cbor_metadata = false
+bytecode_hash = "none"
+offline = false
+remappings = ["@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/"]

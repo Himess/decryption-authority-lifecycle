@@ -1,0 +1,910 @@
+From e8a5a685d1572cc76885f6348d778aa70ec8df5a Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Thu, 22 Oct 2026 01:51:09 +0300
+Subject: [PATCH 5/5] feat(kms-worker): Profile Q in the connector (lifecycle
+ Level 3)
+
+The PQ-only operator policy of the Decryption Authority Lifecycle draft,
+setting `profile_q` (off by default), module core/profile_q.rs:
+
+- Q1: one canonical statement (chain, ACL, variant, B_Q, the ICS's
+  keccak256), signed by each operator with ML-DSA-65. At startup the worker
+  counts distinct operators whose signature verifies under its K8 mode and
+  establishes the profile only with at least `threshold` (n - t) and only for
+  a statement naming its chain, ACL and ICS. No setting and no on-chain read
+  can engage it. Requires Profile H.
+- Q4: Profile H's signature check gets the profile for the chain (the shared
+  crate decides by the signer's code at the pinned block); once engaged, the
+  legacy gateway path, whose signature is checked by ECDSA only, is refused.
+- Q5: after the delegated view answers true, a delegation from a delegator
+  with no code, an EIP-7702 or an EIP-7851 indicator counts only if its
+  per-contract or wildcard record is active and unchanged since B_Q. The
+  records are read with eth_getStorageAt from Zama's ERC-7201 ACLStorage, at
+  one pinned block, for ACL versions whose layout is known; others fail
+  closed. Refusals are final (acl_denied).
+
+Errors: ProfileQRefused maps to a final user_signature_rejected.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../crates/kms-worker/src/core/config.rs      |  42 +++
+ .../src/core/event_processor/decryption.rs    | 239 +++++++++++-
+ .../src/core/event_processor/error.rs         |   6 +-
+ .../src/core/event_processor/rpc.rs           |  78 +++-
+ .../crates/kms-worker/src/core/mod.rs         |   3 +-
+ .../crates/kms-worker/src/core/profile_q.rs   | 343 ++++++++++++++++++
+ 6 files changed, 696 insertions(+), 15 deletions(-)
+ create mode 100644 kms-connector/crates/kms-worker/src/core/profile_q.rs
+
+diff --git a/kms-connector/crates/kms-worker/src/core/config.rs b/kms-connector/crates/kms-worker/src/core/config.rs
+index 0043db59..fe7e56cd 100644
+--- a/kms-connector/crates/kms-worker/src/core/config.rs
++++ b/kms-connector/crates/kms-worker/src/core/config.rs
+@@ -149,6 +149,11 @@ pub struct Config {
+     #[serde(default)]
+     pub profile_h: ProfileHConfig,
+ 
++    /// [lifecycle Level 3] Profile Q, the PQ-only operator policy (Q1, Q4, Q5). Disabled by default. When enabled it
++    /// engages only if the operators' signed statements establish it (Q1), and it requires Profile H.
++    #[serde(default)]
++    pub profile_q: ProfileQConfig,
++
+     /// The service name used for tracing.
+     #[serde(default = "default_service_name")]
+     pub service_name: String,
+@@ -379,6 +384,42 @@ impl ProfileHConfig {
+             max_extra_data_bytes: self.max_extra_data_bytes,
+             max_erc1271_attempts: self.max_erc1271_attempts,
+             eip7702_fallback: self.eip7702_fallback,
++            // [lifecycle Level 3] Set per request from the established Profile Q, never from this configuration.
++            profile_q: None,
++        }
++    }
++}
++
++/// [lifecycle Level 3] Profile Q configuration. The variant and `B_Q` are not settings: they come from the signed
++/// statement, so that only the operators' post-quantum signatures can engage the profile (Q1).
++#[derive(Clone, Debug, Deserialize, PartialEq)]
++#[cfg_attr(test, derive(Serialize))]
++#[serde(default)]
++pub struct ProfileQConfig {
++    /// Master switch. Off: no Profile Q, and none of the files below is read.
++    pub enabled: bool,
++    /// The host chain the statement is for (it must name that chain's ACL).
++    pub chain_id: u64,
++    /// JSON: `{"scheme": "ML-DSA-65", "public_keys": ["0x…", …]}`, the n operators in index order.
++    pub operators_file: Option<std::path::PathBuf>,
++    /// JSON: `{"statement": {chain_id, acl, variant, activation_block, ics_keccak256}, "signatures": [{operator,
++    /// signature}, …]}`.
++    pub statement_file: Option<std::path::PathBuf>,
++    /// The ICS the statement binds (its keccak256 must match).
++    pub ics_file: Option<std::path::PathBuf>,
++    /// Signatures needed: n − t.
++    pub threshold: usize,
++}
++
++impl Default for ProfileQConfig {
++    fn default() -> Self {
++        Self {
++            enabled: false,
++            chain_id: 0,
++            operators_file: None,
++            statement_file: None,
++            ics_file: None,
++            threshold: 9,
+         }
+     }
+ }
+@@ -420,6 +461,7 @@ impl Default for Config {
+             host_rpc_call_timeout: default_host_rpc_call_timeout(),
+             erc1271_gas_limit: default_erc1271_gas_limit(),
+             profile_h: ProfileHConfig::default(),
++            profile_q: ProfileQConfig::default(),
+             service_name: default_service_name(),
+             task_limit: default_task_limit(),
+             monitoring_endpoint: default_monitoring_endpoint(),
+diff --git a/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs b/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+index 91eed3f3..e689d535 100644
+--- a/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
++++ b/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+@@ -4,6 +4,7 @@ use crate::core::{
+         CiphertextManager, HostRpcClient, ProcessingError, RequestCheckError, RequestCheckKind,
+         ciphertext::VerifiedCiphertexts,
+     },
++    profile_q::{self, DelegationRecord, Established, WILDCARD_DELEGATION_ADDRESS},
+ };
+ use alloy::{
+     consensus::Transaction,
+@@ -36,7 +37,8 @@ use std::{
+ };
+ use tracing::{error, info, warn};
+ use user_decryption_signature::{
+-    AttemptState, Disposition, SignatureInput, SignaturePolicy, compute_user_decrypt_digest,
++    AttemptState, Disposition, Erc1271Error, SignatureInput, SignaturePolicy,
++    compute_user_decrypt_digest,
+     kda::{K8Mode, KdaError, KdaOutcome, KdaScheme, KdaSkip},
+ };
+ 
+@@ -64,6 +66,9 @@ pub struct DecryptionProcessor<GP: Provider, HP: Provider> {
+     /// [lifecycle Level 1, Profile H, H4] Where the ERC-1271 attempt state is kept
+     /// (`profile_h_erc1271_attempts`). Without it the state lives in memory only.
+     attempt_store: Option<Pool<Postgres>>,
++
++    /// [lifecycle Level 3] Profile Q, when the operators' signed statements established it (Q1).
++    profile_q: Option<Established>,
+ }
+ 
+ /// [lifecycle Level 1] Runtime state of Profile H.
+@@ -102,13 +107,7 @@ where
+         let decryption_contract =
+             Decryption::new(config.decryption_contract.address, gateway_provider);
+ 
+-        Self {
+-            domain,
+-            decryption_contract,
+-            host_clients,
+-            ciphertext_manager,
+-            erc1271_gas_limit: config.erc1271_gas_limit,
+-            profile_h: config.profile_h.enabled.then(|| {
++        let profile_h = config.profile_h.enabled.then(|| {
+                 let policy = config.profile_h.signature_policy();
+                 info!(
+                     "PROFILE-H enabled: mode={} b_exec={} caps=({}, {}, {}) attempts={} eip7702_fallback={} \
+@@ -135,8 +134,186 @@ where
+                     k8,
+                     attempts: Arc::default(),
+                 }
+-            }),
++            });
++        let profile_q = Self::establish_profile_q(config, profile_h.as_ref(), &host_clients);
++
++        Self {
++            domain,
++            decryption_contract,
++            host_clients,
++            ciphertext_manager,
++            erc1271_gas_limit: config.erc1271_gas_limit,
++            profile_h,
+             attempt_store: None,
++            profile_q,
++        }
++    }
++
++    /// [lifecycle Level 3, Profile Q1] Reads the operators' keys, the signed statement and the ICS, and establishes
++    /// Profile Q only if at least `threshold` operators' signatures verify under this node's K8 mode. A missing or
++    /// malformed file is a startup error; too few valid signatures leave the profile off. Profile Q requires Profile H
++    /// (Q2): its signer rule (Q4) runs inside Profile H's signature check.
++    fn establish_profile_q(
++        config: &Config,
++        profile_h: Option<&ProfileH>,
++        host_clients: &HashMap<u64, HostRpcClient<HP>>,
++    ) -> Option<Established> {
++        let q = &config.profile_q;
++        if !q.enabled {
++            return None;
++        }
++        let profile_h = profile_h.unwrap_or_else(|| panic!("profile_q requires profile_h (Q2)"));
++        if profile_h.kda_schemes.is_empty() {
++            warn!("PROFILE-Q: E3 is not enabled on this node; Q2 requires it before activation");
++        }
++        // The ACL this node actually reads on that chain.
++        let acl = host_clients
++            .get(&q.chain_id)
++            .map(|c| c.acl_address())
++            .unwrap_or_else(|| {
++                panic!(
++                    "profile_q.chain_id {} is not a configured host chain",
++                    q.chain_id
++                )
++            });
++        let file = |p: &Option<std::path::PathBuf>, name: &str| {
++            p.clone()
++                .unwrap_or_else(|| panic!("profile_q.{name} is required"))
++        };
++        let operators: profile_q::Operators =
++            profile_q::read_json(&file(&q.operators_file, "operators_file"))
++                .unwrap_or_else(|e| panic!("profile_q.operators_file: {e}"));
++        let signed: profile_q::SignedStatement =
++            profile_q::read_json(&file(&q.statement_file, "statement_file"))
++                .unwrap_or_else(|e| panic!("profile_q.statement_file: {e}"));
++        let ics = profile_q::file_keccak256(&file(&q.ics_file, "ics_file"))
++            .unwrap_or_else(|e| panic!("profile_q.ics_file: {e}"));
++        match profile_q::establish(
++            &signed,
++            &operators,
++            q.threshold,
++            q.chain_id,
++            acl,
++            ics,
++            profile_h.k8,
++        ) {
++            Ok(e) => {
++                info!(
++                    "PROFILE-Q established chain={} acl={} variant={} b_q={} statements={}/{} threshold={} k8={}",
++                    e.chain_id,
++                    e.acl,
++                    e.profile_q.variant,
++                    e.profile_q.activation_block,
++                    e.verified,
++                    e.operators,
++                    e.threshold,
++                    profile_h.k8,
++                );
++                Some(e)
++            }
++            Err(e) => {
++                warn!("PROFILE-Q not established chain={}: {e}", q.chain_id);
++                None
++            }
++        }
++    }
++
++    /// [lifecycle Level 3] Profile H's policy for a request on `host_client`'s chain, with Profile Q's signer rule (Q4)
++    /// when the profile is established for that chain.
++    fn signature_policy(
++        &self,
++        profile_h: &ProfileH,
++        host_client: &HostRpcClient<HP>,
++    ) -> SignaturePolicy {
++        let mut policy = profile_h.policy;
++        if let Some(q) = &self.profile_q
++            && q.chain_id == host_client.chain_id()
++        {
++            policy.profile_q = Some(q.profile_q);
++        }
++        policy
++    }
++
++    /// [lifecycle Level 3] Profile Q as established for `host_client`'s chain, if it is engaged at the latest block.
++    async fn profile_q_engaged(
++        &self,
++        host_client: &HostRpcClient<HP>,
++    ) -> Result<Option<(Established, u64)>, RequestCheckError> {
++        let Some(q) = self
++            .profile_q
++            .filter(|q| q.chain_id == host_client.chain_id())
++        else {
++            return Ok(None);
++        };
++        let block = host_client.block_number().await?;
++        Ok(q.profile_q.engaged_at(block).then_some((q, block)))
++    }
++
++    /// [lifecycle Level 3, Profile Q5] The delegation cutoff, after the registry's delegated view answered true: a
++    /// delegation from an ECDSA-rooted delegator counts only if one of its records (the per-contract one or the
++    /// wildcard) is active and unchanged since `B_Q`. Every read is at one block N. The records are read from the
++    /// ACL's storage, for a known layout only. A refusal is final: a record's last change can only move later.
++    async fn profile_q_cutoff(
++        &self,
++        host_client: &HostRpcClient<HP>,
++        delegator: Address,
++        delegate: Address,
++        contract: Address,
++    ) -> Result<(), RequestCheckError> {
++        let Some((q, block)) = self.profile_q_engaged(host_client).await? else {
++            return Ok(());
++        };
++        let b_q = q.profile_q.activation_block;
++        let slots = [
++            profile_q::delegation_slot(delegator, delegate, contract),
++            profile_q::delegation_slot(delegator, delegate, WILDCARD_DELEGATION_ADDRESS),
++        ];
++        let reads = host_client.cutoff_reads(delegator, slots, block).await?;
++        let Some(rooted) = profile_q::cutoff_applies(&reads.code) else {
++            info!(
++                "PROFILE-Q cutoff not applied delegator={delegator} delegate={delegate} contract={contract} \
++                block={block} b_q={b_q}: regular code"
++            );
++            return Ok(());
++        };
++        let refuse = |why: String| {
++            warn!(
++                "PROFILE-Q cutoff refused delegator={delegator} delegate={delegate} contract={contract} block={block} \
++                b_q={b_q} delegator_code=\"{rooted}\": {why}"
++            );
++            RequestCheckError::irrecoverable(
++                RequestCheckKind::Acl,
++                ErrorCode::AclDenied,
++                anyhow!(
++                    "Profile Q (Q5): the delegation from {delegator} to {delegate} does not count: {why}"
++                ),
++            )
++        };
++        if !profile_q::KNOWN_LAYOUT_VERSIONS.contains(&reads.version.as_str()) {
++            return Err(refuse(format!(
++                "unknown ACL layout `{}`, the cutoff cannot be established",
++                reads.version
++            )));
++        }
++        let records = reads.words.map(DelegationRecord::decode);
++        let rows = format!(
++            "contract(exp={},last={}) wildcard(exp={},last={}) timestamp={}",
++            records[0].expiration_date,
++            records[0].last_block_delegate_or_revoke,
++            records[1].expiration_date,
++            records[1].last_block_delegate_or_revoke,
++            reads.timestamp,
++        );
++        if records.iter().any(|r| r.counts(reads.timestamp, b_q)) {
++            info!(
++                "PROFILE-Q cutoff passed delegator={delegator} delegate={delegate} contract={contract} block={block} \
++                b_q={b_q} delegator_code=\"{rooted}\" {rows}"
++            );
++            Ok(())
++        } else {
++            Err(refuse(format!(
++                "no active record unchanged since B_Q; {rows}"
++            )))
+         }
+     }
+ 
+@@ -283,16 +460,17 @@ where
+         let started = std::time::Instant::now();
+         let input = SignatureInput::from_payload(payload, digest);
+         let attempts = self.load_attempts(profile_h, digest).await?;
++        let policy = self.signature_policy(profile_h, host_client);
+         let outcome = if profile_h.kda_schemes.is_empty() {
+             host_client
+-                .verify_signature_profile_h(&input, &profile_h.policy, attempts)
++                .verify_signature_profile_h(&input, &policy, attempts)
+                 .await
+         } else {
+             match host_client
+                 .verify_signature_kda(
+                     &input,
+                     owners,
+-                    &profile_h.policy,
++                    &policy,
+                     &profile_h.kda_schemes,
+                     profile_h.k8,
+                     attempts,
+@@ -365,6 +543,15 @@ where
+             Err(rejection) => {
+                 self.save_attempts(profile_h, digest, outcome.attempts)
+                     .await?;
++                if let Erc1271Error::ProfileQRefused {
++                    variant, reason, ..
++                } = &rejection.error
++                {
++                    warn!(
++                        "PROFILE-Q refused path=signature signer={} variant={variant} block={:?} code={:?}: {reason}",
++                        payload.userAddress, rejection.block, rejection.code,
++                    );
++                }
+                 warn!(
+                     "PROFILE-H rejected signer={} error={} disposition={:?} block={:?} code={:?} erc1271_calls={} \
+                     attempts={:?}",
+@@ -504,6 +691,28 @@ where
+             }
+         }
+ 
++        // [lifecycle Level 3, Profile Q4] Once Profile Q is engaged, every ECDSA-only path is refused: here the user's
++        // signature was verified by the gateway, by ECDSA only.
++        if let Some((q, block)) = self.profile_q_engaged(signature_host_client).await? {
++            warn!(
++                "PROFILE-Q refused path=legacy user={user_address} delegator={} variant={} block={block} b_q={}",
++                delegator_address
++                    .map(|a| a.to_string())
++                    .unwrap_or_else(|| "-".into()),
++                q.profile_q.variant,
++                q.profile_q.activation_block,
++            );
++            return Err(RequestCheckError::irrecoverable(
++                RequestCheckKind::Signature,
++                ErrorCode::UserSignatureRejected,
++                anyhow!(
++                    "Profile Q (Q4): this path verifies the user's signature by ECDSA only (host chain \
++                    {contracts_chain_id}, block {block} >= B_Q {})",
++                    q.profile_q.activation_block
++                ),
++            ));
++        }
++
+         let contracts_map = HashMap::<FixedBytes<32>, Address, DefaultHashBuilder>::from_iter(
+             ct_handle_contract_pairs
+                 .iter()
+@@ -826,6 +1035,14 @@ where
+                     )
+                     .await);
+             }
++            // [lifecycle Level 3, Profile Q5] The delegation cutoff.
++            self.profile_q_cutoff(
++                host_client,
++                entry.ownerAddress,
++                user_address,
++                entry.contractAddress,
++            )
++            .await?;
+         }
+         Ok(())
+     }
+diff --git a/kms-connector/crates/kms-worker/src/core/event_processor/error.rs b/kms-connector/crates/kms-worker/src/core/event_processor/error.rs
+index 2c8fb3ee..f36cd4c5 100644
+--- a/kms-connector/crates/kms-worker/src/core/event_processor/error.rs
++++ b/kms-connector/crates/kms-worker/src/core/event_processor/error.rs
+@@ -108,7 +108,8 @@ impl From<Erc1271Error> for ProcessingError {
+             Erc1271Error::EoaMismatchNoCode(_)
+             | Erc1271Error::EmptySigOnEoa(_)
+             | Erc1271Error::CapExceeded { .. }
+-            | Erc1271Error::AttemptsExhausted { .. } => {
++            | Erc1271Error::AttemptsExhausted { .. }
++            | Erc1271Error::ProfileQRefused { .. } => {
+                 Self::irrecoverable(ErrorCode::UserSignatureRejected, err)
+             }
+             Erc1271Error::Transport(_) => Self::transient(err),
+@@ -220,7 +221,8 @@ impl From<Erc1271Error> for RequestCheckError {
+             | Erc1271Error::CapExceeded { .. }
+             | Erc1271Error::EmptyReturn(_)
+             | Erc1271Error::AwaitingNextBlock { .. }
+-            | Erc1271Error::AttemptsExhausted { .. } => RequestCheckKind::Signature,
++            | Erc1271Error::AttemptsExhausted { .. }
++            | Erc1271Error::ProfileQRefused { .. } => RequestCheckKind::Signature,
+         };
+         Self::new(kind, err.into())
+     }
+diff --git a/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs b/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+index 3323c1a0..ee6732cd 100644
+--- a/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
++++ b/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+@@ -1,6 +1,6 @@
+ use crate::core::event_processor::RequestCheckError;
+ use alloy::{
+-    eips::BlockId,
++    eips::{BlockId, BlockNumberOrTag},
+     primitives::{Address, B256, U256},
+     providers::Provider,
+     rpc::types::TransactionRequest,
+@@ -21,6 +21,18 @@ alloy::sol! {
+     }
+ }
+ 
++/// [lifecycle Level 3, Profile Q5] The host-chain reads behind one delegation cutoff decision, all at one block.
++#[derive(Clone, Debug)]
++pub struct CutoffReads<const N: usize> {
++    /// The delegator's code.
++    pub code: Vec<u8>,
++    pub timestamp: u64,
++    /// The ACL's `getVersion()`.
++    pub version: String,
++    /// The ACL storage words at the requested slots.
++    pub words: [U256; N],
++}
++
+ /// A client for one host chain's RPC node, tagged with its chain id so every error it produces
+ /// carries the host chain identity.
+ #[derive(Clone)]
+@@ -170,6 +182,70 @@ impl<P: Provider> HostRpcClient<P> {
+             })
+     }
+ 
++    /// [lifecycle Level 3] The host chain this client serves.
++    pub fn chain_id(&self) -> u64 {
++        self.chain_id
++    }
++
++    /// [lifecycle Level 3] This chain's ACL.
++    pub fn acl_address(&self) -> Address {
++        *self.acl_contract.address()
++    }
++
++    /// [lifecycle Level 3, Profile Q] The latest block number.
++    pub async fn block_number(&self) -> Result<u64, RequestCheckError> {
++        self.acl_contract
++            .provider()
++            .get_block_number()
++            .await
++            .map_err(|e| self.acl_err(e))
++    }
++
++    /// [lifecycle Level 3, Profile Q5] What the delegation cutoff reads, all at `block`: the delegator's raw code, the
++    /// block's timestamp, the ACL's version string, and the storage words at `slots`.
++    pub async fn cutoff_reads<const N: usize>(
++        &self,
++        delegator: Address,
++        slots: [B256; N],
++        block: u64,
++    ) -> Result<CutoffReads<N>, RequestCheckError> {
++        let provider = self.acl_contract.provider();
++        let at = BlockId::number(block);
++        let code = provider
++            .get_code_at(delegator)
++            .block_id(at)
++            .await
++            .map_err(|e| self.acl_err(e))?;
++        let timestamp = provider
++            .get_block_by_number(BlockNumberOrTag::Number(block))
++            .await
++            .map_err(|e| self.acl_err(e))?
++            .ok_or_else(|| self.acl_err(anyhow::anyhow!("block {block} not available")))?
++            .header
++            .timestamp;
++        let version = self
++            .acl_contract
++            .getVersion()
++            .call()
++            .block(at)
++            .await
++            .map_err(|e| self.acl_err(e))?;
++        let mut words = [U256::ZERO; N];
++        for (word, slot) in words.iter_mut().zip(slots) {
++            *word = provider
++                .get_storage_at(self.acl_address(), U256::from_be_bytes(slot.0))
++                .block_id(at)
++                .await
++                .map_err(|e| self.acl_err(e))?;
++        }
++        Ok(CutoffReads {
++            code: code.to_vec(),
++            timestamp,
++            version,
++            words,
++        })
++    }
++
+     fn acl_err(&self, e: impl Into<anyhow::Error>) -> RequestCheckError {
+         RequestCheckError::network(e).context(format!(
+             "on host chain {} (ACL contract {})",
+diff --git a/kms-connector/crates/kms-worker/src/core/mod.rs b/kms-connector/crates/kms-worker/src/core/mod.rs
+index 5309b70c..f1e458a8 100644
+--- a/kms-connector/crates/kms-worker/src/core/mod.rs
++++ b/kms-connector/crates/kms-worker/src/core/mod.rs
+@@ -3,8 +3,9 @@ mod event_picker;
+ pub mod event_processor;
+ mod kms_response_publisher;
+ mod kms_worker;
++pub mod profile_q;
+ 
+-pub use config::{Config, ProfileHConfig};
++pub use config::{Config, ProfileHConfig, ProfileQConfig};
+ pub use event_picker::{DbEventPicker, EventPicker};
+ pub use kms_response_publisher::{DbKmsResponsePublisher, KmsResponsePublisher};
+ pub use kms_worker::KmsWorker;
+diff --git a/kms-connector/crates/kms-worker/src/core/profile_q.rs b/kms-connector/crates/kms-worker/src/core/profile_q.rs
+new file mode 100644
+index 00000000..31a2d8d0
+--- /dev/null
++++ b/kms-connector/crates/kms-worker/src/core/profile_q.rs
+@@ -0,0 +1,343 @@
++//! [lifecycle Level 3] Profile Q: the PQ-only operator policy of the Decryption Authority Lifecycle draft, for the
++//! off-chain request path. It is never an on-chain flag.
++//!
++//! - **Q1, trigger.** The profile is established only from the operators' statements: one statement (host chain, ACL,
++//!   variant, activation block `B_Q`, the ICS's keccak256), signed by each operator with a FIPS 204 key (ML-DSA-65).
++//!   It is established when at least `threshold` (n − t) distinct operators' signatures verify, under this node's K8
++//!   mode. Fewer never establish it, and no on-chain read can.
++//! - **Q4, signers.** Applied by the shared signature crate ([`ProfileQ`] in the policy); the ECDSA-only (legacy
++//!   gateway) path is refused by the worker.
++//! - **Q5, delegation cutoff.** A delegation from an ECDSA-rooted delegator counts only if its last change is at or
++//!   before `B_Q`. The registry has no getter for that block, so it is read from the ACL's ERC-7201 storage
++//!   (`UserDecryptionDelegation.lastBlockDelegateOrRevoke`) with `eth_getStorageAt`, only for an ACL version whose
++//!   layout is known; any other version fails closed.
++
++use alloy::primitives::{Address, B256, U256, keccak256};
++use serde::Deserialize;
++use std::{fmt, path::Path};
++use user_decryption_signature::{
++    PqOnlyVariant, ProfileQ,
++    kda::{K8Mode, KdaScheme, verify_native_k8},
++};
++
++/// Domain separator of a Profile Q activation statement (the signed bytes start with it).
++pub const STATEMENT_TAG: &[u8] = b"ERC-XXXX Profile Q activation statement v1\0";
++/// The operators' signature scheme.
++pub const OPERATOR_SCHEME: KdaScheme = KdaScheme::MlDsa65;
++
++/// ERC-7201 location of Zama's `ACLStorage` (namespace `fhevm.storage.ACL`), the same in ACL v0.7.0 (`main`) and in
++/// every lifecycle release on that line (v0.8.0, v0.9.0, v0.10.0).
++pub const ACL_STORAGE_LOCATION: B256 =
++    alloy::primitives::b256!("a688f31953c2015baaf8c0a488ee1ee22eb0e05273cc1fd31ea4cbee42febc00");
++/// Index of `userDecryptionDelegations` in `ACLStorage`.
++pub const DELEGATIONS_FIELD: u64 = 2;
++/// `ACL.WILDCARD_DELEGATION_ADDRESS`: `address(type(uint160).max)`.
++pub const WILDCARD_DELEGATION_ADDRESS: Address = Address::repeat_byte(0xff);
++/// ACL versions whose `ACLStorage` and `UserDecryptionDelegation` layout this module reads.
++pub const KNOWN_LAYOUT_VERSIONS: [&str; 4] =
++    ["ACL v0.7.0", "ACL v0.8.0", "ACL v0.9.0", "ACL v0.10.0"];
++
++/// One Profile Q activation statement (Q1). The operators sign [`Statement::message`].
++#[derive(Clone, Debug, Deserialize, PartialEq, Eq)]
++pub struct Statement {
++    pub chain_id: u64,
++    pub acl: Address,
++    pub variant: String,
++    pub activation_block: u64,
++    pub ics_keccak256: B256,
++}
++
++impl Statement {
++    pub fn variant(&self) -> Result<PqOnlyVariant, String> {
++        self.variant.parse()
++    }
++
++    /// The signed bytes: tag ‖ chain id (8, big-endian) ‖ ACL (20) ‖ variant (1: no-root-ecdsa, 2: strict) ‖
++    /// `B_Q` (8, big-endian) ‖ the ICS's keccak256 (32).
++    pub fn message(&self) -> Result<Vec<u8>, String> {
++        let variant = match self.variant()? {
++            PqOnlyVariant::NoRootEcdsa => 1u8,
++            PqOnlyVariant::Strict => 2u8,
++        };
++        let mut m = STATEMENT_TAG.to_vec();
++        m.extend_from_slice(&self.chain_id.to_be_bytes());
++        m.extend_from_slice(self.acl.as_slice());
++        m.push(variant);
++        m.extend_from_slice(&self.activation_block.to_be_bytes());
++        m.extend_from_slice(self.ics_keccak256.as_slice());
++        Ok(m)
++    }
++}
++
++/// The signed statement file: the statement and one entry per signing operator.
++#[derive(Clone, Debug, Deserialize)]
++pub struct SignedStatement {
++    pub statement: Statement,
++    pub signatures: Vec<OperatorSignature>,
++}
++
++#[derive(Clone, Debug, Deserialize)]
++pub struct OperatorSignature {
++    /// Index into the operators file.
++    pub operator: usize,
++    pub signature: alloy::primitives::Bytes,
++}
++
++/// The operators file: the ML-DSA-65 public keys of the n operators, in index order.
++#[derive(Clone, Debug, Deserialize)]
++pub struct Operators {
++    pub scheme: String,
++    pub public_keys: Vec<alloy::primitives::Bytes>,
++}
++
++/// Profile Q as established for one host chain.
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub struct Established {
++    pub chain_id: u64,
++    pub acl: Address,
++    pub profile_q: ProfileQ,
++    /// Distinct operators whose signature verified, and how many were needed.
++    pub verified: usize,
++    pub threshold: usize,
++    pub operators: usize,
++}
++
++/// Why the statements did not establish Profile Q.
++#[derive(Clone, Debug, PartialEq, Eq)]
++pub struct NotEstablished {
++    pub verified: usize,
++    pub threshold: usize,
++    pub operators: usize,
++    pub reason: String,
++}
++
++impl fmt::Display for NotEstablished {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        write!(
++            f,
++            "{} of {} operators' statements verify, {} needed: {}",
++            self.verified, self.operators, self.threshold, self.reason
++        )
++    }
++}
++
++/// Q1: counts the distinct operators whose signature over the statement verifies (under `k8`), and establishes Profile
++/// Q for `(chain_id, acl)` only if there are at least `threshold`. A statement for another chain or ACL, or bound to
++/// another ICS, establishes nothing. Signatures from unknown indices, duplicates and invalid signatures are not counted.
++pub fn establish(
++    signed: &SignedStatement,
++    operators: &Operators,
++    threshold: usize,
++    chain_id: u64,
++    acl: Address,
++    ics_keccak256: B256,
++    k8: K8Mode,
++) -> Result<Established, NotEstablished> {
++    let n = operators.public_keys.len();
++    let not = |verified: usize, reason: String| NotEstablished {
++        verified,
++        threshold,
++        operators: n,
++        reason,
++    };
++    if KdaScheme::from_name(&operators.scheme) != Some(OPERATOR_SCHEME) {
++        return Err(not(
++            0,
++            format!(
++                "operator scheme `{}`, expected {OPERATOR_SCHEME}",
++                operators.scheme
++            ),
++        ));
++    }
++    if threshold == 0 || threshold > n {
++        return Err(not(0, format!("threshold {threshold} with {n} operators")));
++    }
++    let s = &signed.statement;
++    if s.chain_id != chain_id || s.acl != acl {
++        return Err(not(
++            0,
++            format!(
++                "the statement is for chain {} ACL {}, this node serves chain {chain_id} ACL {acl}",
++                s.chain_id, s.acl
++            ),
++        ));
++    }
++    if s.ics_keccak256 != ics_keccak256 {
++        return Err(not(
++            0,
++            format!(
++                "the statement binds ICS {}, this node's ICS is {ics_keccak256}",
++                s.ics_keccak256
++            ),
++        ));
++    }
++    let variant = s.variant().map_err(|e| not(0, e))?;
++    let message = s.message().map_err(|e| not(0, e))?;
++    let mut counted = vec![false; n];
++    for entry in &signed.signatures {
++        let Some(pk) = operators.public_keys.get(entry.operator) else {
++            continue;
++        };
++        if counted[entry.operator] {
++            continue;
++        }
++        if verify_native_k8(k8, OPERATOR_SCHEME, pk, &message, &entry.signature).is_ok() {
++            counted[entry.operator] = true;
++        }
++    }
++    let verified = counted.iter().filter(|c| **c).count();
++    if verified < threshold {
++        return Err(not(verified, "below the threshold".to_string()));
++    }
++    Ok(Established {
++        chain_id,
++        acl,
++        profile_q: ProfileQ {
++            variant,
++            activation_block: s.activation_block,
++        },
++        verified,
++        threshold,
++        operators: n,
++    })
++}
++
++/// Reads a JSON file (a configuration error is a startup error).
++pub fn read_json<T: for<'de> Deserialize<'de>>(path: &Path) -> Result<T, String> {
++    let text = std::fs::read_to_string(path).map_err(|e| format!("{}: {e}", path.display()))?;
++    serde_json::from_str(&text).map_err(|e| format!("{}: {e}", path.display()))
++}
++
++/// `keccak256` of a file's bytes (the ICS the statement binds).
++pub fn file_keccak256(path: &Path) -> Result<B256, String> {
++    std::fs::read(path)
++        .map(keccak256)
++        .map_err(|e| format!("{}: {e}", path.display()))
++}
++
++/// `keccak256(abi.encode(key, slot))`: the slot of `mapping[key]` stored at `slot`.
++fn mapping_slot(key: Address, slot: B256) -> B256 {
++    let mut buf = [0u8; 64];
++    buf[12..32].copy_from_slice(key.as_slice());
++    buf[32..].copy_from_slice(slot.as_slice());
++    keccak256(buf)
++}
++
++/// Storage slot of `$.userDecryptionDelegations[delegator][delegate][contract]` in the ACL.
++pub fn delegation_slot(delegator: Address, delegate: Address, contract: Address) -> B256 {
++    let base =
++        B256::from(U256::from_be_bytes(ACL_STORAGE_LOCATION.0) + U256::from(DELEGATIONS_FIELD));
++    mapping_slot(
++        contract,
++        mapping_slot(delegate, mapping_slot(delegator, base)),
++    )
++}
++
++/// One `UserDecryptionDelegation` record: three `uint64` packed in one slot, the first field lowest.
++#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
++pub struct DelegationRecord {
++    pub expiration_date: u64,
++    pub last_block_delegate_or_revoke: u64,
++    pub delegation_counter: u64,
++}
++
++impl DelegationRecord {
++    pub fn decode(word: U256) -> Self {
++        let limbs = word.as_limbs();
++        Self {
++            expiration_date: limbs[0],
++            last_block_delegate_or_revoke: limbs[1],
++            delegation_counter: limbs[2],
++        }
++    }
++
++    /// Q5: active at `timestamp` and unchanged since `B_Q`.
++    pub fn counts(&self, timestamp: u64, activation_block: u64) -> bool {
++        self.expiration_date > timestamp && self.last_block_delegate_or_revoke <= activation_block
++    }
++}
++
++/// Whether Q5's cutoff applies to a delegator with this code, and why: no code and an EIP-7702 indicator are
++/// ECDSA-rooted; for an EIP-7851 ECDSA-disabled indicator this node cannot establish when the key was disabled, so the
++/// cutoff applies to every change. `None` for other code: not ECDSA-rooted, no cutoff.
++pub fn cutoff_applies(code: &[u8]) -> Option<&'static str> {
++    if code.is_empty() {
++        return Some("no code");
++    }
++    if code.len() == 23 && code[0] == 0xef && code[1] == 0x01 {
++        return match code[2] {
++            0x00 => Some("an EIP-7702 indicator"),
++            0x01 => Some("an EIP-7851 indicator, disabling block unknown"),
++            _ => None,
++        };
++    }
++    None
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use alloy::primitives::address;
++
++    #[test]
++    fn delegation_slot_matches_an_independent_computation() {
++        // `cast index address <key> <slot>` three times from ACL_STORAGE_LOCATION + 2 (Foundry 1.8.5).
++        let delegator = address!("0x1111111111111111111111111111111111111111");
++        let delegate = address!("0x2222222222222222222222222222222222222222");
++        let contract = address!("0x3333333333333333333333333333333333333333");
++        assert_eq!(
++            delegation_slot(delegator, delegate, contract),
++            alloy::primitives::b256!(
++                "1a1838ba3d3be88d43697ca6abefe328c9de28c11d40fae2e727ceafb8da1416"
++            )
++        );
++    }
++
++    #[test]
++    fn record_decodes_the_packed_fields_lowest_first() {
++        let word =
++            U256::from(7u64) << 128 | U256::from(1234u64) << 64 | U256::from(1_800_000_000u64);
++        let r = DelegationRecord::decode(word);
++        assert_eq!(r.expiration_date, 1_800_000_000);
++        assert_eq!(r.last_block_delegate_or_revoke, 1234);
++        assert_eq!(r.delegation_counter, 7);
++        assert!(r.counts(1_799_999_999, 1234));
++        assert!(
++            !r.counts(1_800_000_000, 1234),
++            "expired at its expiration date"
++        );
++        assert!(!r.counts(1_700_000_000, 1233), "changed after B_Q");
++    }
++
++    #[test]
++    fn cutoff_applies_to_ecdsa_rooted_and_eip7851_delegators_only() {
++        let d = [0xabu8; 20];
++        let ind = |p: u8| [&[0xef, 0x01, p][..], &d[..]].concat();
++        assert_eq!(cutoff_applies(&[]), Some("no code"));
++        assert!(cutoff_applies(&ind(0x00)).is_some());
++        assert!(cutoff_applies(&ind(0x01)).is_some());
++        assert_eq!(cutoff_applies(&ind(0x02)), None);
++        assert_eq!(cutoff_applies(&[0x60, 0x80]), None);
++        assert_eq!(cutoff_applies(&[&ind(0x00)[..], &[0u8][..]].concat()), None);
++    }
++
++    #[test]
++    fn statement_message_layout() {
++        let s = Statement {
++            chain_id: 12345,
++            acl: Address::repeat_byte(0x11),
++            variant: "strict".into(),
++            activation_block: 77,
++            ics_keccak256: B256::repeat_byte(0x22),
++        };
++        let m = s.message().unwrap();
++        assert_eq!(m.len(), STATEMENT_TAG.len() + 8 + 20 + 1 + 8 + 32);
++        assert_eq!(&m[..STATEMENT_TAG.len()], STATEMENT_TAG);
++        assert_eq!(m[STATEMENT_TAG.len() + 28], 2);
++        let bad = Statement {
++            variant: "nope".into(),
++            ..s
++        };
++        assert!(bad.message().is_err());
++    }
++}

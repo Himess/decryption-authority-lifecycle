@@ -1,0 +1,55 @@
+INSCOPE start=2026-10-21T05:26:22Z cgroup=/system.slice/lifecycle-harness-sol-1792560381.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/setup_harness_sol.sh]
+OZ commit: 69c8def5f222ff96f2b5beff05dfba996368aa79
+forge Version: 1.3.5-v1.3.5
+Compiling 11 files with Solc 0.8.24
+Solc 0.8.24 finished in 327.44ms
+Compiler run successful!
+
+╭------------------------+------------------+-------------------+--------------------+---------------------╮
+| Contract               | Runtime Size (B) | Initcode Size (B) | Runtime Margin (B) | Initcode Margin (B) |
++==========================================================================================================+
+| Address                | 31               | 81                | 24,545             | 49,071              |
+|------------------------+------------------+-------------------+--------------------+---------------------|
+| DappStub               | 378              | 407               | 24,198             | 48,745              |
+|------------------------+------------------+-------------------+--------------------+---------------------|
+| DeployableERC1967Proxy | 122              | 983               | 24,454             | 48,169              |
+|------------------------+------------------+-------------------+--------------------+---------------------|
+| ERC1967Proxy           | 122              | 967               | 24,454             | 48,185              |
+|------------------------+------------------+-------------------+--------------------+---------------------|
+| ERC1967Utils           | 31               | 81                | 24,545             | 49,071              |
+|------------------------+------------------+-------------------+--------------------+---------------------|
+| Errors                 | 31               | 81                | 24,545             | 49,071              |
+|------------------------+------------------+-------------------+--------------------+---------------------|
+| ExecutorStub           | 406              | 435               | 24,170             | 48,717              |
+|------------------------+------------------+-------------------+--------------------+---------------------|
+| StorageSlot            | 31               | 81                | 24,545             | 49,071              |
+╰------------------------+------------------+-------------------+--------------------+---------------------╯
+
+ExecutorStub artifact=out/ExecutorStub.sol/ExecutorStub.json bytecode_len=873 deployed_len=815 deployed_keccak=0xa15b785c05bddce8b498d309f3a03a3bb432cf51dd1aa0faf61d7bcb9d6fe048
+DappStub artifact=out/DappStub.sol/DappStub.json bytecode_len=817 deployed_len=759 deployed_keccak=0xece56d572c87332db5e61cd91d713f86e939586f4d0eb076365f70b705ccd042
+DeployableERC1967Proxy artifact=out/Proxy.sol/DeployableERC1967Proxy.json bytecode_len=1969 deployed_len=247 deployed_keccak=0x8f6ff038ef5c5f65af24d24ba978fc1005f46304e8dce310fd36c5d399e65c7c
+	Command being timed: "/srv/lifecycle/scripts/setup_harness_sol.sh"
+	User time (seconds): 0.63
+	System time (seconds): 0.69
+	Percent of CPU this job got: 41%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.20
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 68352
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 58
+	Minor (reclaiming a frame) page faults: 32555
+	Voluntary context switches: 3991
+	Involuntary context switches: 2373
+	Swaps: 0
+	File system inputs: 13784
+	File system outputs: 60280
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T05:26:25Z rc=0 cgroup_memory.peak_bytes=88903680 memory.max=3221225472 memory.swap.max=1073741824 cpu.max=[200000 100000]
+HEAVY name=harness-sol unit=lifecycle-harness-sol-1792560381 rc=0 wall_s=5 sampled_peak_anon_mb=0 sampled_peak_cgroup_current_mb=0 sampled_peak_swap_mb=0 tripped=0

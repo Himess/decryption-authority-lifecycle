@@ -1,0 +1,14 @@
+date=2026-10-21T20:13:25Z machine=M1 signer=p11_mldsa_tool.py (dilithium-py, evm-ml-dsa-verifier cca262b5 pythonref) verifiers=lifecycle/level3-verifier 538dc88
+XCHECK scheme=ML-DSA-44 impl=rustcrypto accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-44 impl=fips204 accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-44 impl=libcrux accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-44 impl=pqclean accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-65 impl=rustcrypto accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-65 impl=fips204 accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-65 impl=libcrux accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-65 impl=pqclean accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-87 impl=rustcrypto accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-87 impl=fips204 accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-87 impl=libcrux accepts_python_sig=true accepts_other_msg=false
+XCHECK scheme=ML-DSA-87 impl=pqclean accepts_python_sig=true accepts_other_msg=false
+XCHECK-SUMMARY failures=0

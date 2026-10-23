@@ -1,0 +1,18 @@
+PRIM|prague|noop call to a cold account|frame=165|caller=556
+PRIM|prague|SSTORE 0->1 (new slot)|frame=22591|caller=23257
+PRIM|prague|SSTORE 1->2 (existing slot)|frame=2757|caller=3423
+PRIM|prague|SSTORE 2->2 (same value)|frame=2757|caller=3426
+PRIM|prague|CREATE of a 1-slot contract|frame=45052|caller=45658
+PRIM|prague|100 new slots in one call|frame=2243681|caller=2244576
+PRIM|osaka|noop call to a cold account|frame=165|caller=556
+PRIM|osaka|SSTORE 0->1 (new slot)|frame=22591|caller=23257
+PRIM|osaka|SSTORE 1->2 (existing slot)|frame=2757|caller=3423
+PRIM|osaka|SSTORE 2->2 (same value)|frame=2757|caller=3423
+PRIM|osaka|CREATE of a 1-slot contract|frame=45052|caller=45661
+PRIM|osaka|100 new slots in one call|frame=2243681|caller=2244576
+PRIM|amsterdam|noop call to a cold account|frame=165|caller=656
+PRIM|amsterdam|SSTORE 0->1 (new slot)|frame=12591|caller=111280
+PRIM|amsterdam|SSTORE 1->2 (existing slot)|frame=2657|caller=3427
+PRIM|amsterdam|SSTORE 2->2 (same value)|frame=2657|caller=3427
+PRIM|amsterdam|CREATE of a 1-slot contract|frame=12664|caller=291733
+PRIM|amsterdam|100 new slots in one call|frame=1243681|caller=11036676

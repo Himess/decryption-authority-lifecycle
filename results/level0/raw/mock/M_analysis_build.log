@@ -1,0 +1,1732 @@
+No files changed, compilation skipped
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/KMSVerifier.sol:186:9
+    │
+186 │         emit NewContextSet(newContextId, newSignersSet, newThreshold);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:264:9
+    │
+264 │         emit Allowed(msg.sender, account, handle);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[ecrecover]: `ecrecover` call does not reject malleable signatures
+    ╭▸ src/v0.12.0/cleartext/CleartextKMSVerifier.sol:309:35
+    │
+309 │         address recoveredSigner = ecrecover(digest, v, r, s);
+    │                                   ━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/ecrecover
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/v0.12.0/cleartext/CleartextKMSVerifier.sol:333:18
+    │
+333 │             if (!authorized) {
+    │                  ━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/cleartext/CleartextKMSVerifier.sol:334:17
+    │
+334 │                 revert ContractAddressNotAuthorized(c);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:294:9
+    │
+294 │         emit AllowedForDecryption(msg.sender, handlesList);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:288:21
+    │
+288 │                     revert SenderRetired(msg.sender);
+    │                     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:290:17
+    │
+290 │                 revert SenderNotAllowed(msg.sender);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:678:18
+    │
+678 │ …lt = keccak256(abi.encodePacked(COMPUTATION_DOMAIN_SEPARATOR, Operators.cast, ct, toType, acl, block.chainid, blockhash(block.number - 1), block.timestamp));
+    │       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:702:18
+    │
+702 │ …lt = keccak256(abi.encodePacked(COMPUTATION_DOMAIN_SEPARATOR, Operators.trivialEncrypt, pt, toType, acl, block.chainid, blockhash(block.number - 1), block.timestamp));
+    │       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:831:18
+    │
+831 │ …lt = keccak256(abi.encodePacked(COMPUTATION_DOMAIN_SEPARATOR, op, ct, acl, block.chainid, blockhash(block.number - 1), block.timestamp));
+    │       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:855:18
+    │
+855 │ …lt = keccak256(abi.encodePacked(COMPUTATION_DOMAIN_SEPARATOR, op, lhs, rhs, scalar, acl, block.chainid, blockhash(block.number - 1), block.timestamp));
+    │       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:878:18
+    │
+878 │ …lt = keccak256(abi.encodePacked(COMPUTATION_DOMAIN_SEPARATOR, op, lhs, middle, rhs, acl, block.chainid, blockhash(block.number - 1), block.timestamp));
+    │       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:886:13
+    │
+886 │ …     keccak256(abi.encodePacked(SEED_DOMAIN_SEPARATOR, $.counterRand, acl, block.chainid, blockhash(block.number - 1), block.timestamp))
+    │       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/KMSVerifier.sol:223:9
+    │
+223 │         emit KMSContextDestroyed(kmsContextId);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+   ╭▸ src/v0.13.0/cleartext/CleartextFHEVMExecutor.sol:65:9
+   │
+65 │         emit Cast(msg.sender, ct, toType, result);
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ src/v0.13.0/host-contracts/contracts/HCULimit.sol:1803:9
+     │
+1803 │         emit HCUPerBlockSet(hcuPerBlock);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ src/v0.13.0/host-contracts/contracts/HCULimit.sol:1828:9
+     │
+1828 │         emit MaxHCUPerTxSet(maxHCUPerTx);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ src/v0.13.0/host-contracts/contracts/HCULimit.sol:1815:9
+     │
+1815 │         emit MaxHCUDepthPerTxSet(maxHCUDepthPerTx);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+   ╭▸ src/v0.13.0/cleartext/CleartextFHEVMExecutor.sol:82:9
+   │
+82 │         emit TrivialEncrypt(msg.sender, pt, toType, result);
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:370:13
+    │
+370 │         if (expirationDate <= block.timestamp) {
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:386:9
+    │
+386 │ ┏         emit DelegatedForUserDecryption(
+387 │ ┃             msg.sender,
+388 │ ┃             delegate,
+389 │ ┃             contractAddress,
+    ‡ ┃
+392 │ ┃             newExpirationDate
+393 │ ┃         );
+    │ ┗━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/ACL.sol:200:9
+    │
+200 │         emit Allowed(msg.sender, account, handle);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:424:9
+    │
+424 │ ┏         emit RevokedDelegationForUserDecryption(
+425 │ ┃             msg.sender,
+426 │ ┃             delegate,
+427 │ ┃             contractAddress,
+428 │ ┃             ++userDecryptionDelegation.delegationCounter,
+429 │ ┃             oldExpirationDate
+430 │ ┃         );
+    │ ┗━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/cleartext/CleartextFHEVMExecutor.sol:110:9
+    │
+110 │         emit VerifyInput(msg.sender, inputHandle, userAddress, inputProof, inputType, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:449:9
+    │
+449 │         emit AccountRetired(msg.sender, address(0));
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/ACL.sol:227:9
+    │
+227 │         emit AllowedForDecryption(msg.sender, handlesList);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/host-contracts/contracts/ACL.sol:223:17
+    │
+223 │                 revert SenderNotAllowed(msg.sender);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:186:9
+    │
+186 │         emit FheAdd(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:631:9
+    │
+631 │         emit BlockedAccount(account);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+    ╭▸ src/v0.12.0/host-contracts/contracts/KMSVerifier.sol:359:17
+    │
+359 │ ┏                 abi.encodePacked(
+360 │ ┃                     CONTRACT_NAME,
+361 │ ┃                     " v",
+362 │ ┃                     Strings.toString(MAJOR_VERSION),
+    ‡ ┃
+366 │ ┃                     Strings.toString(PATCH_VERSION)
+367 │ ┃                 )
+    │ ┗━━━━━━━━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:644:9
+    │
+644 │         emit UnblockedAccount(account);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/cleartext/CleartextACL.sol:113:13
+    │
+113 │             revert CleartextACLTransientNotSet(handle);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:205:9
+    │
+205 │         emit FheSub(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:683:17
+    │
+683 │ ┏                 abi.encodePacked(
+684 │ ┃                     CONTRACT_NAME,
+685 │ ┃                     " v",
+686 │ ┃                     Strings.toString(MAJOR_VERSION),
+    ‡ ┃
+690 │ ┃                     Strings.toString(PATCH_VERSION)
+691 │ ┃                 )
+    │ ┗━━━━━━━━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/host-contracts/contracts/KMSVerifier.sol:441:17
+    │
+441 │                 revert KMSSignerNull();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/host-contracts/contracts/KMSVerifier.sol:444:17
+    │
+444 │                 revert KMSAlreadySigner();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/cleartext/CleartextACL.sol:216:17
+    │
+216 │                 revert HandleNotAllowedForPublicDecryption(handles[i]);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/cleartext/CleartextACL.sol:203:13
+    │
+203 │             revert CleartextACLCleartextNotSaved(handle);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/v0.12.0/host-contracts/contracts/KMSVerifier.sol:518:34
+    │
+518 │                 recoveredSigners[uniqueValidCount] = signerRecovered;
+    │                                  ━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:224:9
+    │
+224 │         emit FheMul(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/host-contracts/contracts/KMSVerifier.sol:515:17
+    │
+515 │                 revert KMSInvalidSigner(signerRecovered);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/cleartext/CleartextACL.sol:234:17
+    │
+234 │                 revert UserAddressEqualsContractAddress();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/cleartext/CleartextACL.sol:237:17
+    │
+237 │                 revert UserNotAuthorizedForDecrypt(h, userAddress);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/cleartext/CleartextACL.sol:240:17
+    │
+240 │                 revert ContractNotAuthorizedForDecrypt(h, c);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/cleartext/CleartextACL.sol:258:17
+    │
+258 │                 revert HandleNotDelegatedForUserDecryption(h, c, delegator, delegate);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/v0.12.0/host-contracts/contracts/ACL.sol:293:13
+    │
+293 │         if (expirationDate <= block.timestamp) {
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/v0.13.0/host-contracts/contracts/ACL.sol:746:16
+    │
+746 │         return $.userDecryptionDelegations[delegator][delegate][contractAddress].expirationDate > block.timestamp;
+    │                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:245:9
+    │
+245 │         emit FheDiv(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/ACL.sol:306:9
+    │
+306 │ ┏         emit DelegatedForUserDecryption(
+307 │ ┃             msg.sender,
+308 │ ┃             delegate,
+309 │ ┃             contractAddress,
+    ‡ ┃
+312 │ ┃             newExpirationDate
+313 │ ┃         );
+    │ ┗━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/ACL.sol:343:9
+    │
+343 │ ┏         emit RevokedDelegationForUserDecryption(
+344 │ ┃             msg.sender,
+345 │ ┃             delegate,
+346 │ ┃             contractAddress,
+347 │ ┃             ++userDecryptionDelegation.delegationCounter,
+348 │ ┃             oldExpirationDate
+349 │ ┃         );
+    │ ┗━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:753:18
+    │
+753 │           result = keccak256(
+    │ ┏━━━━━━━━━━━━━━━━━━┛
+754 │ ┃             abi.encodePacked(
+755 │ ┃                 COMPUTATION_DOMAIN_SEPARATOR,
+756 │ ┃                 Operators.cast,
+    ‡ ┃
+764 │ ┃         );
+    │ ┗━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:788:18
+    │
+788 │           result = keccak256(
+    │ ┏━━━━━━━━━━━━━━━━━━┛
+789 │ ┃             abi.encodePacked(
+790 │ ┃                 COMPUTATION_DOMAIN_SEPARATOR,
+791 │ ┃                 Operators.trivialEncrypt,
+    ‡ ┃
+799 │ ┃         );
+    │ ┗━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:928:18
+    │
+928 │           result = keccak256(
+    │ ┏━━━━━━━━━━━━━━━━━━┛
+929 │ ┃             abi.encodePacked(
+930 │ ┃                 COMPUTATION_DOMAIN_SEPARATOR,
+931 │ ┃                 op,
+    ‡ ┃
+938 │ ┃         );
+    │ ┗━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:962:18
+    │
+962 │           result = keccak256(
+    │ ┏━━━━━━━━━━━━━━━━━━┛
+963 │ ┃             abi.encodePacked(
+964 │ ┃                 COMPUTATION_DOMAIN_SEPARATOR,
+965 │ ┃                 op,
+    ‡ ┃
+974 │ ┃         );
+    │ ┗━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+     ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:997:18
+     │
+ 997 │           result = keccak256(
+     │ ┏━━━━━━━━━━━━━━━━━━┛
+ 998 │ ┃             abi.encodePacked(
+ 999 │ ┃                 COMPUTATION_DOMAIN_SEPARATOR,
+1000 │ ┃                 op,
+     ‡ ┃
+1009 │ ┃         );
+     │ ┗━━━━━━━━━┛
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+     ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:1023:18
+     │
+1023 │           result = keccak256(
+     │ ┏━━━━━━━━━━━━━━━━━━┛
+1024 │ ┃             abi.encodePacked(
+1025 │ ┃                 COMPUTATION_DOMAIN_SEPARATOR,
+1026 │ ┃                 op,
+     ‡ ┃
+1034 │ ┃         );
+     │ ┗━━━━━━━━━┛
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+     ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:1051:18
+     │
+1051 │           result = keccak256(
+     │ ┏━━━━━━━━━━━━━━━━━━┛
+1052 │ ┃             abi.encodePacked(
+1053 │ ┃                 COMPUTATION_DOMAIN_SEPARATOR,
+1054 │ ┃                 op,
+     ‡ ┃
+1063 │ ┃         );
+     │ ┗━━━━━━━━━┛
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[weak-prng]: weak randomness derived from a predictable on-chain value
+     ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:1071:13
+     │
+1071 │ ┏             keccak256(
+1072 │ ┃                 abi.encodePacked(
+1073 │ ┃                     SEED_DOMAIN_SEPARATOR,
+1074 │ ┃                     $.counterRand,
+     ‡ ┃
+1080 │ ┃             )
+     │ ┗━━━━━━━━━━━━━┛
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/weak-prng
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/v0.12.0/host-contracts/contracts/ACL.sol:466:13
+    │
+466 │             userDecryptionDelegation.expirationDate >= block.timestamp;
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:266:9
+    │
+266 │         emit FheRem(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/ACL.sol:500:9
+    │
+500 │         emit BlockedAccount(account);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[ecrecover]: `ecrecover` call does not reject malleable signatures
+    ╭▸ src/v0.13.0/cleartext/CleartextKMSVerifier.sol:309:35
+    │
+309 │         address recoveredSigner = ecrecover(digest, v, r, s);
+    │                                   ━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/ecrecover
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/ACL.sol:513:9
+    │
+513 │         emit UnblockedAccount(account);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+    ╭▸ src/v0.12.0/host-contracts/contracts/ACL.sol:552:17
+    │
+552 │ ┏                 abi.encodePacked(
+553 │ ┃                     CONTRACT_NAME,
+554 │ ┃                     " v",
+555 │ ┃                     Strings.toString(MAJOR_VERSION),
+    ‡ ┃
+559 │ ┃                     Strings.toString(PATCH_VERSION)
+560 │ ┃                 )
+    │ ┗━━━━━━━━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/v0.13.0/cleartext/CleartextKMSVerifier.sol:333:18
+    │
+333 │             if (!authorized) {
+    │                  ━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/cleartext/CleartextKMSVerifier.sol:334:17
+    │
+334 │                 revert ContractAddressNotAuthorized(c);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:287:9
+    │
+287 │         emit FheBitAnd(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/cleartext/CleartextACL.sol:113:13
+    │
+113 │             revert CleartextACLTransientNotSet(handle);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/cleartext/CleartextACL.sol:216:17
+    │
+216 │                 revert HandleNotAllowedForPublicDecryption(handles[i]);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/cleartext/CleartextACL.sol:203:13
+    │
+203 │             revert CleartextACLCleartextNotSaved(handle);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:308:9
+    │
+308 │         emit FheBitOr(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+   ╭▸ src/v0.12.0/host-contracts/contracts/immutable/PauserSet.sol:59:17
+   │
+59 │ ┏                 abi.encodePacked(
+60 │ ┃                     CONTRACT_NAME,
+61 │ ┃                     " v",
+62 │ ┃                     Strings.toString(MAJOR_VERSION),
+   ‡ ┃
+66 │ ┃                     Strings.toString(PATCH_VERSION)
+67 │ ┃                 )
+   │ ┗━━━━━━━━━━━━━━━━━┛
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/cleartext/CleartextACL.sol:234:17
+    │
+234 │                 revert UserAddressEqualsContractAddress();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/cleartext/CleartextACL.sol:237:17
+    │
+237 │                 revert UserNotAuthorizedForDecrypt(h, userAddress);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/cleartext/CleartextACL.sol:240:17
+    │
+240 │                 revert ContractNotAuthorizedForDecrypt(h, c);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+   ╭▸ src/v0.12.0/cleartext/CleartextFHEVMExecutor.sol:65:9
+   │
+65 │         emit Cast(msg.sender, ct, toType, result);
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/cleartext/CleartextACL.sol:258:17
+    │
+258 │                 revert HandleNotDelegatedForUserDecryption(h, c, delegator, delegate);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:203:9
+    │
+203 │         emit FheAdd(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:329:9
+    │
+329 │         emit FheBitXor(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+   ╭▸ src/v0.12.0/cleartext/CleartextFHEVMExecutor.sol:82:9
+   │
+82 │         emit TrivialEncrypt(msg.sender, pt, toType, result);
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/InputVerifier.sol:197:9
+    │
+197 │         emit NewContextSet(newSignersSet, newThreshold);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:222:9
+    │
+222 │         emit FheSub(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/cleartext/CleartextFHEVMExecutor.sol:110:9
+    │
+110 │         emit VerifyInput(msg.sender, inputHandle, userAddress, inputProof, inputType, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:241:9
+    │
+241 │         emit FheMul(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:349:9
+    │
+349 │         emit FheShl(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/host-contracts/contracts/InputVerifier.sol:188:17
+    │
+188 │                 revert CoprocessorSignerNull();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/host-contracts/contracts/InputVerifier.sol:191:17
+    │
+191 │                 revert CoprocessorAlreadySigner();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/InputVerifier.sol:208:9
+    │
+208 │         emit NewContextSet($.signers, threshold);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:262:9
+    │
+262 │         emit FheDiv(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:369:9
+    │
+369 │         emit FheShr(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+   ╭▸ src/v0.13.0/host-contracts/contracts/immutable/PauserSet.sol:60:17
+   │
+60 │ ┏                 abi.encodePacked(
+61 │ ┃                     CONTRACT_NAME,
+62 │ ┃                     " v",
+63 │ ┃                     Strings.toString(MAJOR_VERSION),
+   ‡ ┃
+67 │ ┃                     Strings.toString(PATCH_VERSION)
+68 │ ┃                 )
+   │ ┗━━━━━━━━━━━━━━━━━┛
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:283:9
+    │
+283 │         emit FheRem(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:276:9
+    │
+276 │         emit PrepKeygenRequest(prepKeygenId, paramsType, extraData);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:389:9
+    │
+389 │         emit FheRotl(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:304:9
+    │
+304 │         emit FheBitAnd(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/InputVerifier.sol:202:9
+    │
+202 │         emit NewContextSet(newSignersSet, newThreshold);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:409:9
+    │
+409 │         emit FheRotr(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSVerifier.sol:256:17
+    │
+256 │ ┏                 abi.encodePacked(
+257 │ ┃                     CONTRACT_NAME,
+258 │ ┃                     " v",
+259 │ ┃                     Strings.toString(MAJOR_VERSION),
+    ‡ ┃
+263 │ ┃                     Strings.toString(PATCH_VERSION)
+264 │ ┃                 )
+    │ ┗━━━━━━━━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:312:9
+    │
+312 │         emit PrepKeygenResponse(prepKeygenId, signature, msg.sender);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:325:13
+    │
+325 │             emit KeygenRequest(prepKeygenId, keyId, extraData);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:325:9
+    │
+325 │         emit FheBitOr(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSVerifier.sol:352:34
+    │
+352 │                 recoveredSigners[uniqueValidCount] = signerRecovered;
+    │                                  ━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:431:9
+    │
+431 │         emit FheEq(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[calls-loop]: external call inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSVerifier.sol:348:18
+    │
+348 │             if (!PROTOCOL_CONFIG.isKmsSignerForContext(kmsContextId, signerRecovered)) {
+    │                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/calls-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSVerifier.sol:349:17
+    │
+349 │                 revert KMSInvalidSigner(signerRecovered);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:346:9
+    │
+346 │         emit FheBitXor(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/InputVerifier.sol:193:17
+    │
+193 │                 revert CoprocessorSignerNull();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/InputVerifier.sol:196:17
+    │
+196 │                 revert CoprocessorAlreadySigner();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:453:9
+    │
+453 │         emit FheNe(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/InputVerifier.sol:213:9
+    │
+213 │         emit NewContextSet($.signers, threshold);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:366:9
+    │
+366 │         emit FheShl(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:376:9
+    │
+376 │         emit KeygenResponse(keyId, keyDigests, signature, msg.sender);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:400:13
+    │
+400 │             emit ActivateKey(keyId, consensusUrls, keyDigests);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:435:9
+    │
+435 │         emit CrsgenRequest(crsId, maxBitLength, paramsType, extraData);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:472:9
+    │
+472 │         emit FheGe(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:386:9
+    │
+386 │         emit FheShr(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/ProtocolConfig.sol:308:9
+    │
+308 │         emit NewKmsContext(newContextId, kmsNodes, thresholds);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:406:9
+    │
+406 │         emit FheRotl(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:491:9
+    │
+491 │         emit FheGt(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ src/v0.12.0/host-contracts/contracts/HCULimit.sol:1681:9
+     │
+1681 │         emit HCUPerBlockSet(hcuPerBlock);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:476:9
+    │
+476 │         emit CrsgenResponse(crsId, crsDigest, signature, msg.sender);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ src/v0.12.0/host-contracts/contracts/HCULimit.sol:1706:9
+     │
+1706 │         emit MaxHCUPerTxSet(maxHCUPerTx);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:494:13
+    │
+494 │             emit ActivateCrs(crsId, consensusUrls, crsDigest);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ src/v0.12.0/host-contracts/contracts/HCULimit.sol:1693:9
+     │
+1693 │         emit MaxHCUDepthPerTxSet(maxHCUDepthPerTx);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:426:9
+    │
+426 │         emit FheRotr(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/ProtocolConfig.sol:146:9
+    │
+146 │         emit KmsContextDestroyed(kmsContextId);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:521:9
+    │
+521 │         emit AbortKeygen(prepKeygenId);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:510:9
+    │
+510 │         emit FheLe(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:539:9
+    │
+539 │         emit AbortCrsgen(crsId);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+    ╭▸ src/v0.13.0/host-contracts/contracts/ProtocolConfig.sol:248:17
+    │
+248 │ ┏                 abi.encodePacked(
+249 │ ┃                     CONTRACT_NAME,
+250 │ ┃                     " v",
+251 │ ┃                     Strings.toString(MAJOR_VERSION),
+    ‡ ┃
+255 │ ┃                     Strings.toString(PATCH_VERSION)
+256 │ ┃                 )
+    │ ┗━━━━━━━━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/ProtocolConfig.sol:284:17
+    │
+284 │                 revert KmsNodeNullTxSender();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/ProtocolConfig.sol:287:17
+    │
+287 │                 revert KmsNodeNullSigner();
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/ProtocolConfig.sol:290:17
+    │
+290 │                 revert KmsTxSenderAlreadyRegistered(node.txSenderAddress);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/ProtocolConfig.sol:293:17
+    │
+293 │                 revert KmsSignerAlreadyRegistered(node.signerAddress);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:448:9
+    │
+448 │         emit FheEq(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/v0.12.0/host-contracts/contracts/InputVerifier.sol:322:17
+    │
+322 │                 element |= uint256(uint8(inputProof[2 + indexHandle * 32 + j])) << (8 * (31 - j));
+    │                 ━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:680:17
+    │
+680 │ ┏                 abi.encodePacked(
+681 │ ┃                     CONTRACT_NAME,
+682 │ ┃                     " v",
+683 │ ┃                     Strings.toString(MAJOR_VERSION),
+    ‡ ┃
+687 │ ┃                     Strings.toString(PATCH_VERSION)
+688 │ ┃                 )
+    │ ┗━━━━━━━━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:529:9
+    │
+529 │         emit FheLt(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/host-contracts/contracts/InputVerifier.sol:286:64
+    │
+286 │                 if (uint8(uint256(element)) != HANDLE_VERSION) revert InvalidHandleVersion();
+    │                                                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:470:9
+    │
+470 │         emit FheNe(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[calls-loop]: external call inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:848:23
+    │
+848 │             urls[i] = PROTOCOL_CONFIG.getKmsNodeForContext(contextId, consensusTxSenders[i]).storageUrl;
+    │                       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/calls-loop
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+    ╭▸ src/v0.12.0/host-contracts/contracts/InputVerifier.sol:374:17
+    │
+374 │ ┏                 abi.encodePacked(
+375 │ ┃                     CONTRACT_NAME,
+376 │ ┃                     " v",
+377 │ ┃                     Strings.toString(MAJOR_VERSION),
+    ‡ ┃
+381 │ ┃                     Strings.toString(PATCH_VERSION)
+382 │ ┃                 )
+    │ ┗━━━━━━━━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:548:9
+    │
+548 │         emit FheMin(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:489:9
+    │
+489 │         emit FheGe(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/v0.12.0/host-contracts/contracts/InputVerifier.sol:463:34
+    │
+463 │                 recoveredSigners[uniqueValidCount] = signerRecovered;
+    │                                  ━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.12.0/host-contracts/contracts/InputVerifier.sol:460:17
+    │
+460 │                 revert InvalidSigner(signerRecovered);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:567:9
+    │
+567 │         emit FheMax(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:508:9
+    │
+508 │         emit FheGt(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[calls-loop]: external call inside a loop
+     ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:1040:30
+     │
+1040 │             address signer = PROTOCOL_CONFIG.getKmsNodeForContext(contextId, txSender).signerAddress;
+     │                              ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/calls-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:585:9
+    │
+585 │         emit FheNeg(msg.sender, ct, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[calls-loop]: external call inside a loop
+     ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:1071:18
+     │
+1071 │             if (!PROTOCOL_CONFIG.isKmsTxSenderForContext(contextId, txSender)) {
+     │                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/calls-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:527:9
+    │
+527 │         emit FheLe(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+     ╭▸ src/v0.13.0/host-contracts/contracts/KMSGeneration.sol:1072:17
+     │
+1072 │                 revert UnknownMigrationConsensusTxSender(requestId, txSender);
+     │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:604:9
+    │
+604 │         emit FheNot(msg.sender, ct, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:546:9
+    │
+546 │         emit FheLt(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/v0.13.0/host-contracts/contracts/InputVerifier.sol:327:17
+    │
+327 │                 element |= uint256(uint8(inputProof[2 + indexHandle * 32 + j])) << (8 * (31 - j));
+    │                 ━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:626:9
+    │
+626 │         emit FheIfThenElse(msg.sender, control, ifTrue, ifFalse, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/InputVerifier.sol:291:64
+    │
+291 │                 if (uint8(uint256(element)) != HANDLE_VERSION) revert InvalidHandleVersion();
+    │                                                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:565:9
+    │
+565 │         emit FheMin(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+    ╭▸ src/v0.13.0/host-contracts/contracts/InputVerifier.sol:379:17
+    │
+379 │ ┏                 abi.encodePacked(
+380 │ ┃                     CONTRACT_NAME,
+381 │ ┃                     " v",
+382 │ ┃                     Strings.toString(MAJOR_VERSION),
+    ‡ ┃
+386 │ ┃                     Strings.toString(PATCH_VERSION)
+387 │ ┃                 )
+    │ ┗━━━━━━━━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:637:9
+    │
+637 │         emit FheRand(msg.sender, randType, seed, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[uninitialized-local]: local variable is read before being initialized
+    ╭▸ src/v0.13.0/host-contracts/contracts/InputVerifier.sol:468:34
+    │
+468 │                 recoveredSigners[uniqueValidCount] = signerRecovered;
+    │                                  ━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/v0.13.0/host-contracts/contracts/InputVerifier.sol:465:17
+    │
+465 │                 revert InvalidSigner(signerRecovered);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:584:9
+    │
+584 │         emit FheMax(msg.sender, lhs, rhs, scalarByte, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:649:9
+    │
+649 │         emit FheRandBounded(msg.sender, upperBound, randType, seed, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:602:9
+    │
+602 │         emit FheNeg(msg.sender, ct, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:682:9
+    │
+682 │         emit Cast(msg.sender, ct, toType, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:621:9
+    │
+621 │         emit FheNot(msg.sender, ct, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:706:9
+    │
+706 │         emit TrivialEncrypt(msg.sender, pt, toType, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:731:9
+    │
+731 │         emit VerifyInput(msg.sender, inputHandle, userAddress, inputProof, inputType, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:643:9
+    │
+643 │         emit FheIfThenElse(msg.sender, control, ifTrue, ifFalse, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+    ╭▸ src/v0.12.0/host-contracts/contracts/FHEVMExecutor.sol:770:17
+    │
+770 │ ┏                 abi.encodePacked(
+771 │ ┃                     CONTRACT_NAME,
+772 │ ┃                     " v",
+773 │ ┃                     Strings.toString(MAJOR_VERSION),
+    ‡ ┃
+777 │ ┃                     Strings.toString(PATCH_VERSION)
+778 │ ┃                 )
+    │ ┗━━━━━━━━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:654:9
+    │
+654 │         emit FheRand(msg.sender, randType, seed, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:666:9
+    │
+666 │         emit FheRandBounded(msg.sender, upperBound, randType, seed, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:689:9
+    │
+689 │         emit FheSum(msg.sender, values, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:724:9
+    │
+724 │         emit FheIsIn(msg.sender, value, values, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:768:9
+    │
+768 │         emit Cast(msg.sender, ct, toType, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:803:9
+    │
+803 │         emit TrivialEncrypt(msg.sender, pt, toType, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:828:9
+    │
+828 │         emit VerifyInput(msg.sender, inputHandle, userAddress, inputProof, inputType, result);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+    ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:867:17
+    │
+867 │ ┏                 abi.encodePacked(
+868 │ ┃                     CONTRACT_NAME,
+869 │ ┃                     " v",
+870 │ ┃                     Strings.toString(MAJOR_VERSION),
+    ‡ ┃
+874 │ ┃                     Strings.toString(PATCH_VERSION)
+875 │ ┃                 )
+    │ ┗━━━━━━━━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[calls-loop]: external call inside a loop
+     ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:1020:18
+     │
+1020 │             if (!ACL.isAllowed(values[i], msg.sender)) revert ACLNotAllowed(values[i], msg.sender);
+     │                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/calls-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+     ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:1020:56
+     │
+1020 │             if (!ACL.isAllowed(values[i], msg.sender)) revert ACLNotAllowed(values[i], msg.sender);
+     │                                                        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+     ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:1021:51
+     │
+1021 │             if (_typeOf(values[i]) != resultType) revert IncompatibleTypes();
+     │                                                   ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[calls-loop]: external call inside a loop
+     ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:1048:18
+     │
+1048 │             if (!ACL.isAllowed(values[i], msg.sender)) revert ACLNotAllowed(values[i], msg.sender);
+     │                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/calls-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+     ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:1048:56
+     │
+1048 │             if (!ACL.isAllowed(values[i], msg.sender)) revert ACLNotAllowed(values[i], msg.sender);
+     │                                                        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+     ╭▸ src/v0.13.0/host-contracts/contracts/FHEVMExecutor.sol:1049:50
+     │
+1049 │             if (_typeOf(values[i]) != valueType) revert IncompatibleTypes();
+     │                                                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ src/v0.13.0/host-contracts/contracts/HCULimit.sol:1631:9
+     │
+1631 │         emit BlockHCUWhitelistAdded(account);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ src/v0.13.0/host-contracts/contracts/HCULimit.sol:1642:9
+     │
+1642 │         emit BlockHCUWhitelistRemoved(account);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+     ╭▸ src/v0.13.0/host-contracts/contracts/HCULimit.sol:1861:17
+     │
+1861 │ ┏                 abi.encodePacked(
+1862 │ ┃                     CONTRACT_NAME,
+1863 │ ┃                     " v",
+1864 │ ┃                     Strings.toString(MAJOR_VERSION),
+     ‡ ┃
+1868 │ ┃                     Strings.toString(PATCH_VERSION)
+1869 │ ┃                 )
+     │ ┗━━━━━━━━━━━━━━━━━┛
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ src/v0.12.0/host-contracts/contracts/HCULimit.sol:1509:9
+     │
+1509 │         emit BlockHCUWhitelistAdded(account);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ src/v0.12.0/host-contracts/contracts/HCULimit.sol:1520:9
+     │
+1520 │         emit BlockHCUWhitelistRemoved(account);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[encode-packed-collision]: `abi.encodePacked()` called with multiple dynamic type arguments; hash collisions possible
+     ╭▸ src/v0.12.0/host-contracts/contracts/HCULimit.sol:1739:17
+     │
+1739 │ ┏                 abi.encodePacked(
+1740 │ ┃                     CONTRACT_NAME,
+1741 │ ┃                     " v",
+1742 │ ┃                     Strings.toString(MAJOR_VERSION),
+     ‡ ┃
+1746 │ ┃                     Strings.toString(PATCH_VERSION)
+1747 │ ┃                 )
+     │ ┗━━━━━━━━━━━━━━━━━┛
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/encode-packed-collision
+
+warning[inconsistent-type-names]: contract mixes shorthand and explicit integer type names; use `uint256` and `int256` consistently
+    ╭▸ src/v0.12.0/host-contracts/contracts/InputVerifier.sol:308:18
+    │
+308 │             for (uint i = 0; i < extraDataSize; i++) {
+    │                  ━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/inconsistent-type-names
+
+warning[inconsistent-type-names]: contract mixes shorthand and explicit integer type names; use `uint256` and `int256` consistently
+    ╭▸ src/v0.12.0/host-contracts/contracts/KMSVerifier.sol:265:14
+    │
+265 │         for (uint i = 0; i < extraDataSize; i++) {
+    │              ━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/inconsistent-type-names
+
+warning[inconsistent-type-names]: contract mixes shorthand and explicit integer type names; use `uint256` and `int256` consistently
+    ╭▸ src/v0.13.0/host-contracts/contracts/InputVerifier.sol:313:18
+    │
+313 │             for (uint i = 0; i < extraDataSize; i++) {
+    │                  ━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/inconsistent-type-names
+
+warning[inconsistent-type-names]: contract mixes shorthand and explicit integer type names; use `uint256` and `int256` consistently
+    ╭▸ src/v0.13.0/host-contracts/contracts/KMSVerifier.sol:169:14
+    │
+169 │         for (uint i = 0; i < extraDataSize; i++) {
+    │              ━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/inconsistent-type-names
+

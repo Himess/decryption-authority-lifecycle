@@ -1,0 +1,16 @@
+date=2026-10-23T05:56:21Z host=VPS nproc=4 kernel=6.8.0-139-generic
+harness HEAD=ed851716c9a6b799996a23399ece2858336f96db pristine HEAD=ed851716c9a6b799996a23399ece2858336f96db
+== diff -rq pristine vs harness kms-connector, excluding directories named 'tests'
+IDENTICAL
+tree-sha256 crates/kms-worker/src (excluding ./tests): harness=8718ddd7d46f5d16134e5a0d63d8decf71bd094e7c62abef70fad11c6bd830c7 pristine=8718ddd7d46f5d16134e5a0d63d8decf71bd094e7c62abef70fad11c6bd830c7 EQUAL
+tree-sha256 crates/utils/src (excluding ./tests): harness=5c6b4fa4535f57a638aa676c1deac9ae311cd1b148415da3ab576a56c08080e0 pristine=5c6b4fa4535f57a638aa676c1deac9ae311cd1b148415da3ab576a56c08080e0 EQUAL
+== harness inputs
+be9d4734365dfebeb0f49f5e26cf58f15f7be164aa272120615e35d8b719eeaa  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_p02_decision_lag.rs
+f77d80a57ae7025c22f79d9a6cd3eeba9ec9159aaee32b8829a82056ec19355a  /srv/lifecycle/harness/level0/base_acl_main.json
+b6c9361d70ab108e773dfaea81183fb4428e333a32ec47878c46cb289153b2b7  /srv/lifecycle/harness/level0/level0_acl_main.json
+4605658bedb1872fb595ea9ac6f4094cab169adacb4094480f63b278b694797d  /srv/lifecycle/harness/level0/level0_acl_v0.13.8.json
+c535fb0cbf87776524f6f968f169e504853b1bc5b91f4792a5b9c58df1151bad  /srv/lifecycle/harness/sol/src/DappStub.sol
+613348ca2fe17f2d8057247a6476617b8d7dac24a68ab6438eb854b049bc7b08  /srv/lifecycle/harness/sol/src/ExecutorStub.sol
+37d0516d3e7c123bbf981774a2ab5ae26d25c5f61e53b23584aa81bcb97034ff  /srv/lifecycle/harness/sol/src/Proxy.sol
+46aa3b639ade6877794a18349339cee9fd452b2c7a5bde6a6e3049885653efa8  /srv/lifecycle/scripts/fault_proxy_v2.py
+87fec3231c0e225e3a4252827dfe7d058518fbbecdf3950d40f345afc5a870fd  /srv/lifecycle/scripts/run_p02.sh

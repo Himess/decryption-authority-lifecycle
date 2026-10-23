@@ -1,0 +1,6055 @@
+{
+ "fixture": "TC13",
+ "rows": [
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.control",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.http-503",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.drop",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.delay",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.short",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.revert-data",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.isAllowed.intermittent",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.control",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.http-503",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.drop",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.delay",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.short",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.revert-data",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.isAllowed.intermittent",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.control",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.http-503",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.drop",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.delay",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.short",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.revert-data",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.allowed.decryptionSignatureInvalidatedBefore.intermittent",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.control",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.http-503",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.drop",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.delay",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.short",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.revert-data",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-direct.retired.decryptionSignatureInvalidatedBefore.intermittent",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.control",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.http-503",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.drop",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.delay",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.short",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.revert-data",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.intermittent",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.control",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.http-503",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.drop",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.delay",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.short",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.revert-data",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.isHandleDelegatedForUserDecryption.intermittent",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.control",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.http-503",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.drop",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.delay",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.short",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.revert-data",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.allowed.decryptionSignatureInvalidatedBefore.intermittent",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.control",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.http-503",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.drop",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.delay",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.short",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.revert-data",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.legacy-delegated.retired.decryptionSignatureInvalidatedBefore.intermittent",
+   "line": "main",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.control",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.http-503",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.drop",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.delay",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.short",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.revert-data",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.isAllowed.intermittent",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.control",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.http-503",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.drop",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.delay",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.short",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.revert-data",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.isAllowed.intermittent",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.control",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.http-503",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.drop",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.delay",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.short",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.revert-data",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.allowed.decryptionSignatureInvalidatedBefore.intermittent",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.control",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.http-503",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.drop",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.delay",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.short",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.revert-data",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.v2-direct.retired.decryptionSignatureInvalidatedBefore.intermittent",
+   "line": "main",
+   "request": {
+    "path": "v2-direct",
+    "describes": "RFC-016 user decryption; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-direct",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.control",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.http-503",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.drop",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.delay",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.short",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.revert-data",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.isHandleDelegatedForUserDecryption.intermittent",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.control",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.http-503",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.drop",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.delay",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.short",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.revert-data",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.isHandleDelegatedForUserDecryption.intermittent",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.control",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.http-503",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.drop",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.delay",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.short",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.revert-data",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.allowed.decryptionSignatureInvalidatedBefore.intermittent",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "allowed",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.control",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.http-503",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.drop",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.delay",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.short",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.revert-data",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.v2-delegated.retired.decryptionSignatureInvalidatedBefore.intermittent",
+   "line": "main",
+   "request": {
+    "path": "v2-delegated",
+    "describes": "RFC-016 delegated user decryption; the subject is the owner"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "decryptionSignatureInvalidatedBefore",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-delegated",
+    "subject": "retired",
+    "view": "decryptionSignatureInvalidatedBefore",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.control",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.http-503",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.drop",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.delay",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.short",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.revert-data",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.allowed.isAllowed.intermittent",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.control",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.jsonrpc-error",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.http-503",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.drop",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.delay",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.malformed-json",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.empty-0x",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.short",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.revert-data",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.revert-nodata",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.main.v2-http-direct.retired.isAllowed.intermittent",
+   "line": "main",
+   "request": {
+    "path": "v2-http-direct",
+    "describes": "RFC-016 user decryption over the connector's HTTP endpoint; the subject is the signer"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "v2-http-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.control",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.jsonrpc-error",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.http-503",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.drop",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.delay",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.malformed-json",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.empty-0x",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.short",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.revert-data",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.revert-nodata",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.allowed.isAllowed.intermittent",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "allowed",
+    "view": "isAllowed",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.control",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.jsonrpc-error",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.http-503",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.drop",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.delay",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.malformed-json",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.empty-0x",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.short",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.revert-data",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.revert-nodata",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-direct.retired.isAllowed.intermittent",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "describes": "gateway (legacy) user decryption; the subject is the user"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isAllowed",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-direct",
+    "subject": "retired",
+    "view": "isAllowed",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.control",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.jsonrpc-error",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.http-503",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.drop",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.delay",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.malformed-json",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.empty-0x",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.short",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.revert-data",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.revert-nodata",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.allowed.isHandleDelegatedForUserDecryption.intermittent",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "any",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "allowed",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "intermittent"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.control",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "control",
+     "describes": "no fault"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "control"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.jsonrpc-error",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "jsonrpc-error",
+     "describes": "a JSON-RPC error object"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "jsonrpc-error"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.http-503",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "http-503",
+     "describes": "HTTP 503"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "http-503"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.drop",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "drop",
+     "describes": "the connection is closed without an answer"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "drop"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.delay",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "delay",
+     "describes": "the answer arrives after the call's timeout"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "delay"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.malformed-json",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "malformed-json",
+     "describes": "a body that is not JSON"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "malformed-json"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.empty-0x",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "empty-0x",
+     "describes": "result 0x"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "empty-0x"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.short",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "short",
+     "describes": "a result shorter than one word"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "short"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.revert-data",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-data",
+     "describes": "a revert with data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-data"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.revert-nodata",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "revert-nodata",
+     "describes": "a revert without data"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "revert-nodata"
+   }
+  },
+  {
+   "id": "tc13.v0.13.8.legacy-delegated.retired.isHandleDelegatedForUserDecryption.intermittent",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-delegated",
+    "describes": "gateway (legacy) delegated user decryption; the subject is the delegator"
+   },
+   "chain_state": {
+    "subject": "granted and delegating, then retired",
+    "fault": {
+     "view": "isHandleDelegatedForUserDecryption",
+     "kind": "intermittent",
+     "describes": "every other call fails"
+    }
+   },
+   "rule": "V1",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "TC13-RESULT",
+    "path": "legacy-delegated",
+    "subject": "retired",
+    "view": "isHandleDelegatedForUserDecryption",
+    "fault": "intermittent"
+   }
+  }
+ ]
+}

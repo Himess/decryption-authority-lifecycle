@@ -1,0 +1,739 @@
+From 02e484de018fec1f3806b3495a26ed7408c758ac Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 17:34:37 +0300
+Subject: [PATCH 5/8] test(host-contracts): Profile A ERC-7984 variant and TC23
+ tests (lifecycle Level 2)
+
+A local Profile A variant of OpenZeppelin ERC-7984 0.5.3 with the observer
+extension (vendored test-only copy, ported by the lifecycle port script),
+next to the variants without it:
+
+- A1: setObserver(account, X) reverts if X != 0 and account is retired,
+  so a retired owner can clear a thief-added observer and nobody can add
+  one again. setOperator(op, until) reverts if until >= block.timestamp
+  and the caller is retired: ERC-7984 operators are valid while
+  block.timestamp <= until, so until == now is a grant too.
+- A2: transfers to and from a retired account succeed.
+- A3: a token asserting the recipient's access after granting breaks
+  every transfer to a retired account.
+- A4: a generic-call path refuses the registry's lifecycle functions and
+  its caller-preserving multicall; without it, the path can retire the
+  contract or hand it to a successor.
+- Asserted residuals: the vanilla observer keeps leaking after
+  retirement; a naive gate locks the thief's observer in (D22).
+- Gas of the A1 gates with cold state.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../test/acl/ACLRetirementProfileA.t.sol      | 442 ++++++++++++++++++
+ .../test/acl/retirement/ProfileAMocks.sol     | 177 +++++++
+ .../extensions/ERC7984ObserverAccess.sol      |  67 +++
+ 3 files changed, 686 insertions(+)
+ create mode 100644 host-contracts/test/acl/ACLRetirementProfileA.t.sol
+ create mode 100644 host-contracts/test/acl/retirement/ProfileAMocks.sol
+ create mode 100644 host-contracts/test/acl/retirement/oz-confidential-contracts-0.5.3/token/ERC7984/extensions/ERC7984ObserverAccess.sol
+
+diff --git a/host-contracts/test/acl/ACLRetirementProfileA.t.sol b/host-contracts/test/acl/ACLRetirementProfileA.t.sol
+new file mode 100644
+index 00000000..ee830500
+--- /dev/null
++++ b/host-contracts/test/acl/ACLRetirementProfileA.t.sol
+@@ -0,0 +1,442 @@
++// SPDX-License-Identifier: BSD-3-Clause-Clear
++pragma solidity ^0.8.24;
++
++import {MulticallUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/MulticallUpgradeable.sol";
++import {ACL} from "../../contracts/ACL.sol";
++import {FheType} from "../../contracts/shared/FheType.sol";
++import {HostContractsDeployerTestUtils} from "../../fhevm-foundry/HostContractsDeployerTestUtils.sol";
++import {aclAdd, inputVerifierAdd} from "../../addresses/FHEVMHostAddresses.sol";
++import {euint64, externalEuint64} from "../../lib/FHE.sol";
++import {ERC7984} from "./retirement/oz-confidential-contracts-0.5.3/token/ERC7984/ERC7984.sol";
++import {ERC7984ObserverAccess} from "./retirement/oz-confidential-contracts-0.5.3/token/ERC7984/extensions/ERC7984ObserverAccess.sol";
++import {ERC7984ObserverToken, ERC7984ProfileAToken, ERC7984NaiveGateToken, ERC7984PostGrantAssertToken, ProfileAMockInputVerifier, GenericCallVault, GenericCallVaultProfileA, RetirementHelperReader} from "./retirement/ProfileAMocks.sol";
++
++/**
++ * @title ACLRetirementProfileATest
++ * @notice Level 2, Profile A (applications) of the Decryption Authority Lifecycle draft: TC23 (rules A1-A4) on
++ *         ACL v0.9.0, with OpenZeppelin ERC-7984 0.5.3 and its observer extension (vendored test-only copies), and
++ *         the library helper `FHE.isAccountRetired`. Each Profile A rule is shown next to the variant without it.
++ *         The key of `holder` is compromised in the observer and operator tests: the owner and the thief both sign
++ *         as `holder`, so `vm.prank(holder)` stands for either of them.
++ */
++contract ACLRetirementProfileATest is HostContractsDeployerTestUtils {
++    ACL internal acl;
++    address internal aclImplementation;
++
++    address internal constant owner = address(456);
++
++    address internal holder = makeAddr("holder");
++    address internal sender = makeAddr("sender");
++    address internal thiefObserver = makeAddr("thiefObserver");
++    address internal thiefObserver2 = makeAddr("thiefObserver2");
++    address internal friendObserver = makeAddr("friendObserver");
++    address internal operator = makeAddr("operator");
++    address internal recipient = makeAddr("recipient");
++    address internal admin = makeAddr("admin");
++    address internal attacker = makeAddr("attacker");
++
++    ERC7984ObserverToken internal vanilla;
++    ERC7984ProfileAToken internal profileA;
++
++    function setUp() public {
++        (, aclImplementation) = _deployACL(owner);
++        _deployPauserSet();
++        _deployFHEVMExecutor(owner);
++        _deployHCULimit(owner);
++        acl = ACL(aclAdd);
++        vanilla = new ERC7984ObserverToken();
++        profileA = new ERC7984ProfileAToken();
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // helpers
++    ////////////////////////////////////////////////////////////////////////////
++
++    function _retire(address who) internal {
++        vm.prank(who);
++        acl.retireAccount();
++        assertTrue(acl.isAccountRetired(who));
++    }
++
++    function _balance(ERC7984ObserverToken token, address account) internal view returns (bytes32) {
++        return euint64.unwrap(token.confidentialBalanceOf(account));
++    }
++
++    /// @dev `sender` (never retired) is funded and sends its whole balance handle to `to`. Returns the transferred
++    ///      amount handle. The token's grants are persistent, so transient storage is cleaned around the call.
++    function _transferTo(ERC7984ObserverToken token, address to) internal returns (bytes32 transferred) {
++        token.mint(sender, 100);
++        acl.cleanTransientStorage();
++        bytes32 amount = _balance(token, sender);
++        vm.prank(sender);
++        transferred = euint64.unwrap(token.confidentialTransfer(to, euint64.wrap(amount)));
++        acl.cleanTransientStorage();
++    }
++
++    /// @dev A fresh input handle of type Uint64 (the mock input verifier accepts any proof).
++    function _freshInput(string memory seed) internal pure returns (bytes32) {
++        return
++            (keccak256(bytes(seed)) & 0xffffffffffffffffffffffffffffffffffffffffff0000000000000000000000) |
++            bytes32(uint256(uint8(FheType.Uint64)) << 8);
++    }
++
++    /// @dev The thief adds an observer while `holder` is still active, then the owner retires `holder`.
++    function _thiefObserverThenRetire(ERC7984ObserverToken token) internal returns (bytes32 balanceAtAdd) {
++        token.mint(holder, 1_000);
++        acl.cleanTransientStorage();
++        vm.prank(holder);
++        token.setObserver(holder, thiefObserver);
++        balanceAtAdd = _balance(token, holder);
++        assertTrue(acl.persistAllowed(balanceAtAdd, thiefObserver), "the observer reads the balance from the start");
++        _retire(holder);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // the library helper
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_Helper_FHEIsAccountRetiredFollowsTheRegistry() public {
++        RetirementHelperReader reader = new RetirementHelperReader();
++        assertFalse(reader.read(holder));
++        _retire(holder);
++        assertTrue(reader.read(holder));
++        assertFalse(reader.read(sender));
++    }
++
++    /// @dev Fails closed: against a registry without the lifecycle Core the helper reverts instead of answering false.
++    function test_Helper_RevertsAgainstARegistryWithoutCore() public {
++        RetirementHelperReader reader = new RetirementHelperReader();
++        vm.etch(aclAdd, address(new ProfileAMockInputVerifier()).code);
++        vm.expectRevert();
++        reader.read(holder);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // A1: observers (TC23 case 1, D22)
++    ////////////////////////////////////////////////////////////////////////////
++
++    /// @dev Profile A: the retired owner clears the thief's observer, and nobody can add one again. Inbound transfers
++    ///      afterwards reach no observer. What the observer read before the clear stays readable (not a clawback).
++    function test_A1_ThiefObserverClearedAndCannotBeReAdded() public {
++        bytes32 balanceAtAdd = _thiefObserverThenRetire(profileA);
++
++        vm.prank(holder);
++        profileA.setObserver(holder, address(0));
++        assertEq(profileA.observer(holder), address(0));
++
++        vm.prank(holder);
++        vm.expectRevert(abi.encodeWithSelector(ERC7984ProfileAToken.ERC7984GrantByRetiredAccount.selector, holder));
++        profileA.setObserver(holder, thiefObserver);
++        vm.prank(holder);
++        vm.expectRevert(abi.encodeWithSelector(ERC7984ProfileAToken.ERC7984GrantByRetiredAccount.selector, holder));
++        profileA.setObserver(holder, thiefObserver2);
++
++        bytes32 transferred = _transferTo(profileA, holder);
++        bytes32 balanceAfter = _balance(profileA, holder);
++        assertTrue(balanceAfter != balanceAtAdd, "the inbound transfer succeeded and changed the balance handle");
++        assertFalse(acl.persistAllowed(balanceAfter, thiefObserver), "no observer on the new balance");
++        assertFalse(acl.persistAllowed(transferred, thiefObserver), "no observer on the new amount");
++        assertTrue(acl.persistAllowed(balanceAtAdd, thiefObserver), "residual: the earlier grant stays");
++    }
++
++    /// @dev Clearing stays allowed for the observer itself, and an active account is not affected by the gate.
++    function test_A1_ObserverMayAbdicate_ActiveAccountUnaffected() public {
++        _thiefObserverThenRetire(profileA);
++        vm.prank(thiefObserver);
++        profileA.setObserver(holder, address(0));
++        assertEq(profileA.observer(holder), address(0));
++
++        profileA.mint(sender, 10);
++        vm.prank(sender);
++        profileA.setObserver(sender, friendObserver);
++        assertEq(profileA.observer(sender), friendObserver);
++        vm.prank(sender);
++        profileA.setObserver(sender, thiefObserver2);
++        assertEq(profileA.observer(sender), thiefObserver2);
++    }
++
++    /// @dev Asserted residual (the variant without Profile A): after retirement the thief adds an observer, which
++    ///      reads the current balance and every later amount. Clearing does not help: the thief adds it again.
++    function test_A1_Residual_VanillaObserverLeaksAfterRetirement() public {
++        vanilla.mint(holder, 1_000);
++        acl.cleanTransientStorage();
++        _retire(holder);
++
++        vm.prank(holder);
++        vanilla.setObserver(holder, thiefObserver);
++        assertTrue(acl.persistAllowed(_balance(vanilla, holder), thiefObserver), "leak: the current balance");
++
++        bytes32 transferred = _transferTo(vanilla, holder);
++        assertTrue(acl.persistAllowed(_balance(vanilla, holder), thiefObserver), "leak: the next balance");
++        assertTrue(acl.persistAllowed(transferred, thiefObserver), "leak: the next amount");
++
++        vm.prank(holder);
++        vanilla.setObserver(holder, address(0));
++        vm.prank(holder);
++        vanilla.setObserver(holder, thiefObserver);
++        assertEq(vanilla.observer(holder), thiefObserver, "the thief wins the clear-and-re-add race");
++    }
++
++    /// @dev D22: a naive gate that refuses every call for a retired account locks the thief's observer in. The retired
++    ///      owner cannot clear it, and every later amount reaches it.
++    function test_A1_D22_NaiveGateLocksInTheThiefObserver() public {
++        ERC7984NaiveGateToken naive = new ERC7984NaiveGateToken();
++        _thiefObserverThenRetire(naive);
++
++        vm.prank(holder);
++        vm.expectRevert(abi.encodeWithSelector(ERC7984NaiveGateToken.ERC7984AccountRetired.selector, holder));
++        naive.setObserver(holder, address(0));
++
++        bytes32 transferred = _transferTo(naive, holder);
++        assertTrue(acl.persistAllowed(_balance(naive, holder), thiefObserver), "the observer reads the next balance");
++        assertTrue(acl.persistAllowed(transferred, thiefObserver), "the observer reads the next amount");
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // A1: operators
++    ////////////////////////////////////////////////////////////////////////////
++
++    /// @dev ERC-7984 operators are valid while `block.timestamp <= until`, so `until == block.timestamp` grants
++    ///      operator status for the rest of the current timestamp. A gate on `until > block.timestamp` misses it.
++    function test_A1_OperatorUntilNowIsAGrant() public {
++        _retire(holder);
++        vm.prank(holder);
++        vanilla.setOperator(operator, uint48(block.timestamp));
++        assertTrue(vanilla.isOperator(holder, operator), "valid in the current block");
++        vm.warp(block.timestamp + 1);
++        assertFalse(vanilla.isOperator(holder, operator));
++    }
++
++    function test_A1_OperatorGate() public {
++        vm.warp(1_000_000);
++        vm.prank(holder);
++        profileA.setOperator(operator, uint48(block.timestamp + 1 days));
++        _retire(holder);
++        assertTrue(profileA.isOperator(holder, operator), "an operator set before retirement stays until revoked");
++
++        bytes memory refused = abi.encodeWithSelector(
++            ERC7984ProfileAToken.ERC7984GrantByRetiredAccount.selector,
++            holder
++        );
++        vm.prank(holder);
++        vm.expectRevert(refused);
++        profileA.setOperator(recipient, uint48(block.timestamp + 1 days));
++        vm.prank(holder);
++        vm.expectRevert(refused);
++        profileA.setOperator(recipient, uint48(block.timestamp));
++        vm.prank(holder);
++        vm.expectRevert(refused);
++        profileA.setOperator(operator, type(uint48).max);
++
++        vm.prank(holder);
++        profileA.setOperator(operator, 0);
++        assertFalse(profileA.isOperator(holder, operator), "revoking stays allowed");
++        vm.prank(holder);
++        profileA.setOperator(recipient, uint48(block.timestamp - 1));
++        assertFalse(profileA.isOperator(holder, recipient));
++
++        vm.prank(sender);
++        profileA.setOperator(operator, uint48(block.timestamp + 1 days));
++        assertTrue(profileA.isOperator(sender, operator), "an active holder is not affected");
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // A2: transfers (TC23 case 2)
++    ////////////////////////////////////////////////////////////////////////////
++
++    /// @dev Inbound: the transfer succeeds; the grant to the retired recipient is inert.
++    function test_A2_TransferToRetiredAccountSucceeds() public {
++        _retire(holder);
++        bytes32 transferred = _transferTo(profileA, holder);
++        bytes32 received = _balance(profileA, holder);
++        assertTrue(received != bytes32(0));
++        assertTrue(acl.persistAllowed(received, address(profileA)), "the token keeps access");
++        assertFalse(acl.persistAllowed(received, holder), "inert for the retired recipient");
++        assertFalse(acl.persistAllowed(transferred, holder));
++        assertTrue(acl.persistAllowed(transferred, sender));
++    }
++
++    /// @dev Outbound: Profile A adds no block. With a fresh input the retired account moves its funds, directly and
++    ///      through an operator it set while active (limit 2: oracle access only).
++    function test_A2_TransferFromRetiredAccountSucceeds() public {
++        vm.etch(inputVerifierAdd, address(new ProfileAMockInputVerifier()).code);
++        profileA.mint(holder, 1_000);
++        vm.prank(holder);
++        profileA.setOperator(operator, type(uint48).max);
++        acl.cleanTransientStorage();
++        _retire(holder);
++        bytes32 before = _balance(profileA, holder);
++
++        vm.prank(holder);
++        profileA.confidentialTransfer(recipient, externalEuint64.wrap(_freshInput("direct")), hex"01");
++        assertTrue(_balance(profileA, recipient) != bytes32(0));
++        assertTrue(_balance(profileA, holder) != before);
++
++        vm.prank(operator);
++        profileA.confidentialTransferFrom(holder, recipient, externalEuint64.wrap(_freshInput("operator")), hex"01");
++        acl.cleanTransientStorage();
++        assertTrue(acl.persistAllowed(_balance(profileA, recipient), recipient));
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // A3: no post-grant assertion
++    ////////////////////////////////////////////////////////////////////////////
++
++    /// @dev A token that asserts the recipient's access after granting breaks every transfer to a retired account.
++    ///      The Profile A token, which asserts nothing, accepts the same transfer.
++    function test_A3_PostGrantAssertionBreaksTransfersToRetiredAccounts() public {
++        ERC7984PostGrantAssertToken asserting = new ERC7984PostGrantAssertToken();
++        asserting.mint(sender, 100);
++        acl.cleanTransientStorage();
++        asserting.mint(recipient, 1);
++        acl.cleanTransientStorage();
++        _retire(holder);
++
++        bytes32 amount = _balance(asserting, sender);
++        vm.prank(sender);
++        vm.expectRevert(
++            abi.encodeWithSelector(ERC7984PostGrantAssertToken.ERC7984RecipientCannotUseBalance.selector, holder)
++        );
++        asserting.confidentialTransfer(holder, euint64.wrap(amount));
++
++        _transferTo(profileA, holder);
++        assertTrue(_balance(profileA, holder) != bytes32(0));
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // gas: the cost of the A1 gates
++    ////////////////////////////////////////////////////////////////////////////
++
++    /// @dev Execution gas of one call from `who`, with the token, the registry proxy and its implementation cold.
++    function _gasOf(address who, address target, bytes memory data) internal returns (uint256 used) {
++        vm.cool(target);
++        vm.cool(aclAdd);
++        vm.cool(aclImplementation);
++        vm.prank(who);
++        uint256 before = gasleft();
++        (bool ok, ) = target.call(data);
++        used = before - gasleft();
++        assertTrue(ok);
++    }
++
++    /// @dev The same call, by an active account, on the vanilla and the Profile A token. The difference is the gate:
++    ///      one `isAccountRetired` view through the registry proxy. The two tokens get different balance handles and
++    ///      different observers, so neither call writes a slot the other one wrote earlier in this test transaction.
++    function test_Gas_A1GateOverhead() public {
++        vm.warp(1_000_000);
++        vanilla.mint(holder, 1_000);
++        profileA.mint(holder, 1_001);
++        acl.cleanTransientStorage();
++        assertTrue(_balance(vanilla, holder) != _balance(profileA, holder));
++
++        bytes memory setOperator = abi.encodeCall(ERC7984.setOperator, (operator, uint48(block.timestamp + 1 days)));
++        uint256 operatorVanilla = _gasOf(holder, address(vanilla), setOperator);
++        uint256 operatorProfileA = _gasOf(holder, address(profileA), setOperator);
++        uint256 observerVanilla = _gasOf(
++            holder,
++            address(vanilla),
++            abi.encodeCall(ERC7984ObserverAccess.setObserver, (holder, friendObserver))
++        );
++        uint256 observerProfileA = _gasOf(
++            holder,
++            address(profileA),
++            abi.encodeCall(ERC7984ObserverAccess.setObserver, (holder, thiefObserver2))
++        );
++
++        emit log_named_uint("setOperator, vanilla", operatorVanilla);
++        emit log_named_uint("setOperator, Profile A", operatorProfileA);
++        emit log_named_uint("setObserver with a balance, vanilla", observerVanilla);
++        emit log_named_uint("setObserver with a balance, Profile A", observerProfileA);
++        emit log_named_uint("gate overhead, setOperator", operatorProfileA - operatorVanilla);
++        emit log_named_uint("gate overhead, setObserver", observerProfileA - observerVanilla);
++        assertGt(operatorProfileA, operatorVanilla);
++        assertGt(observerProfileA, observerVanilla);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // A4: generic calls
++    ////////////////////////////////////////////////////////////////////////////
++
++    /// @dev Without A4, the generic-call path retires the contract itself: its handles are bricked (it can no longer
++    ///      share them, and the views refuse it). The registry's multicall reaches the same function.
++    function test_A4_Residual_GenericCallRetiresTheContract() public {
++        GenericCallVault vault = new GenericCallVault(admin);
++        euint64 h = vault.store(7);
++        acl.cleanTransientStorage();
++        assertTrue(acl.persistAllowed(euint64.unwrap(h), address(vault)));
++
++        vm.prank(admin);
++        vault.execute(aclAdd, abi.encodeCall(ACL.retireAccount, ()));
++        assertTrue(acl.isAccountRetired(address(vault)));
++        assertFalse(acl.persistAllowed(euint64.unwrap(h), address(vault)), "the vault's handles are bricked");
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, address(vault)));
++        vault.share(h, recipient);
++
++        GenericCallVault vault2 = new GenericCallVault(admin);
++        bytes[] memory calls = new bytes[](1);
++        calls[0] = abi.encodeCall(ACL.retireAccount, ());
++        vm.prank(admin);
++        vault2.execute(aclAdd, abi.encodeCall(MulticallUpgradeable.multicall, (calls)));
++        assertTrue(acl.isAccountRetired(address(vault2)), "multicall keeps the vault as msg.sender");
++    }
++
++    /// @dev Without A4, the same path designates an attacker as the contract's successor, confirms it after the delay
++    ///      and retires the contract. The delegated view then answers true for (vault, attacker) on the vault's handle,
++    ///      in the context of an app the vault shared it with.
++    function test_A4_Residual_GenericCallHandsTheContractToASuccessor() public {
++        GenericCallVault vault = new GenericCallVault(admin);
++        address app = makeAddr("app");
++        euint64 h = vault.store(7);
++        vault.share(h, app);
++        acl.cleanTransientStorage();
++        assertFalse(acl.isHandleDelegatedForUserDecryption(address(vault), attacker, app, euint64.unwrap(h)));
++
++        vm.prank(admin);
++        vault.execute(aclAdd, abi.encodeCall(ACL.designateSuccessor, (attacker)));
++        vm.prank(attacker);
++        acl.acceptSuccession(address(vault));
++        vm.warp(block.timestamp + acl.successorDelayOf(address(vault)));
++        vm.prank(admin);
++        vault.execute(aclAdd, abi.encodeCall(ACL.confirmSuccessor, ()));
++        vm.prank(admin);
++        vault.execute(aclAdd, abi.encodeCall(ACL.retireAccount, ()));
++
++        assertEq(acl.successorOf(address(vault)), attacker);
++        assertTrue(
++            acl.isHandleDelegatedForUserDecryption(address(vault), attacker, app, euint64.unwrap(h)),
++            "the attacker reads as the vault's successor"
++        );
++    }
++
++    /// @dev Profile A (A4): the generic-call path refuses every lifecycle function on the registry, and its multicall.
++    ///      Other registry calls and calls to other targets still go through.
++    function test_A4_ProfileARefusesLifecycleCalls() public {
++        GenericCallVaultProfileA vault = new GenericCallVaultProfileA(admin);
++        bytes[] memory calls = new bytes[](1);
++        calls[0] = abi.encodeCall(ACL.retireAccount, ());
++        bytes[8] memory refused = [
++            abi.encodeCall(ACL.retireAccount, ()),
++            abi.encodeCall(ACL.designateSuccessor, (attacker)),
++            abi.encodeCall(ACL.acceptSuccession, (attacker)),
++            abi.encodeCall(ACL.cancelSuccessorDesignation, ()),
++            abi.encodeCall(ACL.confirmSuccessor, ()),
++            abi.encodeCall(ACL.resignSuccession, (attacker)),
++            abi.encodeCall(ACL.raiseSuccessorDelay, (uint64(30 days))),
++            abi.encodeCall(MulticallUpgradeable.multicall, (calls))
++        ];
++        for (uint256 i = 0; i < refused.length; i++) {
++            vm.prank(admin);
++            vm.expectRevert(
++                abi.encodeWithSelector(GenericCallVaultProfileA.LifecycleCallRefused.selector, bytes4(refused[i]))
++            );
++            vault.execute(aclAdd, refused[i]);
++        }
++        assertFalse(acl.isAccountRetired(address(vault)));
++
++        euint64 h = vault.store(7);
++        acl.cleanTransientStorage();
++        vm.prank(admin);
++        vault.execute(aclAdd, abi.encodeCall(ACL.allow, (euint64.unwrap(h), recipient)));
++        assertTrue(acl.persistAllowed(euint64.unwrap(h), recipient), "other registry calls still go through");
++    }
++}
+diff --git a/host-contracts/test/acl/retirement/ProfileAMocks.sol b/host-contracts/test/acl/retirement/ProfileAMocks.sol
+new file mode 100644
+index 00000000..08c7f23f
+--- /dev/null
++++ b/host-contracts/test/acl/retirement/ProfileAMocks.sol
+@@ -0,0 +1,177 @@
++// SPDX-License-Identifier: BSD-3-Clause-Clear
++pragma solidity ^0.8.24;
++
++import {FHE, euint64} from "@fhevm-host-contracts/lib/FHE.sol";
++import {CoprocessorSetup} from "@fhevm-host-contracts/lib/CoprocessorSetup.sol";
++import {FHEVMExecutor} from "@fhevm-host-contracts/contracts/FHEVMExecutor.sol";
++import {aclAdd} from "@fhevm-host-contracts/addresses/FHEVMHostAddresses.sol";
++import {ACL} from "@fhevm-host-contracts/contracts/ACL.sol";
++import {MulticallUpgradeable} from "@openzeppelin/contracts-upgradeable/utils/MulticallUpgradeable.sol";
++
++import {ERC7984} from "./oz-confidential-contracts-0.5.3/token/ERC7984/ERC7984.sol";
++import {ERC7984ObserverAccess} from "./oz-confidential-contracts-0.5.3/token/ERC7984/extensions/ERC7984ObserverAccess.sol";
++
++/**
++ * @notice OpenZeppelin ERC-7984 with `ERC7984ObserverAccess` (confidential-contracts 0.5.3, vendored test-only copy)
++ *         and a test mint. No Profile A: the vanilla behaviour.
++ */
++contract ERC7984ObserverToken is ERC7984ObserverAccess {
++    constructor() ERC7984("Observer Test Token", "OTT", "") {
++        FHE.setCoprocessor(CoprocessorSetup.defaultConfig());
++    }
++
++    function mint(address to, uint64 amount) external returns (euint64) {
++        return _mint(to, FHE.asEuint64(amount));
++    }
++}
++
++/**
++ * @notice Profile A variant (A1), the local OpenZeppelin change of TARGET_ARCHITECTURE §3.9. Two identity-gated grant
++ *         paths refuse to grant on behalf of a retired account; clearing and revoking stay allowed, and `_update`
++ *         (transfers, A2) is unchanged.
++ *         - `setObserver(account, X)` reverts if `X != 0` and `account` is retired. The asymmetry is the point: a
++ *           retired owner can still clear an observer a thief added, and nobody can add one again.
++ *         - `setOperator(operator, until)` reverts if `until >= block.timestamp` and the caller is retired.
++ *           ERC-7984 operators are valid while `block.timestamp <= until`, so `until == block.timestamp` is a grant
++ *           too; only an expiry already in the past (a revocation) passes.
++ */
++contract ERC7984ProfileAToken is ERC7984ObserverToken {
++    /// @dev Thrown when an identity-gated grant is attempted on behalf of a retired account.
++    error ERC7984GrantByRetiredAccount(address account);
++
++    function setObserver(address account, address newObserver) public virtual override {
++        if (newObserver != address(0) && FHE.isAccountRetired(account)) {
++            revert ERC7984GrantByRetiredAccount(account);
++        }
++        super.setObserver(account, newObserver);
++    }
++
++    function setOperator(address operator, uint48 until) public virtual override {
++        if (until >= block.timestamp && FHE.isAccountRetired(msg.sender)) {
++            revert ERC7984GrantByRetiredAccount(msg.sender);
++        }
++        super.setOperator(operator, until);
++    }
++}
++
++/**
++ * @notice Counter-example for decision D22: a naive gate that refuses every `setObserver` call for a retired account,
++ *         clearing included.
++ */
++contract ERC7984NaiveGateToken is ERC7984ObserverToken {
++    error ERC7984AccountRetired(address account);
++
++    function setObserver(address account, address newObserver) public virtual override {
++        if (FHE.isAccountRetired(account)) {
++            revert ERC7984AccountRetired(account);
++        }
++        super.setObserver(account, newObserver);
++    }
++}
++
++/**
++ * @notice Counter-example for A3: after every transfer it asserts that the recipient can use its new balance, the
++ *         post-grant assertion Profile A forbids.
++ */
++contract ERC7984PostGrantAssertToken is ERC7984ObserverToken {
++    error ERC7984RecipientCannotUseBalance(address to);
++
++    function _update(address from, address to, euint64 amount) internal virtual override returns (euint64 transferred) {
++        transferred = super._update(from, to, amount);
++        if (to != address(0) && !FHE.isAllowed(confidentialBalanceOf(to), to)) {
++            revert ERC7984RecipientCannotUseBalance(to);
++        }
++    }
++}
++
++/// @dev Same shape as Zama's MockInputVerifier (fhevmExecutor.t.sol): returns the handle, never reverts.
++contract ProfileAMockInputVerifier {
++    function verifyInput(
++        FHEVMExecutor.ContextUserInputs memory,
++        bytes32 inputHandle,
++        bytes memory
++    ) external pure returns (bytes32) {
++        return inputHandle;
++    }
++}
++
++/**
++ * @notice A contract with an admin-only generic-call path (an `execute` of the kind a vault, a token with a rescue
++ *         function or a wallet module exposes), holding handles of its own. No Profile A.
++ */
++contract GenericCallVault {
++    error NotAdmin(address caller);
++
++    address public immutable admin;
++
++    constructor(address admin_) {
++        admin = admin_;
++        FHE.setCoprocessor(CoprocessorSetup.defaultConfig());
++    }
++
++    /// @notice Creates a handle this contract holds (a stand-in for the balances a vault or token keeps).
++    function store(uint64 value) external returns (euint64 h) {
++        h = FHE.asEuint64(value);
++        FHE.allowThis(h);
++    }
++
++    /// @notice Re-grants a handle this contract holds to `account`, as a vault does on a withdrawal.
++    function share(euint64 h, address account) external {
++        FHE.allow(h, account);
++    }
++
++    function execute(address target, bytes calldata data) external returns (bytes memory ret) {
++        if (msg.sender != admin) revert NotAdmin(msg.sender);
++        _beforeCall(target, data);
++        bool ok;
++        (ok, ret) = target.call(data);
++        if (!ok) {
++            assembly {
++                revert(add(ret, 32), mload(ret))
++            }
++        }
++    }
++
++    function _beforeCall(address target, bytes calldata data) internal view virtual {}
++}
++
++/**
++ * @notice Profile A (A4) version of `GenericCallVault`: its generic-call path refuses the registry's lifecycle
++ *         functions (Core and E1), and the registry's `multicall`, which runs each entry by `delegatecall` with the
++ *         caller kept as `msg.sender`, so a selector list without it is bypassed.
++ */
++contract GenericCallVaultProfileA is GenericCallVault {
++    error LifecycleCallRefused(bytes4 selector);
++
++    constructor(address admin_) GenericCallVault(admin_) {}
++
++    function _beforeCall(address target, bytes calldata data) internal view virtual override {
++        if (target != aclAdd || data.length < 4) {
++            return;
++        }
++        bytes4 selector = bytes4(data[:4]);
++        if (
++            selector == ACL.retireAccount.selector ||
++            selector == ACL.designateSuccessor.selector ||
++            selector == ACL.acceptSuccession.selector ||
++            selector == ACL.cancelSuccessorDesignation.selector ||
++            selector == ACL.confirmSuccessor.selector ||
++            selector == ACL.resignSuccession.selector ||
++            selector == ACL.raiseSuccessorDelay.selector ||
++            selector == MulticallUpgradeable.multicall.selector
++        ) {
++            revert LifecycleCallRefused(selector);
++        }
++    }
++}
++
++/// @notice Reads the retirement bit through the library helper, as an application would.
++contract RetirementHelperReader {
++    constructor() {
++        FHE.setCoprocessor(CoprocessorSetup.defaultConfig());
++    }
++
++    function read(address account) external view returns (bool) {
++        return FHE.isAccountRetired(account);
++    }
++}
+diff --git a/host-contracts/test/acl/retirement/oz-confidential-contracts-0.5.3/token/ERC7984/extensions/ERC7984ObserverAccess.sol b/host-contracts/test/acl/retirement/oz-confidential-contracts-0.5.3/token/ERC7984/extensions/ERC7984ObserverAccess.sol
+new file mode 100644
+index 00000000..0ca22fb4
+--- /dev/null
++++ b/host-contracts/test/acl/retirement/oz-confidential-contracts-0.5.3/token/ERC7984/extensions/ERC7984ObserverAccess.sol
+@@ -0,0 +1,67 @@
++// SPDX-License-Identifier: MIT
++// TEST-ONLY VENDORED COPY, generated by impl/harness/level0/port_oz_erc7984.py. Do not edit by hand.
++// Source: @openzeppelin/confidential-contracts 0.5.3, token/ERC7984/extensions/ERC7984ObserverAccess.sol
++// Source sha256: ff39b3be85364e68649d1189dd5278373d125ef4d5b89dfb655093856fda7fdf
++// Mechanical port to solc 0.8.24 (nothing else changed): pragma ^0.8.27 -> ^0.8.24; 1 FHE import(s) re-pointed to host-contracts lib/FHE.sol; 1 require(bool, error) -> if (!(cond)) revert error
++// OpenZeppelin Confidential Contracts (last updated v0.4.0) (token/ERC7984/extensions/ERC7984ObserverAccess.sol)
++
++pragma solidity ^0.8.24;
++
++import {FHE, euint64} from "@fhevm-host-contracts/lib/FHE.sol";
++import {ERC7984} from "../ERC7984.sol";
++
++/**
++ * @dev Extension of {ERC7984} that allows each account to add an observer who is given
++ * permanent ACL access to its transfer and balance amounts. An observer can be added or removed at any point in time.
++ */
++abstract contract ERC7984ObserverAccess is ERC7984 {
++    mapping(address account => address) private _observers;
++
++    /// @dev Emitted when the observer is changed for the given account `account`.
++    event ERC7984ObserverAccessObserverSet(address account, address oldObserver, address newObserver);
++
++    /// @dev Thrown when an account tries to set a `newObserver` for a given `account` without proper authority.
++    error Unauthorized();
++
++    /**
++     * @dev Sets the observer for the given account `account` to `newObserver`. Can be called by the
++     * account or the existing observer to abdicate the observer role (may only set to `address(0)`).
++     */
++    function setObserver(address account, address newObserver) public virtual {
++        address oldObserver = observer(account);
++        if (!(msg.sender == account || (msg.sender == oldObserver && newObserver == address(0)))) revert Unauthorized();
++        if (oldObserver != newObserver) {
++            if (newObserver != address(0)) {
++                euint64 balanceHandle = confidentialBalanceOf(account);
++                if (FHE.isInitialized(balanceHandle)) {
++                    FHE.allow(balanceHandle, newObserver);
++                }
++            }
++
++            emit ERC7984ObserverAccessObserverSet(account, oldObserver, _observers[account] = newObserver);
++        }
++    }
++
++    /// @dev Returns the observer for the given account `account`.
++    function observer(address account) public view virtual returns (address) {
++        return _observers[account];
++    }
++
++    function _update(address from, address to, euint64 amount) internal virtual override returns (euint64 transferred) {
++        transferred = super._update(from, to, amount);
++
++        address fromObserver = observer(from);
++        address toObserver = observer(to);
++
++        if (fromObserver != address(0)) {
++            FHE.allow(confidentialBalanceOf(from), fromObserver);
++            FHE.allow(transferred, fromObserver);
++        }
++        if (toObserver != address(0)) {
++            FHE.allow(confidentialBalanceOf(to), toObserver);
++            if (toObserver != fromObserver) {
++                FHE.allow(transferred, toObserver);
++            }
++        }
++    }
++}

@@ -1,0 +1,39 @@
+From a3e6cbf8cdd107ed74aa0aa9a400e61b847c4368 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 17:58:53 +0300
+Subject: [PATCH 3/3] fix(sdk): refuse a disposed transport key pair before
+ requesting shares
+
+A released key pair has its private key zero-filled, so it can never decrypt
+the reply. Fail before the relayer request instead of after it, so that no
+share is ever produced for a key nobody holds.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ sdk/js-sdk/src/core/kms/decryptValuesFromPairs.ts | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/sdk/js-sdk/src/core/kms/decryptValuesFromPairs.ts b/sdk/js-sdk/src/core/kms/decryptValuesFromPairs.ts
+index 342aa49..3047d83 100644
+--- a/sdk/js-sdk/src/core/kms/decryptValuesFromPairs.ts
++++ b/sdk/js-sdk/src/core/kms/decryptValuesFromPairs.ts
+@@ -11,6 +11,7 @@ import type { TransportKeyPair } from './TransportKeyPair-p.js';
+ import type { FhevmClientFrozenContext } from '../types/fhevmClientFrozenContext-p.js';
+ import { SDK_PROTOCOL_API_MAJOR_VERSION, SDK_PROTOCOL_API_MINOR_VERSION } from '../runtime/sdkProtocolApiVersion.js';
+ import { decryptKmsSigncryptedShares } from './decryptKmsSigncryptedShares-p.js';
++import { isTransportKeyPair, isTransportKeyPairDisposed } from './TransportKeyPair-p.js';
+ import { fetchKmsSigncryptedSharesV1 } from './fetchKmsSigncryptedSharesV1-p.js';
+ import { fetchKmsSigncryptedSharesV2 } from './fetchKmsSigncryptedSharesV2-p.js';
+ 
+@@ -45,6 +46,11 @@ export type ReturnType = readonly TypedValue[];
+ export async function decryptValuesFromPairs(fhevm: Context, parameters: Parameters): Promise<ReturnType> {
+   const { transportKeyPair: transportKeyPair, fhevmContext } = parameters;
+ 
++  // A released key pair cannot decrypt the reply: refuse before asking for shares encrypted to it.
++  if (isTransportKeyPair(transportKeyPair) && isTransportKeyPairDisposed(transportKeyPair)) {
++    throw new Error('TransportKeyPair is disposed: use a fresh key pair for this request');
++  }
++
+   let kmsSigncryptedShares: KmsSigncryptedShares;
+ 
+   // Compile-time fast path for the protocol API version this SDK is using.

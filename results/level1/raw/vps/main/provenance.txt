@@ -1,0 +1,47 @@
+date=2026-10-21T13:59:52Z host=VPS nproc=4 kernel=6.8.0-139-generic
+l1 HEAD=ed851716c9a6b799996a23399ece2858336f96db pristine HEAD=ed851716c9a6b799996a23399ece2858336f96db
+== git status --porcelain (pristine worktree; must be empty)
+== git status --porcelain (Level 1 tree)
+ M kms-connector/crates/api/src/error.rs
+ M kms-connector/crates/kms-worker/src/core/config.rs
+ M kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+ M kms-connector/crates/kms-worker/src/core/event_processor/error.rs
+ M kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+ M kms-connector/crates/kms-worker/src/core/mod.rs
+ M kms-connector/crates/utils/src/tests/setup/host.rs
+ M shared/user-decryption-signature/src/lib.rs
+?? kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs
+?? shared/user-decryption-signature/src/profile_h.rs
+?? shared/user-decryption-signature/tests/
+== git diff --stat (Level 1 tree vs its HEAD, tracked files)
+ kms-connector/crates/api/src/error.rs              |  17 +-
+ kms-connector/crates/kms-worker/src/core/config.rs |  69 ++++++
+ .../src/core/event_processor/decryption.rs         | 275 +++++++++++++++++++--
+ .../kms-worker/src/core/event_processor/error.rs   |  19 +-
+ .../kms-worker/src/core/event_processor/rpc.rs     |  61 +++++
+ kms-connector/crates/kms-worker/src/core/mod.rs    |   2 +-
+ kms-connector/crates/utils/src/tests/setup/host.rs | 255 ++++++++++++++++++-
+ shared/user-decryption-signature/src/lib.rs        | 109 ++++++--
+ 8 files changed, 752 insertions(+), 55 deletions(-)
+== sha256 of every changed or added file
+616f8b137b213f72da6f74faa1c5aa96bfe5baf5cc414206416d557a01961c55  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/api/src/error.rs
+98850cb0c9a98cf32b3520d3d8ad67e6ae7be58a2b0522a84378c69d0896300b  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/config.rs
+079d6c34c177fc8482439dfdd632fba9626f1195a503c74d920f4d2a371b29d0  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+1c20233cfd3fb4a5ae635125582bee6e9f085044e4ae3fd666aa8bc33aa5a897  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/error.rs
+4458ca78c579897dcf4f29222e97b26ab458f6987c24f403936ab77e47c38908  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+1f342918f1b934267df32212ddab087b44737525e0942ae547fa0b18ef8c5b26  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/src/core/mod.rs
+9259f755845719ff6bd3048c6e462b4f49bd161ea66bc67d8e1da0e3af20a305  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/utils/src/tests/setup/host.rs
+d0b5870836a16d71cd9d574806f14ce14c7ac14f2b0f48c2d18d5fa4d4f6d7fb  /srv/lifecycle/src/fhevm-main-l1/shared/user-decryption-signature/src/lib.rs
+556627f123e43dd810492fcf709af6f61c276703431bf8cb4664811fb9040f47  /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs
+7712d6a17bc3650dcd9a0c823cdfed2b92b6aa247e0198622841b32fba1ec02e  /srv/lifecycle/src/fhevm-main-l1/shared/user-decryption-signature/src/profile_h.rs
+f14f1c6ac602e7218889609ab7026d2f515b6bf01f794da8d6947fcb40b82d6d  /srv/lifecycle/src/fhevm-main-l1/shared/user-decryption-signature/tests/profile_h.rs
+== harness inputs
+b6c9361d70ab108e773dfaea81183fb4428e333a32ec47878c46cb289153b2b7  /srv/lifecycle/harness/level0/level0_acl_main.json
+f77d80a57ae7025c22f79d9a6cd3eeba9ec9159aaee32b8829a82056ec19355a  /srv/lifecycle/harness/level0/base_acl_main.json
+445ef517c1b0f3b1978685707a2b084a40080fabef179b9be16534666802e68e  /srv/lifecycle/harness/level1/RejectAll1271Wallet.json
+c535fb0cbf87776524f6f968f169e504853b1bc5b91f4792a5b9c58df1151bad  /srv/lifecycle/harness/sol/src/DappStub.sol
+613348ca2fe17f2d8057247a6476617b8d7dac24a68ab6438eb854b049bc7b08  /srv/lifecycle/harness/sol/src/ExecutorStub.sol
+37d0516d3e7c123bbf981774a2ab5ae26d25c5f61e53b23584aa81bcb97034ff  /srv/lifecycle/harness/sol/src/Proxy.sol
+ad23f33970285b6acf27ab88db86a366127e27d2c5d9a7fea07a8d536bcc3c9c  /srv/lifecycle/scripts/rpc_recorder.py
+b079ab6bd2363417c71231e5e8a200976385171d0cc9e734dfab500188a075c7  /srv/lifecycle/scripts/run_level1.sh
+91c179afe21786de8995613e9788727022afac8d39a892078f499f13280073c6  /srv/lifecycle/scripts/analyze_level1.py

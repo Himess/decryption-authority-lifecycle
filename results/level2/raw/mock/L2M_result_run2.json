@@ -1,0 +1,210 @@
+{
+  "label": "proven in mock: the delegated view and the SDK flow; plaintext is public in the mock",
+  "startedAt": "2026-10-21T15:00:31.536Z",
+  "accounts": {
+    "OLD": "0xa49a2CD62Bc92578C9AdC5A355901DdB65e781Ce",
+    "S": "0x152D66EBf5Cb7c6F8782aB15216028691cF31EAf",
+    "DOLD": "0x63434Ff65BD0FddE3f9DB13C3Ad98328dAaA2E8c",
+    "X": "0x551102249a3ca411834463E3849d3d845538e512",
+    "NEW": "0x2c8c6206764a1b453bD1c5244173938c71090379",
+    "OLD2": "0xD22ECF6b12ddD400BeD051936Cd9c0BBF81fd3F3",
+    "S2": "0xb902e9496DA8CfA24135BB1d732c9ADeD43A0458",
+    "U": "0x28e849319a4a76917e1E38A1d5780b614784E911"
+  },
+  "env": {
+    "rpcUrl": "http://127.0.0.1:50578",
+    "clientVersion": "anvil/v1.8.5",
+    "hardFork": "Bpo1",
+    "worktree": "<repo>\\impl\\wt-l2-mock",
+    "addresses": {
+      "acl": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+      "kmsVerifier": "0x901F8942346f7AB3a01F6D7613119Bca447Bb030",
+      "fheTest": "0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0"
+    }
+  },
+  "setup": {
+    "aclVersion": "ACL v0.4.2",
+    "core": true,
+    "e1": true,
+    "successorDelay": "604800"
+  },
+  "e1Before": {
+    "before": {
+      "lifecycle": true,
+      "retired": false,
+      "successor": null,
+      "pendingSuccessor": null
+    },
+    "pending": {
+      "lifecycle": true,
+      "retired": false,
+      "successor": null,
+      "pendingSuccessor": {
+        "address": "0x152D66EBf5Cb7c6F8782aB15216028691cF31EAf",
+        "confirmableAt": "1793199632",
+        "accepted": true
+      }
+    },
+    "earlyConfirm": "SuccessorNotYetConfirmable",
+    "confirmed": {
+      "lifecycle": true,
+      "retired": false,
+      "successor": "0x152D66EBf5Cb7c6F8782aB15216028691cF31EAf",
+      "pendingSuccessor": null
+    },
+    "successorWhileActive": {
+      "ok": false,
+      "typedRetired": false,
+      "aclUserDecryptionError": true,
+      "error": "Delegate 0x152D66EBf5Cb7c6F8782aB15216028691cF31EAf is not delegated by 0xa49a2CD62Bc92578C9AdC5A355901DdB65e781Ce to user decrypt handle 0x02b1039295dd123bdc226dbf869c4d3ff39a6f83d2000000000000007a690500 on contract 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0!",
+      "relayerCalled": false
+    },
+    "delegateWhileActive": {
+      "ok": true,
+      "values": [
+        "5001"
+      ],
+      "relayerCalled": true
+    },
+    "ownerWhileActive": {
+      "ok": true,
+      "values": [
+        "5001"
+      ],
+      "relayerCalled": true
+    }
+  },
+  "e1After": {
+    "retireGasUsed": "54459",
+    "event": [
+      "0xa49a2CD62Bc92578C9AdC5A355901DdB65e781Ce",
+      "0x152D66EBf5Cb7c6F8782aB15216028691cF31EAf"
+    ],
+    "after": {
+      "lifecycle": true,
+      "retired": true,
+      "successor": "0x152D66EBf5Cb7c6F8782aB15216028691cF31EAf",
+      "pendingSuccessor": null
+    },
+    "successor": {
+      "ok": true,
+      "values": [
+        "5001",
+        "61"
+      ],
+      "relayerCalled": true
+    },
+    "otherDelegate": {
+      "ok": false,
+      "typedRetired": true,
+      "aclUserDecryptionError": true,
+      "code": "ACCOUNT_RETIRED",
+      "accounts": [
+        "0xa49a2CD62Bc92578C9AdC5A355901DdB65e781Ce"
+      ],
+      "error": "Delegate 0x63434Ff65BD0FddE3f9DB13C3Ad98328dAaA2E8c cannot user decrypt handle 0x02b1039295dd123bdc226dbf869c4d3ff39a6f83d2000000000000007a690500 on contract 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0 for 0xa49a2CD62Bc92578C9AdC5A355901DdB65e781Ce: 0xa49a2CD62Bc92578C9AdC5A355901DdB65e781Ce retired ",
+      "relayerCalled": false
+    },
+    "owner": {
+      "ok": false,
+      "typedRetired": true,
+      "aclUserDecryptionError": true,
+      "code": "ACCOUNT_RETIRED",
+      "accounts": [
+        "0xa49a2CD62Bc92578C9AdC5A355901DdB65e781Ce"
+      ],
+      "error": "User 0xa49a2CD62Bc92578C9AdC5A355901DdB65e781Ce has retired its decryption authority and can no longer decrypt handle 0x02b1039295dd123bdc226dbf869c4d3ff39a6f83d2000000000000007a690500!",
+      "relayerCalled": false
+    }
+  },
+  "e1Straggler": {
+    "views": {
+      "persistAllowed_OLD": false,
+      "delegated_OLD_S": true
+    },
+    "successor": {
+      "ok": true,
+      "values": [
+        "777"
+      ],
+      "relayerCalled": true
+    },
+    "owner": {
+      "ok": false,
+      "typedRetired": true,
+      "aclUserDecryptionError": true,
+      "code": "ACCOUNT_RETIRED",
+      "accounts": [
+        "0xa49a2CD62Bc92578C9AdC5A355901DdB65e781Ce"
+      ],
+      "error": "User 0xa49a2CD62Bc92578C9AdC5A355901DdB65e781Ce has retired its decryption authority and can no longer decrypt handle 0x507f4f6e88725f174e3beaeabd96eb185731efb87d000000000000007a690500!",
+      "relayerCalled": false
+    }
+  },
+  "e1Pending": {
+    "after": {
+      "lifecycle": true,
+      "retired": true,
+      "successor": null,
+      "pendingSuccessor": null
+    },
+    "s2": {
+      "ok": false,
+      "typedRetired": true,
+      "aclUserDecryptionError": true,
+      "code": "ACCOUNT_RETIRED",
+      "accounts": [
+        "0xD22ECF6b12ddD400BeD051936Cd9c0BBF81fd3F3"
+      ],
+      "error": "Delegate 0xb902e9496DA8CfA24135BB1d732c9ADeD43A0458 cannot user decrypt handle 0x8495a07ccc00e64be9a2918edb0a6b4f03bab12bf3000000000000007a690500 on contract 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0 for 0xD22ECF6b12ddD400BeD051936Cd9c0BBF81fd3F3: 0xD22ECF6b12ddD400BeD051936Cd9c0BBF81fd3F3 retired ",
+      "relayerCalled": false
+    }
+  },
+  "ordinaryRefusal": {
+    "ok": false,
+    "typedRetired": false,
+    "aclUserDecryptionError": true,
+    "error": "User 0x2c8c6206764a1b453bD1c5244173938c71090379 is not authorized to decrypt handle 0x507f4f6e88725f174e3beaeabd96eb185731efb87d000000000000007a690500!",
+    "relayerCalled": false
+  },
+  "transportHygiene": {
+    "publicKeysDistinct": true,
+    "r1": {
+      "ok": true,
+      "values": [
+        "9090"
+      ],
+      "relayerCalled": true
+    },
+    "r2": {
+      "ok": true,
+      "values": [
+        "9090"
+      ],
+      "relayerCalled": true
+    },
+    "k1Disposed": true,
+    "reuseReleased": {
+      "ok": false,
+      "typedRetired": false,
+      "aclUserDecryptionError": false,
+      "error": "TransportKeyPair is disposed: use a fresh key pair for this request",
+      "relayerCalled": false
+    },
+    "whileActive": {
+      "retired": false,
+      "purged": null
+    },
+    "afterRetirement": {
+      "retired": true,
+      "purged": {
+        "keys": 1,
+        "permits": 1
+      }
+    },
+    "k3Disposed": true,
+    "keysLeft": 0,
+    "permitsLeft": 0
+  },
+  "finishedAt": "2026-10-21T15:00:34.243Z"
+}

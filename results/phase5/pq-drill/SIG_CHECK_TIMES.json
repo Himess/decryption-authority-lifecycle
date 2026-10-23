@@ -1,0 +1,63 @@
+{
+ "runs": [
+  "pq-drill-r1-20261022T193733Z",
+  "pq-drill-r2-20261022T195036Z",
+  "pq-drill-r3-20261022T200344Z"
+ ],
+ "routes": [
+  {
+   "route": "E3 KDA, ML-DSA-44 with K8 (accepted)",
+   "count_per_run": {
+    "pq-drill-r1-20261022T193733Z": 24,
+    "pq-drill-r2-20261022T195036Z": 26,
+    "pq-drill-r3-20261022T200344Z": 25
+   },
+   "median_ms": 94.7,
+   "p10_ms": 55.1,
+   "p90_ms": 130.3,
+   "min_ms": 35.2,
+   "max_ms": 370.6,
+   "median_ms_per_run": {
+    "pq-drill-r1-20261022T193733Z": 100.8,
+    "pq-drill-r2-20261022T195036Z": 90.1,
+    "pq-drill-r3-20261022T200344Z": 103.4
+   }
+  },
+  {
+   "route": "ERC-1271 (Profile H, accepted)",
+   "count_per_run": {
+    "pq-drill-r1-20261022T193733Z": 162,
+    "pq-drill-r2-20261022T195036Z": 162,
+    "pq-drill-r3-20261022T200344Z": 162
+   },
+   "median_ms": 169.5,
+   "p10_ms": 124.5,
+   "p90_ms": 318.1,
+   "min_ms": 80.2,
+   "max_ms": 1022.5,
+   "median_ms_per_run": {
+    "pq-drill-r1-20261022T193733Z": 169.5,
+    "pq-drill-r2-20261022T195036Z": 175.5,
+    "pq-drill-r3-20261022T200344Z": 166.6
+   }
+  },
+  {
+   "route": "ecrecover (Profile H, accepted)",
+   "count_per_run": {
+    "pq-drill-r1-20261022T193733Z": 18,
+    "pq-drill-r2-20261022T195036Z": 16,
+    "pq-drill-r3-20261022T200344Z": 21
+   },
+   "median_ms": 106.2,
+   "p10_ms": 81.5,
+   "p90_ms": 190.8,
+   "min_ms": 71.0,
+   "max_ms": 385.4,
+   "median_ms_per_run": {
+    "pq-drill-r1-20261022T193733Z": 88.3,
+    "pq-drill-r2-20261022T195036Z": 144.5,
+    "pq-drill-r3-20261022T200344Z": 107.6
+   }
+  }
+ ]
+}

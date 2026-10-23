@@ -1,0 +1,18 @@
+[package]
+name = "p3-mlkem"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Phase 4, P3: ML-KEM-512/768/1024 sizes and times for the reply-channel design note (Q6). Measurement code only."
+
+[dependencies]
+# Both implementations are without a completed security audit for this use.
+ml-kem = { version = "=0.3.2", features = ["getrandom"] }
+libcrux-ml-kem = "=0.0.11"
+rand = "0.8"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+debug = false

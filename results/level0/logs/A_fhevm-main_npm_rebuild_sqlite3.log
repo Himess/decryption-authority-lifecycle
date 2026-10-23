@@ -1,0 +1,11 @@
+
+> sqlite3@5.1.7 install
+> prebuild-install -r napi || node-gyp rebuild
+
+prebuild-install http request GET https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v6-win32-x64.tar.gz
+prebuild-install http 200 https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v6-win32-x64.tar.gz
+
+> sqlite3@5.1.7 install
+> prebuild-install -r napi || node-gyp rebuild
+
+rebuilt dependencies successfully

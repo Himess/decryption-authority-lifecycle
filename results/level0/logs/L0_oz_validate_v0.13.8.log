@@ -1,0 +1,5 @@
+== fhevm-v0.13.8: contracts/ACL.sol:ACL (reference test/acl/retirement/fixtures/ACL_v0_4_0.sol:ACL)
+ ✔  contracts/ACL.sol:ACL (upgrades from test/acl/retirement/fixtures/ACL_v0_4_0.sol:ACL)
+
+SUCCESS
+rc=0

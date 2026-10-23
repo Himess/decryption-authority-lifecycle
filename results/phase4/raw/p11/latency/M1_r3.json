@@ -1,0 +1,253 @@
+{
+  "account": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "arch": "x86_64",
+  "client": "anvil/v1.8.5",
+  "iterations": 200,
+  "os": "windows",
+  "rows": [
+    {
+      "case": "ecdsa, unmodified (RFC-012)",
+      "mean_us": 192,
+      "min_us": 183,
+      "n": 200,
+      "ok": true,
+      "p50_us": 187,
+      "p95_us": 229,
+      "path": "ecrecover",
+      "rpcs": 0
+    },
+    {
+      "case": "ecdsa, Profile H enforce",
+      "mean_us": 488,
+      "min_us": 450,
+      "n": 200,
+      "ok": true,
+      "p50_us": 480,
+      "p95_us": 566,
+      "path": "code read + ecrecover",
+      "rpcs": 2
+    },
+    {
+      "case": "erc1271 ML-DSA-44 account, unmodified 250k",
+      "mean_us": 651,
+      "min_us": 577,
+      "n": 200,
+      "ok": false,
+      "p50_us": 631,
+      "p95_us": 790,
+      "path": "isValidSignature at 250,000",
+      "rpcs": 1
+    },
+    {
+      "case": "erc1271 ML-DSA-44 account, Profile H B_exec 2M",
+      "mean_us": 2738,
+      "min_us": 2567,
+      "n": 200,
+      "ok": true,
+      "p50_us": 2700,
+      "p95_us": 3000,
+      "path": "code read + isValidSignature",
+      "rpcs": 3
+    },
+    {
+      "case": "kda ML-DSA-44 single:rustcrypto",
+      "mean_us": 252,
+      "min_us": 232,
+      "n": 200,
+      "ok": true,
+      "p50_us": 247,
+      "p95_us": 292,
+      "path": "code read + native verify",
+      "rpcs": 1
+    },
+    {
+      "case": "kda ML-DSA-44 agree:rustcrypto,fips204",
+      "mean_us": 345,
+      "min_us": 331,
+      "n": 200,
+      "ok": true,
+      "p50_us": 340,
+      "p95_us": 391,
+      "path": "code read + native verify",
+      "rpcs": 1
+    },
+    {
+      "case": "native ML-DSA-44 rustcrypto",
+      "mean_us": 80,
+      "min_us": 79,
+      "n": 200,
+      "ok": true,
+      "p50_us": 79,
+      "p95_us": 83,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "native ML-DSA-44 fips204",
+      "mean_us": 88,
+      "min_us": 86,
+      "n": 200,
+      "ok": true,
+      "p50_us": 86,
+      "p95_us": 101,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "native ML-DSA-44 libcrux",
+      "mean_us": 32,
+      "min_us": 31,
+      "n": 200,
+      "ok": true,
+      "p50_us": 32,
+      "p95_us": 37,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "native ML-DSA-44 pqclean",
+      "mean_us": 85,
+      "min_us": 84,
+      "n": 200,
+      "ok": true,
+      "p50_us": 85,
+      "p95_us": 91,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "kda ML-DSA-65 single:rustcrypto",
+      "mean_us": 300,
+      "min_us": 278,
+      "n": 200,
+      "ok": true,
+      "p50_us": 294,
+      "p95_us": 345,
+      "path": "code read + native verify",
+      "rpcs": 1
+    },
+    {
+      "case": "kda ML-DSA-65 agree:rustcrypto,fips204",
+      "mean_us": 456,
+      "min_us": 433,
+      "n": 200,
+      "ok": true,
+      "p50_us": 449,
+      "p95_us": 522,
+      "path": "code read + native verify",
+      "rpcs": 1
+    },
+    {
+      "case": "native ML-DSA-65 rustcrypto",
+      "mean_us": 124,
+      "min_us": 121,
+      "n": 200,
+      "ok": true,
+      "p50_us": 124,
+      "p95_us": 127,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "native ML-DSA-65 fips204",
+      "mean_us": 143,
+      "min_us": 141,
+      "n": 200,
+      "ok": true,
+      "p50_us": 142,
+      "p95_us": 158,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "native ML-DSA-65 libcrux",
+      "mean_us": 53,
+      "min_us": 53,
+      "n": 200,
+      "ok": true,
+      "p50_us": 54,
+      "p95_us": 55,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "native ML-DSA-65 pqclean",
+      "mean_us": 139,
+      "min_us": 137,
+      "n": 200,
+      "ok": true,
+      "p50_us": 138,
+      "p95_us": 144,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "kda ML-DSA-87 single:rustcrypto",
+      "mean_us": 387,
+      "min_us": 360,
+      "n": 200,
+      "ok": true,
+      "p50_us": 380,
+      "p95_us": 455,
+      "path": "code read + native verify",
+      "rpcs": 1
+    },
+    {
+      "case": "kda ML-DSA-87 agree:rustcrypto,fips204",
+      "mean_us": 652,
+      "min_us": 613,
+      "n": 200,
+      "ok": true,
+      "p50_us": 635,
+      "p95_us": 745,
+      "path": "code read + native verify",
+      "rpcs": 1
+    },
+    {
+      "case": "native ML-DSA-87 rustcrypto",
+      "mean_us": 204,
+      "min_us": 200,
+      "n": 200,
+      "ok": true,
+      "p50_us": 203,
+      "p95_us": 214,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "native ML-DSA-87 fips204",
+      "mean_us": 237,
+      "min_us": 234,
+      "n": 200,
+      "ok": true,
+      "p50_us": 235,
+      "p95_us": 247,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "native ML-DSA-87 libcrux",
+      "mean_us": 86,
+      "min_us": 85,
+      "n": 200,
+      "ok": true,
+      "p50_us": 86,
+      "p95_us": 90,
+      "path": "no RPC",
+      "rpcs": 0
+    },
+    {
+      "case": "native ML-DSA-87 pqclean",
+      "mean_us": 233,
+      "min_us": 231,
+      "n": 200,
+      "ok": true,
+      "p50_us": 232,
+      "p95_us": 242,
+      "path": "no RPC",
+      "rpcs": 0
+    }
+  ],
+  "rpc": "local anvil",
+  "warmup": 3
+}

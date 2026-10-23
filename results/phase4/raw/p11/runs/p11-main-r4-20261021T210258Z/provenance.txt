@@ -1,0 +1,20 @@
+date=2026-10-21T21:02:58Z host=VPS nproc=4 kernel=6.8.0-139-generic
+tree HEAD=ed851716c9a6b799996a23399ece2858336f96db pristine HEAD=ed851716c9a6b799996a23399ece2858336f96db
+== diff -rq pristine vs tree kms-connector and shared, excluding directories named 'tests'
+IDENTICAL kms-connector
+IDENTICAL shared
+== harness inputs
+1ff581455a5be9f9c5e8d2a5aaad3716ea9024e3de6bc2547fbddf1df7a5d3f1  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_p11_e3.rs
+f77d80a57ae7025c22f79d9a6cd3eeba9ec9159aaee32b8829a82056ec19355a  /srv/lifecycle/harness/level0/base_acl_main.json
+b6c9361d70ab108e773dfaea81183fb4428e333a32ec47878c46cb289153b2b7  /srv/lifecycle/harness/level0/level0_acl_main.json
+4605658bedb1872fb595ea9ac6f4094cab169adacb4094480f63b278b694797d  /srv/lifecycle/harness/level0/level0_acl_v0.13.8.json
+c535fb0cbf87776524f6f968f169e504853b1bc5b91f4792a5b9c58df1151bad  /srv/lifecycle/harness/sol/src/DappStub.sol
+613348ca2fe17f2d8057247a6476617b8d7dac24a68ab6438eb854b049bc7b08  /srv/lifecycle/harness/sol/src/ExecutorStub.sol
+37d0516d3e7c123bbf981774a2ab5ae26d25c5f61e53b23584aa81bcb97034ff  /srv/lifecycle/harness/sol/src/Proxy.sol
+11d95c2391019bf28578193118413a868244d5e77c8165c3ce079c41340bbe60  /srv/lifecycle/harness/p04/artifacts/MLDSA44Account1271.json
+d206177a976f801d5193de2b6d91f0dfa91ed71a06705a624b22b45a921ed4f2  /srv/lifecycle/harness/p04/artifacts/MLDSA44Verifier.json
+2d724ab4640530e454f5216a7d539178c50030781f0239163ee87f57539dedaa  /srv/lifecycle/harness/p04/artifacts/NoErc1271.json
+164340ddf9bb45f728d3eddb4d576e8782b2937acd84dee46338773efdefac74  /srv/lifecycle/pq/mldsa_tool.py
+592d8563e4d736f2af7abd6ee843dbb2d50aa2bf5ef562074acee1b76605c166  /srv/lifecycle/pq/p11_mldsa_tool.py
+46aa3b639ade6877794a18349339cee9fd452b2c7a5bde6a6e3049885653efa8  /srv/lifecycle/scripts/fault_proxy_v2.py
+420b711216be5632e22dacbbecdc1cd8f551a87c5d3c1df754b4442515b598ba  /srv/lifecycle/scripts/run_p11.sh

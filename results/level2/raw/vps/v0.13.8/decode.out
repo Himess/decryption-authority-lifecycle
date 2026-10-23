@@ -1,0 +1,55 @@
+mode=level0 requests=8 records=20
+deploy {'kind': 'level0', 'version': 'ACL v0.4.2', 'proxy': '0x6FF14E2d6Cc4e2AD6eA068b238ca684B57F6a251', 'impl': '0x0f60581Cef64924B0f2Cf3A34292bDA86343D64f', 'runtime_bytes': '14290', 'runtime_matches_reference': 'true', 'reference_keccak': '0xe0dedd8d9f3adc9d2c13b936ca5f25745fe0b074d7b1014449635aa2b9eb70cd'}
+retire {'case': 'l2.legacy', 'role': 'delegator-with-successor', 'account': '0xAB86621090Ed806fDc64ed8CE458757d917309c8', 'tx': '0xecbb55bafc75923e24fd0f855032e077b3895685a31d3142696ffdfc245d8342', 'gas_used': '54487', 'account_retired_event': 'true', 'isAccountRetired': 'true'}
+# (method, function, call-object keys, block) seen on the connector's host-chain endpoint
+run: 20 record(s), 2 kind(s)
+   ('eth_call', 'isAllowed', 'input,to', 'latest')
+   ('eth_call', 'isHandleDelegatedForUserDecryption', 'input,to', 'latest')
+baseline: 1 file(s), 15 record(s), 2 kind(s)
+   ('eth_call', 'isAllowed', 'input,to', 'latest')
+   ('eth_call', 'isHandleDelegatedForUserDecryption', 'input,to', 'latest')
+kinds in this run but not in the baseline: []
+non-eth_call methods in this run: none
+Level 0 selectors (retireAccount, isAccountRetired, supportsInterface, retirementStorageLocation) seen: none
+eth_calls whose `to` is not one of the run's ACL proxies: 0
+
+l2.legacy.delegate-d.u-active                              Forwarded obs=Forwarded kms=4  att=1  cpa=1     false=- verified=0/1 
+l2.legacy.successor-s.u-active                             Rejected  obs=Rejected  kms=0  att=3  cpa=1     false=isHandleDelegatedForUserDecryption(U,S,C,h) verified=3/3 0x5E3044c10D1086fc46D10B3FB5bdDd9371e0CC00 is not a delegate of 0xAB86621090Ed806fDc64ed8CE458757d917309c8 for contract 0x3E21c5DE947cA54E7035bedEA49A7504004996
+l2.legacy.successor-s.u-retired                            Forwarded obs=Forwarded kms=4  att=1  cpa=1     false=- verified=0/1 
+l2.legacy.delegate-d.u-retired                             Rejected  obs=Rejected  kms=0  att=3  cpa=1     false=isHandleDelegatedForUserDecryption(U,D,C,h) verified=3/3 0xC9EC80B90373c4cbFECCda001ecE97B017EcB420 is not a delegate of 0xAB86621090Ed806fDc64ed8CE458757d917309c8 for contract 0x3E21c5DE947cA54E7035bedEA49A7504004996
+l2.legacy.successor-s-direct.u-retired                     Rejected  obs=Rejected  kms=0  att=3  cpa=2     false=isAllowed(h,S) verified=3/3 0x5E3044c10D1086fc46D10B3FB5bdDd9371e0CC00 is not allowed to decrypt 8e68ce7b82efdde070a7a0242c5ccb1f3bb40fed43ff00000000000030390500!
+l2.legacy.h2-holder-v                                      Forwarded obs=Forwarded kms=4  att=1  cpa=2     false=- verified=0/1 
+l2.legacy.successor-s.straggler-h2                         Forwarded obs=Forwarded kms=4  att=1  cpa=1     false=- verified=0/1 
+l2.legacy.successor-s.after-resign                         Rejected  obs=Rejected  kms=0  att=3  cpa=1     false=isHandleDelegatedForUserDecryption(U,S,C,h) verified=3/3 0x5E3044c10D1086fc46D10B3FB5bdDd9371e0CC00 is not a delegate of 0xAB86621090Ed806fDc64ed8CE458757d917309c8 for contract 0x3E21c5DE947cA54E7035bedEA49A7504004996
+# Times from the unmodified connector's own log timestamps (us resolution) and the recorder (time.time()).
+# check_ms   : 'Starting ACL check'/'Starting RFC016 check' -> 'ACL check passed' or the attempt's ERROR line
+# attempt_ms : 'Starting to process' -> 'Event successfully processed!' or the ERROR line
+# request_ms : first 'Starting to process' -> 'Successfully stored response in DB!' (forwarded) or the last
+#              'Successfully updated event in DB!' (rejected: status failed / restored)
+# rpc_ms     : per ACL eth_call, recorder arrival -> upstream (anvil) answer
+# gap_ms     : retry spacing, start of attempt k -> start of attempt k+1 (rejected requests)
+[scenario level0 delegated Forwarded] requests=3 attempts/request=[1] calls/attempt=[1]
+   check_ms    n=3 median=6.78 p10=6.04 p90=49.92 min=5.86 max=60.71
+   attempt_ms  n=3 median=118.47 p10=111.05 p90=151.07 min=109.20 max=159.21
+   request_ms  n=3 median=132.57 p10=117.69 p90=167.64 min=113.98 max=176.41
+   rpc_ms      n=3 median=2.09 p10=1.60 p90=4.25 min=1.48 max=4.79
+[scenario level0 delegated Rejected] requests=3 attempts/request=[3] calls/attempt=[1]
+   check_ms    n=9 median=9.04 p10=6.82 p90=45.48 min=5.95 max=48.53
+   attempt_ms  n=9 median=9.58 p10=8.12 p90=45.98 min=6.51 max=49.08
+   request_ms  n=3 median=531.32 p10=508.57 p90=543.05 min=502.88 max=545.98
+   rpc_ms      n=9 median=2.79 p10=1.83 p90=4.58 min=1.71 max=5.34
+   gap_ms      n=6 median=238.31 p10=20.65 p90=495.30 min=20.11 max=510.24
+[scenario level0 direct Forwarded] requests=1 attempts/request=[1] calls/attempt=[2]
+   check_ms    n=1 median=11.36 p10=11.36 p90=11.36 min=11.36 max=11.36
+   attempt_ms  n=1 median=111.27 p10=111.27 p90=111.27 min=111.27 max=111.27
+   request_ms  n=1 median=124.73 p10=124.73 p90=124.73 min=124.73 max=124.73
+   rpc_ms      n=2 median=3.42 p10=3.39 p90=3.44 min=3.38 max=3.45
+[scenario level0 direct Rejected] requests=1 attempts/request=[3] calls/attempt=[2]
+   check_ms    n=3 median=13.05 p10=8.06 p90=42.03 min=6.81 max=49.28
+   attempt_ms  n=3 median=15.15 p10=8.93 p90=43.04 min=7.38 max=50.02
+   request_ms  n=1 median=304.36 p10=304.36 p90=304.36 min=304.36 max=304.36
+   rpc_ms      n=6 median=3.77 p10=1.91 p90=5.24 min=1.55 max=5.50
+   gap_ms      n=2 median=144.59 p10=62.90 p90=226.27 min=42.48 max=246.70
+
+REQUESTS ALL OK (8 requests)
+ZERO-NEW-RPC OK

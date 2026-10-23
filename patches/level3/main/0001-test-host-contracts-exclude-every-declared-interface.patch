@@ -1,0 +1,31 @@
+From 5cd12ed5e764f9aabf87b30dfda215cfd97246fe Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 18:27:31 +0300
+Subject: [PATCH 1/6] test(host-contracts): exclude every declared interface id
+ from the ERC-165 fuzz test
+
+The fuzzer draws PUSH4 constants from the bytecode, so an id the registry
+declares (E1 0x7dc5e209, E1 delay 0xc61ca396, E2 0x4b9ec076) eventually
+comes up and fails a test that excluded only ERC-165 and Core. E2's id did.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ host-contracts/test/acl/ACLRetirement.t.sol | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/host-contracts/test/acl/ACLRetirement.t.sol b/host-contracts/test/acl/ACLRetirement.t.sol
+index 7562d816..10f91be1 100644
+--- a/host-contracts/test/acl/ACLRetirement.t.sol
++++ b/host-contracts/test/acl/ACLRetirement.t.sol
+@@ -342,8 +342,11 @@ contract ACLRetirementTest is HostContractsDeployerTestUtils {
+         assertEq(ACL.retirementStorageLocation.selector, bytes4(0xc89c7ccd));
+     }
+ 
++    /// @dev Every id the registry declares is excluded: ERC-165, Core, E1, the E1 delay and E2. The fuzzer draws
++    ///      PUSH4 constants from the bytecode, so a missing exclusion fails sooner or later.
+     function test_ERC165_FuzzUnknownIds(bytes4 id) public view {
+         vm.assume(id != 0x01ffc9a7 && id != CORE_INTERFACE_ID);
++        vm.assume(id != 0x7dc5e209 && id != 0xc61ca396 && id != 0x4b9ec076);
+         assertFalse(acl.supportsInterface(id));
+     }
+ 

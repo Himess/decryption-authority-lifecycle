@@ -1,0 +1,2409 @@
+{
+ "runs": [
+  "p503-main-l1-r1-20261022T183256Z",
+  "p503-main-l1-r2-20261022T183419Z",
+  "p503-main-l1-r3-20261022T183543Z",
+  "p503-main-r1-20261022T183224Z",
+  "p503-main-r2-20261022T183353Z",
+  "p503-main-r3-20261022T183511Z",
+  "p503-v0.13.8-r1-20261022T183208Z",
+  "p503-v0.13.8-r2-20261022T183338Z",
+  "p503-v0.13.8-r3-20261022T183455Z"
+ ],
+ "rows": [
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce.v2-direct.x-eoa.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [
+    "0x\u2026(0 B)"
+   ],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 813,
+     "getCode": [
+      {
+       "prefix": "0x",
+       "len": 0,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [],
+     "rpc_calls": 4
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 640,
+     "getCode": [
+      {
+       "prefix": "0x",
+       "len": 0,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [],
+     "rpc_calls": 4
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 628,
+     "getCode": [
+      {
+       "prefix": "0x",
+       "len": 0,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [],
+     "rpc_calls": 4
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce.v2-direct.x-8298.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [
+    "0x608080\u2026(1218 B)"
+   ],
+   "isValidSignature": [
+    "2033544:0xffffffff"
+   ],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 3367,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0xffffffff",
+       "error": null
+      }
+     ],
+     "rpc_calls": 13
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2853,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0xffffffff",
+       "error": null
+      }
+     ],
+     "rpc_calls": 13
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 3395,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0xffffffff",
+       "error": null
+      }
+     ],
+     "rpc_calls": 13
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce.v2-http-direct.x-8298.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "user_signature_rejected"
+   ],
+   "getCode": [
+    "0x608080\u2026(1218 B)"
+   ],
+   "isValidSignature": [
+    "2033544:0xffffffff"
+   ],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "0",
+     "error_code": "user_signature_rejected",
+     "wall_ms": 2600,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0xffffffff",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "0",
+     "error_code": "user_signature_rejected",
+     "wall_ms": 2491,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0xffffffff",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "0",
+     "error_code": "user_signature_rejected",
+     "wall_ms": 2400,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0xffffffff",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce.v2-direct.y-8298.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [
+    "0x00fea1\u2026(14 B)"
+   ],
+   "isValidSignature": [
+    "2033544:0x"
+   ],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 3712,
+     "getCode": [
+      {
+       "prefix": "0x00fea1",
+       "len": 14,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x00fea1",
+       "len": 14,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x00fea1",
+       "len": 14,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0x",
+       "error": null
+      }
+     ],
+     "rpc_calls": 13
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 3397,
+     "getCode": [
+      {
+       "prefix": "0x00fea1",
+       "len": 14,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x00fea1",
+       "len": 14,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x00fea1",
+       "len": 14,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0x",
+       "error": null
+      }
+     ],
+     "rpc_calls": 13
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 3549,
+     "getCode": [
+      {
+       "prefix": "0x00fea1",
+       "len": 14,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x00fea1",
+       "len": 14,
+       "rewritten": false
+      },
+      {
+       "prefix": "0x00fea1",
+       "len": 14,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0x",
+       "error": null
+      }
+     ],
+     "rpc_calls": 13
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce.v2-direct.x-8298.ml-dsa-44",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [
+    "0x608080\u2026(1218 B)"
+   ],
+   "isValidSignature": [
+    "2183048:0x1626ba7e"
+   ],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 1785,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2183048,
+       "result": "0x1626ba7e",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 1805,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2183048,
+       "result": "0x1626ba7e",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 1936,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2183048,
+       "result": "0x1626ba7e",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce.v2-http-direct.x-8298.ml-dsa-44",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [
+    "0x608080\u2026(1218 B)"
+   ],
+   "isValidSignature": [
+    "2183048:0x1626ba7e"
+   ],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 1644,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2183048,
+       "result": "0x1626ba7e",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 2151,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2183048,
+       "result": "0x1626ba7e",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 2115,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2183048,
+       "result": "0x1626ba7e",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "off.v2-direct.x-8298.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 403,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 626,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 484,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "shadow.v2-direct.x-8298.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [
+    "0x608080\u2026(1218 B)"
+   ],
+   "isValidSignature": [
+    "2033544:0xffffffff"
+   ],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 557,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0xffffffff",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 531,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0xffffffff",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 739,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [
+      {
+       "gas": 2033544,
+       "result": "0xffffffff",
+       "error": null
+      }
+     ],
+     "rpc_calls": 5
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "disabled.v2-direct.x-8298.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 392,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 390,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 592,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce-h6.legacy-direct.x-8298",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [
+    "0x608080\u2026(1218 B)"
+   ],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 2319,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 2356,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 2955,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce.legacy-direct.x-8298",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 385,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 3
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 546,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 3
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 537,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 3
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce.v2-direct.x-8298-retired.ml-dsa-44",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [
+    "0x608080\u2026(1218 B)",
+    "\u2026(0 B)"
+   ],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 3896,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 4
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 3787,
+     "getCode": [
+      {
+       "prefix": "",
+       "len": 0,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [],
+     "rpc_calls": 5
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 4254,
+     "getCode": [
+      {
+       "prefix": "0x608080",
+       "len": 1218,
+       "rewritten": false
+      }
+     ],
+     "isValidSignature": [],
+     "rpc_calls": 5
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce.v2-direct.x-8298-retired.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 2520,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 4
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 2261,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 4
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 2384,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 4
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "enforce.legacy-direct.x-8298-retired",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 2501,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 4
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 2300,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 4
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "1",
+     "error_code": "-",
+     "wall_ms": 2404,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 4
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "level1",
+   "row": "disabled.v2-direct.x-8298-retired.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2835,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 6
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2724,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 6
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2934,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 6
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "unmodified",
+   "row": "v2-direct.x-eoa.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 493,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 537,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 630,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "unmodified",
+   "row": "v2-direct.x-8298.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 449,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 534,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 404,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "unmodified",
+   "row": "v2-http-direct.x-8298.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 495,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 465,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 434,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "unmodified",
+   "row": "legacy-direct.x-8298",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 962,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 3
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 738,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 3
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 450,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 3
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "unmodified",
+   "row": "v2-direct.x-8298.ml-dsa-44",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [
+    "250000:execution reverted"
+   ],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 4117,
+     "getCode": [],
+     "isValidSignature": [
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      }
+     ],
+     "rpc_calls": 9
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 4194,
+     "getCode": [],
+     "isValidSignature": [
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      }
+     ],
+     "rpc_calls": 9
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 4503,
+     "getCode": [],
+     "isValidSignature": [
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      }
+     ],
+     "rpc_calls": 9
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "unmodified",
+   "row": "v2-direct.x-8298-retired.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2874,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 6
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2854,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 6
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2831,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 6
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "unmodified",
+   "row": "v2-http-direct.x-8298-retired.root-key",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "acl_denied"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "0",
+     "error_code": "acl_denied",
+     "wall_ms": 2382,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "0",
+     "error_code": "acl_denied",
+     "wall_ms": 2331,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "0",
+     "error_code": "acl_denied",
+     "wall_ms": 2584,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "unmodified",
+   "row": "legacy-direct.x-8298-retired",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2929,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 9
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2798,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 9
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2894,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 9
+    }
+   ]
+  },
+  {
+   "version": "main",
+   "tree": "unmodified",
+   "row": "v2-direct.x-8298-retired.ml-dsa-44",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [
+    "250000:execution reverted"
+   ],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 3985,
+     "getCode": [],
+     "isValidSignature": [
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      }
+     ],
+     "rpc_calls": 9
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 4248,
+     "getCode": [],
+     "isValidSignature": [
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      }
+     ],
+     "rpc_calls": 9
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 4443,
+     "getCode": [],
+     "isValidSignature": [
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      },
+      {
+       "gas": 250000,
+       "result": null,
+       "error": "execution reverted"
+      }
+     ],
+     "rpc_calls": 9
+    }
+   ]
+  },
+  {
+   "version": "v0.13.8",
+   "tree": "unmodified",
+   "row": "legacy-direct.x-8298",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 459,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 709,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 358,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 2
+    }
+   ]
+  },
+  {
+   "version": "v0.13.8",
+   "tree": "unmodified",
+   "row": "legacy-delegated.d-for-x-8298",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "kms_hits": [
+    "4"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 299,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 1
+    },
+    {
+     "run": "r2",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 298,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 1
+    },
+    {
+     "run": "r3",
+     "expected": "Forwarded",
+     "observed": "Forwarded",
+     "kms_hits": "4",
+     "attempts": "0",
+     "error_code": "-",
+     "wall_ms": 455,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 1
+    }
+   ]
+  },
+  {
+   "version": "v0.13.8",
+   "tree": "unmodified",
+   "row": "legacy-direct.x-8298-retired",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 3196,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 6
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2656,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 6
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 3183,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 6
+    }
+   ]
+  },
+  {
+   "version": "v0.13.8",
+   "tree": "unmodified",
+   "row": "legacy-delegated.d-for-x-8298-retired",
+   "runs": 3,
+   "run_ids": [
+    "r1",
+    "r2",
+    "r3"
+   ],
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "kms_hits": [
+    "0"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "getCode": [],
+   "isValidSignature": [],
+   "conforms": true,
+   "observations": [
+    {
+     "run": "r1",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 3138,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 3
+    },
+    {
+     "run": "r2",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 2600,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 3
+    },
+    {
+     "run": "r3",
+     "expected": "Rejected",
+     "observed": "Rejected",
+     "kms_hits": "0",
+     "attempts": "3",
+     "error_code": "-",
+     "wall_ms": 3223,
+     "getCode": [],
+     "isValidSignature": [],
+     "rpc_calls": 3
+    }
+   ]
+  }
+ ],
+ "adopted_code": [
+  {
+   "run": "p503-main-l1-r1-20261022T183256Z",
+   "account": "0xa2c57d94752D99a6e78f8e2F70fc99FBA015d5A3",
+   "source": "0x63fcbf49648D1BA81ca678d9f5D39F569EE9d63F",
+   "len": "1218",
+   "hash": "0x7891c3c76c5bf802ca4e5896ec1285637f1d241a523c4416e01c5e3eef2f005b"
+  },
+  {
+   "run": "p503-main-l1-r1-20261022T183256Z",
+   "account": "0x1358ef6364e0482207933A9Bfde68dDbBa51CF8D",
+   "source": "0x49FA56058eEef75FC179574B1003FAea2021D8f2",
+   "len": "14",
+   "hash": "0x0ff2fef105b5c284e999785cf74025fde39b0534444cd33c1632bd4c3186bcb7"
+  },
+  {
+   "run": "p503-main-l1-r2-20261022T183419Z",
+   "account": "0x1335582c783Bd61555D80357c71031bE40b4F4fC",
+   "source": "0x8d4A3f0cDc0c69Aa219D66c792C80F0FD3F8B247",
+   "len": "1218",
+   "hash": "0x828c758e1f1f522faa2919eda5f63ce1803e63527e2b9629c980ddafa4238253"
+  },
+  {
+   "run": "p503-main-l1-r2-20261022T183419Z",
+   "account": "0x92073bCd03D2F91d397546B6118D3a0C2254Bb90",
+   "source": "0xBfC5DA7C4A7F20D32B0fC8d78a0C4442eF134237",
+   "len": "14",
+   "hash": "0x0ff2fef105b5c284e999785cf74025fde39b0534444cd33c1632bd4c3186bcb7"
+  },
+  {
+   "run": "p503-main-l1-r3-20261022T183543Z",
+   "account": "0x8ca05Ee46Ac3B8c1BF743b945592ab60258338d8",
+   "source": "0xb0D666385607627c6C27EB49E27D2F230d91F2bE",
+   "len": "1218",
+   "hash": "0x37dd477de7bffa9f6026dfae59349aeac0874cb84120663453b48875c037c3a1"
+  },
+  {
+   "run": "p503-main-l1-r3-20261022T183543Z",
+   "account": "0xe9298c2C23c8A74B44Dca14a17119ab332fE81e5",
+   "source": "0x9C1786BF53DDfE268fE536eD4CE483697b807091",
+   "len": "14",
+   "hash": "0x0ff2fef105b5c284e999785cf74025fde39b0534444cd33c1632bd4c3186bcb7"
+  },
+  {
+   "run": "p503-main-r1-20261022T183224Z",
+   "account": "0xb15e07dC130826AA3E3B7BfAD6D53B86F1F8dd33",
+   "source": "0xC109CcDDfD6c22C7483B80a7Aa634689A52eB0CD",
+   "len": "1218",
+   "hash": "0x6cf84b9c7bc0b298567bcc552c40856f8d9109fe8d70c9e93b4b1a917eb84769"
+  },
+  {
+   "run": "p503-main-r2-20261022T183353Z",
+   "account": "0x280DE51455AdeDadE5F5b31D63BcC9421a1CBdB3",
+   "source": "0x7248BB9d7C306F8dbA5116FfEbA1393E4b8508ad",
+   "len": "1218",
+   "hash": "0x9e67aca6bbed9271a72aa86f096add9bb1dfdef16d646519b92876d3d698ce83"
+  },
+  {
+   "run": "p503-main-r3-20261022T183511Z",
+   "account": "0x1c838535FcaC2f53FD44f3523092D9E8f27d42Ca",
+   "source": "0xA1b36046fc3F426c754f92cD8F9fc06161598416",
+   "len": "1218",
+   "hash": "0x412beb9c5d0f3ffb4f6714c1d57ac6f0f60e8182f86ad09ef367ff57f7ba7190"
+  },
+  {
+   "run": "p503-v0.13.8-r1-20261022T183208Z",
+   "account": "0x3f2de3c36249bD5200DC2fd58F518a4b09A00A9f",
+   "len": "14",
+   "hash": "0x0ff2fef105b5c284e999785cf74025fde39b0534444cd33c1632bd4c3186bcb7"
+  },
+  {
+   "run": "p503-v0.13.8-r2-20261022T183338Z",
+   "account": "0x2780E6Bd05141cfA96Fa07ab4AC0948ad9F68FAc",
+   "len": "14",
+   "hash": "0x0ff2fef105b5c284e999785cf74025fde39b0534444cd33c1632bd4c3186bcb7"
+  },
+  {
+   "run": "p503-v0.13.8-r3-20261022T183455Z",
+   "account": "0x5B6C14C7F4cDb7e17d5305477274DBD79006435c",
+   "len": "14",
+   "hash": "0x0ff2fef105b5c284e999785cf74025fde39b0534444cd33c1632bd4c3186bcb7"
+  }
+ ],
+ "summary": {
+  "rows": 28,
+  "conforming": 28,
+  "rows_with_three_runs": 28,
+  "rewritten_answers": 0,
+  "adopted_code_kinds": [
+   [
+    "1218",
+    "0x37dd477de7bffa9f6026dfae59349aeac0874cb84120663453b48875c037c3a1"
+   ],
+   [
+    "1218",
+    "0x412beb9c5d0f3ffb4f6714c1d57ac6f0f60e8182f86ad09ef367ff57f7ba7190"
+   ],
+   [
+    "1218",
+    "0x6cf84b9c7bc0b298567bcc552c40856f8d9109fe8d70c9e93b4b1a917eb84769"
+   ],
+   [
+    "1218",
+    "0x7891c3c76c5bf802ca4e5896ec1285637f1d241a523c4416e01c5e3eef2f005b"
+   ],
+   [
+    "1218",
+    "0x828c758e1f1f522faa2919eda5f63ce1803e63527e2b9629c980ddafa4238253"
+   ],
+   [
+    "1218",
+    "0x9e67aca6bbed9271a72aa86f096add9bb1dfdef16d646519b92876d3d698ce83"
+   ],
+   [
+    "14",
+    "0x0ff2fef105b5c284e999785cf74025fde39b0534444cd33c1632bd4c3186bcb7"
+   ]
+  ]
+ }
+}

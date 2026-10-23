@@ -1,0 +1,48 @@
+Compiling 10 files with Solc 0.8.24
+Solc 0.8.24 finished in 16.61s
+Compiler run successful with warnings:
+Warning (2018): Function state mutability can be restricted to pure
+  --> test/conformance/ZamaMainConformance.t.sol:53:5:
+   |
+53 |     function kitRegistry() internal view override returns (address) {
+   |     ^ (Relevant source part starts here and spans across multiple lines).
+
+
+Ran 18 tests for test/conformance/ZamaMainConformance.t.sol:ZamaMainConformanceTest
+[FAIL: registry batch: retire then grant reverts] test_kit_TC10_GrantsThenRetireAtomic_RetireThenGrantReverts() (gas: 1729287)
+[FAIL: enforcement kept] test_kit_TC11_TheUpgradeGuard() (gas: 2535462)
+[PASS] test_kit_TC12_ERC165() (gas: 21138)
+[PASS] test_kit_TC17_DesignationRules() (gas: 79507)
+[PASS] test_kit_TC17_TheSuccessorReadsOnlyAfterRetirement_AndNothingMore() (gas: 977979)
+[PASS] test_kit_TC19_AContractAccountSignsThroughERC1271Only() (gas: 798164)
+[PASS] test_kit_TC19_TheERCVector() (gas: 118169)
+[FAIL: every use view false after retirement] test_kit_TC1_R5_TheNextCallInTheSameTransaction() (gas: 895919)
+[PASS] test_kit_TC1_RetireOnce_SecondRevertsWithoutAnEvent() (gas: 48718)
+[PASS] test_kit_TC2_RetireUnderHostileConditions_AsAContract_WithNoHandles() (gas: 839721)
+[PASS] test_kit_TC3_NeverRetiredAccountsUnaffected() (gas: 969571)
+[FAIL: isAllowed] test_kit_TC4_EveryUseViewFalse_PublicUnchanged() (gas: 946177)
+[FAIL: assertion failed] test_kit_TC4_R10_TheEngineAndTheOutput() (gas: 884948)
+[PASS] test_kit_TC5_OnBehalfFalseForEachRetiredParty() (gas: 995083)
+[SKIP] test_kit_TC6_PermitFalseForARetiredIssuerOrRecipient() (gas: 0)
+[FAIL: reverts: allow] test_kit_TC7_ARetiredGrantorRevertsOnEveryPath() (gas: 935909)
+[FAIL: inert] test_kit_TC8_GrantsToARetiredAccountSucceed_AndAreInert() (gas: 973565)
+[FAIL: export reverts: allow] test_kit_TC9_ComputeThenEveryExportReverts() (gas: 1217404)
+Suite result: FAILED. 9 passed; 8 failed; 1 skipped; finished in 5.67ms (24.98ms CPU time)
+
+Ran 1 test suite in 19.99ms (5.67ms CPU time): 9 tests passed, 8 failed, 1 skipped (18 total tests)
+
+Failing tests:
+Encountered 8 failing tests in test/conformance/ZamaMainConformance.t.sol:ZamaMainConformanceTest
+[FAIL: registry batch: retire then grant reverts] test_kit_TC10_GrantsThenRetireAtomic_RetireThenGrantReverts() (gas: 1729287)
+[FAIL: enforcement kept] test_kit_TC11_TheUpgradeGuard() (gas: 2535462)
+[FAIL: every use view false after retirement] test_kit_TC1_R5_TheNextCallInTheSameTransaction() (gas: 895919)
+[FAIL: isAllowed] test_kit_TC4_EveryUseViewFalse_PublicUnchanged() (gas: 946177)
+[FAIL: assertion failed] test_kit_TC4_R10_TheEngineAndTheOutput() (gas: 884948)
+[FAIL: reverts: allow] test_kit_TC7_ARetiredGrantorRevertsOnEveryPath() (gas: 935909)
+[FAIL: inert] test_kit_TC8_GrantsToARetiredAccountSucceed_AndAreInert() (gas: 973565)
+[FAIL: export reverts: allow] test_kit_TC9_ComputeThenEveryExportReverts() (gas: 1217404)
+
+Encountered a total of 8 failing tests, 9 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 8 failed tests
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger

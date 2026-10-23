@@ -1,0 +1,22 @@
+raw_scrub_scan of export-repro: 45 files
+mnemonic-word=4
+private-key-word=4
+hex-secret=0
+password-assignment=0
+url-credentials=0
+ipv4-public=0
+path-c-users=80
+path-home=0
+hostname-left=0
+files=45
+binary=0
+RESULT secret_or_hostname_hits=8
+SECRET mnemonic-word: console\run3_level0-mock.log:77
+SECRET private-key-word: console\run3_level0-mock.log:77
+SECRET mnemonic-word: console\run4b_level0-mock.log:73
+SECRET private-key-word: console\run4b_level0-mock.log:73
+SECRET mnemonic-word: run3\level0-mock\M_summary.txt:49
+SECRET private-key-word: run3\level0-mock\M_summary.txt:49
+SECRET mnemonic-word: run4b\level0-mock\M_summary.txt:49
+SECRET private-key-word: run4b\level0-mock\M_summary.txt:49
+Reviewed 2026-10-22: all 8 hits are the label of the mock script's own secret scan ("... (lines naming a private key or mnemonic):"), each followed by its count, 0. The same label is in Phase 3's committed mock summaries. No secret.

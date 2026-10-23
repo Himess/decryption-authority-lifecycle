@@ -1,0 +1,713 @@
+//! [lifecycle real-chain harness] Baseline proof: the UNMODIFIED kms-worker checks user-decryption
+//! requests against a REAL fhevm ACL (Zama bytecode at this checkout) deployed on a local Anvil node.
+//!
+//! Same structure as `tests/acl.rs`: Gateway mocked with an alloy `Asserter` (including the
+//! Coprocessor registry load), KMS Core mocked with a `mocktail` gRPC server, ciphertext storage
+//! (RFC-023 attestation HEAD + ciphertext GET) mocked with a `mocktail` HTTP server. Only the host
+//! chain changes: `init_host_chains_acl_contracts_mock` is replaced by
+//! `init_host_chains_acl_contracts_anvil`, whose provider reaches Anvil through a JSON-RPC recorder,
+//! so every ACL view the connector performs is captured on the wire.
+//!
+//! Paths covered: the gateway-transaction ("legacy") user decryption, direct and delegated
+//! (`real_acl_user_decryption`), and the RFC-016 in-event ("V2") user decryption, direct and
+//! delegated (`real_acl_user_decryption_v2`).
+//!
+//! Environment (set by `/srv/lifecycle/scripts/run_real_chain.sh`):
+//! - `LIFECYCLE_ANVIL_URL`: direct Anvil URL, used only for harness setup transactions/reads.
+//! - `LIFECYCLE_HOST_RPC_URL`: recorder URL in front of the same Anvil, given to the connector.
+//! - `LIFECYCLE_HOST_CHAIN_ID`: Anvil chain id, encoded in the handle.
+//! - `LIFECYCLE_SOL_OUT`: forge `out/` dir of the test-only helper contracts.
+//! - `DATABASE_URL` (+ `PGPASSFILE`): external Postgres, the repo's own `DbInstance::setup_external`.
+mod common;
+
+use crate::common::{TEST_COPRO_REGISTRY_REFRESH, init_kms_worker, mock_copro_registry_load};
+use alloy::{
+    hex,
+    primitives::{Address, B256, U256, keccak256},
+    providers::{Provider, ProviderBuilder, mock::Asserter},
+    rpc::types::Transaction,
+    sol_types::SolCall,
+    transports::http::reqwest::Url,
+};
+use ciphertext_attestation::{
+    COPROCESSOR_CONTEXT_ID_V1, CiphertextAttestationPayload, CiphertextFormat,
+    S3_METADATA_ATTESTATION_HEADER, ciphertext::Version, s3_ct128_key,
+};
+use connector_utils::{
+    tests::{
+        db::requests::{InsertRequestOptions, TestEventType, insert_rand_request},
+        rand::rand_digest,
+        setup::{
+            AnvilAcl, DbInstance, S3_CT_BUCKET, TestInstanceBuilder,
+            init_host_chains_acl_contracts_anvil, s3_ct_attestation_signer,
+        },
+    },
+    types::ProtocolEventKind,
+};
+use fhevm_gateway_bindings::decryption::{
+    Decryption::{
+        CtHandleContractPair, delegatedUserDecryptionRequestCall,
+        userDecryptionRequest_1Call as userDecryptionRequestCall,
+    },
+    IDecryption::{ContractsInfo, DelegationAccounts},
+};
+use kms_grpc::kms::v1::{
+    Empty, SigningSchemeType, TypedSignature, UserDecryptionResponse,
+    UserDecryptionResponsePayload,
+};
+use kms_worker::core::Config;
+use mocktail::{
+    MockSet,
+    server::{MockServer, MockServerConfig},
+};
+use rstest::rstest;
+use sqlx::{Pool, Postgres};
+use std::{
+    net::{IpAddr, Ipv4Addr},
+    path::PathBuf,
+    str::FromStr,
+    time::{Duration, Instant, SystemTime, UNIX_EPOCH},
+};
+use tokio_util::sync::CancellationToken;
+use tracing::info;
+use tracing_subscriber::EnvFilter;
+
+const MAX_DECRYPTION_ATTEMPTS: u16 = 3;
+/// FHE type byte (index 30) of the test handle: 5 (`euint64`), as in the repo's `S3_CT_HANDLE`.
+const HANDLE_FHE_TYPE: u8 = 5;
+
+#[derive(Debug, Clone, Copy)]
+enum Scenario {
+    /// Direct path, user U holds a persistent ACL allowance on the handle.
+    DirectUserU,
+    /// Direct path, user V holds no allowance.
+    DirectUserV,
+    /// Delegated path, delegator U (allowed) delegated to D for contract C.
+    DelegatedUToD,
+    /// Delegated path, delegator V (not allowed on the handle) delegated to D for contract C.
+    DelegatedVToD,
+    /// Delegated path, delegator U, but V was never delegated by U.
+    DelegatedUToV,
+}
+
+struct Accounts {
+    owner: Address,
+    u: Address,
+    v: Address,
+    d: Address,
+}
+
+impl Scenario {
+    /// (request user = `userAddress` of the event, delegator, expected to be forwarded to the KMS)
+    fn request(&self, a: &Accounts) -> (Address, Option<Address>, bool) {
+        match self {
+            Scenario::DirectUserU => (a.u, None, true),
+            Scenario::DirectUserV => (a.v, None, false),
+            Scenario::DelegatedUToD => (a.d, Some(a.u), true),
+            Scenario::DelegatedVToD => (a.d, Some(a.v), false),
+            Scenario::DelegatedUToV => (a.v, Some(a.u), false),
+        }
+    }
+}
+
+fn env(name: &str) -> anyhow::Result<String> {
+    std::env::var(name).map_err(|_| anyhow::anyhow!("missing env var {name}"))
+}
+
+fn make_handle(chain_id: u64) -> B256 {
+    let mut h = rand_digest().0;
+    h[21] = 0xff;
+    h[22..30].copy_from_slice(&chain_id.to_be_bytes());
+    h[30] = HANDLE_FHE_TYPE;
+    h[31] = 0;
+    B256::from(h)
+}
+
+fn mock_gateway_tx(tx_hash: B256, calldata: Vec<u8>) -> Result<Transaction, serde_json::Error> {
+    // Same JSON shape as `tests/common::create_mock_user_decryption_request_tx` (`to` is the default
+    // Decryption contract address, so the direct-target check in `fetch_calldata` passes).
+    serde_json::from_value(serde_json::json!({
+        "hash": hex::encode(tx_hash.as_slice()),
+        "nonce": "0x0",
+        "blockHash": null,
+        "blockNumber": null,
+        "transactionIndex": null,
+        "from": "0x0000000000000000000000000000000000000000",
+        "to": "0x0000000000000000000000000000000000000000",
+        "value": "0x0",
+        "gasPrice": "0x0",
+        "gas": "0x0",
+        "input": format!("0x{}", hex::encode(&calldata)),
+        "v": "0x1b",
+        "r": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "s": "0x0000000000000000000000000000000000000000000000000000000000000001",
+        "type": "0x0"
+    }))
+}
+
+fn localhost_mock_config() -> MockServerConfig {
+    MockServerConfig {
+        listen_addr: IpAddr::V4(Ipv4Addr::LOCALHOST),
+        ..Default::default()
+    }
+}
+
+fn total_hits(server: &MockServer) -> usize {
+    server.mocks().iter().map(|m| m.match_count()).sum()
+}
+
+#[derive(Debug, PartialEq)]
+enum Outcome {
+    Forwarded,
+    Rejected,
+}
+
+async fn wait_for_outcome(db: &Pool<Postgres>, decryption_id: U256) -> anyhow::Result<Outcome> {
+    let start = Instant::now();
+    loop {
+        let responses: i64 = sqlx::query_scalar(
+            "SELECT COUNT(*) FROM user_decryption_responses WHERE decryption_id = $1",
+        )
+        .bind(decryption_id.as_le_slice())
+        .fetch_one(db)
+        .await?;
+        if responses > 0 {
+            return Ok(Outcome::Forwarded);
+        }
+        // `fetch_optional`: a response insert may remove/complete the request row concurrently.
+        let status: Option<String> = sqlx::query_scalar(
+            "SELECT status::text FROM user_decryption_requests WHERE decryption_id = $1",
+        )
+        .bind(decryption_id.as_le_slice())
+        .fetch_optional(db)
+        .await?;
+        if status.as_deref() == Some("failed") {
+            return Ok(Outcome::Rejected);
+        }
+        if start.elapsed() > Duration::from_secs(90) {
+            anyhow::bail!("timeout waiting for outcome (status={status:?})");
+        }
+        tokio::time::sleep(Duration::from_millis(200)).await;
+    }
+}
+
+#[rstest]
+#[case::direct_user_u_allowed(Scenario::DirectUserU)]
+#[case::direct_user_v_rejected(Scenario::DirectUserV)]
+#[case::delegated_u_to_d_allowed(Scenario::DelegatedUToD)]
+#[case::delegated_v_to_d_rejected(Scenario::DelegatedVToD)]
+#[case::delegated_u_to_v_rejected(Scenario::DelegatedUToV)]
+#[timeout(Duration::from_secs(180))]
+#[tokio::test]
+async fn real_acl_user_decryption(#[case] scenario: Scenario) -> anyhow::Result<()> {
+    let log_guard = tracing::subscriber::set_default(
+        tracing_subscriber::fmt()
+            .with_env_filter(
+                EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info")),
+            )
+            .with_test_writer()
+            .finish(),
+    );
+    let anvil_url = Url::from_str(&env("LIFECYCLE_ANVIL_URL")?)?;
+    let host_rpc_url = Url::from_str(&env("LIFECYCLE_HOST_RPC_URL")?)?;
+    let host_chain_id: u64 = env("LIFECYCLE_HOST_CHAIN_ID")?.parse()?;
+    let sol_out = PathBuf::from(env("LIFECYCLE_SOL_OUT")?);
+
+    // ---------------------------------------------------------------- real host chain (Anvil)
+    let accounts = ProviderBuilder::new()
+        .connect_http(anvil_url.clone())
+        .get_accounts()
+        .await?;
+    let a = Accounts {
+        owner: accounts[0],
+        u: accounts[1],
+        v: accounts[2],
+        d: accounts[3],
+    };
+    info!("ACCOUNTS owner={} U={} V={} D={}", a.owner, a.u, a.v, a.d);
+    let acl = AnvilAcl::deploy(anvil_url.clone(), &sol_out, a.owner).await?;
+    let c = acl.dapp;
+    let handle = make_handle(host_chain_id);
+    acl.grant(handle, a.u).await?;
+    let expiration = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs() + 86_400;
+    acl.delegate(a.u, a.d, c, expiration).await?;
+    acl.delegate(a.v, a.d, c, expiration).await?;
+
+    // Harness sanity table, read directly from Anvil (not through the recorder).
+    let view = acl.instance();
+    let table = [
+        ("isAllowed(h,U)", view.isAllowed(handle, a.u).call().await?, true),
+        ("isAllowed(h,V)", view.isAllowed(handle, a.v).call().await?, false),
+        ("isAllowed(h,D)", view.isAllowed(handle, a.d).call().await?, false),
+        ("isAllowed(h,C)", view.isAllowed(handle, c).call().await?, true),
+        (
+            "isHandleDelegatedForUserDecryption(U,D,C,h)",
+            view.isHandleDelegatedForUserDecryption(a.u, a.d, c, handle).call().await?,
+            true,
+        ),
+        (
+            "isHandleDelegatedForUserDecryption(V,D,C,h)",
+            view.isHandleDelegatedForUserDecryption(a.v, a.d, c, handle).call().await?,
+            false,
+        ),
+        (
+            "isHandleDelegatedForUserDecryption(U,V,C,h)",
+            view.isHandleDelegatedForUserDecryption(a.u, a.v, c, handle).call().await?,
+            false,
+        ),
+    ];
+    for (name, got, want) in table {
+        info!("ACL-STATE {name} = {got}");
+        assert_eq!(got, want, "harness ACL state: {name}");
+    }
+    for who in [a.u, a.v, a.d] {
+        let ts = view.decryptionSignatureInvalidatedBefore(who).call().await?;
+        info!("ACL-STATE decryptionSignatureInvalidatedBefore({who}) = {ts}");
+        assert_eq!(ts, U256::ZERO);
+    }
+
+    // ---------------------------------------------------------------- DB + mocks (as tests/acl.rs)
+    let test_instance = TestInstanceBuilder::default()
+        .with_tracing(Some(log_guard))
+        .with_db(DbInstance::setup_external().await?)
+        .build();
+    let db = test_instance.db();
+
+    let (user, delegator, expect_forwarded) = scenario.request(&a);
+    let pairs = vec![CtHandleContractPair {
+        ctHandle: handle,
+        contractAddress: c,
+    }];
+    let contracts_info = ContractsInfo {
+        chainId: U256::from(host_chain_id),
+        addresses: vec![c],
+    };
+    let calldata = match delegator {
+        None => userDecryptionRequestCall {
+            ctHandleContractPairs: pairs,
+            contractsInfo: contracts_info,
+            userAddress: user,
+            ..Default::default()
+        }
+        .abi_encode(),
+        Some(delegator) => delegatedUserDecryptionRequestCall {
+            ctHandleContractPairs: pairs,
+            delegationAccounts: DelegationAccounts {
+                delegatorAddress: delegator,
+                delegateAddress: user,
+            },
+            contractsInfo: contracts_info,
+            ..Default::default()
+        }
+        .abi_encode(),
+    };
+
+    // Ciphertext storage mock (RFC-023 layout), bound to 127.0.0.1: HEAD returns the coprocessor
+    // attestation header (signed by the repo's test attestation signer), GET the ciphertext.
+    let ciphertext = [rand_digest().0, rand_digest().0].concat();
+    let sns_digest = keccak256(&ciphertext);
+    let attestation = CiphertextAttestationPayload::new(
+        Version::V1,
+        handle,
+        U256::ZERO,
+        COPROCESSOR_CONTEXT_ID_V1,
+        B256::ZERO,
+        sns_digest,
+        CiphertextFormat::CompressedOnCpu,
+    )
+    .sign(&s3_ct_attestation_signer())
+    .await?;
+    let attestation_json = serde_json::to_string(&attestation)?;
+    let object_path = format!(
+        "/{S3_CT_BUCKET}/{}",
+        s3_ct128_key(handle.as_slice(), COPROCESSOR_CONTEXT_ID_V1)
+    );
+    let mut s3_mocks = MockSet::new();
+    let (head_path, head_attestation) = (object_path.clone(), attestation_json.clone());
+    s3_mocks.mock(move |when, then| {
+        when.head().path(head_path);
+        then.headers([(S3_METADATA_ATTESTATION_HEADER, head_attestation.as_str())]);
+    });
+    let (get_path, get_body) = (object_path.clone(), ciphertext.clone());
+    s3_mocks.mock(move |when, then| {
+        when.get().path(get_path);
+        then.bytes(get_body);
+    });
+    let s3_server = MockServer::new_http("s3")
+        .with_config(localhost_mock_config())
+        .with_mocks(s3_mocks);
+    s3_server.start().await?;
+    let s3_base_url = format!("http://127.0.0.1:{}", s3_server.port().unwrap());
+
+    // Gateway mock: Coprocessor registry load, then the request calldata re-read on every attempt.
+    let asserter = Asserter::new();
+    mock_copro_registry_load(&asserter, &s3_base_url);
+    let tx_hash = rand_digest();
+    let attempts = if expect_forwarded { 1 } else { MAX_DECRYPTION_ATTEMPTS };
+    for _ in 0..attempts {
+        asserter.push_success(&mock_gateway_tx(tx_hash, calldata.clone())?);
+    }
+    let gateway_mock_provider = ProviderBuilder::new()
+        .disable_recommended_fillers()
+        .connect_mocked_client(asserter);
+
+    // KMS Core mock (same mocks as tests/integration_tests.rs), bound to 127.0.0.1. It accepts
+    // anything: a rejected request must fail before reaching it.
+    let mut kms_mocks = MockSet::new();
+    kms_mocks.mock(|when, then| {
+        when.path("/kms_service.v1.CoreServiceEndpoint/UserDecrypt");
+        then.pb(Empty::default());
+    });
+    kms_mocks.mock(|when, then| {
+        when.path("/kms_service.v1.CoreServiceEndpoint/GetUserDecryptionResult");
+        then.pb(UserDecryptionResponse {
+            payload: Some(UserDecryptionResponsePayload::default()),
+            signatures: vec![TypedSignature {
+                scheme: SigningSchemeType::Ecdsa256k1 as i32,
+                signature: vec![69u8; 65],
+            }],
+            ..Default::default()
+        });
+    });
+    let kms_server = MockServer::new_grpc("kms_service.v1.CoreServiceEndpoint")
+        .with_config(localhost_mock_config())
+        .with_mocks(kms_mocks);
+    kms_server.start().await?;
+
+    // ---------------------------------------------------------------- unmodified kms-worker
+    let config = Config {
+        kms_core_endpoints: vec![kms_server.base_url().unwrap().to_string()],
+        max_decryption_attempts: MAX_DECRYPTION_ATTEMPTS,
+        db_fast_event_polling: Duration::from_millis(500),
+        copro_registry_refresh: TEST_COPRO_REGISTRY_REFRESH,
+        ..Default::default()
+    };
+    let acl_contracts = init_host_chains_acl_contracts_anvil(host_chain_id, acl.acl, host_rpc_url);
+    let kms_worker = init_kms_worker(config, gateway_mock_provider, acl_contracts, db).await?;
+
+    let request = insert_rand_request(
+        db,
+        TestEventType::UserDecryption,
+        InsertRequestOptions::new()
+            .with_ct_handles(vec![handle])
+            .with_tx_hash(tx_hash),
+    )
+    .await?;
+    let ProtocolEventKind::UserDecryption(request) = request else {
+        anyhow::bail!("unexpected request kind");
+    };
+    // `insert_rand_request` draws a random `userAddress`; set the scenario's user before the
+    // worker starts (the gateway event's userAddress is the requester / delegate).
+    sqlx::query("UPDATE user_decryption_requests SET user_address = $1 WHERE decryption_id = $2")
+        .bind(user.as_slice())
+        .bind(request.decryptionId.as_le_slice())
+        .execute(db)
+        .await?;
+
+    info!(
+        "SCENARIO {scenario:?}: acl={} handle={handle} user={user} delegator={delegator:?} \
+        contract={c} decryption_id={}",
+        acl.acl, request.decryptionId
+    );
+    let cancel_token = CancellationToken::new();
+    let kms_worker_task = tokio::spawn(kms_worker.start(cancel_token.clone()));
+
+    let outcome = wait_for_outcome(db, request.decryptionId).await?;
+    if outcome == Outcome::Rejected {
+        // Give a late (wrong) forward a chance to show up before asserting it never happened.
+        tokio::time::sleep(Duration::from_secs(2)).await;
+    }
+    let kms_hits = total_hits(&kms_server);
+    let s3_hits = total_hits(&s3_server);
+    cancel_token.cancel();
+    kms_worker_task.await.unwrap();
+
+    info!(
+        "RESULT scenario={scenario:?} version=main acl={} acl_version={} user={user} \
+        delegator={delegator:?} contract={c} expected={} observed={outcome:?} kms_mock_hits={kms_hits} \
+        s3_mock_hits={s3_hits}",
+        acl.acl,
+        acl.version,
+        if expect_forwarded { "Forwarded" } else { "Rejected" },
+    );
+    if expect_forwarded {
+        assert_eq!(outcome, Outcome::Forwarded);
+        assert!(kms_hits >= 2, "UserDecrypt + GetUserDecryptionResult expected");
+    } else {
+        assert_eq!(outcome, Outcome::Rejected);
+        // At main the gRPC request is prepared (ciphertext fetched) concurrently with the checks
+        // (`processor.rs` try_join!), so S3 hits are expected; the KMS Core must never be reached.
+        assert_eq!(kms_hits, 0, "a rejected request must never reach the KMS Core");
+    }
+    Ok(())
+}
+
+// =================================================================================================
+// RFC-016 "V2" path (payload carried in the event, EIP-712 signed by the requester). The requester
+// keys are ephemeral local test keys (never printed); the ACL state lives on the same real Anvil ACL.
+// =================================================================================================
+
+use alloy::{
+    signers::{SignerSync, local::PrivateKeySigner},
+    sol_types::Eip712Domain,
+};
+use user_decryption_signature::compute_user_decrypt_digest;
+
+#[derive(Debug, Clone, Copy)]
+enum ScenarioV2 {
+    /// owner == user == Uk (local key), Uk persistently allowed on the handle.
+    DirectUserU,
+    /// owner == user == Vk (local key), no allowance.
+    DirectUserV,
+    /// owner U (Anvil account, allowed) delegated to Dk for contract C; user Dk.
+    DelegatedUToD,
+    /// owner V (not allowed on the handle) delegated to Dk for contract C; user Dk.
+    DelegatedVToD,
+    /// owner U, user Vk, never delegated by U.
+    DelegatedUToV,
+}
+
+async fn start_s3_mock(handle: B256) -> anyhow::Result<(MockServer, String)> {
+    let ciphertext = [rand_digest().0, rand_digest().0].concat();
+    let sns_digest = keccak256(&ciphertext);
+    let attestation = CiphertextAttestationPayload::new(
+        Version::V1,
+        handle,
+        U256::ZERO,
+        COPROCESSOR_CONTEXT_ID_V1,
+        B256::ZERO,
+        sns_digest,
+        CiphertextFormat::CompressedOnCpu,
+    )
+    .sign(&s3_ct_attestation_signer())
+    .await?;
+    let attestation_json = serde_json::to_string(&attestation)?;
+    let object_path = format!(
+        "/{S3_CT_BUCKET}/{}",
+        s3_ct128_key(handle.as_slice(), COPROCESSOR_CONTEXT_ID_V1)
+    );
+    let mut s3_mocks = MockSet::new();
+    let (head_path, head_attestation) = (object_path.clone(), attestation_json);
+    s3_mocks.mock(move |when, then| {
+        when.head().path(head_path);
+        then.headers([(S3_METADATA_ATTESTATION_HEADER, head_attestation.as_str())]);
+    });
+    s3_mocks.mock(move |when, then| {
+        when.get().path(object_path);
+        then.bytes(ciphertext);
+    });
+    let s3_server = MockServer::new_http("s3")
+        .with_config(localhost_mock_config())
+        .with_mocks(s3_mocks);
+    s3_server.start().await?;
+    let base = format!("http://127.0.0.1:{}", s3_server.port().unwrap());
+    Ok((s3_server, base))
+}
+
+async fn start_kms_mock() -> anyhow::Result<MockServer> {
+    let mut kms_mocks = MockSet::new();
+    kms_mocks.mock(|when, then| {
+        when.path("/kms_service.v1.CoreServiceEndpoint/UserDecrypt");
+        then.pb(Empty::default());
+    });
+    kms_mocks.mock(|when, then| {
+        when.path("/kms_service.v1.CoreServiceEndpoint/GetUserDecryptionResult");
+        then.pb(UserDecryptionResponse {
+            payload: Some(UserDecryptionResponsePayload::default()),
+            signatures: vec![TypedSignature {
+                scheme: SigningSchemeType::Ecdsa256k1 as i32,
+                signature: vec![69u8; 65],
+            }],
+            ..Default::default()
+        });
+    });
+    let kms_server = MockServer::new_grpc("kms_service.v1.CoreServiceEndpoint")
+        .with_config(localhost_mock_config())
+        .with_mocks(kms_mocks);
+    kms_server.start().await?;
+    Ok(kms_server)
+}
+
+#[rstest]
+#[case::v2_direct_user_u_allowed(ScenarioV2::DirectUserU)]
+#[case::v2_direct_user_v_rejected(ScenarioV2::DirectUserV)]
+#[case::v2_delegated_u_to_d_allowed(ScenarioV2::DelegatedUToD)]
+#[case::v2_delegated_v_to_d_rejected(ScenarioV2::DelegatedVToD)]
+#[case::v2_delegated_u_to_v_rejected(ScenarioV2::DelegatedUToV)]
+#[timeout(Duration::from_secs(180))]
+#[tokio::test]
+async fn real_acl_user_decryption_v2(#[case] scenario: ScenarioV2) -> anyhow::Result<()> {
+    let log_guard = tracing::subscriber::set_default(
+        tracing_subscriber::fmt()
+            .with_env_filter(
+                EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info")),
+            )
+            .with_test_writer()
+            .finish(),
+    );
+    let anvil_url = Url::from_str(&env("LIFECYCLE_ANVIL_URL")?)?;
+    let host_rpc_url = Url::from_str(&env("LIFECYCLE_HOST_RPC_URL")?)?;
+    let host_chain_id: u64 = env("LIFECYCLE_HOST_CHAIN_ID")?.parse()?;
+    let sol_out = PathBuf::from(env("LIFECYCLE_SOL_OUT")?);
+
+    let accounts = ProviderBuilder::new()
+        .connect_http(anvil_url.clone())
+        .get_accounts()
+        .await?;
+    let a = Accounts {
+        owner: accounts[0],
+        u: accounts[1],
+        v: accounts[2],
+        d: accounts[3],
+    };
+    // Ephemeral requester keys (EIP-712 signers). Only their addresses are ever logged.
+    let uk = PrivateKeySigner::from_bytes(&rand_digest())?;
+    let vk = PrivateKeySigner::from_bytes(&rand_digest())?;
+    let dk = PrivateKeySigner::from_bytes(&rand_digest())?;
+    info!("ACCOUNTS owner={} U={} V={} D={}", a.owner, a.u, a.v, a.d);
+    info!(
+        "LOCAL-KEYS Uk={} Vk={} Dk={}",
+        uk.address(),
+        vk.address(),
+        dk.address()
+    );
+
+    let acl = AnvilAcl::deploy(anvil_url.clone(), &sol_out, a.owner).await?;
+    let c = acl.dapp;
+    let handle = make_handle(host_chain_id);
+    acl.grant(handle, a.u).await?;
+    acl.grant(handle, uk.address()).await?;
+    let expiration = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs() + 86_400;
+    acl.delegate(a.u, dk.address(), c, expiration).await?;
+    acl.delegate(a.v, dk.address(), c, expiration).await?;
+
+    let view = acl.instance();
+    let table = [
+        ("isAllowed(h,Uk)", view.isAllowed(handle, uk.address()).call().await?, true),
+        ("isAllowed(h,Vk)", view.isAllowed(handle, vk.address()).call().await?, false),
+        ("isAllowed(h,U)", view.isAllowed(handle, a.u).call().await?, true),
+        ("isAllowed(h,V)", view.isAllowed(handle, a.v).call().await?, false),
+        (
+            "isHandleDelegatedForUserDecryption(U,Dk,C,h)",
+            view.isHandleDelegatedForUserDecryption(a.u, dk.address(), c, handle).call().await?,
+            true,
+        ),
+        (
+            "isHandleDelegatedForUserDecryption(V,Dk,C,h)",
+            view.isHandleDelegatedForUserDecryption(a.v, dk.address(), c, handle).call().await?,
+            false,
+        ),
+        (
+            "isHandleDelegatedForUserDecryption(U,Vk,C,h)",
+            view.isHandleDelegatedForUserDecryption(a.u, vk.address(), c, handle).call().await?,
+            false,
+        ),
+    ];
+    for (name, got, want) in table {
+        info!("ACL-STATE {name} = {got}");
+        assert_eq!(got, want, "harness ACL state: {name}");
+    }
+
+    let test_instance = TestInstanceBuilder::default()
+        .with_tracing(Some(log_guard))
+        .with_db(DbInstance::setup_external().await?)
+        .build();
+    let db = test_instance.db();
+
+    let (signer, owner, expect_forwarded) = match scenario {
+        ScenarioV2::DirectUserU => (&uk, uk.address(), true),
+        ScenarioV2::DirectUserV => (&vk, vk.address(), false),
+        ScenarioV2::DelegatedUToD => (&dk, a.u, true),
+        ScenarioV2::DelegatedVToD => (&dk, a.v, false),
+        ScenarioV2::DelegatedUToV => (&vk, a.u, false),
+    };
+    let user = signer.address();
+
+    let (s3_server, s3_base_url) = start_s3_mock(handle).await?;
+    // Gateway mock: only the Coprocessor registry load (the V2 payload is carried in the event).
+    let asserter = Asserter::new();
+    mock_copro_registry_load(&asserter, &s3_base_url);
+    let gateway_mock_provider = ProviderBuilder::new()
+        .disable_recommended_fillers()
+        .connect_mocked_client(asserter);
+    let kms_server = start_kms_mock().await?;
+
+    let config = Config {
+        kms_core_endpoints: vec![kms_server.base_url().unwrap().to_string()],
+        max_decryption_attempts: MAX_DECRYPTION_ATTEMPTS,
+        db_fast_event_polling: Duration::from_millis(500),
+        copro_registry_refresh: TEST_COPRO_REGISTRY_REFRESH,
+        ..Default::default()
+    };
+    let domain = Eip712Domain {
+        name: Some(config.decryption_contract.domain_name.clone().into()),
+        version: Some(config.decryption_contract.domain_version.clone().into()),
+        chain_id: Some(U256::from(host_chain_id)),
+        verifying_contract: Some(config.decryption_contract.address),
+        salt: None,
+    };
+    let acl_contracts = init_host_chains_acl_contracts_anvil(host_chain_id, acl.acl, host_rpc_url);
+    let kms_worker = init_kms_worker(config, gateway_mock_provider, acl_contracts, db).await?;
+
+    // Insert a V2 row (repo helper: random user, key and signature, validity window around now),
+    // then turn it into this scenario: user, owner and contract, plus an EIP-712 signature by the user.
+    let request = insert_rand_request(
+        db,
+        TestEventType::UserDecryptionV2,
+        InsertRequestOptions::new().with_ct_handles(vec![handle]),
+    )
+    .await?;
+    let ProtocolEventKind::UserDecryptionV2(request) = request else {
+        anyhow::bail!("unexpected request kind");
+    };
+    let mut payload = request.payload.clone();
+    payload.userAddress = user;
+    let digest = compute_user_decrypt_digest(&payload, &domain);
+    let signature = signer.sign_hash_sync(&digest)?.as_bytes().to_vec();
+    sqlx::query(
+        "UPDATE user_decryption_requests SET user_address = $1, signature = $2, \
+        handle_owner_addresses = $3, handle_contract_addresses = $4 WHERE decryption_id = $5",
+    )
+    .bind(user.as_slice())
+    .bind(&signature)
+    .bind(vec![owner.to_vec()])
+    .bind(vec![c.to_vec()])
+    .bind(request.decryptionId.as_le_slice())
+    .execute(db)
+    .await?;
+
+    let delegator = if owner == user { None } else { Some(owner) };
+    info!(
+        "SCENARIO V2_{scenario:?}: acl={} handle={handle} user={user} delegator={delegator:?} \
+        contract={c} decryption_id={}",
+        acl.acl, request.decryptionId
+    );
+    let cancel_token = CancellationToken::new();
+    let kms_worker_task = tokio::spawn(kms_worker.start(cancel_token.clone()));
+
+    let outcome = wait_for_outcome(db, request.decryptionId).await?;
+    if outcome == Outcome::Rejected {
+        tokio::time::sleep(Duration::from_secs(2)).await;
+    }
+    let kms_hits = total_hits(&kms_server);
+    let s3_hits = total_hits(&s3_server);
+    cancel_token.cancel();
+    kms_worker_task.await.unwrap();
+
+    info!(
+        "RESULT scenario=V2_{scenario:?} version=main acl={} acl_version={} user={user} \
+        owner={owner} contract={c} expected={} observed={outcome:?} kms_mock_hits={kms_hits} \
+        s3_mock_hits={s3_hits}",
+        acl.acl,
+        acl.version,
+        if expect_forwarded { "Forwarded" } else { "Rejected" },
+    );
+    if expect_forwarded {
+        assert_eq!(outcome, Outcome::Forwarded);
+        assert!(kms_hits >= 2, "UserDecrypt + GetUserDecryptionResult expected");
+    } else {
+        assert_eq!(outcome, Outcome::Rejected);
+        assert_eq!(kms_hits, 0, "a rejected request must never reach the KMS Core");
+    }
+    Ok(())
+}

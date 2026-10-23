@@ -1,0 +1,29 @@
+No files changed, compilation skipped
+
+Ran 15 tests for test/acl/ACLRetirementProfileA.t.sol:ACLRetirementProfileATest
+[PASS] test_A1_D22_NaiveGateLocksInTheThiefObserver() (gas: 2894821)
+[PASS] test_A1_ObserverMayAbdicate_ActiveAccountUnaffected() (gas: 797079)
+[PASS] test_A1_OperatorGate() (gas: 144666)
+[PASS] test_A1_OperatorUntilNowIsAGrant() (gas: 81467)
+[PASS] test_A1_Residual_VanillaObserverLeaksAfterRetirement() (gas: 1115251)
+[PASS] test_A1_ThiefObserverClearedAndCannotBeReAdded() (gas: 1046205)
+[PASS] test_A2_TransferFromRetiredAccountSucceeds() (gas: 1198544)
+[PASS] test_A2_TransferToRetiredAccountSucceeds() (gas: 720725)
+[PASS] test_A3_PostGrantAssertionBreaksTransfersToRetiredAccounts() (gas: 3393803)
+[PASS] test_A4_ProfileARefusesLifecycleCalls() (gas: 657657)
+[PASS] test_A4_Residual_GenericCallHandsTheContractToASuccessor() (gas: 596799)
+[PASS] test_A4_Residual_GenericCallRetiresTheContract() (gas: 949522)
+[PASS] test_Gas_A1GateOverhead() (gas: 847334)
+Logs:
+  setOperator, vanilla: 25111
+  setOperator, Profile A: 32892
+  setObserver with a balance, vanilla: 70067
+  setObserver with a balance, Profile A: 73876
+  gate overhead, setOperator: 7781
+  gate overhead, setObserver: 3809
+
+[PASS] test_Helper_FHEIsAccountRetiredFollowsTheRegistry() (gas: 220880)
+[PASS] test_Helper_RevertsAgainstARegistryWithoutCore() (gas: 290868)
+Suite result: ok. 15 passed; 0 failed; 0 skipped; finished in 6.99ms (24.89ms CPU time)
+
+Ran 1 test suite in 15.26ms (6.99ms CPU time): 15 tests passed, 0 failed, 0 skipped (15 total tests)

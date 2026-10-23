@@ -1,0 +1,113 @@
+Compiling 34 files with Solc 0.8.24
+Solc 0.8.24 finished in 1.70s
+Compiler run successful!
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ lib/cryptography/FhevmECDSA.sol:155:23
+    │
+155 │             uint8 v = uint8((uint256(vs) >> 255) + 27);
+    │                       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint8' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unused-return]: return value of an external call is not used
+    ╭▸ lib/Impl.sol:985:9
+    │
+985 │         IACL($.ACLAddress).multicall(calls);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/unused-return
+
+warning[unused-return]: return value of an external call is not used
+     ╭▸ lib/Impl.sol:1020:9
+     │
+1020 │         IACL($.ACLAddress).multicall(calls);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/unused-return
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+   ╭▸ lib/bridge/ConfidentialOAppCore.sol:99:9
+   │
+99 │         emit PeerSet(_eid, _peer);
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[calls-loop]: external call inside a loop
+    ╭▸ lib/Impl.sol:808:18
+    │
+808 │         result = IFHEVMExecutor($.CoprocessorAddress).trivialEncrypt(value, toType);
+    │                  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/calls-loop
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+     ╭▸ lib/FHE.sol:8349:9
+     │
+8349 │         emit PublicDecryptionVerified(handlesList, abiEncodedCleartexts);
+     │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[unused-return]: return value of an external call is not used
+     ╭▸ lib/FHE.sol:8435:13
+     │
+8435 │         ) = IKMSVerifier($.KMSVerifierAddress).eip712Domain();
+     │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/unused-return
+
+warning[uninitialized-local]: local variable is read before being initialized
+     ╭▸ lib/FHE.sol:8505:34
+     │
+8505 │                 recoveredSigners[uniqueValidCount] = signerRecovered;
+     │                                  ━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/uninitialized-local
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ lib/cryptography/FhevmECDSA.sol:280:13
+    │
+280 │             revert ECDSAInvalidSignature();
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ lib/cryptography/FhevmECDSA.sol:282:13
+    │
+282 │             revert ECDSAInvalidSignatureLength(uint256(errorArg));
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ lib/cryptography/FhevmECDSA.sol:284:13
+    │
+284 │             revert ECDSAInvalidSignatureS(errorArg);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+     ╭▸ lib/FHE.sol:8502:17
+     │
+8502 │                 revert KMSInvalidSigner(signerRecovered);
+     │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[inconsistent-type-names]: contract mixes shorthand and explicit integer type names; use `uint256` and `int256` consistently
+     ╭▸ lib/FHE.sol:8406:14
+     │
+8406 │         for (uint i = 0; i < extraDataSize; i++) {
+     │              ━━━━━━━━━━
+     │
+     ╰ help: https://getfoundry.sh/forge/linting/inconsistent-type-names
+

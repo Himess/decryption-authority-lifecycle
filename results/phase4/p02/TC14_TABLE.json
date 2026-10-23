@@ -1,0 +1,822 @@
+[
+ {
+  "version": "main",
+  "case": "after",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "17"
+    },
+    "isAllowed_heads": [
+     17
+    ],
+    "isAllowed_calls": 6
+   },
+   {
+    "run": "r2",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "17"
+    },
+    "isAllowed_heads": [
+     17
+    ],
+    "isAllowed_calls": 6
+   },
+   {
+    "run": "r3",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "17"
+    },
+    "isAllowed_heads": [
+     17
+    ],
+    "isAllowed_calls": 6
+   }
+  ]
+ },
+ {
+  "version": "main",
+  "case": "race",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "eval_head": "17",
+     "retire_block": "18",
+     "t_eval": "1792608925.861529",
+     "t_retired": "1792608925.941717",
+     "t_outcome_seen": "1792608930.205701"
+    },
+    "isAllowed_heads": [
+     17
+    ],
+    "isAllowed_calls": 2,
+    "race_ms": {
+     "eval_to_retired": 80,
+     "eval_to_outcome_seen": 4344
+    }
+   },
+   {
+    "run": "r2",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "eval_head": "17",
+     "retire_block": "18",
+     "t_eval": "1792609085.179892",
+     "t_retired": "1792609085.262937",
+     "t_outcome_seen": "1792609089.401026"
+    },
+    "isAllowed_heads": [
+     17
+    ],
+    "isAllowed_calls": 2,
+    "race_ms": {
+     "eval_to_retired": 83,
+     "eval_to_outcome_seen": 4221
+    }
+   },
+   {
+    "run": "r3",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "eval_head": "17",
+     "retire_block": "18",
+     "t_eval": "1792609245.065654",
+     "t_retired": "1792609245.100100",
+     "t_outcome_seen": "1792609249.317518"
+    },
+    "isAllowed_heads": [
+     17
+    ],
+    "isAllowed_calls": 2,
+    "race_ms": {
+     "eval_to_retired": 34,
+     "eval_to_outcome_seen": 4252
+    }
+   }
+  ]
+ },
+ {
+  "version": "main",
+  "case": "reorg-before",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "19"
+    },
+    "isAllowed_heads": [
+     19
+    ],
+    "isAllowed_calls": 6
+   },
+   {
+    "run": "r2",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "19"
+    },
+    "isAllowed_heads": [
+     19
+    ],
+    "isAllowed_calls": 6
+   },
+   {
+    "run": "r3",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "19"
+    },
+    "isAllowed_heads": [
+     19
+    ],
+    "isAllowed_calls": 6
+   }
+  ]
+ },
+ {
+  "version": "main",
+  "case": "reorg-after",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "rolled_back_block": "19",
+     "head": "18"
+    },
+    "isAllowed_heads": [
+     18
+    ],
+    "isAllowed_calls": 2
+   },
+   {
+    "run": "r2",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "rolled_back_block": "19",
+     "head": "18"
+    },
+    "isAllowed_heads": [
+     18
+    ],
+    "isAllowed_calls": 2
+   },
+   {
+    "run": "r3",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "rolled_back_block": "19",
+     "head": "18"
+    },
+    "isAllowed_heads": [
+     18
+    ],
+    "isAllowed_calls": 2
+   }
+  ]
+ },
+ {
+  "version": "main",
+  "case": "restart-mid-check",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "worker_a_eval_head": "18",
+     "worker_a_kms_hits": "0",
+     "status_after_a": "pending",
+     "unlocked": "0",
+     "retire_block": "19"
+    },
+    "isAllowed_heads": [
+     19
+    ],
+    "isAllowed_calls": 4
+   },
+   {
+    "run": "r2",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "worker_a_eval_head": "18",
+     "worker_a_kms_hits": "0",
+     "status_after_a": "pending",
+     "unlocked": "0",
+     "retire_block": "19"
+    },
+    "isAllowed_heads": [
+     19
+    ],
+    "isAllowed_calls": 4
+   },
+   {
+    "run": "r3",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "worker_a_eval_head": "18",
+     "worker_a_kms_hits": "0",
+     "status_after_a": "pending",
+     "unlocked": "0",
+     "retire_block": "19"
+    },
+    "isAllowed_heads": [
+     19
+    ],
+    "isAllowed_calls": 4
+   }
+  ]
+ },
+ {
+  "version": "main",
+  "case": "already-sent-live",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "2",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     19
+    ],
+    "isAllowed_calls": 2
+   },
+   {
+    "run": "r2",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "2",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     19
+    ],
+    "isAllowed_calls": 2
+   },
+   {
+    "run": "r3",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "2",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     19
+    ],
+    "isAllowed_calls": 2
+   }
+  ]
+ },
+ {
+  "version": "main",
+  "case": "already-sent-retired",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     20
+    ],
+    "isAllowed_calls": 6
+   },
+   {
+    "run": "r2",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     20
+    ],
+    "isAllowed_calls": 6
+   },
+   {
+    "run": "r3",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     20
+    ],
+    "isAllowed_calls": 6
+   }
+  ]
+ },
+ {
+  "version": "v0.13.8",
+  "case": "after",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "14"
+    },
+    "isAllowed_heads": [
+     14
+    ],
+    "isAllowed_calls": 4
+   },
+   {
+    "run": "r2",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "14"
+    },
+    "isAllowed_heads": [
+     14
+    ],
+    "isAllowed_calls": 4
+   },
+   {
+    "run": "r3",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "14"
+    },
+    "isAllowed_heads": [
+     14
+    ],
+    "isAllowed_calls": 4
+   }
+  ]
+ },
+ {
+  "version": "v0.13.8",
+  "case": "race",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "eval_head": "14",
+     "retire_block": "15",
+     "t_eval": "1792608896.504597",
+     "t_retired": "1792608896.530359",
+     "t_outcome_seen": "1792608900.947696"
+    },
+    "isAllowed_heads": [
+     14
+    ],
+    "isAllowed_calls": 2,
+    "race_ms": {
+     "eval_to_retired": 26,
+     "eval_to_outcome_seen": 4443
+    }
+   },
+   {
+    "run": "r2",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "eval_head": "14",
+     "retire_block": "15",
+     "t_eval": "1792609056.826457",
+     "t_retired": "1792609056.889735",
+     "t_outcome_seen": "1792609061.111507"
+    },
+    "isAllowed_heads": [
+     14
+    ],
+    "isAllowed_calls": 2,
+    "race_ms": {
+     "eval_to_retired": 63,
+     "eval_to_outcome_seen": 4285
+    }
+   },
+   {
+    "run": "r3",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "eval_head": "14",
+     "retire_block": "15",
+     "t_eval": "1792609215.388959",
+     "t_retired": "1792609215.456559",
+     "t_outcome_seen": "1792609219.976012"
+    },
+    "isAllowed_heads": [
+     14
+    ],
+    "isAllowed_calls": 2,
+    "race_ms": {
+     "eval_to_retired": 68,
+     "eval_to_outcome_seen": 4587
+    }
+   }
+  ]
+ },
+ {
+  "version": "v0.13.8",
+  "case": "reorg-before",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "16"
+    },
+    "isAllowed_heads": [
+     16
+    ],
+    "isAllowed_calls": 6
+   },
+   {
+    "run": "r2",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "16"
+    },
+    "isAllowed_heads": [
+     16
+    ],
+    "isAllowed_calls": 6
+   },
+   {
+    "run": "r3",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "retire_block": "16"
+    },
+    "isAllowed_heads": [
+     16
+    ],
+    "isAllowed_calls": 6
+   }
+  ]
+ },
+ {
+  "version": "v0.13.8",
+  "case": "reorg-after",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "rolled_back_block": "16",
+     "head": "15"
+    },
+    "isAllowed_heads": [
+     15
+    ],
+    "isAllowed_calls": 2
+   },
+   {
+    "run": "r2",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "rolled_back_block": "16",
+     "head": "15"
+    },
+    "isAllowed_heads": [
+     15
+    ],
+    "isAllowed_calls": 2
+   },
+   {
+    "run": "r3",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "4",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "rolled_back_block": "16",
+     "head": "15"
+    },
+    "isAllowed_heads": [
+     15
+    ],
+    "isAllowed_calls": 2
+   }
+  ]
+ },
+ {
+  "version": "v0.13.8",
+  "case": "restart-mid-check",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "worker_a_eval_head": "15",
+     "worker_a_kms_hits": "0",
+     "status_after_a": "pending",
+     "unlocked": "0",
+     "retire_block": "16"
+    },
+    "isAllowed_heads": [
+     16
+    ],
+    "isAllowed_calls": 4
+   },
+   {
+    "run": "r2",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "worker_a_eval_head": "15",
+     "worker_a_kms_hits": "0",
+     "status_after_a": "pending",
+     "unlocked": "0",
+     "retire_block": "16"
+    },
+    "isAllowed_heads": [
+     16
+    ],
+    "isAllowed_calls": 4
+   },
+   {
+    "run": "r3",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "worker_a_eval_head": "15",
+     "worker_a_kms_hits": "0",
+     "status_after_a": "pending",
+     "unlocked": "0",
+     "retire_block": "16"
+    },
+    "isAllowed_heads": [
+     16
+    ],
+    "isAllowed_calls": 4
+   }
+  ]
+ },
+ {
+  "version": "v0.13.8",
+  "case": "already-sent-live",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "2",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     16
+    ],
+    "isAllowed_calls": 2
+   },
+   {
+    "run": "r2",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "2",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     16
+    ],
+    "isAllowed_calls": 2
+   },
+   {
+    "run": "r3",
+    "expected": "Forwarded",
+    "observed": "Forwarded",
+    "kms_hits": "2",
+    "attempts": "0",
+    "status": "completed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     16
+    ],
+    "isAllowed_calls": 2
+   }
+  ]
+ },
+ {
+  "version": "v0.13.8",
+  "case": "already-sent-retired",
+  "runs": 3,
+  "conforms": true,
+  "observations": [
+   {
+    "run": "r1",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     17
+    ],
+    "isAllowed_calls": 6
+   },
+   {
+    "run": "r2",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     17
+    ],
+    "isAllowed_calls": 6
+   },
+   {
+    "run": "r3",
+    "expected": "Rejected",
+    "observed": "Rejected",
+    "kms_hits": "0",
+    "attempts": "3",
+    "status": "failed",
+    "extra": {
+     "already_sent": "true"
+    },
+    "isAllowed_heads": [
+     17
+    ],
+    "isAllowed_calls": 6
+   }
+  ]
+ }
+]

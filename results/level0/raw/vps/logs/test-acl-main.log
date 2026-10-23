@@ -1,0 +1,42 @@
+INSCOPE start=2026-10-21T06:56:21Z cgroup=/system.slice/lifecycle-test-acl-main-1792565781.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/kw.sh main test --test acl -- --test-threads=1]
+KW ver=main tree=harness step=test commit=ed851716c9a6b799996a23399ece2858336f96db date=2026-10-21T06:56:21Z host=VPS nproc=4
+KW dirty-files: 
+KW toolchain=1.99.1-x86_64-unknown-linux-gnu (overridden by '/srv/lifecycle/src/fhevm-main-harness/kms-connector/rust-toolchain.toml') | rustc 1.99.1 (58cf8f9c3 2026-10-13) | cargo 1.99.1 (5f94df478 2026-08-27) | libprotoc 34.1 | jobs=1
+    Finished `test` profile [unoptimized] target(s) in 1.22s
+     Running tests/acl.rs (/srv/lifecycle/target/main/debug/deps/acl-aa05af2bfee30293)
+
+running 6 tests
+test test_decryption_acl_failure::case_1_public_decryption ... ok
+test test_decryption_acl_failure::case_2_user_decryption ... ok
+test test_decryption_acl_failure::case_3_user_decryption_v2 ... ok
+test test_decryption_acl_failure::case_4_public_decryption_already_sent ... ok
+test test_decryption_acl_failure::case_5_user_decryption_already_sent ... ok
+test test_decryption_acl_failure::case_6_user_decryption_v2_already_sent ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.45s
+
+	Command being timed: "/srv/lifecycle/scripts/kw.sh main test --test acl -- --test-threads=1"
+	User time (seconds): 3.89
+	System time (seconds): 1.74
+	Percent of CPU this job got: 36%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:15.41
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 154888
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 64470
+	Voluntary context switches: 2394
+	Involuntary context switches: 56
+	Swaps: 0
+	File system inputs: 8
+	File system outputs: 16
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T06:56:37Z rc=0 cgroup_memory.peak_bytes=145035264 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=test-acl-main unit=lifecycle-test-acl-main-1792565781 rc=0 wall_s=21 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=21 killed=no sampled_peak_anon_mb=136 sampled_peak_cgroup_current_mb=137 sampled_peak_swap_mb=0

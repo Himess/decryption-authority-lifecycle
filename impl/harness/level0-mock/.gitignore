@@ -1,0 +1,4 @@
+# Local build and run artifacts (not source)
+.build/
+.vite-cache/
+node_modules

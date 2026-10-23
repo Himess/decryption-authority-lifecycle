@@ -1,0 +1,9 @@
+
+> sqlite3@5.1.7 install
+> prebuild-install -r napi || node-gyp rebuild
+
+
+> sqlite3@5.1.7 install
+> prebuild-install -r napi || node-gyp rebuild
+
+rebuilt dependencies successfully

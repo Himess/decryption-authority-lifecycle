@@ -1,0 +1,761 @@
+From 45415714ff42a3f4959c7b91afa8da2d6c89047e Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 15:27:31 +0300
+Subject: [PATCH 2/8] test(shared): deterministic Profile H tests with a mocked
+ provider
+
+19 tests that pin the exact RPC sequence of each verification: H1 caps
+reject with no RPC in every mode (and exactly-at-cap passes), the H3
+budget formula, H2 code classification and the code-first matrix (empty
+code, 7702 rejecting delegate refusing the root key, 7702 empty-success
+shim only for a 65-byte root-key signature and off under Profile Q, empty
+and reasoned reverts and short returns never falling back, regular code
+ERC-1271 only), transport errors not counted, H4 two attempts a block
+apart then exhausted, and H8 shadow serving Off while reporting the
+would-be rejection with one shared isValidSignature call.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../tests/profile_h.rs                        | 733 ++++++++++++++++++
+ 1 file changed, 733 insertions(+)
+ create mode 100644 shared/user-decryption-signature/tests/profile_h.rs
+
+diff --git a/shared/user-decryption-signature/tests/profile_h.rs b/shared/user-decryption-signature/tests/profile_h.rs
+new file mode 100644
+index 00000000..d25cace1
+--- /dev/null
++++ b/shared/user-decryption-signature/tests/profile_h.rs
+@@ -0,0 +1,733 @@
++//! [lifecycle Level 1] Deterministic tests of Profile H (`profile_h.rs`) with a mocked provider.
++//!
++//! The mock answers JSON-RPC requests strictly in the order they are queued, whatever their method, and fails any
++//! request beyond the queue. Each test therefore pins the exact RPC sequence a verification makes: an unexpected
++//! extra request surfaces as a `Transport` error, and a queued answer left unused is asserted with `rpcs_left`.
++//! Rules: draft Profile H, H1 caps, H2 code-first at one block, H3 budget, H4 attempts, H8 shadow.
++
++use alloy::{
++    primitives::{Address, B256, Bytes, U64},
++    providers::{Provider, ProviderBuilder, mock::Asserter},
++    rpc::json_rpc::ErrorPayload,
++    signers::{SignerSync, local::PrivateKeySigner},
++};
++use serde_json::value::RawValue;
++use std::borrow::Cow;
++use user_decryption_signature::{
++    AcceptPath, AccountCode, AttemptState, CappedField, CodeFirstMode, Disposition,
++    ERC1271_MAGIC_VALUE, Erc1271Error, SignatureInput, SignaturePolicy, VerdictSummary, check_caps,
++    classify_code, erc1271_gas_limit, verify_user_decryption_signature,
++};
++
++const BLOCK: u64 = 100;
++
++fn provider(asserter: &Asserter) -> impl Provider {
++    ProviderBuilder::new()
++        .disable_recommended_fillers()
++        .connect_mocked_client(asserter.clone())
++}
++
++fn policy(mode: CodeFirstMode) -> SignaturePolicy {
++    SignaturePolicy {
++        mode,
++        ..SignaturePolicy::default()
++    }
++}
++
++/// A key, its address and a valid 65-byte signature over `digest`.
++fn signed(digest: B256) -> (Address, Vec<u8>) {
++    let key = PrivateKeySigner::random();
++    let sig = key.sign_hash_sync(&digest).unwrap().as_bytes().to_vec();
++    (key.address(), sig)
++}
++
++fn input(signer: Address, digest: B256, signature: &[u8]) -> SignatureInput<'_> {
++    SignatureInput {
++        signer,
++        digest,
++        signature,
++        public_key_len: 800,
++        extra_data_len: 1,
++    }
++}
++
++fn magic() -> Bytes {
++    let mut r = [0u8; 32];
++    r[..4].copy_from_slice(&ERC1271_MAGIC_VALUE);
++    Bytes::copy_from_slice(&r)
++}
++
++fn wrong_magic() -> Bytes {
++    let mut r = [0u8; 32];
++    r[..4].copy_from_slice(&[0xff, 0xff, 0xff, 0xff]);
++    Bytes::copy_from_slice(&r)
++}
++
++fn eip7702_code(delegate: Address) -> Bytes {
++    let mut c = vec![0xef, 0x01, 0x00];
++    c.extend_from_slice(delegate.as_slice());
++    Bytes::from(c)
++}
++
++fn regular_code() -> Bytes {
++    Bytes::from(vec![0x60, 0x80, 0x60, 0x40, 0x52])
++}
++
++fn revert(data_hex: &str) -> ErrorPayload {
++    let raw = RawValue::from_string(format!("\"{data_hex}\"")).unwrap();
++    ErrorPayload::internal_error_with_message_and_obj(Cow::Borrowed("execution reverted"), raw)
++}
++
++fn push_block(a: &Asserter, n: u64) {
++    a.push_success(&U64::from(n));
++}
++
++fn rpcs_left(a: &Asserter) -> usize {
++    a.read_q().len()
++}
++
++////////////////////////////////////////////////////////////////////////////////////////////////////
++// H1 caps, H3 budget, H2 classification (pure)
++////////////////////////////////////////////////////////////////////////////////////////////////////
++
++#[tokio::test]
++async fn h1_caps_reject_before_any_rpc() {
++    let digest = B256::repeat_byte(1);
++    let signer = Address::repeat_byte(2);
++    for (sig_len, pk, ed, field) in [
++        (65_537usize, 0usize, 0usize, Some(CappedField::Signature)),
++        (65, 4_097, 0, Some(CappedField::PublicKey)),
++        (65, 0, 1_025, Some(CappedField::ExtraData)),
++        (65_536, 4_096, 1_024, None),
++    ] {
++        let sig = vec![0x11u8; sig_len];
++        let inp = SignatureInput {
++            signer,
++            digest,
++            signature: &sig,
++            public_key_len: pk,
++            extra_data_len: ed,
++        };
++        for mode in [
++            CodeFirstMode::Off,
++            CodeFirstMode::Shadow,
++            CodeFirstMode::Enforce,
++        ] {
++            let asserter = Asserter::new(); // nothing queued: any RPC would fail as Transport
++            let out = verify_user_decryption_signature(
++                &provider(&asserter),
++                &inp,
++                &policy(mode),
++                AttemptState::default(),
++            )
++            .await;
++            match field {
++                Some(f) => {
++                    let r = out.result.unwrap_err();
++                    assert!(
++                        matches!(r.error, Erc1271Error::CapExceeded { field, .. } if field == f),
++                        "{mode}: {:?}",
++                        r.error
++                    );
++                    assert_eq!(r.disposition, Disposition::Final);
++                    assert_eq!(r.block, None, "no block read");
++                    assert_eq!(r.erc1271_calls, 0);
++                }
++                None => {
++                    assert!(
++                        check_caps(&policy(mode), &inp).is_ok(),
++                        "exactly at the caps passes H1"
++                    );
++                }
++            }
++        }
++    }
++}
++
++#[test]
++fn h3_budget_excludes_calldata() {
++    // B_exec + 21,000 + 64 x len(calldata)
++    assert_eq!(erc1271_gas_limit(2_000_000, 0), 2_021_000);
++    assert_eq!(erc1271_gas_limit(2_000_000, 100), 2_027_400);
++    // A 64 KiB signature: isValidSignature calldata = 4 + 32 + 32 + 32 + 65,536 bytes.
++    assert_eq!(
++        erc1271_gas_limit(2_000_000, 65_636),
++        2_000_000 + 21_000 + 64 * 65_636
++    );
++    assert_eq!(
++        erc1271_gas_limit(u64::MAX, usize::MAX),
++        u64::MAX,
++        "saturates"
++    );
++    assert_eq!(
++        SignaturePolicy::default().erc1271_execution_budget,
++        2_000_000
++    );
++    assert_eq!(SignaturePolicy::default().max_erc1271_attempts, 2);
++    assert_eq!(SignaturePolicy::default().mode, CodeFirstMode::Off);
++}
++
++#[test]
++fn h2_code_classification() {
++    let d = Address::repeat_byte(0xaa);
++    assert_eq!(classify_code(&[]), AccountCode::Empty);
++    assert_eq!(
++        classify_code(&eip7702_code(d)),
++        AccountCode::Eip7702 { delegate: d }
++    );
++    // 0xef0100 prefix with the wrong length is regular code, not a delegation indicator.
++    let mut long = eip7702_code(d).to_vec();
++    long.push(0);
++    assert_eq!(classify_code(&long), AccountCode::Regular { len: 24 });
++    assert_eq!(
++        classify_code(&[0xef, 0x01, 0x00]),
++        AccountCode::Regular { len: 3 }
++    );
++    assert_eq!(
++        classify_code(&regular_code()),
++        AccountCode::Regular { len: 5 }
++    );
++}
++
++////////////////////////////////////////////////////////////////////////////////////////////////////
++// Off: RFC-012 ordering with the Profile H budget and attempt limit
++////////////////////////////////////////////////////////////////////////////////////////////////////
++
++#[tokio::test]
++async fn off_eoa_valid_signature_zero_rpc() {
++    let digest = B256::repeat_byte(3);
++    let (signer, sig) = signed(digest);
++    let asserter = Asserter::new();
++    let out = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Off),
++        AttemptState::default(),
++    )
++    .await;
++    let v = out.result.unwrap();
++    assert_eq!(v.path, AcceptPath::Ecrecover);
++    assert_eq!(v.block, None, "no host-chain read");
++    assert_eq!(v.erc1271_calls, 0);
++}
++
++/// The B5 finding, kept by `Off`: a 7702 account whose delegate rejects every signature is still accepted through
++/// the root key, because `Off` tries ecrecover first and never reads the code.
++#[tokio::test]
++async fn off_accepts_7702_root_key_without_reading_code() {
++    let digest = B256::repeat_byte(4);
++    let (signer, sig) = signed(digest);
++    let asserter = Asserter::new();
++    let out = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Off),
++        AttemptState::default(),
++    )
++    .await;
++    assert_eq!(out.result.unwrap().path, AcceptPath::Ecrecover);
++}
++
++#[tokio::test]
++async fn off_contract_wallet_magic_accepts_after_block_and_call() {
++    let digest = B256::repeat_byte(5);
++    let signer = Address::repeat_byte(6);
++    let sig = vec![0x22u8; 1_312]; // not ECDSA
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_success(&magic());
++    let out = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Off),
++        AttemptState::default(),
++    )
++    .await;
++    let v = out.result.unwrap();
++    assert_eq!(v.path, AcceptPath::Erc1271);
++    assert_eq!(v.block, Some(BLOCK));
++    assert_eq!(v.code, None, "Off never reads code");
++    assert_eq!(v.erc1271_calls, 1);
++    assert_eq!(rpcs_left(&asserter), 0);
++}
++
++#[tokio::test]
++async fn off_empty_return_is_final_no_code() {
++    let digest = B256::repeat_byte(7);
++    let signer = Address::repeat_byte(8);
++    let sig = vec![0x11u8; 65];
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_success(&Bytes::default());
++    let out = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Off),
++        AttemptState::default(),
++    )
++    .await;
++    let r = out.result.unwrap_err();
++    assert_eq!(r.error, Erc1271Error::EoaMismatchNoCode(signer));
++    assert_eq!(r.disposition, Disposition::Final);
++}
++
++////////////////////////////////////////////////////////////////////////////////////////////////////
++// Enforce: the code-first matrix (H2), every read at one block
++////////////////////////////////////////////////////////////////////////////////////////////////////
++
++#[tokio::test]
++async fn enforce_empty_code_only_65_byte_ecrecover() {
++    let digest = B256::repeat_byte(9);
++    let (signer, sig) = signed(digest);
++    // Valid 65-byte signature: accepted after blockNumber + getCode, no isValidSignature call.
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_success(&Bytes::default());
++    let v = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Enforce),
++        AttemptState::default(),
++    )
++    .await
++    .result
++    .unwrap();
++    assert_eq!(
++        (v.path, v.block, v.code, v.erc1271_calls),
++        (
++            AcceptPath::Ecrecover,
++            Some(BLOCK),
++            Some(AccountCode::Empty),
++            0
++        )
++    );
++
++    // Any other signature on an empty-code account is final; the empty signature too.
++    for (bad, expected) in [
++        (vec![0x11u8; 64], Erc1271Error::EoaMismatchNoCode(signer)),
++        (vec![0x11u8; 65], Erc1271Error::EoaMismatchNoCode(signer)),
++        (vec![], Erc1271Error::EmptySigOnEoa(signer)),
++    ] {
++        let asserter = Asserter::new();
++        push_block(&asserter, BLOCK);
++        asserter.push_success(&Bytes::default());
++        let r = verify_user_decryption_signature(
++            &provider(&asserter),
++            &input(signer, digest, &bad),
++            &policy(CodeFirstMode::Enforce),
++            AttemptState::default(),
++        )
++        .await
++        .result
++        .unwrap_err();
++        assert_eq!(r.error, expected);
++        assert_eq!(r.disposition, Disposition::Final);
++        assert_eq!(r.erc1271_calls, 0);
++    }
++}
++
++#[tokio::test]
++async fn enforce_7702_rejecting_delegate_refuses_root_key() {
++    let digest = B256::repeat_byte(10);
++    let (signer, sig) = signed(digest);
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_success(&eip7702_code(Address::repeat_byte(0xd1)));
++    asserter.push_success(&wrong_magic());
++    let out = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Enforce),
++        AttemptState::default(),
++    )
++    .await;
++    let r = out.result.unwrap_err();
++    assert!(matches!(r.error, Erc1271Error::WrongMagic(a, _) if a == signer));
++    assert_eq!(
++        r.disposition,
++        Disposition::RetryNextBlock,
++        "first negative: one retry left"
++    );
++    assert_eq!(
++        out.attempts,
++        AttemptState {
++            negatives: 1,
++            last_negative_block: Some(BLOCK)
++        }
++    );
++    assert_eq!(r.erc1271_calls, 1);
++}
++
++#[tokio::test]
++async fn enforce_7702_empty_success_shim_only_for_65_byte_root_key() {
++    let digest = B256::repeat_byte(11);
++    let (signer, sig) = signed(digest);
++    let delegated = eip7702_code(Address::repeat_byte(0xd2));
++
++    // Empty success + 65-byte root-key signature: the narrow fallback.
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_success(&delegated);
++    asserter.push_success(&Bytes::default());
++    let v = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Enforce),
++        AttemptState::default(),
++    )
++    .await
++    .result
++    .unwrap();
++    assert_eq!(v.path, AcceptPath::Eip7702Shim);
++    assert!(matches!(v.code, Some(AccountCode::Eip7702 { .. })));
++
++    // Empty success but the signature does not recover the account: no shim.
++    let (_, other_sig) = signed(digest);
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_success(&delegated);
++    asserter.push_success(&Bytes::default());
++    let r = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &other_sig),
++        &policy(CodeFirstMode::Enforce),
++        AttemptState::default(),
++    )
++    .await
++    .result
++    .unwrap_err();
++    assert_eq!(r.error, Erc1271Error::EmptyReturn(signer));
++
++    // Shim switched off (Profile Q): no fallback either.
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_success(&delegated);
++    asserter.push_success(&Bytes::default());
++    let p = SignaturePolicy {
++        eip7702_fallback: false,
++        ..policy(CodeFirstMode::Enforce)
++    };
++    let r = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &p,
++        AttemptState::default(),
++    )
++    .await
++    .result
++    .unwrap_err();
++    assert_eq!(r.error, Erc1271Error::EmptyReturn(signer));
++}
++
++#[tokio::test]
++async fn enforce_7702_empty_revert_never_falls_back() {
++    // An out-of-gas isValidSignature also reverts with empty data: never a fallback.
++    let digest = B256::repeat_byte(12);
++    let (signer, sig) = signed(digest);
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_success(&eip7702_code(Address::repeat_byte(0xd3)));
++    asserter.push_failure(revert("0x"));
++    let r = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Enforce),
++        AttemptState::default(),
++    )
++    .await
++    .result
++    .unwrap_err();
++    assert_eq!(r.error, Erc1271Error::EmptyRevert(signer));
++    assert_eq!(r.disposition, Disposition::RetryNextBlock);
++}
++
++#[tokio::test]
++async fn enforce_7702_reasoned_revert_and_short_return_never_fall_back() {
++    let digest = B256::repeat_byte(13);
++    let (signer, sig) = signed(digest);
++    for answer in ["revert", "short"] {
++        let asserter = Asserter::new();
++        push_block(&asserter, BLOCK);
++        asserter.push_success(&eip7702_code(Address::repeat_byte(0xd4)));
++        if answer == "revert" {
++            asserter.push_failure(revert("0x08c379a0"));
++        } else {
++            asserter.push_success(&Bytes::from(vec![0x16, 0x26, 0xba, 0x7e]));
++        }
++        let r = verify_user_decryption_signature(
++            &provider(&asserter),
++            &input(signer, digest, &sig),
++            &policy(CodeFirstMode::Enforce),
++            AttemptState::default(),
++        )
++        .await
++        .result
++        .unwrap_err();
++        assert!(
++            matches!(r.error, Erc1271Error::Rejected(a, _) if a == signer),
++            "{answer}: {:?}",
++            r.error
++        );
++        assert_eq!(r.disposition, Disposition::RetryNextBlock);
++    }
++}
++
++#[tokio::test]
++async fn enforce_regular_code_erc1271_only() {
++    let digest = B256::repeat_byte(14);
++    let (signer, sig) = signed(digest);
++    // Magic: accepted.
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_success(&regular_code());
++    asserter.push_success(&magic());
++    let v = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Enforce),
++        AttemptState::default(),
++    )
++    .await
++    .result
++    .unwrap();
++    assert_eq!(v.path, AcceptPath::Erc1271);
++    // Empty success with a valid 65-byte signature: no shim on regular code.
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_success(&regular_code());
++    asserter.push_success(&Bytes::default());
++    let r = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Enforce),
++        AttemptState::default(),
++    )
++    .await
++    .result
++    .unwrap_err();
++    assert_eq!(r.error, Erc1271Error::EmptyReturn(signer));
++}
++
++#[tokio::test]
++async fn enforce_transport_error_is_left_to_the_caller() {
++    let digest = B256::repeat_byte(15);
++    let (signer, sig) = signed(digest);
++    let asserter = Asserter::new();
++    push_block(&asserter, BLOCK);
++    asserter.push_failure_msg("connection reset");
++    let out = verify_user_decryption_signature(
++        &provider(&asserter),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Enforce),
++        AttemptState::default(),
++    )
++    .await;
++    let r = out.result.unwrap_err();
++    assert!(matches!(r.error, Erc1271Error::Transport(_)));
++    assert_eq!(r.disposition, Disposition::Transport);
++    assert_eq!(
++        out.attempts,
++        AttemptState::default(),
++        "a transport error is not a counted attempt"
++    );
++}
++
++////////////////////////////////////////////////////////////////////////////////////////////////////
++// H4 attempts
++////////////////////////////////////////////////////////////////////////////////////////////////////
++
++#[tokio::test]
++async fn h4_at_most_two_attempts_a_block_apart() {
++    let digest = B256::repeat_byte(16);
++    let signer = Address::repeat_byte(17);
++    let sig = vec![0x33u8; 2_420]; // e.g. an ML-DSA-44 signature
++    let p = policy(CodeFirstMode::Enforce);
++
++    // Attempt 1 at block B: wrong magic, one retry left.
++    let a = Asserter::new();
++    push_block(&a, BLOCK);
++    a.push_success(&regular_code());
++    a.push_success(&wrong_magic());
++    let o1 = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &sig),
++        &p,
++        AttemptState::default(),
++    )
++    .await;
++    assert_eq!(
++        o1.result.as_ref().unwrap_err().disposition,
++        Disposition::RetryNextBlock
++    );
++    let s1 = o1.attempts;
++
++    // Same block: held back, nothing called, not an attempt.
++    let a = Asserter::new();
++    push_block(&a, BLOCK);
++    a.push_success(&regular_code());
++    let o2 =
++        verify_user_decryption_signature(&provider(&a), &input(signer, digest, &sig), &p, s1).await;
++    let r2 = o2.result.unwrap_err();
++    assert_eq!(r2.disposition, Disposition::AwaitingNextBlock);
++    assert_eq!(r2.erc1271_calls, 0);
++    assert_eq!(o2.attempts, s1);
++
++    // Attempt 2 one block later: wrong magic again, final.
++    let a = Asserter::new();
++    push_block(&a, BLOCK + 1);
++    a.push_success(&regular_code());
++    a.push_success(&wrong_magic());
++    let o3 =
++        verify_user_decryption_signature(&provider(&a), &input(signer, digest, &sig), &p, s1).await;
++    assert_eq!(
++        o3.result.as_ref().unwrap_err().disposition,
++        Disposition::Final
++    );
++    assert_eq!(
++        o3.attempts,
++        AttemptState {
++            negatives: 2,
++            last_negative_block: Some(BLOCK + 1)
++        }
++    );
++
++    // Any later processing: exhausted, no call.
++    let a = Asserter::new();
++    push_block(&a, BLOCK + 5);
++    a.push_success(&regular_code());
++    let o4 = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &sig),
++        &p,
++        o3.attempts,
++    )
++    .await;
++    let r4 = o4.result.unwrap_err();
++    assert!(matches!(
++        r4.error,
++        Erc1271Error::AttemptsExhausted { attempts: 2, .. }
++    ));
++    assert_eq!(r4.disposition, Disposition::Final);
++    assert_eq!(r4.erc1271_calls, 0);
++
++    // A pass on the retry is accepted.
++    let a = Asserter::new();
++    push_block(&a, BLOCK + 1);
++    a.push_success(&regular_code());
++    a.push_success(&magic());
++    let ok =
++        verify_user_decryption_signature(&provider(&a), &input(signer, digest, &sig), &p, s1).await;
++    assert_eq!(ok.result.unwrap().path, AcceptPath::Erc1271);
++}
++
++#[tokio::test]
++async fn h4_off_mode_is_bounded_too() {
++    let digest = B256::repeat_byte(18);
++    let signer = Address::repeat_byte(19);
++    let sig = vec![0x44u8; 100];
++    let p = policy(CodeFirstMode::Off);
++    let a = Asserter::new();
++    push_block(&a, BLOCK);
++    a.push_success(&wrong_magic());
++    let o1 = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &sig),
++        &p,
++        AttemptState::default(),
++    )
++    .await;
++    let a = Asserter::new();
++    push_block(&a, BLOCK + 1);
++    a.push_failure(revert("0x"));
++    let o2 = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &sig),
++        &p,
++        o1.attempts,
++    )
++    .await;
++    assert_eq!(o2.result.unwrap_err().disposition, Disposition::Final);
++}
++
++////////////////////////////////////////////////////////////////////////////////////////////////////
++// H8 shadow
++////////////////////////////////////////////////////////////////////////////////////////////////////
++
++#[tokio::test]
++async fn h8_shadow_serves_off_and_reports_would_reject() {
++    let digest = B256::repeat_byte(20);
++    let (signer, sig) = signed(digest);
++    // Served: ecrecover (no RPC). Code-first: blockNumber, getCode (7702), isValidSignature -> wrong magic.
++    let a = Asserter::new();
++    push_block(&a, BLOCK);
++    a.push_success(&eip7702_code(Address::repeat_byte(0xd5)));
++    a.push_success(&wrong_magic());
++    let out = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Shadow),
++        AttemptState::default(),
++    )
++    .await;
++    let shadow = out.shadow().cloned().unwrap();
++    assert_eq!(shadow.served, VerdictSummary::Accept(AcceptPath::Ecrecover));
++    assert!(matches!(
++        shadow.code_first,
++        VerdictSummary::Reject(Erc1271Error::WrongMagic(..))
++    ));
++    assert!(shadow.would_reject());
++    let v = out.result.unwrap();
++    assert_eq!(v.path, AcceptPath::Ecrecover, "the served verdict is Off's");
++    assert_eq!(
++        out.attempts,
++        AttemptState::default(),
++        "the hypothetical verdict is not counted"
++    );
++    assert_eq!(rpcs_left(&a), 0);
++}
++
++#[tokio::test]
++async fn h8_shadow_shares_one_isvalidsignature_call() {
++    // A contract wallet that returns magic: both orderings accept, with ONE isValidSignature call at ONE block.
++    let digest = B256::repeat_byte(21);
++    let signer = Address::repeat_byte(22);
++    let sig = vec![0x55u8; 1_000];
++    let a = Asserter::new();
++    push_block(&a, BLOCK); // served (Off): blockNumber, then the call
++    a.push_success(&magic());
++    a.push_success(&regular_code()); // code-first: getCode at the same block, call reused
++    let out = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Shadow),
++        AttemptState::default(),
++    )
++    .await;
++    let v = out.result.unwrap();
++    assert_eq!(v.erc1271_calls, 1);
++    let s = v.shadow.unwrap();
++    assert_eq!(s.served, VerdictSummary::Accept(AcceptPath::Erc1271));
++    assert_eq!(s.code_first, VerdictSummary::Accept(AcceptPath::Erc1271));
++    assert!(!s.would_reject() && !s.would_accept());
++    assert_eq!(rpcs_left(&a), 0);
++}
++
++#[tokio::test]
++async fn h8_shadow_eoa_agrees() {
++    let digest = B256::repeat_byte(23);
++    let (signer, sig) = signed(digest);
++    let a = Asserter::new();
++    push_block(&a, BLOCK);
++    a.push_success(&Bytes::default());
++    let out = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Shadow),
++        AttemptState::default(),
++    )
++    .await;
++    let s = out.shadow().cloned().unwrap();
++    assert_eq!(s.served, VerdictSummary::Accept(AcceptPath::Ecrecover));
++    assert_eq!(s.code_first, VerdictSummary::Accept(AcceptPath::Ecrecover));
++    assert_eq!(s.code, Some(AccountCode::Empty));
++}

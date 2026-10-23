@@ -1,0 +1,3 @@
+2026-10-21T12:14:01Z <live-service>=active load=[1.10 0.58 0.33] mem_avail_mb=7175 swap_used_mb=149 tag=before:build-L2-main
+HEAVY name=build-L2-main unit=lifecycle-build-L2-main-1792584841 rc=0 wall_s=51 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=51 killed=no sampled_peak_anon_mb=557 sampled_peak_cgroup_current_mb=1840 sampled_peak_swap_mb=0
+2026-10-21T12:14:52Z <live-service>=active load=[1.11 0.66 0.37] mem_avail_mb=7048 swap_used_mb=149 tag=after:build-L2-main

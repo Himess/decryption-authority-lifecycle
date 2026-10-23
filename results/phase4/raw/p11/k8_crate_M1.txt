@@ -1,0 +1,146 @@
+date=2026-10-21T20:00:31Z machine=M1 (Windows 10 Pro 10.0.19045, Ryzen 5 5600, 16 GB) rustc=rustc 1.95.0 (59807616e 2026-04-14) branch=lifecycle/level3-verifier (a8e1f34 + uncommitted P1.1 changes)
+test agree_refuses_and_reports_when_one_library_is_faulty ... K8-AGREE scheme=ML-DSA-44 mode=agree:rustcrypto,fips204 faulty=rustcrypto verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:rustcrypto,libcrux faulty=rustcrypto verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:rustcrypto,pqclean faulty=rustcrypto verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:rustcrypto,fips204 faulty=rustcrypto verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:rustcrypto,libcrux faulty=rustcrypto verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:rustcrypto,pqclean faulty=rustcrypto verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:rustcrypto,fips204 faulty=rustcrypto verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:rustcrypto,libcrux faulty=rustcrypto verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:rustcrypto,pqclean faulty=rustcrypto verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:rustcrypto,fips204 faulty=fips204 verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:fips204,libcrux faulty=fips204 verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:fips204,pqclean faulty=fips204 verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:rustcrypto,fips204 faulty=fips204 verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:fips204,libcrux faulty=fips204 verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:fips204,pqclean faulty=fips204 verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:rustcrypto,fips204 faulty=fips204 verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:fips204,libcrux faulty=fips204 verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:fips204,pqclean faulty=fips204 verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:rustcrypto,libcrux faulty=libcrux verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:fips204,libcrux faulty=libcrux verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:libcrux,pqclean faulty=libcrux verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:rustcrypto,libcrux faulty=libcrux verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:fips204,libcrux faulty=libcrux verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:libcrux,pqclean faulty=libcrux verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:rustcrypto,libcrux faulty=libcrux verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:fips204,libcrux faulty=libcrux verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:libcrux,pqclean faulty=libcrux verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:rustcrypto,pqclean faulty=pqclean verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:fips204,pqclean faulty=pqclean verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-44 mode=agree:libcrux,pqclean faulty=pqclean verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:rustcrypto,pqclean faulty=pqclean verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:fips204,pqclean faulty=pqclean verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-65 mode=agree:libcrux,pqclean faulty=pqclean verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:rustcrypto,pqclean faulty=pqclean verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:fips204,pqclean faulty=pqclean verdict=refused-disagreement
+K8-AGREE scheme=ML-DSA-87 mode=agree:libcrux,pqclean faulty=pqclean verdict=refused-disagreement
+test modes_parse_and_print ... ok
+test route_reports_a_disagreement_with_no_fallback ... ok
+test thirteen_nodes_one_library_bug_reaches_at_most_t_nodes ... K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"rustcrypto","scheme":"ML-DSA-44","accepting":[1, 2, 3, 4]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"rustcrypto","scheme":"ML-DSA-65","accepting":[1, 2, 3, 4]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"rustcrypto","scheme":"ML-DSA-87","accepting":[1, 2, 3, 4]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"fips204","scheme":"ML-DSA-44","accepting":[5, 6, 7]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"fips204","scheme":"ML-DSA-65","accepting":[5, 6, 7]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"fips204","scheme":"ML-DSA-87","accepting":[5, 6, 7]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"libcrux","scheme":"ML-DSA-44","accepting":[8, 9, 10]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"libcrux","scheme":"ML-DSA-65","accepting":[8, 9, 10]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"libcrux","scheme":"ML-DSA-87","accepting":[8, 9, 10]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"pqclean","scheme":"ML-DSA-44","accepting":[11, 12, 13]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"pqclean","scheme":"ML-DSA-65","accepting":[11, 12, 13]}
+K8-NODES {"deployment":"single-4-3-3-3","k8_single_ok":true,"faulty":"pqclean","scheme":"ML-DSA-87","accepting":[11, 12, 13]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"rustcrypto","scheme":"ML-DSA-44","accepting":[1, 2, 3, 4, 5]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"rustcrypto","scheme":"ML-DSA-65","accepting":[1, 2, 3, 4, 5]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"rustcrypto","scheme":"ML-DSA-87","accepting":[1, 2, 3, 4, 5]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"fips204","scheme":"ML-DSA-44","accepting":[6, 7, 8]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"fips204","scheme":"ML-DSA-65","accepting":[6, 7, 8]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"fips204","scheme":"ML-DSA-87","accepting":[6, 7, 8]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"libcrux","scheme":"ML-DSA-44","accepting":[9, 10, 11]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"libcrux","scheme":"ML-DSA-65","accepting":[9, 10, 11]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"libcrux","scheme":"ML-DSA-87","accepting":[9, 10, 11]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"pqclean","scheme":"ML-DSA-44","accepting":[12, 13]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"pqclean","scheme":"ML-DSA-65","accepting":[12, 13]}
+K8-NODES {"deployment":"single-5-3-3-2","k8_single_ok":false,"faulty":"pqclean","scheme":"ML-DSA-87","accepting":[12, 13]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"rustcrypto","scheme":"ML-DSA-44","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"rustcrypto","scheme":"ML-DSA-65","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"rustcrypto","scheme":"ML-DSA-87","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"fips204","scheme":"ML-DSA-44","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"fips204","scheme":"ML-DSA-65","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"fips204","scheme":"ML-DSA-87","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"libcrux","scheme":"ML-DSA-44","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"libcrux","scheme":"ML-DSA-65","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"libcrux","scheme":"ML-DSA-87","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"pqclean","scheme":"ML-DSA-44","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"pqclean","scheme":"ML-DSA-65","accepting":[]}
+K8-NODES {"deployment":"agree-rotating","k8_single_ok":false,"faulty":"pqclean","scheme":"ML-DSA-87","accepting":[]}
+test without_a_fault_every_mode_gives_the_same_verdicts ... ok
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.86s
+test every_implementation_passes_acvp_and_wycheproof ... K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-44 interface=external/preHash run=4 pass=4 not_exposed=11
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-44 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-44 interface=internal run=0 pass=0 not_exposed=15
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-44 interface=internal/externalMu run=0 pass=0 not_exposed=15
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-65 interface=external/preHash run=3 pass=3 not_exposed=12
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-65 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-65 interface=internal run=0 pass=0 not_exposed=15
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-65 interface=internal/externalMu run=0 pass=0 not_exposed=15
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-87 interface=external/preHash run=4 pass=4 not_exposed=11
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-87 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-87 interface=internal run=0 pass=0 not_exposed=15
+K8-VECTORS impl=fips204 source=acvp scheme=ML-DSA-87 interface=internal/externalMu run=0 pass=0 not_exposed=15
+K8-VECTORS impl=fips204 source=wycheproof scheme=ML-DSA-44 interface=external/pure run=180 pass=180 not_exposed=0
+K8-VECTORS impl=fips204 source=wycheproof scheme=ML-DSA-65 interface=external/pure run=210 pass=210 not_exposed=0
+K8-VECTORS impl=fips204 source=wycheproof scheme=ML-DSA-87 interface=external/pure run=241 pass=241 not_exposed=0
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-44 interface=external/preHash run=1 pass=1 not_exposed=14
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-44 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-44 interface=internal run=15 pass=15 not_exposed=0
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-44 interface=internal/externalMu run=0 pass=0 not_exposed=15
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-65 interface=external/preHash run=1 pass=1 not_exposed=14
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-65 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-65 interface=internal run=15 pass=15 not_exposed=0
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-65 interface=internal/externalMu run=0 pass=0 not_exposed=15
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-87 interface=external/preHash run=1 pass=1 not_exposed=14
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-87 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-87 interface=internal run=15 pass=15 not_exposed=0
+K8-VECTORS impl=libcrux source=acvp scheme=ML-DSA-87 interface=internal/externalMu run=0 pass=0 not_exposed=15
+K8-VECTORS impl=libcrux source=wycheproof scheme=ML-DSA-44 interface=external/pure run=180 pass=180 not_exposed=0
+K8-VECTORS impl=libcrux source=wycheproof scheme=ML-DSA-65 interface=external/pure run=210 pass=210 not_exposed=0
+K8-VECTORS impl=libcrux source=wycheproof scheme=ML-DSA-87 interface=external/pure run=241 pass=241 not_exposed=0
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-44 interface=external/preHash run=0 pass=0 not_exposed=15
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-44 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-44 interface=internal run=0 pass=0 not_exposed=15
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-44 interface=internal/externalMu run=0 pass=0 not_exposed=15
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-65 interface=external/preHash run=0 pass=0 not_exposed=15
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-65 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-65 interface=internal run=0 pass=0 not_exposed=15
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-65 interface=internal/externalMu run=0 pass=0 not_exposed=15
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-87 interface=external/preHash run=0 pass=0 not_exposed=15
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-87 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-87 interface=internal run=0 pass=0 not_exposed=15
+K8-VECTORS impl=pqclean source=acvp scheme=ML-DSA-87 interface=internal/externalMu run=0 pass=0 not_exposed=15
+K8-VECTORS impl=pqclean source=wycheproof scheme=ML-DSA-44 interface=external/pure run=180 pass=180 not_exposed=0
+K8-VECTORS impl=pqclean source=wycheproof scheme=ML-DSA-65 interface=external/pure run=210 pass=210 not_exposed=0
+K8-VECTORS impl=pqclean source=wycheproof scheme=ML-DSA-87 interface=external/pure run=241 pass=241 not_exposed=0
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-44 interface=external/preHash run=0 pass=0 not_exposed=15
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-44 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-44 interface=internal run=15 pass=15 not_exposed=0
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-44 interface=internal/externalMu run=15 pass=15 not_exposed=0
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-65 interface=external/preHash run=0 pass=0 not_exposed=15
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-65 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-65 interface=internal run=15 pass=15 not_exposed=0
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-65 interface=internal/externalMu run=15 pass=15 not_exposed=0
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-87 interface=external/preHash run=0 pass=0 not_exposed=15
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-87 interface=external/pure run=15 pass=15 not_exposed=0
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-87 interface=internal run=15 pass=15 not_exposed=0
+K8-VECTORS impl=rustcrypto source=acvp scheme=ML-DSA-87 interface=internal/externalMu run=15 pass=15 not_exposed=0
+K8-VECTORS impl=rustcrypto source=wycheproof scheme=ML-DSA-44 interface=external/pure run=180 pass=180 not_exposed=0
+K8-VECTORS impl=rustcrypto source=wycheproof scheme=ML-DSA-65 interface=external/pure run=210 pass=210 not_exposed=0
+K8-VECTORS impl=rustcrypto source=wycheproof scheme=ML-DSA-87 interface=external/pure run=241 pass=241 not_exposed=0
+K8-VECTORS-TOTAL impl=fips204 source=acvp run=56 pass=56 not_exposed=124
+K8-VECTORS-TOTAL impl=fips204 source=wycheproof run=631 pass=631 not_exposed=0
+K8-VECTORS-TOTAL impl=libcrux source=acvp run=93 pass=93 not_exposed=87
+K8-VECTORS-TOTAL impl=libcrux source=wycheproof run=631 pass=631 not_exposed=0
+K8-VECTORS-TOTAL impl=pqclean source=acvp run=45 pass=45 not_exposed=135
+K8-VECTORS-TOTAL impl=pqclean source=wycheproof run=631 pass=631 not_exposed=0
+K8-VECTORS-TOTAL impl=rustcrypto source=acvp run=135 pass=135 not_exposed=45
+K8-VECTORS-TOTAL impl=rustcrypto source=wycheproof run=631 pass=631 not_exposed=0
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 16.46s

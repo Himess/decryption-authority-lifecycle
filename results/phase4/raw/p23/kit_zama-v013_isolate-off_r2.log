@@ -1,0 +1,24 @@
+No files changed, compilation skipped
+
+Ran 18 tests for test/conformance/ZamaV013Conformance.t.sol:ZamaV013ConformanceTest
+[PASS] test_kit_TC10_GrantsThenRetireAtomic_RetireThenGrantReverts() (gas: 1751051)
+[PASS] test_kit_TC11_TheUpgradeGuard() (gas: 2661190)
+[PASS] test_kit_TC12_ERC165() (gas: 21209)
+[PASS] test_kit_TC17_DesignationRules() (gas: 78920)
+[PASS] test_kit_TC17_TheSuccessorReadsOnlyAfterRetirement_AndNothingMore() (gas: 987407)
+[PASS] test_kit_TC19_AContractAccountSignsThroughERC1271Only() (gas: 819325)
+[PASS] test_kit_TC19_TheERCVector() (gas: 117429)
+[PASS] test_kit_TC1_R5_TheNextCallInTheSameTransaction() (gas: 896159)
+[PASS] test_kit_TC1_RetireOnce_SecondRevertsWithoutAnEvent() (gas: 48459)
+[PASS] test_kit_TC2_RetireUnderHostileConditions_AsAContract_WithNoHandles() (gas: 860897)
+[PASS] test_kit_TC3_NeverRetiredAccountsUnaffected() (gas: 993485)
+[PASS] test_kit_TC4_EveryUseViewFalse_PublicUnchanged() (gas: 982772)
+[PASS] test_kit_TC4_R10_TheEngineAndTheOutput() (gas: 907435)
+[PASS] test_kit_TC5_OnBehalfFalseForEachRetiredParty() (gas: 1003182)
+[SKIP] test_kit_TC6_PermitFalseForARetiredIssuerOrRecipient() (gas: 0)
+[PASS] test_kit_TC7_ARetiredGrantorRevertsOnEveryPath() (gas: 918064)
+[PASS] test_kit_TC8_GrantsToARetiredAccountSucceed_AndAreInert() (gas: 997360)
+[PASS] test_kit_TC9_ComputeThenEveryExportReverts() (gas: 1154770)
+Suite result: ok. 17 passed; 0 failed; 1 skipped; finished in 5.82ms (26.70ms CPU time)
+
+Ran 1 test suite in 18.69ms (5.82ms CPU time): 17 tests passed, 0 failed, 1 skipped (18 total tests)

@@ -1,0 +1,12 @@
+fhevm-deploy rc=0
+ACL on chain: "ACL v0.4.2"
+ ✓ p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated) > setup: the mock runs ACL v0.4.2 with Core and E1 1ms
+ ✓ p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated) > before: E and X are plain EOAs, active; the wallet itself reads as regular code 593ms
+ ✓ p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated) > X adopts the ML-DSA-44 wallet runtime (anvil_setCode): regular, active 249ms
+ ✓ p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated) > X retires (impersonated, standing in for a call through its code): regular, retired 450ms
+ ✓ p503-sdk-status.test.ts > P0.3: getAuthorityStatus reports an account holding adopted regular code (EIP-8298, simulated) > the proxy rewrote nothing 2ms
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+vitest rc=0
+git status of the worktrees (tracked files must be unchanged):
+RESULT secret_or_hostname_hits=0

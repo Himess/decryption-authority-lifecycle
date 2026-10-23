@@ -1,0 +1,45 @@
+date=2026-10-22T19:50:36Z host=VPS nproc=4 kernel=6.8.0-139-generic
+tree HEAD=ed851716c9a6b799996a23399ece2858336f96db pristine HEAD=ed851716c9a6b799996a23399ece2858336f96db
+== diff -rq pristine vs tree kms-connector and shared, excluding directories named 'tests'
+Files /srv/lifecycle/src/fhevm-main/kms-connector/Cargo.lock and /srv/lifecycle/src/fhevm-main-l5/kms-connector/Cargo.lock differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/config/endpoint.toml and /srv/lifecycle/src/fhevm-main-l5/kms-connector/config/endpoint.toml differ
+Only in /srv/lifecycle/src/fhevm-main-l5/kms-connector/connector-db/migrations: 20261021120000_profile_h_erc1271_attempts.sql
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/api/src/error.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/api/src/error.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/endpoint/src/core/config.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/endpoint/src/core/config.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/endpoint/src/core/db.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/endpoint/src/core/db.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/endpoint/src/core/http/decrypt.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/endpoint/src/core/http/decrypt.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/endpoint/src/core/http/public_decrypt.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/endpoint/src/core/http/public_decrypt.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/endpoint/src/core/http/user_decrypt.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/endpoint/src/core/http/user_decrypt.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/kms-worker/Cargo.toml and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/Cargo.toml differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/kms-worker/src/core/config.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/src/core/config.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/kms-worker/src/core/event_processor/error.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/src/core/event_processor/error.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/kms-worker/src/core/kms_worker.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/src/core/kms_worker.rs differ
+Files /srv/lifecycle/src/fhevm-main/kms-connector/crates/kms-worker/src/core/mod.rs and /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/src/core/mod.rs differ
+Only in /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/src/core: profile_q.rs
+DIFFERENT kms-connector
+Files /srv/lifecycle/src/fhevm-main/shared/user-decryption-signature/Cargo.lock and /srv/lifecycle/src/fhevm-main-l5/shared/user-decryption-signature/Cargo.lock differ
+Files /srv/lifecycle/src/fhevm-main/shared/user-decryption-signature/Cargo.toml and /srv/lifecycle/src/fhevm-main-l5/shared/user-decryption-signature/Cargo.toml differ
+Only in /srv/lifecycle/src/fhevm-main-l5/shared/user-decryption-signature/src: kda.rs
+Files /srv/lifecycle/src/fhevm-main/shared/user-decryption-signature/src/lib.rs and /srv/lifecycle/src/fhevm-main-l5/shared/user-decryption-signature/src/lib.rs differ
+Only in /srv/lifecycle/src/fhevm-main-l5/shared/user-decryption-signature/src: profile_h.rs
+DIFFERENT shared
+== Phase 5 files of the tree (branch lifecycle/phase5-connector)
+6118965419b75f61c04983d55df26998a682deb721c980b9fd137b9bc9a3da88  /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/src/core/profile_q.rs
+8e740db2229bb675329bef2087e15643046496368cf1ef81c4dc9345ffb928a4  /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+f4cc04910cb36d248946582e9739d5c7f01f5cbe84994e920db475d26693402b  /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+== harness inputs
+b8724f79fd2f8e942110bb7656656987e6dd108827ae6ab043ae3b471e974637  /srv/lifecycle/src/fhevm-main-l5/kms-connector/crates/kms-worker/tests/acl_pq_drill.rs
+fbc05374cf497bb3c8d8433c6c38fd7442ae7a0b70a8d53e6f2a279fffcddd79  /srv/lifecycle/harness/p5/PQWallet.json
+f47b80876e61a21f5262af52af32d0bb2bb2fe18efb5d82cdde8d2a648c8b5f1  /srv/lifecycle/harness/p5/level3_acl_main.json
+c535fb0cbf87776524f6f968f169e504853b1bc5b91f4792a5b9c58df1151bad  /srv/lifecycle/harness/sol/src/DappStub.sol
+613348ca2fe17f2d8057247a6476617b8d7dac24a68ab6438eb854b049bc7b08  /srv/lifecycle/harness/sol/src/ExecutorStub.sol
+37d0516d3e7c123bbf981774a2ab5ae26d25c5f61e53b23584aa81bcb97034ff  /srv/lifecycle/harness/sol/src/Proxy.sol
+11d95c2391019bf28578193118413a868244d5e77c8165c3ce079c41340bbe60  /srv/lifecycle/harness/p04/artifacts/MLDSA44Account1271.json
+d206177a976f801d5193de2b6d91f0dfa91ed71a06705a624b22b45a921ed4f2  /srv/lifecycle/harness/p04/artifacts/MLDSA44Verifier.json
+2d724ab4640530e454f5216a7d539178c50030781f0239163ee87f57539dedaa  /srv/lifecycle/harness/p04/artifacts/NoErc1271.json
+164340ddf9bb45f728d3eddb4d576e8782b2937acd84dee46338773efdefac74  /srv/lifecycle/pq/mldsa_tool.py
+592d8563e4d736f2af7abd6ee843dbb2d50aa2bf5ef562074acee1b76605c166  /srv/lifecycle/pq/p11_mldsa_tool.py
+46aa3b639ade6877794a18349339cee9fd452b2c7a5bde6a6e3049885653efa8  /srv/lifecycle/scripts/fault_proxy_v2.py
+33a542b4f77d4eb2c58547edf04fb58d1379bdf7ef33c53152042ba210b2fef9  /srv/lifecycle/scripts/run_pq_drill.sh

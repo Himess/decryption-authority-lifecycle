@@ -1,0 +1,62 @@
+No files changed, compilation skipped
+Script ran successfully.
+Gas used: 73503
+
+== Logs ==
+  
+  Addresses file written to:
+    <repo>/impl/wt-l2-mock/sdk/js-sdk/contracts/<repo>/impl/wt-l2-mock/sdk/js-sdk/contracts/src/v0.13.0/host-contracts/addresses/FHEVMHostAddresses.sol
+deployer:           0x8B8f5091f8b9817EF69cFC1E8B2f721BafF60DF4
+emptyUupsDeployer:  0x591351e626F539453A3f30C640f6589A3DB0b5E3
+🍟 Funding 0x8B8f5091f8b9817EF69cFC1E8B2f721BafF60DF4 with 10000 ETH...
+🍟 Funding 0x591351e626F539453A3f30C640f6589A3DB0b5E3 with 10000 ETH...
+✅ deployer balance: 10000.000000000000000000 ETH
+✅ emptyUupsDeployer balance: 10000.000000000000000000 ETH
+
+🚚  Deploying Cleartext FHEVM Host Constracts ...
+No files changed, compilation skipped
+Script ran successfully.
+
+== Logs ==
+  ACL empty proxy:            0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D
+  FHEVMExecutor empty proxy:            0xe3a9105a3a932253A70F126eb1E3b589C643dD24
+  KMSVerifier empty proxy:            0x901F8942346f7AB3a01F6D7613119Bca447Bb030
+  InputVerifier empty proxy:            0x36772142b74871f255CbD7A3e89B401d3e45825f
+  HCULimit empty proxy:            0x233ff88A48c172d29F675403e6A8e302b0F032D9
+  ProtocolConfig empty proxy:            0x44aA028fd264C76BF4A8f8B4d8A5272f6AE25CAc
+  KmsGeneration empty proxy:            0x216be43148dB537BeddBC268163deb1a802b5553
+  PauserSet:                  0xded0D2a71268DC12622BdD1b55d68a1CB5662327
+  pauser:            0xa44366bAA26296c1409AD1e284264212029F02f1
+  pauser:            0xc1d91b49A1B3D1324E93F86778C44a03f1063f1b
+Error: `CleartextFHEVMExecutor` is above the contract size limit (26573 > 24576).
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 31337
+
+Estimated max fee per gas: 2.000000001 gwei
+Estimated base fee per gas: 1 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 41003182
+
+Estimated amount required: 0.082006364041003182 ETH
+
+==========================
+
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: <repo>/impl/wt-l2-mock/sdk/js-sdk/contracts/broadcast\DeployCleartextFHEVMHost.s.sol\31337\run-latest.json
+
+Sensitive values saved to: <repo>/impl/wt-l2-mock/sdk/js-sdk/contracts/cache\DeployCleartextFHEVMHost.s.sol\31337\run-latest.json
+
+
+🥬  Verifying Cleartext FHEVM Host Constracts ...
+No files changed, compilation skipped
+Script ran successfully.
+✅  ok

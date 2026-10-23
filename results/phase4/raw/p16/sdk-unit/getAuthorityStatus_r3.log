@@ -1,0 +1,21 @@
+Testing types with tsc and vue-tsc is an experimental feature.
+Breaking changes might not follow SemVer, please pin Vitest's version when using it.
+
+ RUN  v4.1.9 <repo>/impl/wt-sdk-status/sdk/js-sdk
+
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > reports a registry without the lifecycle Core 6ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > reports a retired account and its confirmed successor 2ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > reports a pending designation, and no E1 fields on a Core-only registry 3ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > answers per chain 2ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > reports the account code: none, EIP-7702, EIP-7851 (ECDSA disabled) and other code 4ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > reports an EIP-7851 account together with its E1 successor state 1ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > reads the code of the checksummed account, also where the ACL has no lifecycle Core 1ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > leaves the code undefined when the Ethereum module cannot read it, and throws its transport errors 2ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > purgeIfRetired > purges the ring only once the account is retired 2ms
+
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+Type Errors  no errors
+   Start at  00:40:00
+   Duration  531ms (transform 254ms, setup 0ms, import 326ms, tests 23ms, environment 0ms)
+

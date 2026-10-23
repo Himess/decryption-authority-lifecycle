@@ -1,0 +1,1143 @@
+From bbec0897fdadabfbaef52db91bca6feff250765a Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 17:55:32 +0300
+Subject: [PATCH 7/8] feat(sdk): lifecycle hygiene in the SDK (Decryption
+ Authority Lifecycle, Level 2)
+
+- A typed refusal. When the ACL precheck refuses and an account the
+  request rests on is retired (ACL.isAccountRetired), the precheck throws
+  AclAccountRetiredError (code ACCOUNT_RETIRED, the retired accounts). It
+  extends AclUserDecryptionError, so existing handlers still catch it.
+  An allowed request makes no extra call. On an ACL without the lifecycle
+  Core the generic error stays.
+- getAuthorityStatus(client, { address }) and getAuthorityStatusOnChains:
+  whether the ACL supports the lifecycle, whether the account is retired,
+  and its E1 successor or pending designation.
+- Transport-key hygiene. disposeTransportKeyPair zero-fills a key pair's
+  private key, after which decrypting or serializing with it throws.
+  createTransportKeyRing hands out one key pair per request, zero-fills it
+  on release, and purges an account's key pairs and permits.
+  purgeIfRetired purges them once the account is retired.
+
+Unit tests with a mocked provider: 19 new tests.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ sdk/js-sdk/src/core/actions/decrypt/index.ts  |   6 +
+ .../core/actions/decrypt/purgeIfRetired.ts    |  31 ++++
+ .../actions/host/getAuthorityStatus.test.ts   | 121 +++++++++++++
+ .../core/actions/host/getAuthorityStatus.ts   | 147 +++++++++++++++
+ sdk/js-sdk/src/core/actions/host/index.ts     |   8 +
+ sdk/js-sdk/src/core/errors/AclError.ts        |  39 ++++
+ .../host-contracts/abi-fragments/fragments.ts |  60 +++++++
+ .../core/host-contracts/checkDelegation.ts    |  16 +-
+ .../host-contracts/checkPersistAllowed.ts     |  20 ++-
+ .../host-contracts/isAccountRetired.test.ts   | 168 ++++++++++++++++++
+ .../core/host-contracts/isAccountRetired.ts   |  84 +++++++++
+ sdk/js-sdk/src/core/kms/TransportKeyPair-p.ts |  45 +++++
+ .../src/core/kms/TransportKeyRing.test.ts     | 100 +++++++++++
+ sdk/js-sdk/src/core/kms/TransportKeyRing.ts   |  86 +++++++++
+ 14 files changed, 929 insertions(+), 2 deletions(-)
+ create mode 100644 sdk/js-sdk/src/core/actions/decrypt/purgeIfRetired.ts
+ create mode 100644 sdk/js-sdk/src/core/actions/host/getAuthorityStatus.test.ts
+ create mode 100644 sdk/js-sdk/src/core/actions/host/getAuthorityStatus.ts
+ create mode 100644 sdk/js-sdk/src/core/host-contracts/isAccountRetired.test.ts
+ create mode 100644 sdk/js-sdk/src/core/host-contracts/isAccountRetired.ts
+ create mode 100644 sdk/js-sdk/src/core/kms/TransportKeyRing.test.ts
+ create mode 100644 sdk/js-sdk/src/core/kms/TransportKeyRing.ts
+
+diff --git a/sdk/js-sdk/src/core/actions/decrypt/index.ts b/sdk/js-sdk/src/core/actions/decrypt/index.ts
+index b27aacde..da6f82a3 100644
+--- a/sdk/js-sdk/src/core/actions/decrypt/index.ts
++++ b/sdk/js-sdk/src/core/actions/decrypt/index.ts
+@@ -38,3 +38,9 @@ export {
+ } from './canDecryptValue.js';
+ 
+ export { type TransportKeyPair } from '../../kms/TransportKeyPair-p.js';
++
++export { disposeTransportKeyPair, isTransportKeyPairDisposed } from '../../kms/TransportKeyPair-p.js';
++
++export { type TransportKeyRing, createTransportKeyRing } from '../../kms/TransportKeyRing.js';
++
++export { type PurgeIfRetiredParameters, type PurgeIfRetiredReturnType, purgeIfRetired } from './purgeIfRetired.js';
+diff --git a/sdk/js-sdk/src/core/actions/decrypt/purgeIfRetired.ts b/sdk/js-sdk/src/core/actions/decrypt/purgeIfRetired.ts
+new file mode 100644
+index 00000000..66d11de9
+--- /dev/null
++++ b/sdk/js-sdk/src/core/actions/decrypt/purgeIfRetired.ts
+@@ -0,0 +1,31 @@
++import type { Fhevm } from '../../types/coreFhevmClient.js';
++import type { FhevmChain } from '../../types/fhevmChain.js';
++import type { TransportKeyRing } from '../../kms/TransportKeyRing.js';
++import type { AuthorityStatus } from '../host/getAuthorityStatus.js';
++import { getAuthorityStatus } from '../host/getAuthorityStatus.js';
++
++////////////////////////////////////////////////////////////////////////////////
++
++export type PurgeIfRetiredParameters = {
++  readonly ring: TransportKeyRing;
++  readonly address: string;
++};
++
++export type PurgeIfRetiredReturnType = {
++  readonly status: AuthorityStatus;
++  readonly purged: { readonly keys: number; readonly permits: number } | undefined;
++};
++
++////////////////////////////////////////////////////////////////////////////////
++
++/**
++ * Reads the authority status of `address` and, if it is retired, zero-fills and forgets every transport key pair the
++ * ring tracks for it and drops its permits (Decryption Authority Lifecycle, Level 2).
++ */
++export async function purgeIfRetired(
++  fhevm: Fhevm<FhevmChain>,
++  parameters: PurgeIfRetiredParameters,
++): Promise<PurgeIfRetiredReturnType> {
++  const status = await getAuthorityStatus(fhevm, { address: parameters.address });
++  return { status, purged: status.retired ? parameters.ring.purge(parameters.address) : undefined };
++}
+diff --git a/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.test.ts b/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.test.ts
+new file mode 100644
+index 00000000..33b3d2aa
+--- /dev/null
++++ b/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.test.ts
+@@ -0,0 +1,121 @@
++import type { EthereumModule } from '../../modules/ethereum/types.js';
++import type { RelayerModule } from '../../modules/relayer/types.js';
++import type { FhevmRuntime } from '../../types/coreFhevmRuntime.js';
++import type { FhevmClientFrozenContext } from '../../types/fhevmClientFrozenContext-p.js';
++import { describe, expect, it, vi } from 'vitest';
++import { PRIVATE_ETHERS_TOKEN } from '../../../ethers/internal/ethers-p.js';
++import { sepolia } from '../../chains/definitions/sepolia.js';
++import { createCoreFhevm, setFrozenContext } from '../../runtime/CoreFhevm-p.js';
++import { createFhevmRuntime } from '../../runtime/CoreFhevmRuntime-p.js';
++import { createFhevmClientFrozenContext } from '../../frozenContext/fhevmClientFrozenContext-p.js';
++import { isTransportKeyPairDisposed, toTransportKeyPair } from '../../kms/TransportKeyPair-p.js';
++import { createTransportKeyRing } from '../../kms/TransportKeyRing.js';
++import { purgeIfRetired } from '../decrypt/purgeIfRetired.js';
++import { getAuthorityStatus, getAuthorityStatusOnChains } from './getAuthorityStatus.js';
++
++////////////////////////////////////////////////////////////////////////////////
++// npx vitest run --config src/vitest.config.ts src/core/actions/host/getAuthorityStatus.test.ts
++//
++// Decryption Authority Lifecycle, Level 2: one status call per chain (Core, retired, E1 successor), and the purge of
++// a ring once the account is retired.
++////////////////////////////////////////////////////////////////////////////////
++
++const ACCOUNT = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
++const SUCCESSOR = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8';
++const ZERO = '0x0000000000000000000000000000000000000000';
++const CORE = '0x556d2088';
++const E1 = '0x7dc5e209';
++
++type Handlers = Record<string, (args: readonly unknown[]) => unknown>;
++
++function makeClient(handlers: Handlers) {
++  const readContract = vi.fn(
++    async (
++      _trustedClient: unknown,
++      parameters: { readonly functionName: string; readonly args: readonly unknown[] },
++    ) => {
++      const handler = handlers[parameters.functionName];
++      if (handler === undefined) {
++        throw new Error(`No mocked handler for ${parameters.functionName}`);
++      }
++      return handler(parameters.args);
++    },
++  );
++  const runtime = createFhevmRuntime(PRIVATE_ETHERS_TOKEN, {
++    ethereum: { readContract } as unknown as EthereumModule,
++    relayer: {} as RelayerModule,
++    config: {},
++  });
++  const client = createCoreFhevm(PRIVATE_ETHERS_TOKEN, { chain: sepolia, client: {}, runtime });
++  setFrozenContext(client, createFhevmClientFrozenContext({ hostContractVersions: {} }));
++  return client;
++}
++
++const registry = (o: { core: boolean; e1: boolean; retired: boolean; successor?: string; pending?: string }) =>
++  makeClient({
++    supportsInterface: ([id]) => (id === CORE ? o.core : id === E1 ? o.e1 : false),
++    isAccountRetired: () => o.retired,
++    successorOf: () => o.successor ?? ZERO,
++    pendingSuccessorOf: () => [o.pending ?? ZERO, 1_800_000_000n, false],
++  });
++
++describe('getAuthorityStatus', () => {
++  it('reports a registry without the lifecycle Core', async () => {
++    const s = await getAuthorityStatus(registry({ core: false, e1: false, retired: false }), { address: ACCOUNT });
++    expect(s).toMatchObject({ chainId: sepolia.id, lifecycle: false, retired: false });
++    expect(s.successor).toBeUndefined();
++  });
++
++  it('reports a retired account and its confirmed successor', async () => {
++    const s = await getAuthorityStatus(registry({ core: true, e1: true, retired: true, successor: SUCCESSOR }), {
++      address: ACCOUNT.toLowerCase(),
++    });
++    expect(s).toMatchObject({ lifecycle: true, retired: true, successor: SUCCESSOR, pendingSuccessor: null });
++    expect(s.account).toBe(ACCOUNT);
++  });
++
++  it('reports a pending designation, and no E1 fields on a Core-only registry', async () => {
++    const pending = await getAuthorityStatus(registry({ core: true, e1: true, retired: false, pending: SUCCESSOR }), {
++      address: ACCOUNT,
++    });
++    expect(pending.successor).toBeNull();
++    expect(pending.pendingSuccessor).toEqual({ address: SUCCESSOR, confirmableAt: 1_800_000_000n, accepted: false });
++    const coreOnly = await getAuthorityStatus(registry({ core: true, e1: false, retired: false }), {
++      address: ACCOUNT,
++    });
++    expect(coreOnly).toMatchObject({ lifecycle: true, retired: false });
++    expect(coreOnly.pendingSuccessor).toBeUndefined();
++  });
++
++  it('answers per chain', async () => {
++    const all = await getAuthorityStatusOnChains(
++      [registry({ core: true, e1: true, retired: true }), registry({ core: true, e1: true, retired: false })],
++      { address: ACCOUNT },
++    );
++    expect(all.map((s) => s.retired)).toEqual([true, false]);
++  });
++});
++
++describe('purgeIfRetired', () => {
++  const keyPair = () =>
++    toTransportKeyPair(
++      { runtime: {} as unknown as FhevmRuntime, chain: sepolia },
++      {
++        value: { publicKey: `0x${'11'.repeat(32)}`, privateKey: new Uint8Array(32).fill(9) },
++        fhevmContext: {} as unknown as FhevmClientFrozenContext,
++      },
++    );
++
++  it('purges the ring only once the account is retired', async () => {
++    const ring = createTransportKeyRing(async () => keyPair());
++    const k = await ring.issue(ACCOUNT);
++
++    const active = await purgeIfRetired(registry({ core: true, e1: true, retired: false }), { ring, address: ACCOUNT });
++    expect(active.purged).toBeUndefined();
++    expect(isTransportKeyPairDisposed(k)).toBe(false);
++
++    const retired = await purgeIfRetired(registry({ core: true, e1: true, retired: true }), { ring, address: ACCOUNT });
++    expect(retired.purged).toEqual({ keys: 1, permits: 0 });
++    expect(isTransportKeyPairDisposed(k)).toBe(true);
++  });
++});
+diff --git a/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.ts b/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.ts
+new file mode 100644
+index 00000000..ecc17d4a
+--- /dev/null
++++ b/sdk/js-sdk/src/core/actions/host/getAuthorityStatus.ts
+@@ -0,0 +1,147 @@
++import type { Fhevm } from '../../types/coreFhevmClient.js';
++import type { FhevmChain } from '../../types/fhevmChain.js';
++import type { ChecksummedAddress } from '../../types/primitives.js';
++import {
++  isAccountRetiredAbi,
++  pendingSuccessorOfAbi,
++  successorOfAbi,
++  supportsInterfaceAbi,
++} from '../../host-contracts/abi-fragments/fragments.js';
++import { getTrustedClient, initPublicAction } from '../../runtime/CoreFhevm-p.js';
++import { addressToChecksummedAddress, assertIsAddress } from '../../base/address.js';
++
++////////////////////////////////////////////////////////////////////////////////
++
++// ERC-165 interface ids of the Decryption Authority Lifecycle.
++const LIFECYCLE_CORE_INTERFACE_ID = '0x556d2088';
++const LIFECYCLE_SUCCESSION_INTERFACE_ID = '0x7dc5e209';
++const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
++
++export type GetAuthorityStatusParameters = {
++  readonly address: string;
++};
++
++export type AuthorityStatus = {
++  readonly chainId: number;
++  readonly aclAddress: ChecksummedAddress;
++  readonly account: ChecksummedAddress;
++  /** Whether the ACL declares the lifecycle Core (ERC-165 `0x556d2088`). Without it, no account can retire there. */
++  readonly lifecycle: boolean;
++  /** Whether the account has retired its decryption authority on this chain. Retirement is one-way. */
++  readonly retired: boolean;
++  /** E1: the confirmed successor, or `null`. `undefined` when the ACL does not declare E1 (`0x7dc5e209`). */
++  readonly successor: ChecksummedAddress | null | undefined;
++  /** E1: the pending designation, or `null`. `undefined` when the ACL does not declare E1. */
++  readonly pendingSuccessor:
++    | {
++        readonly address: ChecksummedAddress;
++        readonly confirmableAt: bigint;
++        readonly accepted: boolean;
++      }
++    | null
++    | undefined;
++};
++
++export type GetAuthorityStatusReturnType = AuthorityStatus;
++
++////////////////////////////////////////////////////////////////////////////////
++
++/**
++ * The decryption authority status of `address` on the client's chain: whether the ACL supports the Decryption
++ * Authority Lifecycle, whether the account is retired, and its successor (E1). Wallets use it to show one status and
++ * to purge transport keys and permits once the account is retired.
++ */
++export async function getAuthorityStatus(
++  fhevm: Fhevm<FhevmChain>,
++  parameters: GetAuthorityStatusParameters,
++): Promise<GetAuthorityStatusReturnType> {
++  assertIsAddress(parameters.address, {});
++  const account = addressToChecksummedAddress(parameters.address);
++  const aclAddress = fhevm.chain.fhevm.contracts.acl.address as ChecksummedAddress;
++
++  // no context needed
++  await initPublicAction(fhevm);
++  const trustedClient = getTrustedClient(fhevm);
++
++  const supports = async (interfaceId: string): Promise<boolean> => {
++    try {
++      const res = await fhevm.runtime.ethereum.readContract(trustedClient, {
++        address: aclAddress,
++        abi: supportsInterfaceAbi,
++        args: [interfaceId],
++        functionName: supportsInterfaceAbi[0].name,
++      });
++      return res === true;
++    } catch {
++      return false;
++    }
++  };
++
++  const status = {
++    chainId: fhevm.chain.id,
++    aclAddress,
++    account,
++  };
++
++  if (!(await supports(LIFECYCLE_CORE_INTERFACE_ID))) {
++    return { ...status, lifecycle: false, retired: false, successor: undefined, pendingSuccessor: undefined };
++  }
++
++  const retired = await fhevm.runtime.ethereum.readContract(trustedClient, {
++    address: aclAddress,
++    abi: isAccountRetiredAbi,
++    args: [account],
++    functionName: isAccountRetiredAbi[0].name,
++  });
++  if (typeof retired !== 'boolean') {
++    throw new Error(`Invalid isAccountRetired result.`);
++  }
++
++  if (!(await supports(LIFECYCLE_SUCCESSION_INTERFACE_ID))) {
++    return { ...status, lifecycle: true, retired, successor: undefined, pendingSuccessor: undefined };
++  }
++
++  const successor = String(
++    await fhevm.runtime.ethereum.readContract(trustedClient, {
++      address: aclAddress,
++      abi: successorOfAbi,
++      args: [account],
++      functionName: successorOfAbi[0].name,
++    }),
++  );
++  assertIsAddress(successor, {});
++  const pending = (await fhevm.runtime.ethereum.readContract(trustedClient, {
++    address: aclAddress,
++    abi: pendingSuccessorOfAbi,
++    args: [account],
++    functionName: pendingSuccessorOfAbi[0].name,
++  })) as readonly [unknown, bigint | number, unknown];
++  const pendingAddress = pending[0];
++  assertIsAddress(pendingAddress, {});
++
++  return {
++    ...status,
++    lifecycle: true,
++    retired,
++    successor: successor.toLowerCase() === ZERO_ADDRESS ? null : addressToChecksummedAddress(successor),
++    pendingSuccessor:
++      pendingAddress.toLowerCase() === ZERO_ADDRESS
++        ? null
++        : {
++            address: addressToChecksummedAddress(pendingAddress),
++            confirmableAt: BigInt(pending[1]),
++            accepted: pending[2] === true,
++          },
++  };
++}
++
++/**
++ * The status of `address` on several chains, one client per chain. Retirement is per chain: an answer on one chain
++ * says nothing about another.
++ */
++export async function getAuthorityStatusOnChains(
++  fhevms: ReadonlyArray<Fhevm<FhevmChain>>,
++  parameters: GetAuthorityStatusParameters,
++): Promise<readonly GetAuthorityStatusReturnType[]> {
++  return await Promise.all(fhevms.map((fhevm) => getAuthorityStatus(fhevm, parameters)));
++}
+diff --git a/sdk/js-sdk/src/core/actions/host/index.ts b/sdk/js-sdk/src/core/actions/host/index.ts
+index 0cf1c9ae..c9f8018f 100644
+--- a/sdk/js-sdk/src/core/actions/host/index.ts
++++ b/sdk/js-sdk/src/core/actions/host/index.ts
+@@ -11,3 +11,11 @@ export {
+ } from './isAllowedForDecryption.js';
+ 
+ export { type PersistAllowedParameters, type PersistAllowedReturnType, persistAllowed } from './persistAllowed.js';
++
++export {
++  type AuthorityStatus,
++  type GetAuthorityStatusParameters,
++  type GetAuthorityStatusReturnType,
++  getAuthorityStatus,
++  getAuthorityStatusOnChains,
++} from './getAuthorityStatus.js';
+diff --git a/sdk/js-sdk/src/core/errors/AclError.ts b/sdk/js-sdk/src/core/errors/AclError.ts
+index 4acc5332..d6b4d3e9 100644
+--- a/sdk/js-sdk/src/core/errors/AclError.ts
++++ b/sdk/js-sdk/src/core/errors/AclError.ts
+@@ -53,3 +53,42 @@ export class AclUserDecryptionError extends ContractErrorBase {
+     });
+   }
+ }
++
++////////////////////////////////////////////////////////////////////////////////
++// AclAccountRetiredError
++////////////////////////////////////////////////////////////////////////////////
++
++export type AclAccountRetiredErrorType = AclAccountRetiredError & {
++  name: 'AclAccountRetiredError';
++};
++
++/**
++ * A user decryption refused because an account it rests on has retired its decryption authority
++ * (Decryption Authority Lifecycle, `ACL.isAccountRetired`). Retirement is one-way, so unlike other ACL refusals
++ * this one never clears: retrying cannot succeed. It extends {@link AclUserDecryptionError}, so existing handlers
++ * still catch it.
++ */
++export class AclAccountRetiredError extends AclUserDecryptionError {
++  readonly #accounts: ChecksummedAddress[];
++
++  constructor({
++    contractAddress,
++    accounts,
++    message,
++  }: {
++    contractAddress: Address;
++    accounts: ChecksummedAddress[];
++    message: string;
++  }) {
++    super({ contractAddress, message });
++    this.#accounts = accounts;
++  }
++
++  /** The machine-readable reason, the same code the verifier returns over HTTP (`account_retired`). */
++  public readonly code = 'ACCOUNT_RETIRED' as const;
++
++  /** The retired accounts among the request's subjects. */
++  public get accounts(): ChecksummedAddress[] {
++    return this.#accounts;
++  }
++}
+diff --git a/sdk/js-sdk/src/core/host-contracts/abi-fragments/fragments.ts b/sdk/js-sdk/src/core/host-contracts/abi-fragments/fragments.ts
+index a1b27b02..e23b6013 100644
+--- a/sdk/js-sdk/src/core/host-contracts/abi-fragments/fragments.ts
++++ b/sdk/js-sdk/src/core/host-contracts/abi-fragments/fragments.ts
+@@ -486,3 +486,63 @@ export const getContextSignersAndThresholdFromExtraDataAbi: readonly [
+     stateMutability: 'view',
+   },
+ ] as const;
++
++////////////////////////////////////////////////////////////////////////////////
++// ACL.isAccountRetired(account) (Decryption Authority Lifecycle, Core)
++////////////////////////////////////////////////////////////////////////////////
++
++export const isAccountRetiredAbi: readonly [Record<string, unknown> & { readonly name: 'isAccountRetired' }] = [
++  {
++    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
++    name: 'isAccountRetired',
++    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
++    stateMutability: 'view',
++    type: 'function',
++  },
++] as const;
++
++////////////////////////////////////////////////////////////////////////////////
++// ACL.supportsInterface(interfaceId) (ERC-165)
++////////////////////////////////////////////////////////////////////////////////
++
++export const supportsInterfaceAbi: readonly [Record<string, unknown> & { readonly name: 'supportsInterface' }] = [
++  {
++    inputs: [{ internalType: 'bytes4', name: 'interfaceId', type: 'bytes4' }],
++    name: 'supportsInterface',
++    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
++    stateMutability: 'view',
++    type: 'function',
++  },
++] as const;
++
++////////////////////////////////////////////////////////////////////////////////
++// ACL.successorOf(account) (Decryption Authority Lifecycle, E1)
++////////////////////////////////////////////////////////////////////////////////
++
++export const successorOfAbi: readonly [Record<string, unknown> & { readonly name: 'successorOf' }] = [
++  {
++    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
++    name: 'successorOf',
++    outputs: [{ internalType: 'address', name: '', type: 'address' }],
++    stateMutability: 'view',
++    type: 'function',
++  },
++] as const;
++
++////////////////////////////////////////////////////////////////////////////////
++// ACL.pendingSuccessorOf(account) (Decryption Authority Lifecycle, E1)
++////////////////////////////////////////////////////////////////////////////////
++
++export const pendingSuccessorOfAbi: readonly [Record<string, unknown> & { readonly name: 'pendingSuccessorOf' }] = [
++  {
++    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
++    name: 'pendingSuccessorOf',
++    outputs: [
++      { internalType: 'address', name: 'successor', type: 'address' },
++      { internalType: 'uint64', name: 'confirmableAt', type: 'uint64' },
++      { internalType: 'bool', name: 'accepted', type: 'bool' },
++    ],
++    stateMutability: 'view',
++    type: 'function',
++  },
++] as const;
+diff --git a/sdk/js-sdk/src/core/host-contracts/checkDelegation.ts b/sdk/js-sdk/src/core/host-contracts/checkDelegation.ts
+index 1498791c..7a35abc1 100644
+--- a/sdk/js-sdk/src/core/host-contracts/checkDelegation.ts
++++ b/sdk/js-sdk/src/core/host-contracts/checkDelegation.ts
+@@ -2,7 +2,8 @@ import type { FhevmRuntime } from '../types/coreFhevmRuntime.js';
+ import type { Handle } from '../types/encryptedTypes-p.js';
+ import type { ChecksummedAddress } from '../types/primitives.js';
+ import type { HandleContractPair } from '../types/other-p.js';
+-import { AclUserDecryptionError } from '../errors/AclError.js';
++import { AclAccountRetiredError, AclUserDecryptionError } from '../errors/AclError.js';
++import { findRetiredAccounts } from './isAccountRetired.js';
+ import { isHandleDelegatedForUserDecryption } from './isHandleDelegatedForUserDecryption-p.js';
+ import { WILDCARD_DELEGATION_ADDRESS } from './constants.js';
+ 
+@@ -120,6 +121,19 @@ export async function checkDelegation(context: Context, parameters: Parameters):
+   for (const pair of handleContractPairs) {
+     const key = getKey(pair.contractAddress, pair.handle.bytes32Hex);
+     if (resultMap.get(key) !== true) {
++      // A refusal that rests on a retired account is final: type it (Decryption Authority Lifecycle). A retired
++      // delegator's confirmed successor (E1) is not refused here: the delegated view answers true for it.
++      const retired = await findRetiredAccounts(context, {
++        aclAddress,
++        accounts: [delegator, delegate, pair.contractAddress],
++      });
++      if (retired.length > 0) {
++        throw new AclAccountRetiredError({
++          contractAddress: aclAddress,
++          accounts: retired,
++          message: `Delegate ${delegate} cannot user decrypt handle ${pair.handle.bytes32Hex} on contract ${pair.contractAddress} for ${delegator}: ${retired.join(', ')} retired its decryption authority!`,
++        });
++      }
+       throw new AclUserDecryptionError({
+         contractAddress: aclAddress,
+         message: `Delegate ${delegate} is not delegated by ${delegator} to user decrypt handle ${pair.handle.bytes32Hex} on contract ${pair.contractAddress}!`,
+diff --git a/sdk/js-sdk/src/core/host-contracts/checkPersistAllowed.ts b/sdk/js-sdk/src/core/host-contracts/checkPersistAllowed.ts
+index dbe55b25..0666dd16 100644
+--- a/sdk/js-sdk/src/core/host-contracts/checkPersistAllowed.ts
++++ b/sdk/js-sdk/src/core/host-contracts/checkPersistAllowed.ts
+@@ -2,8 +2,9 @@ import type { FhevmRuntime } from '../types/coreFhevmRuntime.js';
+ import type { Handle } from '../types/encryptedTypes-p.js';
+ import type { ChecksummedAddress } from '../types/primitives.js';
+ import type { HandleAccountPair } from '../types/other-p.js';
+-import { AclUserDecryptionError } from '../errors/AclError.js';
++import { AclAccountRetiredError, AclUserDecryptionError } from '../errors/AclError.js';
+ import { persistAllowed } from './persistAllowed.js';
++import { findRetiredAccounts } from './isAccountRetired.js';
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+@@ -97,6 +98,15 @@ export async function checkPersistAllowed(context: Context, parameters: Paramete
+     // 5. Verify user permissions
+     const userKey = getKey(parameters.userAddress, pair.handle.bytes32Hex);
+     if (resultMap.get(userKey) !== true) {
++      // A refusal that rests on a retired account is final: type it (Decryption Authority Lifecycle).
++      const retired = await findRetiredAccounts(context, { aclAddress, accounts: [userAddress] });
++      if (retired.length > 0) {
++        throw new AclAccountRetiredError({
++          contractAddress: aclAddress,
++          accounts: retired,
++          message: `User ${userAddress} has retired its decryption authority and can no longer decrypt handle ${pair.handle.bytes32Hex}!`,
++        });
++      }
+       throw new AclUserDecryptionError({
+         contractAddress: aclAddress,
+         message: `User ${userAddress} is not authorized to decrypt handle ${pair.handle.bytes32Hex}!`,
+@@ -106,6 +116,14 @@ export async function checkPersistAllowed(context: Context, parameters: Paramete
+     // 6. Verify contract permissions
+     const contractKey = getKey(pair.contractAddress, pair.handle.bytes32Hex);
+     if (resultMap.get(contractKey) !== true) {
++      const retired = await findRetiredAccounts(context, { aclAddress, accounts: [pair.contractAddress] });
++      if (retired.length > 0) {
++        throw new AclAccountRetiredError({
++          contractAddress: aclAddress,
++          accounts: retired,
++          message: `Dapp contract ${pair.contractAddress} has retired its decryption authority: handle ${pair.handle.bytes32Hex} can no longer be user decrypted in its context!`,
++        });
++      }
+       throw new AclUserDecryptionError({
+         contractAddress: aclAddress,
+         message: `Dapp contract ${pair.contractAddress} is not authorized to user decrypt handle ${pair.handle.bytes32Hex}!`,
+diff --git a/sdk/js-sdk/src/core/host-contracts/isAccountRetired.test.ts b/sdk/js-sdk/src/core/host-contracts/isAccountRetired.test.ts
+new file mode 100644
+index 00000000..c30e4f22
+--- /dev/null
++++ b/sdk/js-sdk/src/core/host-contracts/isAccountRetired.test.ts
+@@ -0,0 +1,168 @@
++import type { EthereumModule } from '../modules/ethereum/types.js';
++import type { RelayerModule } from '../modules/relayer/types.js';
++import type { ChecksummedAddress } from '../types/primitives.js';
++import { describe, expect, it, vi } from 'vitest';
++import { PRIVATE_ETHERS_TOKEN } from '../../ethers/internal/ethers-p.js';
++import { sepolia } from '../chains/definitions/sepolia.js';
++import { createCoreFhevm } from '../runtime/CoreFhevm-p.js';
++import { createFhevmRuntime } from '../runtime/CoreFhevmRuntime-p.js';
++import { buildHandle } from '../handle/FhevmHandle.js';
++import { AclAccountRetiredError, AclUserDecryptionError } from '../errors/AclError.js';
++import { checkPersistAllowed } from './checkPersistAllowed.js';
++import { checkDelegation } from './checkDelegation.js';
++import { findRetiredAccounts, isAccountRetired } from './isAccountRetired.js';
++
++////////////////////////////////////////////////////////////////////////////////
++// npx vitest run --config src/vitest.config.ts src/core/host-contracts/isAccountRetired.test.ts
++//
++// Decryption Authority Lifecycle, Level 2: a precheck refusal that rests on a retired account is typed
++// (AclAccountRetiredError, code ACCOUNT_RETIRED); every other refusal keeps its generic AclUserDecryptionError; an
++// allowed request makes no extra call; an ACL without the lifecycle Core leaves the generic error in place.
++////////////////////////////////////////////////////////////////////////////////
++
++const ACL = sepolia.fhevm.contracts.acl.address as ChecksummedAddress;
++const USER = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' as ChecksummedAddress;
++const DELEGATE = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8' as ChecksummedAddress;
++const APP = '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC' as ChecksummedAddress;
++const HANDLE = buildHandle({ chainId: 11155111n, hash21: `0x${'ab'.repeat(21)}`, fheTypeId: 5 });
++
++type Handlers = Record<string, (args: readonly unknown[]) => unknown>;
++
++/** A real core client whose readContract dispatches on the function name; a missing handler throws. */
++function makeClient(handlers: Handlers) {
++  const readContract = vi.fn(
++    async (
++      _trustedClient: unknown,
++      parameters: { readonly functionName: string; readonly args: readonly unknown[] },
++    ) => {
++      const handler = handlers[parameters.functionName];
++      if (handler === undefined) {
++        throw new Error(`No mocked handler for ${parameters.functionName}`);
++      }
++      return handler(parameters.args);
++    },
++  );
++  const runtime = createFhevmRuntime(PRIVATE_ETHERS_TOKEN, {
++    ethereum: { readContract } as unknown as EthereumModule,
++    relayer: {} as RelayerModule,
++    config: {},
++  });
++  const client = createCoreFhevm(PRIVATE_ETHERS_TOKEN, { chain: sepolia, client: {}, runtime });
++  const called = (): string[] =>
++    readContract.mock.calls.map((call) => (call[1] as { readonly functionName: string }).functionName);
++  return { client, called };
++}
++
++const lower = (a: unknown): string => String(a).toLowerCase();
++const pairs = [{ handle: HANDLE, contractAddress: APP }];
++
++describe('checkPersistAllowed', () => {
++  it('types the refusal when the user is retired', async () => {
++    const { client, called } = makeClient({
++      persistAllowed: ([, account]) => lower(account) !== lower(USER),
++      isAccountRetired: ([account]) => lower(account) === lower(USER),
++    });
++    const err = await checkPersistAllowed(client, {
++      aclAddress: ACL,
++      userAddress: USER,
++      handleContractPairs: pairs,
++    }).catch((e: unknown) => e);
++    expect(err).toBeInstanceOf(AclAccountRetiredError);
++    expect(err).toBeInstanceOf(AclUserDecryptionError);
++    expect((err as AclAccountRetiredError).code).toBe('ACCOUNT_RETIRED');
++    expect((err as AclAccountRetiredError).accounts).toEqual([USER]);
++    expect(called().filter((f) => f === 'isAccountRetired')).toHaveLength(1);
++  });
++
++  it('types the refusal when the app contract is retired', async () => {
++    const { client } = makeClient({
++      persistAllowed: ([, account]) => lower(account) !== lower(APP),
++      isAccountRetired: ([account]) => lower(account) === lower(APP),
++    });
++    const err = await checkPersistAllowed(client, {
++      aclAddress: ACL,
++      userAddress: USER,
++      handleContractPairs: pairs,
++    }).catch((e: unknown) => e);
++    expect(err).toBeInstanceOf(AclAccountRetiredError);
++    expect((err as AclAccountRetiredError).accounts).toEqual([APP]);
++  });
++
++  it('keeps the generic error for an ordinary refusal', async () => {
++    const { client } = makeClient({ persistAllowed: () => false, isAccountRetired: () => false });
++    const err = await checkPersistAllowed(client, {
++      aclAddress: ACL,
++      userAddress: USER,
++      handleContractPairs: pairs,
++    }).catch((e: unknown) => e);
++    expect(err).toBeInstanceOf(AclUserDecryptionError);
++    expect(err).not.toBeInstanceOf(AclAccountRetiredError);
++  });
++
++  it('keeps the generic error when the ACL has no lifecycle Core', async () => {
++    const { client, called } = makeClient({ persistAllowed: () => false });
++    const err = await checkPersistAllowed(client, {
++      aclAddress: ACL,
++      userAddress: USER,
++      handleContractPairs: pairs,
++    }).catch((e: unknown) => e);
++    expect(err).toBeInstanceOf(AclUserDecryptionError);
++    expect(err).not.toBeInstanceOf(AclAccountRetiredError);
++    expect(called()).toContain('isAccountRetired');
++  });
++
++  it('makes no extra call when the request is allowed', async () => {
++    const { client, called } = makeClient({ persistAllowed: () => true });
++    await checkPersistAllowed(client, { aclAddress: ACL, userAddress: USER, handleContractPairs: pairs });
++    expect(called()).not.toContain('isAccountRetired');
++  });
++});
++
++describe('checkDelegation', () => {
++  it('types the refusal when the delegator is retired', async () => {
++    const { client } = makeClient({
++      isHandleDelegatedForUserDecryption: () => false,
++      isAccountRetired: ([account]) => lower(account) === lower(USER),
++    });
++    const err = await checkDelegation(client, {
++      aclAddress: ACL,
++      delegator: USER,
++      delegate: DELEGATE,
++      handleContractPairs: pairs,
++    }).catch((e: unknown) => e);
++    expect(err).toBeInstanceOf(AclAccountRetiredError);
++    expect((err as AclAccountRetiredError).accounts).toEqual([USER]);
++  });
++
++  it("passes a retired delegator's successor, which the delegated view allows, with no extra call", async () => {
++    const { client, called } = makeClient({ isHandleDelegatedForUserDecryption: () => true });
++    await checkDelegation(client, { aclAddress: ACL, delegator: USER, delegate: DELEGATE, handleContractPairs: pairs });
++    expect(called()).not.toContain('isAccountRetired');
++  });
++
++  it('keeps the generic error for an ordinary refusal', async () => {
++    const { client } = makeClient({ isHandleDelegatedForUserDecryption: () => false, isAccountRetired: () => false });
++    const err = await checkDelegation(client, {
++      aclAddress: ACL,
++      delegator: USER,
++      delegate: DELEGATE,
++      handleContractPairs: pairs,
++    }).catch((e: unknown) => e);
++    expect(err).toBeInstanceOf(AclUserDecryptionError);
++    expect(err).not.toBeInstanceOf(AclAccountRetiredError);
++  });
++});
++
++describe('isAccountRetired / findRetiredAccounts', () => {
++  it('reads each account and returns the retired ones without duplicates', async () => {
++    const { client } = makeClient({ isAccountRetired: ([account]) => lower(account) !== lower(APP) });
++    expect(await isAccountRetired(client, { aclAddress: ACL, accounts: [USER, APP] })).toEqual([true, false]);
++    expect(await findRetiredAccounts(client, { aclAddress: ACL, accounts: [USER, APP, USER] })).toEqual([USER]);
++  });
++
++  it('answers nothing when the ACL has no lifecycle Core', async () => {
++    const { client } = makeClient({});
++    await expect(isAccountRetired(client, { aclAddress: ACL, accounts: [USER] })).rejects.toThrow();
++    expect(await findRetiredAccounts(client, { aclAddress: ACL, accounts: [USER] })).toEqual([]);
++  });
++});
+diff --git a/sdk/js-sdk/src/core/host-contracts/isAccountRetired.ts b/sdk/js-sdk/src/core/host-contracts/isAccountRetired.ts
+new file mode 100644
+index 00000000..e882c702
+--- /dev/null
++++ b/sdk/js-sdk/src/core/host-contracts/isAccountRetired.ts
+@@ -0,0 +1,84 @@
++import type { ChecksummedAddress } from '../types/primitives.js';
++import type { FhevmRuntime } from '../types/coreFhevmRuntime.js';
++import { isAccountRetiredAbi } from './abi-fragments/fragments.js';
++import { getTrustedClient } from '../runtime/CoreFhevm-p.js';
++import { executeWithBatching } from '../base/promise.js';
++
++////////////////////////////////////////////////////////////////////////////////
++
++type Context = {
++  readonly runtime: FhevmRuntime;
++  readonly client: NonNullable<object>;
++  readonly options: { readonly batchRpcCalls: boolean };
++};
++
++type Parameters = {
++  readonly aclAddress: ChecksummedAddress;
++  readonly accounts: readonly ChecksummedAddress[];
++};
++
++////////////////////////////////////////////////////////////////////////////////
++
++/**
++ * Reads `ACL.isAccountRetired(account)` (Decryption Authority Lifecycle, Core) for each account.
++ * Throws if the ACL has no lifecycle Core.
++ */
++export async function isAccountRetired(context: Context, parameters: Parameters): Promise<boolean[]> {
++  const { aclAddress, accounts } = parameters;
++
++  const rpcCalls = accounts.map((account) => () => _isAccountRetired(context, { aclAddress, account }));
++
++  return await executeWithBatching(rpcCalls, context.options.batchRpcCalls);
++}
++
++/**
++ * Returns the retired accounts among `accounts`, without duplicates. Used after a precheck has refused, to type the
++ * refusal: an ACL without the lifecycle Core answers nothing here (an empty list), so the precheck's generic error
++ * stands.
++ */
++export async function findRetiredAccounts(context: Context, parameters: Parameters): Promise<ChecksummedAddress[]> {
++  const unique: ChecksummedAddress[] = [];
++  const seen = new Set<string>();
++  for (const account of parameters.accounts) {
++    // runtime defensive check, use lowercase
++    if (!seen.has(account.toLowerCase())) {
++      seen.add(account.toLowerCase());
++      unique.push(account);
++    }
++  }
++
++  let retired: boolean[];
++  try {
++    retired = await isAccountRetired(context, { aclAddress: parameters.aclAddress, accounts: unique });
++  } catch {
++    return [];
++  }
++
++  return unique.filter((_, i) => retired[i] === true);
++}
++
++////////////////////////////////////////////////////////////////////////////////
++
++async function _isAccountRetired(
++  context: Context,
++  parameters: {
++    readonly aclAddress: ChecksummedAddress;
++    readonly account: ChecksummedAddress;
++  },
++): Promise<boolean> {
++  const { aclAddress, account } = parameters;
++  const trustedClient = getTrustedClient(context);
++
++  const res = await context.runtime.ethereum.readContract(trustedClient, {
++    address: aclAddress,
++    abi: isAccountRetiredAbi,
++    args: [account],
++    functionName: isAccountRetiredAbi[0].name,
++  });
++
++  if (typeof res !== 'boolean') {
++    throw new Error(`Invalid isAccountRetired result.`);
++  }
++
++  return res;
++}
+diff --git a/sdk/js-sdk/src/core/kms/TransportKeyPair-p.ts b/sdk/js-sdk/src/core/kms/TransportKeyPair-p.ts
+index 24f7acdf..7cbf6d99 100644
+--- a/sdk/js-sdk/src/core/kms/TransportKeyPair-p.ts
++++ b/sdk/js-sdk/src/core/kms/TransportKeyPair-p.ts
+@@ -38,6 +38,7 @@ export type TransportKeyPair = {
+ 
+ const GetTkmsPrivateKeyFn = Symbol();
+ const SerializeFn = Symbol();
++const DisposeFn = Symbol();
+ 
+ class TransportKeyPairImpl implements TransportKeyPair {
+   declare readonly [TransportKeyPairBrand]: true;
+@@ -45,6 +46,7 @@ class TransportKeyPairImpl implements TransportKeyPair {
+   readonly #publicKeyBytesHex: BytesHex;
+   readonly #privateKeyBytes: Bytes;
+   readonly #tkmsVersion: string | undefined;
++  #disposed = false;
+ 
+   readonly #runtime: WeakRef<FhevmRuntime>;
+ 
+@@ -89,6 +91,7 @@ class TransportKeyPairImpl implements TransportKeyPair {
+     if (privateToken !== PRIVATE_TOKEN) {
+       throw new Error('Unauthorized');
+     }
++    this.#assertNotDisposed();
+     // If the runtime was GC'd, deref() returns undefined, which !== expectedRuntime → throws.
+     // This is intentional: a GC'd runtime means the key pair is stale.
+     if (expectedRuntime !== this.#runtime.deref()) {
+@@ -134,6 +137,7 @@ class TransportKeyPairImpl implements TransportKeyPair {
+     if (privateToken !== PRIVATE_TOKEN) {
+       throw new Error('Unauthorized');
+     }
++    this.#assertNotDisposed();
+     if (this.#tkmsVersion === undefined) {
+       return {
+         publicKey: this.#publicKeyBytesHex,
+@@ -147,6 +151,29 @@ class TransportKeyPairImpl implements TransportKeyPair {
+     };
+   }
+ 
++  /**
++   * Hidden method (Symbol key) that zero-fills the private key bytes. Every later use of the key pair throws.
++   *
++   * Access is protected by the Symbol key (not exported) and the private token.
++   */
++  [DisposeFn](privateToken: symbol): void {
++    if (privateToken !== PRIVATE_TOKEN) {
++      throw new Error('Unauthorized');
++    }
++    this.#privateKeyBytes.fill(0);
++    this.#disposed = true;
++  }
++
++  public get disposed(): boolean {
++    return this.#disposed;
++  }
++
++  #assertNotDisposed(): void {
++    if (this.#disposed) {
++      throw new Error('TransportKeyPair is disposed');
++    }
++  }
++
+   /**
+    * Prevents accidental private key exposure via `JSON.stringify`.
+    * Only the public key is included in the output.
+@@ -299,6 +326,24 @@ export function serializeTransportKeyPair(parameters: {
+   return (parameters.transportKeyPair as TransportKeyPairImpl)[SerializeFn](PRIVATE_TOKEN);
+ }
+ 
++/**
++ * Zero-fills the private key of an {@link TransportKeyPair}. From then on, decrypting with it or serializing it throws.
++ * A key pair built by {@link toTransportKeyPair} from caller-supplied `Bytes` shares that buffer, which is zero-filled
++ * too.
++ *
++ * @throws {InvalidTypeError} If `value` is not a valid {@link TransportKeyPair}.
++ */
++export function disposeTransportKeyPair(transportKeyPair: TransportKeyPair): void {
++  assertIsTransportKeyPair(transportKeyPair, {});
++  (transportKeyPair as TransportKeyPairImpl)[DisposeFn](PRIVATE_TOKEN);
++}
++
++/** Returns whether {@link disposeTransportKeyPair} was called on `transportKeyPair`. */
++export function isTransportKeyPairDisposed(transportKeyPair: TransportKeyPair): boolean {
++  assertIsTransportKeyPair(transportKeyPair, {});
++  return (transportKeyPair as TransportKeyPairImpl).disposed;
++}
++
+ /**
+  * Extracts the deserialized TKMS private key from an {@link TransportKeyPair}.
+  * Lazily deserializes and verifies the key on first access.
+diff --git a/sdk/js-sdk/src/core/kms/TransportKeyRing.test.ts b/sdk/js-sdk/src/core/kms/TransportKeyRing.test.ts
+new file mode 100644
+index 00000000..74da6b6f
+--- /dev/null
++++ b/sdk/js-sdk/src/core/kms/TransportKeyRing.test.ts
+@@ -0,0 +1,100 @@
++import type { FhevmRuntime } from '../types/coreFhevmRuntime.js';
++import type { FhevmClientFrozenContext } from '../types/fhevmClientFrozenContext-p.js';
++import type { SignedDecryptionPermit } from '../types/signedDecryptionPermit.js';
++import type { TransportKeyPair } from './TransportKeyPair-p.js';
++import { describe, expect, it } from 'vitest';
++import { sepolia } from '../chains/definitions/sepolia.js';
++import {
++  disposeTransportKeyPair,
++  isTransportKeyPairDisposed,
++  serializeTransportKeyPair,
++  toTransportKeyPair,
++} from './TransportKeyPair-p.js';
++import { createTransportKeyRing } from './TransportKeyRing.js';
++
++////////////////////////////////////////////////////////////////////////////////
++// npx vitest run --config src/vitest.config.ts src/core/kms/TransportKeyRing.test.ts
++//
++// Decryption Authority Lifecycle, Level 2: transport-key hygiene. A disposed key pair is zero-filled and unusable;
++// a ring hands out one key pair per request and purges an account's key pairs and permits.
++////////////////////////////////////////////////////////////////////////////////
++
++const ALICE = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
++const BOB = '0x70997970C51812dc3A010C7d01b50e0d17dc79C8';
++const runtime = {} as unknown as FhevmRuntime;
++const fhevmContext = {} as unknown as FhevmClientFrozenContext;
++
++let seed = 0;
++/** A key pair over caller-supplied bytes (no WASM needed); also returns the private key buffer. */
++function makeKeyPair(): { readonly transportKeyPair: TransportKeyPair; readonly privateKey: Uint8Array } {
++  seed++;
++  const privateKey = new Uint8Array(32).fill(seed);
++  const transportKeyPair = toTransportKeyPair(
++    { runtime, chain: sepolia },
++    { value: { publicKey: `0x${seed.toString(16).padStart(2, '0').repeat(32)}`, privateKey }, fhevmContext },
++  );
++  return { transportKeyPair, privateKey };
++}
++
++describe('disposeTransportKeyPair', () => {
++  it('zero-fills the private key and makes the key pair unusable', () => {
++    const { transportKeyPair, privateKey } = makeKeyPair();
++    expect(serializeTransportKeyPair({ transportKeyPair, fhevmContext }).privateKey).not.toMatch(/^0+$/);
++    expect(isTransportKeyPairDisposed(transportKeyPair)).toBe(false);
++
++    disposeTransportKeyPair(transportKeyPair);
++
++    expect(isTransportKeyPairDisposed(transportKeyPair)).toBe(true);
++    expect(privateKey.every((b) => b === 0)).toBe(true);
++    expect(() => serializeTransportKeyPair({ transportKeyPair, fhevmContext })).toThrow('TransportKeyPair is disposed');
++    expect(JSON.stringify(transportKeyPair)).toContain('publicKey');
++  });
++});
++
++describe('createTransportKeyRing', () => {
++  it('issues a fresh key pair per request and zero-fills it on release', async () => {
++    const issued: Uint8Array[] = [];
++    const ring = createTransportKeyRing(async () => {
++      const { transportKeyPair, privateKey } = makeKeyPair();
++      issued.push(privateKey);
++      return transportKeyPair;
++    });
++
++    const k1 = await ring.issue(ALICE);
++    const k2 = await ring.issue(ALICE);
++    expect(k1).not.toBe(k2);
++    expect(k1.publicKey).not.toBe(k2.publicKey);
++    expect(ring.keyCount(ALICE)).toBe(2);
++
++    ring.release(k1);
++    expect(ring.keyCount(ALICE)).toBe(1);
++    expect(isTransportKeyPairDisposed(k1)).toBe(true);
++    expect(issued[0]!.every((b) => b === 0)).toBe(true);
++    expect(isTransportKeyPairDisposed(k2)).toBe(false);
++  });
++
++  it("purges every key pair and permit of a retired account, and only that account's", async () => {
++    const ring = createTransportKeyRing(async () => makeKeyPair().transportKeyPair);
++    const a1 = await ring.issue(ALICE);
++    const a2 = await ring.issue(ALICE.toLowerCase());
++    const b1 = await ring.issue(BOB);
++    ring.keepPermit(ALICE, { signerAddress: ALICE } as unknown as SignedDecryptionPermit);
++    ring.keepPermit(BOB, { signerAddress: BOB } as unknown as SignedDecryptionPermit);
++
++    expect(ring.purge(ALICE)).toEqual({ keys: 2, permits: 1 });
++
++    expect(isTransportKeyPairDisposed(a1)).toBe(true);
++    expect(isTransportKeyPairDisposed(a2)).toBe(true);
++    expect(ring.keyCount(ALICE)).toBe(0);
++    expect(ring.permitsOf(ALICE)).toEqual([]);
++    expect(isTransportKeyPairDisposed(b1)).toBe(false);
++    expect(ring.keyCount(BOB)).toBe(1);
++    expect(ring.permitsOf(BOB)).toHaveLength(1);
++    expect(ring.purge(ALICE)).toEqual({ keys: 0, permits: 0 });
++  });
++
++  it('rejects an invalid account address', async () => {
++    const ring = createTransportKeyRing(async () => makeKeyPair().transportKeyPair);
++    await expect(ring.issue('not-an-address')).rejects.toThrow();
++  });
++});
+diff --git a/sdk/js-sdk/src/core/kms/TransportKeyRing.ts b/sdk/js-sdk/src/core/kms/TransportKeyRing.ts
+new file mode 100644
+index 00000000..4678c27b
+--- /dev/null
++++ b/sdk/js-sdk/src/core/kms/TransportKeyRing.ts
+@@ -0,0 +1,86 @@
++import type { SignedDecryptionPermit } from '../types/signedDecryptionPermit.js';
++import type { TransportKeyPair } from './TransportKeyPair-p.js';
++import { assertIsAddress } from '../base/address.js';
++import { disposeTransportKeyPair, isTransportKeyPairDisposed } from './TransportKeyPair-p.js';
++
++////////////////////////////////////////////////////////////////////////////////
++
++/**
++ * Transport-key hygiene (Decryption Authority Lifecycle, Level 2).
++ *
++ * The shares a user decryption releases are encrypted to the request's transport key, so their secrecy lasts only as
++ * long as that key stays private. Today an app may keep one key pair, and the permit that authorizes it, for up to
++ * 365 days. A ring instead hands out a fresh key pair per request and zero-fills it once the request is done. When an
++ * account retires, {@link TransportKeyRing.purge} zero-fills every key pair still tracked for it and drops its
++ * permits.
++ */
++export type TransportKeyRing = {
++  /** Generates a fresh key pair for one request of `account`, and tracks it until it is released or purged. */
++  readonly issue: (account: string) => Promise<TransportKeyPair>;
++  /** Zero-fills and forgets a key pair whose request is done. */
++  readonly release: (transportKeyPair: TransportKeyPair) => void;
++  /** Keeps a signed permit of `account`, so that a purge drops it too. */
++  readonly keepPermit: (account: string, signedPermit: SignedDecryptionPermit) => void;
++  /** The permits kept for `account`. */
++  readonly permitsOf: (account: string) => readonly SignedDecryptionPermit[];
++  /** Zero-fills and forgets every key pair tracked for `account`, and drops its permits. */
++  readonly purge: (account: string) => { readonly keys: number; readonly permits: number };
++  /** The number of key pairs tracked for `account`. */
++  readonly keyCount: (account: string) => number;
++};
++
++/**
++ * Creates a {@link TransportKeyRing}. `generate` makes one key pair, for example
++ * `() => client.generateTransportKeyPair()`.
++ */
++export function createTransportKeyRing(generate: () => Promise<TransportKeyPair>): TransportKeyRing {
++  const keys = new Map<string, Set<TransportKeyPair>>();
++  const permits = new Map<string, SignedDecryptionPermit[]>();
++
++  // Addresses are compared lowercase, as the ACL prechecks do.
++  const key = (account: string): string => {
++    assertIsAddress(account, {});
++    return account.toLowerCase();
++  };
++
++  return Object.freeze({
++    issue: async (account: string): Promise<TransportKeyPair> => {
++      const k = key(account);
++      const transportKeyPair = await generate();
++      let set = keys.get(k);
++      if (set === undefined) {
++        set = new Set();
++        keys.set(k, set);
++      }
++      set.add(transportKeyPair);
++      return transportKeyPair;
++    },
++    release: (transportKeyPair: TransportKeyPair): void => {
++      for (const set of keys.values()) {
++        set.delete(transportKeyPair);
++      }
++      if (!isTransportKeyPairDisposed(transportKeyPair)) {
++        disposeTransportKeyPair(transportKeyPair);
++      }
++    },
++    keepPermit: (account: string, signedPermit: SignedDecryptionPermit): void => {
++      const k = key(account);
++      permits.set(k, [...(permits.get(k) ?? []), signedPermit]);
++    },
++    permitsOf: (account: string): readonly SignedDecryptionPermit[] => permits.get(key(account)) ?? [],
++    purge: (account: string): { readonly keys: number; readonly permits: number } => {
++      const k = key(account);
++      const set = keys.get(k) ?? new Set<TransportKeyPair>();
++      for (const transportKeyPair of set) {
++        if (!isTransportKeyPairDisposed(transportKeyPair)) {
++          disposeTransportKeyPair(transportKeyPair);
++        }
++      }
++      const dropped = { keys: set.size, permits: permits.get(k)?.length ?? 0 };
++      keys.delete(k);
++      permits.delete(k);
++      return dropped;
++    },
++    keyCount: (account: string): number => keys.get(key(account))?.size ?? 0,
++  });
++}

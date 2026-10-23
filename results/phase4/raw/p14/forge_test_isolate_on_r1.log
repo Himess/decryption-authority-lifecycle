@@ -1,0 +1,46 @@
+2026-10-22T07:49:30Z
+Compiling 107 files with Solc 0.8.27
+Solc 0.8.27 finished in 8.01s
+Compiler run successful!
+
+Ran 14 tests for test/ProfileAStock.t.sol:ProfileAStockTest
+[PASS] test_A1_ProfileA_ObserverAddedAfterRetirementRefused() (gas: 4729423)
+Logs:
+  profile A: handles the thief's observer reads after 5 inbound transfers: 0
+
+[PASS] test_A1_ProfileA_ObserverMayAbdicate_ActiveAccountUnaffected() (gas: 1208638)
+[PASS] test_A1_ProfileA_OperatorGate() (gas: 438853)
+[PASS] test_A1_ProfileA_ThiefObserverClearedAndCannotBeReAdded() (gas: 4941087)
+Logs:
+  profile A, after the clear: handles read after 5 transfers: 0
+
+[PASS] test_A1_ProfileA_UnclearedObserverKeepsReading() (gas: 5080160)
+Logs:
+  profile A, not cleared: handles read after 5 transfers: 10
+
+[PASS] test_A1_Stock_Residual_ObserverAddedAfterRetirement() (gas: 5231901)
+Logs:
+  stock: handles the thief's observer reads after 5 inbound transfers: 10
+
+[PASS] test_A1_Stock_Residual_OperatorAfterRetirement() (gas: 197432)
+[PASS] test_A1_Stock_Residual_ThiefReAddsAfterTheClear() (gas: 5225395)
+Logs:
+  stock, re-added after the clear: handles read after 5 transfers: 10
+
+[PASS] test_Gas_A1GateOverhead() (gas: 1104281)
+Logs:
+  setOperator, stock: 49005
+  setOperator, Profile A: 61803
+  setObserver with a balance, stock: 103582
+  setObserver with a balance, Profile A: 107420
+  gate overhead, setOperator: 12798
+  gate overhead, setObserver: 3838
+
+[PASS] test_ProfileA_FailsClosedWithoutCore() (gas: 251327)
+[PASS] test_TC8_TransferFromRetiredAccount_ProfileA() (gas: 1590749)
+[PASS] test_TC8_TransferFromRetiredAccount_Stock() (gas: 1577713)
+[PASS] test_TC8_TransferToRetiredAccount_ProfileA() (gas: 974523)
+[PASS] test_TC8_TransferToRetiredAccount_Stock() (gas: 974391)
+Suite result: ok. 14 passed; 0 failed; 0 skipped; finished in 21.42ms (106.43ms CPU time)
+
+Ran 1 test suite in 27.26ms (21.42ms CPU time): 14 tests passed, 0 failed, 0 skipped (14 total tests)

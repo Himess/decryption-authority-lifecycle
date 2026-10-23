@@ -1,0 +1,25 @@
+# Out-of-tree cross-check: UNMODIFIED OpenZeppelin confidential-contracts 0.5.3 with its peer @fhevm/solidity 0.11.1
+# (both from experiments/node_modules), against the Level 0 ACL v0.8.0 source of impl/fhevm-main (branch
+# lifecycle/level0), all compiled here with solc 0.8.27 (OZ 0.5.3 needs >= 0.8.27; Zama pins 0.8.24 in-tree).
+[profile.default]
+src = 'test'
+test = 'test'
+out = 'out'
+cache_path = 'cache'
+libs = []
+solc = '0.8.27'
+optimizer = true
+optimizer_runs = 800
+evm_version = 'cancun'
+cbor_metadata = false
+bytecode_hash = 'none'
+allow_paths = ['<repo>/impl/fhevm-main/host-contracts', '<repo>/experiments/node_modules']
+remappings = [
+  'forge-std/=<repo>/impl/fhevm-main/host-contracts/dependencies/forge-std-1.11.0/src/',
+  '@fhevm-host-contracts/=<repo>/impl/fhevm-main/host-contracts/',
+  '@openzeppelin/contracts/=<repo>/impl/fhevm-main/host-contracts/node_modules/@openzeppelin/contracts/',
+  '@openzeppelin/contracts-upgradeable/=<repo>/impl/fhevm-main/host-contracts/node_modules/@openzeppelin/contracts-upgradeable/',
+  '@openzeppelin/confidential-contracts/=<repo>/experiments/node_modules/@openzeppelin/confidential-contracts/',
+  '@fhevm/solidity/=<repo>/experiments/node_modules/@fhevm/solidity/',
+  'encrypted-types/=<repo>/experiments/node_modules/encrypted-types/',
+]

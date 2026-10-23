@@ -1,0 +1,7 @@
+date_utc: 2026-10-22T01:13:11Z
+anvil: <workspace>/scratch/foundry-nightly-9089a6b/bin/anvil anvil Version: 1.8.6-nightly Commit SHA: 9089a6bfdca158b2ef268b3d60923bf1e0879fed Build Timestamp: 2026-10-21T06:06:34.994872100Z (1792562794) Build Profile: dist 
+node: v22.13.0
+artifacts: main-runs800 (Level 0, ACL v0.8.0), main-l2-runs800 (Level 2, v0.9.0), main-l3-runs800 (Level 3, v0.10.0); Zama's production settings (solc 0.8.24, 800 runs, cancun)
+main-runs800 ACL.json sha256 9c7f90d34c447578
+main-l2-runs800 ACL.json sha256 6c8c260e299f4fb2
+main-l3-runs800 ACL.json sha256 44dbf162ab5d57c2

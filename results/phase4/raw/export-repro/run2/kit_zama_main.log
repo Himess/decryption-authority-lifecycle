@@ -1,0 +1,32 @@
+Compiling 132 files with Solc 0.8.24
+Solc 0.8.24 finished in 23.87s
+Compiler run successful with warnings:
+Warning (2018): Function state mutability can be restricted to pure
+  --> test/conformance/ZamaMainConformance.t.sol:53:5:
+   |
+53 |     function kitRegistry() internal view override returns (address) {
+   |     ^ (Relevant source part starts here and spans across multiple lines).
+
+
+Ran 18 tests for test/conformance/ZamaMainConformance.t.sol:ZamaMainConformanceTest
+[PASS] test_kit_TC10_GrantsThenRetireAtomic_RetireThenGrantReverts() (gas: 1709802)
+[PASS] test_kit_TC11_TheUpgradeGuard() (gas: 2666121)
+[PASS] test_kit_TC12_ERC165() (gas: 21138)
+[PASS] test_kit_TC17_DesignationRules() (gas: 79507)
+[PASS] test_kit_TC17_TheSuccessorReadsOnlyAfterRetirement_AndNothingMore() (gas: 981103)
+[PASS] test_kit_TC19_AContractAccountSignsThroughERC1271Only() (gas: 798164)
+[PASS] test_kit_TC19_TheERCVector() (gas: 118169)
+[PASS] test_kit_TC1_R5_TheNextCallInTheSameTransaction() (gas: 876012)
+[PASS] test_kit_TC1_RetireOnce_SecondRevertsWithoutAnEvent() (gas: 48718)
+[PASS] test_kit_TC2_RetireUnderHostileConditions_AsAContract_WithNoHandles() (gas: 839721)
+[PASS] test_kit_TC3_NeverRetiredAccountsUnaffected() (gas: 973538)
+[PASS] test_kit_TC4_EveryUseViewFalse_PublicUnchanged() (gas: 962832)
+[PASS] test_kit_TC4_R10_TheEngineAndTheOutput() (gas: 887992)
+[PASS] test_kit_TC5_OnBehalfFalseForEachRetiredParty() (gas: 997926)
+[SKIP] test_kit_TC6_PermitFalseForARetiredIssuerOrRecipient() (gas: 0)
+[PASS] test_kit_TC7_ARetiredGrantorRevertsOnEveryPath() (gas: 898068)
+[PASS] test_kit_TC8_GrantsToARetiredAccountSucceed_AndAreInert() (gas: 977482)
+[PASS] test_kit_TC9_ComputeThenEveryExportReverts() (gas: 1136537)
+Suite result: ok. 17 passed; 0 failed; 1 skipped; finished in 5.89ms (25.76ms CPU time)
+
+Ran 1 test suite in 22.88ms (5.89ms CPU time): 17 tests passed, 0 failed, 1 skipped (18 total tests)

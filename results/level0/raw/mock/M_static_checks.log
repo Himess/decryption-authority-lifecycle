@@ -1,0 +1,114 @@
+# Static checks on the re-pointed cleartext mock build
+# generated 2026-10-21T08:50:04.649Z from ..\harness\level0-mock\.build\sdk-out
+# solc 0.8.35+commit.47b9dedd; optimizer {"enabled":true,"runs":800}; evmVersion osaka
+
+## 1. Functions defined by CleartextACL itself (src/v0.13.0/cleartext/CleartextACL.sol), from the compiled AST
+  - _getCleartextACLStorage              line  55  private pure
+  - _tslot                               line  64  private pure
+  - _setTransientCleartext               line  73  private nonpayable
+  - _isTransientCleartextSet             line  90  private view
+  - _getTransientCleartextUnchecked      line  99  private view
+  - _getTransientCleartext               line 108  private view
+  - allowTransientWithCleartext          line 122  external nonpayable virtual
+  - isAllowedWithCleartext               line 134  external view
+  - allow                                line 141  public nonpayable override virtual
+  - allowTransient                       line 156  public nonpayable override virtual
+  - allowForDecryption                   line 169  public nonpayable override virtual
+  - _persistCleartextFromTransient       line 185  private nonpayable
+  - plaintext                            line 196  public view
+  - plaintextForPublicDecryption         line 208  public view
+  - plaintextForUserDecryption           line 222  public view
+  - plaintextForDelegatedUserDecryption  line 246  public view
+  - registerInputCleartext               line 270  external nonpayable virtual
+  - requireNotPaused                     line 282  public view virtual
+
+Must be inherited (not defined in CleartextACL): persistAllowed, isHandleDelegatedForUserDecryption, isAllowed, getUserDecryptionDelegationExpirationDate, delegateForUserDecryption, retireAccount, isAccountRetired, supportsInterface, retirementStorageLocation, _authorizeUpgrade, _retired
+RESULT: PASS, CleartextACL overrides none of them
+
+CleartextACL linearized bases (AST ids): 69226 -> 75646 -> 45844 -> 75712 -> 46020 -> 45064 -> 45259 -> 45741 -> 93421 -> 45695 -> 39909 -> 45513; ACL contract AST id 75646 (present)
+  inherited persistAllowed                             defined at src/v0.13.0/host-contracts/contracts/ACL.sol:597
+  inherited isHandleDelegatedForUserDecryption         defined at src/v0.13.0/host-contracts/contracts/ACL.sol:571
+  inherited isAllowed                                  defined at src/v0.13.0/host-contracts/contracts/ACL.sol:542
+  inherited getUserDecryptionDelegationExpirationDate  defined at src/v0.13.0/host-contracts/contracts/ACL.sol:481
+  inherited delegateForUserDecryption                  defined at src/v0.13.0/host-contracts/contracts/ACL.sol:340
+  inherited retireAccount                              defined at src/v0.13.0/host-contracts/contracts/ACL.sol:443
+  inherited isAccountRetired                           defined at src/v0.13.0/host-contracts/contracts/ACL.sol:617
+  inherited supportsInterface                          defined at src/v0.13.0/host-contracts/contracts/ACL.sol:701
+  inherited retirementStorageLocation                  defined at src/v0.13.0/host-contracts/contracts/ACL.sol:710
+  inherited _authorizeUpgrade                          defined at src/v0.13.0/host-contracts/contracts/ACL.sol:721
+  inherited _retired                                   defined at src/v0.13.0/host-contracts/contracts/ACL.sol:761
+CleartextACL ABI exposes: persistAllowed=true, isHandleDelegatedForUserDecryption=true, retireAccount=true, isAccountRetired=true, supportsInterface=true, retirementStorageLocation=true, multicall=true
+
+Revert statements in CleartextACL.sol (AST), per error:
+  CleartextACLTransientMismatch          src/v0.13.0/cleartext/CleartextACL.sol:82
+  CleartextACLTransientNotSet            src/v0.13.0/cleartext/CleartextACL.sol:113, src/v0.13.0/cleartext/CleartextACL.sol:165
+  CleartextACLNotFHEVMExecutor           src/v0.13.0/cleartext/CleartextACL.sol:124, src/v0.13.0/cleartext/CleartextACL.sol:272
+  CleartextACLCleartextNotSaved          src/v0.13.0/cleartext/CleartextACL.sol:203
+  HandleNotAllowedForPublicDecryption    src/v0.13.0/cleartext/CleartextACL.sol:216
+  UserAddressEqualsContractAddress       src/v0.13.0/cleartext/CleartextACL.sol:234
+  UserNotAuthorizedForDecrypt            src/v0.13.0/cleartext/CleartextACL.sol:237
+  ContractNotAuthorizedForDecrypt        src/v0.13.0/cleartext/CleartextACL.sol:240
+  HandleNotDelegatedForUserDecryption    src/v0.13.0/cleartext/CleartextACL.sol:258
+  CleartextACLInputAlreadyPersisted      src/v0.13.0/cleartext/CleartextACL.sol:276
+CleartextACL ABI errors: SenderRetired=true, AccountAlreadyRetired=true, UpgradeDropsRetirement=true
+CleartextACL ABI events: AccountRetired=true
+
+## 2. Line pins in the re-pointed build (sdk/js-sdk/contracts/...)
+  ok   src/v0.13.0/cleartext/CleartextACL.sol:222  function plaintextForUserDecryption(HandleContractPair[] calldata pairs, address userAddress)
+  ok   src/v0.13.0/cleartext/CleartextACL.sol:236  if (!persistAllowed(h, userAddress)) {
+  ok   src/v0.13.0/cleartext/CleartextACL.sol:237  revert UserNotAuthorizedForDecrypt(h, userAddress);
+  ok   src/v0.13.0/cleartext/CleartextACL.sol:239  if (!persistAllowed(h, c)) {
+  ok   src/v0.13.0/cleartext/CleartextACL.sol:240  revert ContractNotAuthorizedForDecrypt(h, c);
+  ok   src/v0.13.0/cleartext/CleartextACL.sol:246  function plaintextForDelegatedUserDecryption(
+  ok   src/v0.13.0/cleartext/CleartextACL.sol:257  if (!isHandleDelegatedForUserDecryption(delegator, delegate, c, h)) {
+  ok   src/v0.13.0/cleartext/CleartextACL.sol:258  revert HandleNotDelegatedForUserDecryption(h, c, delegator, delegate);
+  ok   src/v0.13.0/cleartext/CleartextKMSVerifier.sol:225  function userDecrypt(
+  ok   src/v0.13.0/cleartext/CleartextKMSVerifier.sol:246  uint256[] memory rawCleartexts = CleartextACL(aclAdd).plaintextForUserDecryption(pairs, userAddress);
+  ok   src/v0.13.0/cleartext/CleartextKMSVerifier.sol:263  function delegatedUserDecrypt(
+  ok   src/v0.13.0/cleartext/CleartextKMSVerifier.sol:286  CleartextACL(aclAdd).plaintextForDelegatedUserDecryption(pairs, delegator, delegate);
+  ok   src/v0.13.0/cleartext/CleartextKMSVerifier.sol:252  _verifySignature(
+  ok   src/v0.13.0/host-contracts/contracts/ACL.sol:571  function isHandleDelegatedForUserDecryption(
+  ok   src/v0.13.0/host-contracts/contracts/ACL.sol:578  if ($r.retired[delegator] || $r.retired[delegate] || $r.retired[contractAddress]) {
+  ok   src/v0.13.0/host-contracts/contracts/ACL.sol:597  function persistAllowed(bytes32 handle, address account) public view virtual returns (bool) {
+  ok   src/v0.13.0/host-contracts/contracts/ACL.sol:599  return $.persistedAllowedPairs[handle][account] && !_retired().retired[account];
+  ok   src/v0.13.0/host-contracts/contracts/ACL.sol:542  function isAllowed(bytes32 handle, address account) public view virtual returns (bool) {
+  ok   src/v0.13.0/host-contracts/contracts/ACL.sol:543  if (msg.sender != FHEVM_EXECUTOR_ADDRESS && _retired().retired[account]) {
+  ok   src/v0.13.0/host-contracts/contracts/ACL.sol:258  revert SenderRetired(msg.sender);
+  ok   src/v0.13.0/host-contracts/contracts/ACL.sol:346  revert SenderRetired(msg.sender);
+  ok   src/v0.13.0/host-contracts/contracts/ACL.sol:443  function retireAccount() public virtual {
+  ok   src/v0.13.0/host-contracts/contracts/ACL.sol:446  revert AccountAlreadyRetired(msg.sender);
+RESULT: PASS, all pinned lines hold
+
+## 2b. Line pins on the SDK side (sdk/js-sdk/src/...)
+  ok   core/actions/decrypt/decryptValue.ts:47  const typedValues = await decryptValuesFromPairs_(fhevm, {
+  ok   core/actions/decrypt/decryptValues.ts:49  return decryptValuesFromPairs_(fhevm, {
+  ok   core/kms/decryptValuesFromPairs.ts:65  kmsSigncryptedShares = await fetchKmsSigncryptedSharesV1(fhevm, parameters);
+  ok   core/kms/fetchKmsSigncryptedSharesV1-p.ts:125  // 7. Check: ACL permissions (user is signer or delegatorAddress)
+  ok   core/kms/fetchKmsSigncryptedSharesV1-p.ts:127  await checkDelegation(context, {
+  ok   core/kms/fetchKmsSigncryptedSharesV1-p.ts:134  await checkPersistAllowed(context, {
+  ok   core/kms/fetchKmsSigncryptedSharesV1-p.ts:161  shares = await context.runtime.relayer.fetchDelegatedUserDecrypt(context, {
+  ok   core/kms/fetchKmsSigncryptedSharesV1-p.ts:173  shares = await context.runtime.relayer.fetchUserDecrypt(context, {
+  ok   core/host-contracts/checkPersistAllowed.ts:79  const allResults = await persistAllowed(context, {
+  ok   core/host-contracts/checkPersistAllowed.ts:100  throw new AclUserDecryptionError({
+  ok   core/host-contracts/checkPersistAllowed.ts:102  message: `User ${userAddress} is not authorized to decrypt handle ${pair.handle.bytes32Hex}!`,
+  ok   core/host-contracts/checkPersistAllowed.ts:109  throw new AclUserDecryptionError({
+  ok   core/host-contracts/checkPersistAllowed.ts:111  message: `Dapp contract ${pair.contractAddress} is not authorized to user decrypt handle ${pair.handle.bytes32Hex}!`,
+  ok   core/host-contracts/persistAllowed.ts:56  const res = await context.runtime.ethereum.readContract(trustedClient, {
+  ok   core/host-contracts/checkDelegation.ts:100  const allResults = await isHandleDelegatedForUserDecryption(context, {
+  ok   core/host-contracts/checkDelegation.ts:123  throw new AclUserDecryptionError({
+  ok   core/host-contracts/isHandleDelegatedForUserDecryption-p.ts:65  const res = await context.runtime.ethereum.readContract(trustedClient, {
+  ok   ethers/internal/runtime-ct.ts:20  const rm = cleartextRelayerModule();
+  ok   core/modules/relayer/cleartext/mock.ts:50  fetchUserDecrypt,
+  ok   core/modules/relayer/cleartext/mock.ts:51  fetchDelegatedUserDecrypt,
+  ok   core/modules/relayer/cleartext/fetchUserDecrypt.ts:14  return await fetchUserDecryptV1(relayerClient, parameters);
+  ok   core/modules/relayer/cleartext/fetchUserDecryptV1.ts:188  const offChain = await isForgeFhevmV1(relayerClient, fhevmContext);
+  ok   core/modules/relayer/cleartext/fetchUserDecryptV1.ts:194  res = await runUserDecryptOnChain(relayerClient, payload);
+  ok   core/modules/relayer/cleartext/fetchUserDecryptV1.ts:132  const res = (await relayerClient.runtime.ethereum.readContract(trustedClient, {
+  ok   core/modules/relayer/cleartext/fetchUserDecryptV1.ts:134  address: relayerClient.chain.fhevm.contracts.kmsVerifier.address as ChecksummedAddress,
+  ok   core/modules/relayer/cleartext/fetchDelegatedUserDecryptV1.ts:194  const offChain = await isForgeFhevmV1(relayerClient, fhevmContext);
+  ok   core/modules/relayer/cleartext/fetchDelegatedUserDecryptV1.ts:200  res = await runDelegatedUserDecryptOnChain(relayerClient, payload);
+  ok   core/modules/relayer/cleartext/fetchDelegatedUserDecryptV1.ts:137  const res = (await relayerClient.runtime.ethereum.readContract(trustedClient, {
+  ok   core/modules/relayer/cleartext/fetchDelegatedUserDecryptV1.ts:139  address: relayerClient.chain.fhevm.contracts.kmsVerifier.address as ChecksummedAddress,
+  ok   core/modules/relayer/cleartext/forgeFhevmV1.ts:53  return currentKmsSignersContext.signers.length === 1 && isForgeFhevmV1KmsSigner(currentKmsSignersContext.signers[0]);
+RESULT: PASS, all pinned lines hold (contracts and SDK)
+RESULT: PASS, each decryption error has exactly one revert statement in CleartextACL.sol

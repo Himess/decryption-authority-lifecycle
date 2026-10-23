@@ -1,0 +1,29 @@
+2026-10-21T20:23:41Z START build-p11-main-l3
+2026-10-21T20:42:47Z END build-p11-main-l3 rc=0
+2026-10-21T20:42:47Z START build-p11-main
+2026-10-21T20:44:00Z END build-p11-main rc=0
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 8 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-21T20:44:11Z START suite-kms-worker-lib-l3
+2026-10-21T20:44:37Z END suite-kms-worker-lib-l3 rc=0
+2026-10-21T20:44:37Z START p11-main-l3-r1
+2026-10-21T20:45:56Z END p11-main-l3-r1 rc=101
+2026-10-21T20:45:56Z p11-main-l3-r1 failed (continuing)
+2026-10-21T20:45:56Z START p11-main-r1
+2026-10-21T20:46:17Z END p11-main-r1 rc=0
+2026-10-21T20:46:17Z START p11-main-l3-r2
+2026-10-21T20:47:30Z END p11-main-l3-r2 rc=101
+2026-10-21T20:47:30Z p11-main-l3-r2 failed (continuing)
+2026-10-21T20:47:30Z START p11-main-r2
+2026-10-21T20:47:51Z END p11-main-r2 rc=0
+2026-10-21T20:47:51Z START p11-main-l3-r3
+2026-10-21T20:49:03Z END p11-main-l3-r3 rc=101
+2026-10-21T20:49:03Z p11-main-l3-r3 failed (continuing)
+2026-10-21T20:49:03Z START p11-main-r3
+2026-10-21T20:49:19Z END p11-main-r3 rc=0
+2026-10-21T20:49:19Z CHAIN DONE
+2026-10-21T20:49:20Z lifecycle-pg removed

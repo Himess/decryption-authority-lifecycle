@@ -1,0 +1,786 @@
+{
+ "eoa.valid.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 19.378,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0
+  }
+ ],
+ "eoa.valid.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 17.878,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 14.516
+  }
+ ],
+ "eoa.wrong-key.legacy": [
+  {
+   "method": "eth_call",
+   "block": "pending",
+   "gas": "0x3d090",
+   "ms": 12.011
+  }
+ ],
+ "eoa.wrong-key.off": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 19.626,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 0
+  }
+ ],
+ "eoa.wrong-key.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 18.065,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 0
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 13.804
+  }
+ ],
+ "eoa.wrong-key.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 16.598,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 14.938
+  }
+ ],
+ "regular.owner-wallet.legacy": [
+  {
+   "method": "eth_call",
+   "block": "pending",
+   "gas": "0x3d090",
+   "ms": 13.781
+  }
+ ],
+ "regular.owner-wallet.off": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 18.656,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 14.791
+  }
+ ],
+ "regular.owner-wallet.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 19.194,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 0
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 14.011
+  }
+ ],
+ "regular.owner-wallet.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 20.91,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 14.556
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 0.995
+  }
+ ],
+ "7702.reject-all.root-key.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 23.707,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 15
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 14.512
+  }
+ ],
+ "7702.reject-all.root-key.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 14.998,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 1.002
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 12.997
+  }
+ ],
+ "7702.root-key-delegate.root-key.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 25,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0.999
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 1.003
+  }
+ ],
+ "7702.root-key-delegate.root-key.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 0.999,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 24.997
+  }
+ ],
+ "7702.no-erc1271.root-key.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 14.998,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 14.997
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 13.731
+  }
+ ],
+ "7702.no-erc1271.root-key.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 1,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 16.417
+  }
+ ],
+ "7702.no-erc1271.root-key.enforce-nofallback": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 19.775,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 15.026
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 14.736
+  }
+ ],
+ "7702.empty-revert.root-key.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 21.656,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 1.009
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 14.129,
+   "error": "execution reverted"
+  }
+ ],
+ "7702.empty-revert.root-key.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 18.166,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 14.691
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 15.701,
+   "error": "execution reverted"
+  }
+ ],
+ "7702.reason-revert.root-key.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 19.913,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 0,
+   "error": "execution reverted: ReasonRevert1271: rejected"
+  }
+ ],
+ "7702.reason-revert.root-key.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 17.496,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 14.259
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 15.48,
+   "error": "execution reverted: ReasonRevert1271: rejected"
+  }
+ ],
+ "7739-like.plain.legacy": [
+  {
+   "method": "eth_call",
+   "block": "pending",
+   "gas": "0x3d090",
+   "ms": 25.463
+  }
+ ],
+ "7739-like.plain.off": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 18.224,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 0
+  }
+ ],
+ "7739-like.plain.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 18.037,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 14.157
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0
+  }
+ ],
+ "7739-like.plain.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 17.242,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 13.669
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 14.34
+  }
+ ],
+ "7739-like.nested.legacy": [
+  {
+   "method": "eth_call",
+   "block": "pending",
+   "gas": "0x3d090",
+   "ms": 11.596
+  }
+ ],
+ "7739-like.nested.off": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 17.509,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 14.999
+  }
+ ],
+ "7739-like.nested.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 19,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 14.996
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 13.998
+  }
+ ],
+ "7739-like.nested.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 17.665,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 13.853
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 14.143
+  }
+ ],
+ "pq.mldsa44.legacy": [
+  {
+   "method": "eth_call",
+   "block": "pending",
+   "gas": "0x3d090",
+   "ms": 2.002,
+   "error": "execution reverted"
+  }
+ ],
+ "pq.mldsa44.off": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 14.998,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x214f88",
+   "ms": 3.999
+  }
+ ],
+ "pq.mldsa44.shadow": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 1,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x214f88",
+   "ms": 2.998
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0
+  }
+ ],
+ "pq.mldsa44.enforce": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 15.999,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 1
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x214f88",
+   "ms": 2.999
+  }
+ ],
+ "pq.mldsa44.bexec-1000000": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 24,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 1
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x120d48",
+   "ms": 3,
+   "error": "execution reverted: f1600-170: helper call failed"
+  }
+ ],
+ "pq.mldsa44.bexec-1200000": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 12.003,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x151a88",
+   "ms": 2.998
+  }
+ ],
+ "pq.mldsa44.bexec-1300000": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 0,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0.997
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x16a128",
+   "ms": 3
+  }
+ ],
+ "pq.mldsa44.bexec-1500000": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 0,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0.997
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x19ae68",
+   "ms": 22.001
+  }
+ ],
+ "pq.mldsa44.bexec-2000000": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 0,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 1.002
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x214f88",
+   "ms": 2.997
+  }
+ ],
+ "budget.small.burn-1.9M.profile-h": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 1,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1ef788",
+   "ms": 2.996
+  }
+ ],
+ "budget.small.burn-2.1M.profile-h": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 11.999,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0.996
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1ef788",
+   "ms": 4.001,
+   "error": "EVM error OutOfGas"
+  }
+ ],
+ "budget.burn-1.9M.profile-h": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 1.002,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0.999
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x598788",
+   "ms": 21.51
+  }
+ ],
+ "budget.burn-2.1M.profile-h": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 23.998,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x598788",
+   "ms": 3.001
+  }
+ ],
+ "budget.burn-4.5M.profile-h": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 20.002,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 14.999
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x598788",
+   "ms": 5.996
+  }
+ ],
+ "budget.burn-1.9M.legacy-250k": [
+  {
+   "method": "eth_call",
+   "block": "pending",
+   "gas": "0x3d090",
+   "ms": 2,
+   "error": "intrinsic gas too high -- CallGasCostMoreThanGasLimit"
+  }
+ ],
+ "budget.burn-1.9M.legacy-2.021M": [
+  {
+   "method": "eth_call",
+   "block": "pending",
+   "gas": "0x1ed688",
+   "ms": 13,
+   "error": "intrinsic gas too high -- GasFloorMoreThanGasLimit"
+  }
+ ],
+ "caps.signature-65536": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 1.001,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 1
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x5eef88",
+   "ms": 15.999
+  }
+ ],
+ "attempts.1": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 22,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 15
+  },
+  {
+   "method": "eth_call",
+   "block": "0x12",
+   "gas": "0x1f0788",
+   "ms": 1
+  }
+ ],
+ "attempts.2-same-block": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 14.001,
+   "result": "0x12"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x12",
+   "ms": 0
+  }
+ ],
+ "attempts.2-next-block": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 19,
+   "result": "0x13"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x13",
+   "ms": 15
+  },
+  {
+   "method": "eth_call",
+   "block": "0x13",
+   "gas": "0x1f0788",
+   "ms": 14.998
+  }
+ ],
+ "attempts.3": [
+  {
+   "method": "eth_blockNumber",
+   "ms": 0.998,
+   "result": "0x13"
+  },
+  {
+   "method": "eth_getCode",
+   "block": "0x13",
+   "ms": 0
+  }
+ ]
+}

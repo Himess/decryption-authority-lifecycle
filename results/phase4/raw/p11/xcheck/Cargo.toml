@@ -1,0 +1,12 @@
+[package]
+name = "p11-xcheck"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[workspace]
+
+[dependencies]
+user-decryption-signature = { path = "<repo>/impl/wt-l1-main/shared/user-decryption-signature", features = ["k8"] }
+alloy = { version = "2", default-features = false }
+serde_json = "1"

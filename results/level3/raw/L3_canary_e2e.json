@@ -1,0 +1,82 @@
+{
+  "runs": [
+    {
+      "step": "baseline (no upgrade)",
+      "upgradesSeen": 0,
+      "ok": true,
+      "halt": [],
+      "implementation": "0x87207f00a4b9bA6D3630FF4ca7eAAaf9E855B921",
+      "codeHash": "0x66de7628247ed1a61b8918e483429f44796d42b8a4836f0405058499607f9985",
+      "rpcCalls": 6,
+      "viewCalls": 4,
+      "backdoorReads": false
+    },
+    {
+      "step": "honest redeploy, not ratified",
+      "upgradesSeen": 1,
+      "ok": false,
+      "halt": [
+        "the implementation is not pinned"
+      ],
+      "implementation": "0x978Fa3bBEAAbC0e2755363B3B413c73A09eBffdC",
+      "codeHash": "0x88d962c56ab329f623cddf021d372754716fba8a757c7efbd75d54ac1528b3ed",
+      "rpcCalls": 6,
+      "viewCalls": 4,
+      "backdoorReads": false
+    },
+    {
+      "step": "the same release, ratified",
+      "upgradesSeen": 0,
+      "ok": true,
+      "halt": [],
+      "implementation": "0x978Fa3bBEAAbC0e2755363B3B413c73A09eBffdC",
+      "codeHash": "0x88d962c56ab329f623cddf021d372754716fba8a757c7efbd75d54ac1528b3ed",
+      "rpcCalls": 6,
+      "viewCalls": 4,
+      "backdoorReads": false
+    },
+    {
+      "step": "Core-less liar",
+      "upgradesSeen": 1,
+      "ok": false,
+      "halt": [
+        "isAccountRetired(canary) reverts",
+        "isAllowed(handle, canary) is true",
+        "persistAllowed(handle, canary) is true",
+        "delegated view from the canary is true",
+        "the implementation is not pinned"
+      ],
+      "implementation": "0xf98Dc460235d2DA2De4855b9c75fadeB8b9cA7c7",
+      "codeHash": "0xe007b6ff688c8856c4b415462f37933156e7a4f5b7fded8617b782cefe77b132",
+      "rpcCalls": 6,
+      "viewCalls": 4,
+      "backdoorReads": false
+    },
+    {
+      "step": "the ratified release again",
+      "upgradesSeen": 1,
+      "ok": true,
+      "halt": [],
+      "implementation": "0x978Fa3bBEAAbC0e2755363B3B413c73A09eBffdC",
+      "codeHash": "0x88d962c56ab329f623cddf021d372754716fba8a757c7efbd75d54ac1528b3ed",
+      "rpcCalls": 6,
+      "viewCalls": 4,
+      "backdoorReads": false
+    },
+    {
+      "step": "backdoored release",
+      "upgradesSeen": 1,
+      "ok": false,
+      "halt": [
+        "the implementation is not pinned"
+      ],
+      "implementation": "0x2b3c094c74c0200B2f1C27707BBBe2dB002b54BD",
+      "codeHash": "0x81c97c2f58949fdac38ccf5fcf62a599a7c30df60fb5eadb65c4be79acbc64e4",
+      "rpcCalls": 6,
+      "viewCalls": 4,
+      "backdoorReads": true
+    }
+  ],
+  "client": "anvil/v1.8.5",
+  "sameSourceDifferentCodeHash": true
+}

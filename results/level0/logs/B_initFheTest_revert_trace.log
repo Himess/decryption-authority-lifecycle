@@ -1,0 +1,28 @@
+### cast call FHETest.initFheTest(true) --trace (v0.13.8 clone, anvil 1.8.5)
+    ├─ [60704] 0xe3a9105a3a932253A70F126eb1E3b589C643dD24::fheRand(2)
+    │   ├─ [55832] 0xcF5De2DbC4Ea85426db47845537A90ec4e6316E2::fheRand(2) [delegatecall]
+    │   │   ├─ [14034] 0x233ff88A48c172d29F675403e6A8e302b0F032D9::checkHCUForFheRand(2, 0x698769c8dcb8f11049755b73047e7a7bc4baf974fdff0000000000007a690200, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0)
+    │   │   │   ├─ [9156] 0x6089D8d39D0808e6Deaf322cFb7eeCc2B197Da0B::checkHCUForFheRand(2, 0x698769c8dcb8f11049755b73047e7a7bc4baf974fdff0000000000007a690200, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0) [delegatecall]
+    │   │   │   │   └─ ← [Stop]
+    │   │   │   └─ ← [Return]
+    │   │   ├─ [8934] 0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D::fd72754b(698769c8dcb8f11049755b73047e7a7bc4baf974fdff0000000000007a69020000000000000000000000000061a8e950161dacca06b0b623efa2b7237babd4a0000000000000000000000000000000000000000000000000000000000000001c)
+    │   │   │   ├─ [4056] 0x6933Afcf0F4bCE1A611baD0A6FaafF0337a7ba1E::fd72754b(698769c8dcb8f11049755b73047e7a7bc4baf974fdff0000000000007a69020000000000000000000000000061a8e950161dacca06b0b623efa2b7237babd4a0000000000000000000000000000000000000000000000000000000000000001c) [delegatecall]
+    │   │   │   │   └─ ← [Stop]
+    │   │   │   └─ ← [Return]
+    │   │   ├─ emit FheRand(caller: 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, randType: 2, seed: 0xe5cc3f8d79801e724417ba0a92ccc087, result: 0x698769c8dcb8f11049755b73047e7a7bc4baf974fdff0000000000007a690200)
+    │   │   └─ ← [Return] 0x698769c8dcb8f11049755b73047e7a7bc4baf974fdff0000000000007a690200
+    │   └─ ← [Return] 0x698769c8dcb8f11049755b73047e7a7bc4baf974fdff0000000000007a690200
+    ├─ [582] 0xe3a9105a3a932253A70F126eb1E3b589C643dD24::checkHandleType(0x698769c8dcb8f11049755b73047e7a7bc4baf974fdff0000000000007a690200, 2) [staticcall]
+    │   ├─ [209] 0xcF5De2DbC4Ea85426db47845537A90ec4e6316E2::checkHandleType(0x698769c8dcb8f11049755b73047e7a7bc4baf974fdff0000000000007a690200, 2) [delegatecall]
+    │   │   └─ ← [Revert] EvmError: Revert
+    │   └─ ← [Revert] EvmError: Revert
+    └─ ← [Revert] EvmError: Revert
+
+
+Error: Transaction failed.
+Gas used: 91303
+
+### direct: FHEVMExecutor.checkHandleType(bytes32,uint8)
+Error: server returned an error response: error code 3: execution reverted, data: "0x"
+### executor getVersion
+"FHEVMExecutor v0.4.0"

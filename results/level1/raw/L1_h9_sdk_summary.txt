@@ -1,0 +1,9 @@
+commit: 5b69260 (lifecycle/level1)
+ ✓ sdk-h9-real-evm.test.ts > SDK precheck, H9, on a local EVM > ML-DSA-44 ERC-1271 account: refused at 250,000, accepted under the Profile H budget 1626ms
+ ✓ sdk-h9-real-evm.test.ts > SDK precheck, H9, on a local EVM > EIP-7702 account whose delegate rejects everything: root key accepted today, refused under enforce 169ms
+ ✓ sdk-h9-real-evm.test.ts > SDK precheck, H9, on a local EVM > EIP-7702 account whose delegate has no isValidSignature: the narrow shim, and Profile Q without it 125ms
+ ✓ sdk-h9-real-evm.test.ts > SDK precheck, H9, on a local EVM > controls: an EOA and a regular-code wallet 140ms
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+vitest rc=0
+git status of sdk/js-sdk (tracked files must be unchanged):

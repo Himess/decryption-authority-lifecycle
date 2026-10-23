@@ -1,0 +1,629 @@
+From 8f2483f3d8eefdf5e8efccbffaec5037f3d34479 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Thu, 22 Oct 2026 01:05:22 +0300
+Subject: [PATCH 4/5] feat(shared): Profile Q's signer rule (Q4) in the
+ signature check (lifecycle Level 3)
+
+SignaturePolicy gains profile_q: the variant (no-root-ecdsa or strict) and
+the activation block B_Q that the operators' statements announced. A
+verification whose pinned block is at or after B_Q is decided by the
+signer's code at that block, whatever the mode:
+- no code, or an EIP-7702 indicator: refused, with no ERC-1271 call;
+- other code, an EIP-7851 ECDSA-disabled indicator included: ERC-1271
+  only, with no fallback, in the no-root-ecdsa variant; refused with no
+  call in the strict variant.
+E3 signers are accepted by the KDA route, which runs before this check.
+H1 caps and H4 attempts still apply. New error ProfileQRefused (final).
+
+tests/profile_q.rs: 10 tests with a mocked provider pinning the RPC
+sequence, including the KDA route under both variants.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ shared/user-decryption-signature/src/lib.rs   |  13 +-
+ .../src/profile_h.rs                          | 139 +++++++
+ .../tests/profile_q.rs                        | 368 ++++++++++++++++++
+ 3 files changed, 518 insertions(+), 2 deletions(-)
+ create mode 100644 shared/user-decryption-signature/tests/profile_q.rs
+
+diff --git a/shared/user-decryption-signature/src/lib.rs b/shared/user-decryption-signature/src/lib.rs
+index b7d72ee1..745a9d9a 100644
+--- a/shared/user-decryption-signature/src/lib.rs
++++ b/shared/user-decryption-signature/src/lib.rs
+@@ -11,6 +11,8 @@
+ //! pinned block with a narrow EIP-7702 fallback, an execution-gas budget for the ERC-1271 call,
+ //! a bounded number of ERC-1271 attempts, and an `off | shadow | enforce` rollout switch.
+ //! [`verify_signature`] keeps the RFC-012 ordering and its caller-supplied gas cap unchanged.
++//! [lifecycle Level 3] [`profile_h`] also applies Profile Q's signer rule (Q4) once the profile is
++//! engaged ([`ProfileQ`]).
+ 
+ #[cfg(feature = "kda")]
+ pub mod kda;
+@@ -18,8 +20,8 @@ pub mod profile_h;
+ 
+ pub use profile_h::{
+     AcceptPath, AccountCode, AttemptState, CappedField, CodeFirstMode, Disposition, Outcome,
+-    Rejection, ShadowReport, SignatureInput, SignaturePolicy, VerdictSummary, Verification,
+-    check_caps, classify_code, erc1271_gas_limit, read_account_code,
++    PqOnlyVariant, ProfileQ, Rejection, ShadowReport, SignatureInput, SignaturePolicy,
++    VerdictSummary, Verification, check_caps, classify_code, erc1271_gas_limit, read_account_code,
+     verify_user_decryption_signature,
+ };
+ 
+@@ -120,6 +122,13 @@ pub enum Erc1271Error {
+          the attempt limit is reached"
+     )]
+     AttemptsExhausted { account: Address, attempts: u8 },
++    /// [lifecycle Level 3, Profile Q4] Profile Q is engaged and the signer is not one it accepts. Final.
++    #[error("Profile Q ({variant}) refuses userAddress {account}: {reason}")]
++    ProfileQRefused {
++        account: Address,
++        variant: PqOnlyVariant,
++        reason: &'static str,
++    },
+ }
+ 
+ /// Default `Eip712Domain` builder for callers that only have the host `contractsChainId` and
+diff --git a/shared/user-decryption-signature/src/profile_h.rs b/shared/user-decryption-signature/src/profile_h.rs
+index 91471972..f228c52b 100644
+--- a/shared/user-decryption-signature/src/profile_h.rs
++++ b/shared/user-decryption-signature/src/profile_h.rs
+@@ -30,6 +30,13 @@
+ //!
+ //! `Off` keeps the RFC-012 ordering (`ecrecover` first) but applies the caps, the budget and the
+ //! attempt limit. The pre-existing [`crate::verify_signature`] is left untouched.
++//!
++//! [lifecycle Level 3] **Profile Q, Q4.** With [`SignaturePolicy::profile_q`] set, a verification
++//! whose pinned block `B` is at or after the activation block `B_Q` is decided by the signer's code
++//! at `B`, whatever the mode: a signer authenticated by ECDSA (no code, or an EIP-7702 indicator)
++//! is refused with no ERC-1271 call; other code, an EIP-7851 ECDSA-disabled indicator included,
++//! goes to ERC-1271 only, with no fallback, in the no-root-ECDSA variant, and is refused in the
++//! strict variant. E3 signers are accepted by the KDA route, which runs before this check.
+ 
+ use crate::{
+     ERC1271_MAGIC_VALUE, Erc1271Error, IERC1271::isValidSignatureCall, map_erc1271_call_error,
+@@ -117,6 +124,59 @@ impl FromStr for CodeFirstMode {
+     }
+ }
+ 
++/// [lifecycle Level 3] The Profile Q variant (Q4): which signers a verifier accepts once the profile is engaged.
++#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
++pub enum PqOnlyVariant {
++    /// Signers with regular code through ERC-1271 (an EIP-7851 ECDSA-disabled indicator included), and E3 signers.
++    NoRootEcdsa,
++    /// E3 signers only.
++    Strict,
++}
++
++impl PqOnlyVariant {
++    pub const fn as_str(self) -> &'static str {
++        match self {
++            Self::NoRootEcdsa => "no-root-ecdsa",
++            Self::Strict => "strict",
++        }
++    }
++}
++
++impl fmt::Display for PqOnlyVariant {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.write_str(self.as_str())
++    }
++}
++
++impl FromStr for PqOnlyVariant {
++    type Err = String;
++
++    fn from_str(s: &str) -> Result<Self, Self::Err> {
++        match s.trim().to_ascii_lowercase().as_str() {
++            "no-root-ecdsa" => Ok(Self::NoRootEcdsa),
++            "strict" => Ok(Self::Strict),
++            other => Err(format!(
++                "unknown Profile Q variant `{other}` (expected `no-root-ecdsa` or `strict`)"
++            )),
++        }
++    }
++}
++
++/// [lifecycle Level 3] Profile Q as the signature check sees it: the variant, and the activation block `B_Q` that
++/// the operators' statements announced (Q1). A verification is under Profile Q when its pinned block is at or after
++/// `B_Q`.
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub struct ProfileQ {
++    pub variant: PqOnlyVariant,
++    pub activation_block: u64,
++}
++
++impl ProfileQ {
++    pub const fn engaged_at(&self, block: u64) -> bool {
++        block >= self.activation_block
++    }
++}
++
+ /// The Profile H value set. Verifiers, relayers and SDKs SHOULD use the same values (H9).
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+ pub struct SignaturePolicy {
+@@ -130,6 +190,8 @@ pub struct SignaturePolicy {
+     pub max_erc1271_attempts: u8,
+     /// The narrow EIP-7702 fallback of H2. Profile Q switches it off.
+     pub eip7702_fallback: bool,
++    /// [lifecycle Level 3] Profile Q (Q4), once its activation is established; `None`: no Profile Q.
++    pub profile_q: Option<ProfileQ>,
+ }
+ 
+ impl Default for SignaturePolicy {
+@@ -142,6 +204,7 @@ impl Default for SignaturePolicy {
+             max_extra_data_bytes: DEFAULT_MAX_EXTRA_DATA_BYTES,
+             max_erc1271_attempts: DEFAULT_MAX_ERC1271_ATTEMPTS,
+             eip7702_fallback: true,
++            profile_q: None,
+         }
+     }
+ }
+@@ -408,6 +471,9 @@ impl Outcome {
+ /// - `Enforce`: `eth_getCode(signer, B)`; then `eth_call isValidSignature` at `B` iff the signer
+ ///   has code.
+ /// - `Shadow`: the union of both, with a single `isValidSignature` call shared by both verdicts.
++/// - [lifecycle Level 3] With `profile_q` set: `eth_blockNumber` first; at or after `B_Q`,
++///   `eth_getCode(signer, B)`, then `eth_call isValidSignature` at `B` only for regular code in the
++///   no-root-ECDSA variant. Before `B_Q`, the mode's sequence, at the same `B`.
+ pub async fn verify_user_decryption_signature<P: Provider>(
+     provider: &P,
+     input: &SignatureInput<'_>,
+@@ -429,6 +495,17 @@ pub async fn verify_user_decryption_signature<P: Provider>(
+     }
+ 
+     let mut ctx = Ctx::new(provider, *input, policy);
++    // [lifecycle Level 3] Profile Q (Q4): at or after `B_Q` the signer's code at `B` decides, whatever the mode.
++    if let Some(q) = policy.profile_q {
++        let block = match ctx.block().await {
++            Ok(block) => block,
++            Err(e) => return ctx.finish(attempts, Step::Reject(e, Kind::Transport), None),
++        };
++        if q.engaged_at(block) {
++            let step = profile_q_step(&mut ctx, q, &attempts).await;
++            return ctx.finish(attempts, step, None);
++        }
++    }
+     match policy.mode {
+         CodeFirstMode::Off => {
+             let step = legacy_step(&mut ctx, &attempts).await;
+@@ -804,3 +881,65 @@ async fn code_first_step<P: Provider>(
+         Err(e) => negative_or_transport(e),
+     }
+ }
++
++/// [lifecycle Level 3] Profile Q (Q4), engaged at `B`. A signer authenticated by ECDSA, that is one with no code or
++/// with an EIP-7702 delegation indicator, is refused with no ERC-1271 call; so is regular code in the strict variant.
++/// In the no-root-ECDSA variant regular code goes to ERC-1271 only, with no fallback of any kind: an EIP-7851
++/// ECDSA-disabled indicator (`0xef0101 ‖ delegate`) is regular code under H2, so such an account is treated as
++/// migrated.
++async fn profile_q_step<P: Provider>(
++    ctx: &mut Ctx<'_, P>,
++    q: ProfileQ,
++    attempts: &AttemptState,
++) -> Step {
++    let signer = ctx.input.signer;
++    let block = match ctx.block().await {
++        Ok(block) => block,
++        Err(e) => return Step::Reject(e, Kind::Transport),
++    };
++    let code = match ctx.code().await {
++        Ok(code) => code,
++        Err(e) => return Step::Reject(e, Kind::Transport),
++    };
++    let refuse = |reason: &'static str| {
++        Step::Reject(
++            Erc1271Error::ProfileQRefused {
++                account: signer,
++                variant: q.variant,
++                reason,
++            },
++            Kind::Final,
++        )
++    };
++    match (code, q.variant) {
++        (AccountCode::Empty, _) => {
++            return refuse("no code: an ECDSA-authenticated signer outside the E3 route");
++        }
++        (AccountCode::Eip7702 { .. }, _) => {
++            return refuse(
++                "an EIP-7702 delegation indicator: the account's ECDSA key still signs for it",
++            );
++        }
++        (AccountCode::Regular { .. }, PqOnlyVariant::Strict) => {
++            return refuse("the strict variant accepts E3 signers only");
++        }
++        (AccountCode::Regular { .. }, PqOnlyVariant::NoRootEcdsa) => {}
++    }
++    if let Some(held) = ctx.gate(attempts, block) {
++        return held;
++    }
++    match ctx.call().await {
++        Ok(CallOutcome::Magic) => Step::Accept(AcceptPath::Erc1271),
++        Ok(CallOutcome::EmptyReturn) => {
++            Step::Reject(Erc1271Error::EmptyReturn(signer), Kind::Negative)
++        }
++        Ok(CallOutcome::Short(len)) => Step::Reject(
++            Erc1271Error::Rejected(signer, format!("returndata length {len} < 32")),
++            Kind::Negative,
++        ),
++        Ok(CallOutcome::WrongMagic(magic)) => {
++            Step::Reject(Erc1271Error::WrongMagic(signer, magic), Kind::Negative)
++        }
++        Err(e) => negative_or_transport(e),
++    }
++}
+diff --git a/shared/user-decryption-signature/tests/profile_q.rs b/shared/user-decryption-signature/tests/profile_q.rs
+new file mode 100644
+index 00000000..2a4877ff
+--- /dev/null
++++ b/shared/user-decryption-signature/tests/profile_q.rs
+@@ -0,0 +1,368 @@
++//! [lifecycle Level 3] Profile Q's signer rule (Q4) in the signature check, with a mocked provider that pins the exact
++//! RPC sequence (as in `profile_h.rs`): before `B_Q` Profile H applies unchanged; at or after `B_Q` a signer
++//! authenticated by ECDSA (no code, an EIP-7702 indicator) is refused with no ERC-1271 call in both variants; regular
++//! code, an EIP-7851 ECDSA-disabled indicator included, goes to ERC-1271 only, with no fallback, in the no-root-ECDSA
++//! variant, and is refused with no call in the strict variant; E3 signers are accepted in both.
++
++use alloy::{
++    primitives::{Address, B256, Bytes, U64},
++    providers::{Provider, ProviderBuilder, mock::Asserter},
++    signers::{SignerSync, local::PrivateKeySigner},
++};
++use user_decryption_signature::{
++    AcceptPath, AttemptState, CodeFirstMode, Disposition, ERC1271_MAGIC_VALUE, Erc1271Error,
++    PqOnlyVariant, ProfileQ, SignatureInput, SignaturePolicy, verify_user_decryption_signature,
++};
++
++const BLOCK: u64 = 100;
++const VARIANTS: [PqOnlyVariant; 2] = [PqOnlyVariant::NoRootEcdsa, PqOnlyVariant::Strict];
++
++fn provider(asserter: &Asserter) -> impl Provider {
++    ProviderBuilder::new()
++        .disable_recommended_fillers()
++        .connect_mocked_client(asserter.clone())
++}
++
++fn rpcs_left(a: &Asserter) -> usize {
++    a.read_q().len()
++}
++
++/// Profile H in `mode`, with Profile Q `variant` activated at `b_q`.
++fn policy(mode: CodeFirstMode, variant: PqOnlyVariant, b_q: u64) -> SignaturePolicy {
++    SignaturePolicy {
++        mode,
++        profile_q: Some(ProfileQ {
++            variant,
++            activation_block: b_q,
++        }),
++        ..SignaturePolicy::default()
++    }
++}
++
++/// A key, its address and a valid 65-byte signature over `digest`.
++fn signed(digest: B256) -> (Address, Vec<u8>) {
++    let key = PrivateKeySigner::random();
++    let sig = key.sign_hash_sync(&digest).unwrap().as_bytes().to_vec();
++    (key.address(), sig)
++}
++
++fn input(signer: Address, digest: B256, signature: &[u8]) -> SignatureInput<'_> {
++    SignatureInput {
++        signer,
++        digest,
++        signature,
++        public_key_len: 800,
++        extra_data_len: 1,
++    }
++}
++
++fn magic() -> Bytes {
++    let mut r = [0u8; 32];
++    r[..4].copy_from_slice(&ERC1271_MAGIC_VALUE);
++    Bytes::copy_from_slice(&r)
++}
++
++fn indicator(prefix: [u8; 3], delegate: Address) -> Bytes {
++    let mut c = prefix.to_vec();
++    c.extend_from_slice(delegate.as_slice());
++    Bytes::from(c)
++}
++
++fn regular_code() -> Bytes {
++    Bytes::from(vec![0x60, 0x80, 0x60, 0x40, 0x52])
++}
++
++fn assert_refused_without_call(
++    out: &user_decryption_signature::Outcome,
++    variant: PqOnlyVariant,
++    signer: Address,
++) {
++    let r = out.result.as_ref().expect_err("refused");
++    assert!(
++        matches!(&r.error, Erc1271Error::ProfileQRefused { account, variant: v, .. } if *account == signer && *v == variant),
++        "{:?}",
++        r.error
++    );
++    assert_eq!(r.disposition, Disposition::Final);
++    assert_eq!(r.erc1271_calls, 0);
++    assert_eq!(r.block, Some(BLOCK));
++}
++
++#[tokio::test]
++async fn before_b_q_profile_h_applies_unchanged() {
++    let digest = B256::repeat_byte(1);
++    let (signer, sig) = signed(digest);
++    for variant in VARIANTS {
++        // Enforce: block (read once, shared with Profile H), then the code: no code, a 65-byte ECDSA signature.
++        let a = Asserter::new();
++        a.push_success(&U64::from(BLOCK));
++        a.push_success(&Bytes::new());
++        let out = verify_user_decryption_signature(
++            &provider(&a),
++            &input(signer, digest, &sig),
++            &policy(CodeFirstMode::Enforce, variant, BLOCK + 1),
++            AttemptState::default(),
++        )
++        .await;
++        assert_eq!(out.result.unwrap().path, AcceptPath::Ecrecover, "{variant}");
++        assert_eq!(rpcs_left(&a), 0);
++    }
++}
++
++#[tokio::test]
++async fn ecdsa_signers_are_refused_without_any_erc1271_call() {
++    let digest = B256::repeat_byte(2);
++    let (signer, sig) = signed(digest);
++    for variant in VARIANTS {
++        // Engaged at B_Q exactly; the mode does not matter once engaged.
++        for mode in [
++            CodeFirstMode::Off,
++            CodeFirstMode::Shadow,
++            CodeFirstMode::Enforce,
++        ] {
++            // No code: the account's own key, outside the E3 route.
++            let a = Asserter::new();
++            a.push_success(&U64::from(BLOCK));
++            a.push_success(&Bytes::new());
++            let out = verify_user_decryption_signature(
++                &provider(&a),
++                &input(signer, digest, &sig),
++                &policy(mode, variant, BLOCK),
++                AttemptState::default(),
++            )
++            .await;
++            assert_refused_without_call(&out, variant, signer);
++            assert_eq!(rpcs_left(&a), 0);
++
++            // An EIP-7702 indicator, whatever the delegate would answer: nothing is called (no shim either).
++            let a = Asserter::new();
++            a.push_success(&U64::from(BLOCK));
++            a.push_success(&indicator([0xef, 0x01, 0x00], Address::repeat_byte(9)));
++            let out = verify_user_decryption_signature(
++                &provider(&a),
++                &input(signer, digest, &sig),
++                &policy(mode, variant, BLOCK - 5),
++                AttemptState::default(),
++            )
++            .await;
++            assert_refused_without_call(&out, variant, signer);
++            assert_eq!(rpcs_left(&a), 0);
++        }
++    }
++}
++
++#[tokio::test]
++async fn no_root_ecdsa_accepts_regular_code_and_eip7851_through_erc1271_only() {
++    let digest = B256::repeat_byte(3);
++    let signer = Address::repeat_byte(4);
++    let sig = vec![0x55u8; 2_420]; // what the wallet checks is its business; the mock answers the magic value
++    for code in [
++        regular_code(),
++        indicator([0xef, 0x01, 0x01], Address::repeat_byte(9)),
++    ] {
++        let a = Asserter::new();
++        a.push_success(&U64::from(BLOCK));
++        a.push_success(&code);
++        a.push_success(&magic());
++        let out = verify_user_decryption_signature(
++            &provider(&a),
++            &input(signer, digest, &sig),
++            &policy(CodeFirstMode::Enforce, PqOnlyVariant::NoRootEcdsa, BLOCK),
++            AttemptState::default(),
++        )
++        .await;
++        let v = out.result.unwrap();
++        assert_eq!(v.path, AcceptPath::Erc1271);
++        assert_eq!(v.erc1271_calls, 1);
++        assert_eq!(rpcs_left(&a), 0);
++    }
++}
++
++#[tokio::test]
++async fn no_fallback_of_any_kind_under_profile_q() {
++    // An EIP-7851 account whose delegate returns nothing, signed with the (disabled) root key: under Profile H the shim
++    // is for 0xef0100 only; under Profile Q there is no shim at all. The empty return is a counted negative.
++    let digest = B256::repeat_byte(5);
++    let (signer, sig) = signed(digest);
++    let a = Asserter::new();
++    a.push_success(&U64::from(BLOCK));
++    a.push_success(&indicator([0xef, 0x01, 0x01], Address::repeat_byte(9)));
++    a.push_success(&Bytes::new());
++    let out = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Enforce, PqOnlyVariant::NoRootEcdsa, BLOCK),
++        AttemptState::default(),
++    )
++    .await;
++    let r = out.result.unwrap_err();
++    assert_eq!(r.error, Erc1271Error::EmptyReturn(signer));
++    assert_eq!(r.disposition, Disposition::RetryNextBlock);
++    assert_eq!(out.attempts.negatives, 1);
++    assert_eq!(rpcs_left(&a), 0);
++}
++
++#[tokio::test]
++async fn strict_refuses_regular_code_without_any_call() {
++    let digest = B256::repeat_byte(6);
++    let signer = Address::repeat_byte(7);
++    let sig = vec![0x55u8; 2_420];
++    for code in [
++        regular_code(),
++        indicator([0xef, 0x01, 0x01], Address::repeat_byte(9)),
++    ] {
++        let a = Asserter::new();
++        a.push_success(&U64::from(BLOCK));
++        a.push_success(&code);
++        let out = verify_user_decryption_signature(
++            &provider(&a),
++            &input(signer, digest, &sig),
++            &policy(CodeFirstMode::Enforce, PqOnlyVariant::Strict, BLOCK),
++            AttemptState::default(),
++        )
++        .await;
++        assert_refused_without_call(&out, PqOnlyVariant::Strict, signer);
++        assert_eq!(rpcs_left(&a), 0);
++    }
++}
++
++#[tokio::test]
++async fn h4_attempts_still_bound_erc1271_under_profile_q() {
++    let digest = B256::repeat_byte(8);
++    let signer = Address::repeat_byte(10);
++    let sig = vec![0x55u8; 2_420];
++    // A negative at B already: the retry must wait for a later block, and nothing is called.
++    let a = Asserter::new();
++    a.push_success(&U64::from(BLOCK));
++    a.push_success(&regular_code());
++    let out = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &sig),
++        &policy(CodeFirstMode::Enforce, PqOnlyVariant::NoRootEcdsa, BLOCK),
++        AttemptState {
++            negatives: 1,
++            last_negative_block: Some(BLOCK),
++        },
++    )
++    .await;
++    let r = out.result.unwrap_err();
++    assert_eq!(r.disposition, Disposition::AwaitingNextBlock);
++    assert_eq!(r.erc1271_calls, 0);
++    assert_eq!(rpcs_left(&a), 0);
++}
++
++#[tokio::test]
++async fn caps_come_first_and_transport_errors_are_left_to_the_caller() {
++    let digest = B256::repeat_byte(11);
++    let signer = Address::repeat_byte(12);
++    // H1 caps: before any RPC (nothing queued).
++    let big = vec![0x11u8; 65_537];
++    let a = Asserter::new();
++    let out = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &big),
++        &policy(CodeFirstMode::Enforce, PqOnlyVariant::Strict, 0),
++        AttemptState::default(),
++    )
++    .await;
++    assert!(matches!(
++        out.result.unwrap_err().error,
++        Erc1271Error::CapExceeded { .. }
++    ));
++    // The block read fails: Transport, so the caller retries; nothing is decided.
++    let a = Asserter::new();
++    a.push_failure_msg("connection refused");
++    let out = verify_user_decryption_signature(
++        &provider(&a),
++        &input(signer, digest, &[0x11u8; 65]),
++        &policy(CodeFirstMode::Enforce, PqOnlyVariant::Strict, 0),
++        AttemptState::default(),
++    )
++    .await;
++    assert_eq!(out.result.unwrap_err().disposition, Disposition::Transport);
++}
++
++#[test]
++fn variants_parse_and_print() {
++    for v in VARIANTS {
++        assert_eq!(v.to_string().parse::<PqOnlyVariant>().unwrap(), v);
++    }
++    assert!("no-root".parse::<PqOnlyVariant>().is_err());
++    let q = ProfileQ {
++        variant: PqOnlyVariant::Strict,
++        activation_block: 10,
++    };
++    assert!(!q.engaged_at(9));
++    assert!(q.engaged_at(10));
++    assert!(q.engaged_at(11));
++}
++
++#[cfg(feature = "kda")]
++mod e3 {
++    //! E3 signers are accepted in both variants; a KDA that is not routed (it has code) is not an E3 signer.
++    use super::*;
++    use ml_dsa::{MlDsa44, Seed, Signature, SigningKey};
++    use user_decryption_signature::kda::{
++        KdaOutcome, KdaScheme, KdaSkip, key_derived_address, request_signature, verify_with_kda,
++    };
++
++    const OWNER: Address = Address::repeat_byte(0xaa);
++
++    fn kda_request(digest: B256) -> (Address, Vec<u8>) {
++        let sk = SigningKey::<MlDsa44>::from_seed(&Seed::try_from(&[44u8; 32][..]).unwrap());
++        let esk = sk.expanded_key();
++        let sig: Signature<MlDsa44> = esk.sign_deterministic(digest.as_slice(), &[]).unwrap();
++        let pk = esk.verifying_key().encode().to_vec();
++        let signer_bytes = KdaScheme::MlDsa44.signer_bytes(&pk);
++        (
++            key_derived_address(&signer_bytes),
++            request_signature(&signer_bytes, &sig.encode()),
++        )
++    }
++
++    #[tokio::test]
++    async fn e3_signers_are_accepted_in_both_variants() {
++        let digest = B256::repeat_byte(13);
++        let (kda, signature) = kda_request(digest);
++        for variant in VARIANTS {
++            let a = Asserter::new();
++            a.push_success(&Bytes::new()); // eth_getCode(KDA): empty, the route is taken
++            let out = verify_with_kda(
++                &provider(&a),
++                &input(kda, digest, &signature),
++                &[OWNER],
++                &policy(CodeFirstMode::Enforce, variant, 0),
++                &KdaScheme::ALL,
++                AttemptState::default(),
++            )
++            .await;
++            assert_eq!(out, KdaOutcome::Kda(Ok(KdaScheme::MlDsa44)), "{variant}");
++            assert_eq!(rpcs_left(&a), 0);
++        }
++    }
++
++    #[tokio::test]
++    async fn a_kda_with_code_is_not_an_e3_signer_under_strict() {
++        let digest = B256::repeat_byte(14);
++        let (kda, signature) = kda_request(digest);
++        let a = Asserter::new();
++        a.push_success(&regular_code()); // the route's read: the KDA has code, so no route (K5)
++        a.push_success(&U64::from(BLOCK)); // Profile Q: block, then code at B
++        a.push_success(&regular_code());
++        let out = verify_with_kda(
++            &provider(&a),
++            &input(kda, digest, &signature),
++            &[OWNER],
++            &policy(CodeFirstMode::Enforce, PqOnlyVariant::Strict, BLOCK),
++            &KdaScheme::ALL,
++            AttemptState::default(),
++        )
++        .await;
++        let KdaOutcome::ProfileH { skip, outcome } = out else {
++            panic!("expected the Profile H path, got {out:?}");
++        };
++        assert_eq!(skip, KdaSkip::RequesterHasCode);
++        assert_refused_without_call(&outcome, PqOnlyVariant::Strict, kda);
++        assert_eq!(rpcs_left(&a), 0);
++    }
++}

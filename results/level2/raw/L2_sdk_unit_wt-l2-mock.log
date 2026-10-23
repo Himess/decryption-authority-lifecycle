@@ -1,0 +1,926 @@
+Testing types with tsc and vue-tsc is an experimental feature.
+Breaking changes might not follow SemVer, please pin Vitest's version when using it.
+
+ RUN  v4.1.11 <repo>/impl/wt-l2-mock/sdk/js-sdk
+
+ ✓ src/ethers/internal/config.test.ts > ethers runtime config > allows identical module version objects 110ms
+ ✓ src/ethers/internal/config.test.ts > ethers runtime config > treats undefined module versions and auto module versions as different configs 1ms
+ ✓ src/ethers/internal/config.test.ts > ethers runtime config > treats auto module versions and undefined module versions as different configs 1ms
+ ✓ src/viem/internal/config.test.ts > viem runtime config > allows identical module version objects 45ms
+ ✓ src/viem/internal/config.test.ts > viem runtime config > treats undefined module versions and auto module versions as different configs 2ms
+ ✓ src/viem/internal/config.test.ts > viem runtime config > treats auto module versions and undefined module versions as different configs 1ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > executes all factories (parallel=true) 4ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > executes all factories (parallel=false) 1ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > returns results in original order even with varying delays (parallel=true) 38ms
+ ✓ src/core/base/inflate.test.ts > inflate > gunzip (gzip container) > round-trips empty 45ms
+ ✓ src/core/base/inflate.test.ts > inflate > gunzip (gzip container) > round-trips single byte 4ms
+ ✓ src/core/base/inflate.test.ts > inflate > gunzip (gzip container) > round-trips short text 7ms
+ ✓ src/core/base/inflate.test.ts > inflate > gunzip (gzip container) > round-trips repetitive 16ms
+ ✓ src/core/base/inflate.test.ts > inflate > gunzip (gzip container) > round-trips all-byte-values 4ms
+ ✓ src/core/base/inflate.test.ts > inflate > gunzip (gzip container) > round-trips incompressible-40k 5ms
+ ✓ src/core/base/inflate.test.ts > inflate > gunzip (gzip container) > round-trips large-256k 11ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > surfaces message + label from a relayer-shaped body { error: { message, label } } 49ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > surfaces message + label from a flat Cloudflare/Kong body { message, label } 6ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > surfaces message only when label is absent 1ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > surfaces label only when message is absent 1ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > returns {} for an empty body 1ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > returns {} for a non-JSON text body (e.g. bare "Forbidden") 1ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > returns {} for an HTML error page 4ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > returns {} for JSON without message/label fields 1ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > returns {} when error.message/label are not strings 4ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > treats empty-string message/label as absent 2ms
+ ✓ src/core/modules/relayer/module/readErrorMessage.test.ts > readErrorMessage > never throws when the body cannot be read 1ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > returns results in original order even with varying delays (parallel=false) 88ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > handles empty array (parallel=true) 0ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > handles empty array (parallel=false) 0ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > handles single factory (parallel=true) 0ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > handles single factory (parallel=false) 0ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > propagates single error (parallel=true) 4ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > propagates single error (parallel=false) 0ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > propagates multiple errors (parallel=true) 1ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > propagates multiple errors (parallel=false) 0ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > propagates multiple errors with delay (parallel=true) 20ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > propagates multiple errors with delay (parallel=false) 49ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateRaw (raw DEFLATE) > round-trips empty 3ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateRaw (raw DEFLATE) > round-trips single byte 5ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateRaw (raw DEFLATE) > round-trips short text 2ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateRaw (raw DEFLATE) > round-trips repetitive 13ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateRaw (raw DEFLATE) > round-trips all-byte-values 2ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateRaw (raw DEFLATE) > round-trips incompressible-40k 10ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateRaw (raw DEFLATE) > round-trips large-256k 14ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateRaw (raw DEFLATE) > produces correct output regardless of sizeHint (buffer grows) 15ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateDecompress (dispatch) > handles gzip 2ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateDecompress (dispatch) > handles deflate 7ms
+ ✓ src/core/base/inflate.test.ts > inflate > inflateDecompress (dispatch) > handles deflate-raw 2ms
+ ✓ src/core/base/inflate.test.ts > inflate > errors > gunzip throws on a non-gzip stream 2ms
+ ✓ src/core/base/inflate.test.ts > inflate > errors > gunzip throws on a too-short input 0ms
+ ✓ src/core/base/uint.test.ts > uint > isUint 6ms
+ ✓ src/core/base/uint.test.ts > uint > assertIsUint 6ms
+ ✓ src/core/base/uint.test.ts > uint > assertRecordUintProperty 4ms
+ ✓ src/core/base/uint.test.ts > uint > isRecordUintProperty 1ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > converts 0 to 32 zero bytes 1ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > converts 1 to bytes32 with last byte = 1 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > converts 123 (0x7b) correctly 1ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > converts 255 (0xff) correctly 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > converts 256 (0x100) correctly 1ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > converts 65535 (0xffff) correctly 1ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > converts 0x01020304 correctly (big-endian) 1ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > converts MAX_SAFE_INTEGER correctly 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > throws for negative numbers 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > throws for non-integer numbers 1ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > throws for NaN 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes32 > throws for Infinity 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > converts 0 to 8 zero bytes 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > converts 1 to bytes8 with last byte = 1 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > converts 123 (0x7b) correctly 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > converts 255 (0xff) correctly 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > converts 256 (0x100) correctly 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > converts 65535 (0xffff) correctly 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > converts 0x01020304 correctly (big-endian) 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > converts MAX_SAFE_INTEGER correctly 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > throws for negative numbers 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > throws for non-integer numbers 1ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > throws for NaN 0ms
+ ✓ src/core/base/uint.test.ts > numberToBytes8 > throws for Infinity 1ms
+ ✓ src/core/base/uint.test.ts > isUintNumber > returns true for positive integers 0ms
+ ✓ src/core/base/uint.test.ts > isUintNumber > returns false for negative numbers 0ms
+ ✓ src/core/base/uint.test.ts > isUintNumber > returns false for non-integer numbers 0ms
+ ✓ src/core/base/uint.test.ts > isUintNumber > returns false for non-number types 2ms
+ ✓ src/core/base/uint.test.ts > isUintBigInt > returns true for non-negative bigints 0ms
+ ✓ src/core/base/uint.test.ts > isUintBigInt > returns false for negative bigints 0ms
+ ✓ src/core/base/uint.test.ts > isUintBigInt > returns false for non-bigint types 0ms
+ ✓ src/core/base/uint.test.ts > isUint8 > returns true for 0 0ms
+ ✓ src/core/base/uint.test.ts > isUint8 > returns true for 1 0ms
+ ✓ src/core/base/uint.test.ts > isUint8 > returns true for MAX_UINT8 (255) 0ms
+ ✓ src/core/base/uint.test.ts > isUint8 > returns true for BigInt values within range 0ms
+ ✓ src/core/base/uint.test.ts > isUint8 > returns false for 256 (MAX_UINT8 + 1) 0ms
+ ✓ src/core/base/uint.test.ts > isUint8 > returns false for non-uint values 0ms
+ ✓ src/core/base/uint.test.ts > isUint8 > returns false for values much larger than MAX_UINT8 0ms
+ ✓ src/core/base/uint.test.ts > isUint16 > returns true for 0 0ms
+ ✓ src/core/base/uint.test.ts > isUint16 > returns true for 1 0ms
+ ✓ src/core/base/uint.test.ts > isUint16 > returns true for MAX_UINT8 (255) 0ms
+ ✓ src/core/base/uint.test.ts > isUint16 > returns true for MAX_UINT16 (65535) 1ms
+ ✓ src/core/base/uint.test.ts > isUint16 > returns true for BigInt values within range 1ms
+ ✓ src/core/base/uint.test.ts > isUint16 > returns false for 65536 (MAX_UINT16 + 1) 1ms
+ ✓ src/core/base/uint.test.ts > isUint16 > returns false for non-uint values 0ms
+ ✓ src/core/base/uint.test.ts > isUint16 > returns false for values larger than MAX_UINT16 0ms
+ ✓ src/core/base/uint.test.ts > isUint32 > returns true for 0 0ms
+ ✓ src/core/base/uint.test.ts > isUint32 > returns true for 1 0ms
+ ✓ src/core/base/uint.test.ts > isUint32 > returns true for MAX_UINT8 (255) 0ms
+ ✓ src/core/base/uint.test.ts > isUint32 > returns true for MAX_UINT32 (0xffffffff) 0ms
+ ✓ src/core/base/uint.test.ts > isUint32 > returns true for BigInt values within range 0ms
+ ✓ src/core/base/uint.test.ts > isUint32 > returns false for 0x100000000 (MAX_UINT32 + 1) 0ms
+ ✓ src/core/base/uint.test.ts > isUint32 > returns false for non-uint values 1ms
+ ✓ src/core/base/uint.test.ts > isUint32 > returns false for values larger than MAX_UINT32 0ms
+ ✓ src/core/base/uint.test.ts > isUint64 > returns true for 0 0ms
+ ✓ src/core/base/uint.test.ts > isUint64 > returns true for 1 0ms
+ ✓ src/core/base/uint.test.ts > isUint64 > returns true for MAX_UINT8 (255) 0ms
+ ✓ src/core/base/uint.test.ts > isUint64 > returns true for MAX_UINT32 0ms
+ ✓ src/core/base/uint.test.ts > isUint64 > returns true for MAX_UINT64 (2^64 - 1) 0ms
+ ✓ src/core/base/uint.test.ts > isUint64 > returns true for Number.MAX_SAFE_INTEGER 0ms
+ ✓ src/core/base/uint.test.ts > isUint64 > returns true for BigInt values within range 0ms
+ ✓ src/core/base/uint.test.ts > isUint64 > returns false for MAX_UINT64 + 1 0ms
+ ✓ src/core/base/uint.test.ts > isUint64 > returns false for non-uint values 0ms
+ ✓ src/core/base/uint.test.ts > isUint64 > returns false for values larger than MAX_UINT64 0ms
+ ✓ src/core/base/uint.test.ts > isUint128 > returns true for 0 0ms
+ ✓ src/core/base/uint.test.ts > isUint128 > returns true for 1 0ms
+ ✓ src/core/base/uint.test.ts > isUint128 > returns true for MAX_UINT64 0ms
+ ✓ src/core/base/uint.test.ts > isUint128 > returns true for MAX_UINT128 (2^128 - 1) 0ms
+ ✓ src/core/base/uint.test.ts > isUint128 > returns true for BigInt values within range 0ms
+ ✓ src/core/base/uint.test.ts > isUint128 > returns false for MAX_UINT128 + 1 0ms
+ ✓ src/core/base/uint.test.ts > isUint128 > returns false for non-uint values 0ms
+ ✓ src/core/base/uint.test.ts > isUint128 > returns false for values larger than MAX_UINT128 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint8 > does not throw for 0 1ms
+ ✓ src/core/base/uint.test.ts > assertIsUint8 > does not throw for 1 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint8 > does not throw for MAX_UINT8 (255) 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint8 > does not throw for BigInt values within range 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint8 > throws for 256 (MAX_UINT8 + 1) 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint8 > throws for non-uint values 1ms
+ ✓ src/core/base/uint.test.ts > assertIsUint8 > throws for values much larger than MAX_UINT8 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint32 > does not throw for 0 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint32 > does not throw for 1 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint32 > does not throw for MAX_UINT8 (255) 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint32 > does not throw for MAX_UINT32 (0xffffffff) 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint32 > does not throw for BigInt values within range 1ms
+ ✓ src/core/base/uint.test.ts > assertIsUint32 > throws for 0x100000000 (MAX_UINT32 + 1) 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint32 > throws for non-uint values 1ms
+ ✓ src/core/base/uint.test.ts > assertIsUint32 > throws for values larger than MAX_UINT32 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint64 > does not throw for 0 2ms
+ ✓ src/core/base/uint.test.ts > assertIsUint64 > does not throw for 1 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint64 > does not throw for MAX_UINT8 (255) 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint64 > does not throw for MAX_UINT32 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint64 > does not throw for MAX_UINT64 (2^64 - 1) 1ms
+ ✓ src/core/base/uint.test.ts > assertIsUint64 > does not throw for Number.MAX_SAFE_INTEGER 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint64 > does not throw for BigInt values within range 1ms
+ ✓ src/core/base/uint.test.ts > assertIsUint64 > throws for MAX_UINT64 + 1 4ms
+ ✓ src/core/base/uint.test.ts > assertIsUint64 > throws for non-uint values 1ms
+ ✓ src/core/base/uint.test.ts > assertIsUint64 > throws for values larger than MAX_UINT64 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > does not throw for 0 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > does not throw for 1 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > does not throw for MAX_UINT8 (255) 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > does not throw for MAX_UINT32 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > does not throw for MAX_UINT64 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > does not throw for MAX_UINT256 (2^256 - 1) 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > does not throw for Number.MAX_SAFE_INTEGER 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > does not throw for BigInt values within range 1ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > throws for MAX_UINT256 + 1 0ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > throws for non-uint values 1ms
+ ✓ src/core/base/uint.test.ts > assertIsUint256 > throws for values larger than MAX_UINT256 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts 0 to "0x00" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts 1 to "0x01" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts 15 to "0x0f" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts 16 to "0x10" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts 255 to "0xff" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts 256 to "0x0100" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts 65535 to "0xffff" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts 65536 to "0x010000" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts BigInt(0) to "0x00" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts BigInt(255) to "0xff" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts MAX_UINT64 correctly 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > converts MAX_UINT256 correctly 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHex > pads odd-length hex to even length 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts 0 to "00" 1ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts 1 to "01" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts 15 to "0f" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts 16 to "10" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts 255 to "ff" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts 256 to "0100" 1ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts 65535 to "ffff" 1ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts 65536 to "010000" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts BigInt(0) to "00" 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts BigInt(255) to "ff" 1ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts MAX_UINT64 correctly 1ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > converts MAX_UINT256 correctly 0ms
+ ✓ src/core/base/uint.test.ts > uintToBytesHexNo0x > pads odd-length hex to even length 1ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts 0 to 32 zero bytes 1ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts 1 to bytes32 with last byte = 1 1ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts 1n to bytes32 with last byte = 1 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts 255 (0xff) correctly 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts 256 (0x100) correctly 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts 0x01020304 correctly (big-endian) 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts MAX_UINT8 correctly 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts MAX_UINT32 correctly 1ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts MAX_UINT64 correctly 1ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts MAX_UINT128 correctly 1ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts MAX_UINT256 correctly (all bytes 0xff) 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts 2^64 correctly (first byte of third chunk) 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts 2^128 correctly (first byte of second chunk) 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts 2^192 correctly (first byte of first chunk) 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts 2^248 correctly (second byte) 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > converts a value spanning all four 64-bit chunks correctly 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > throws for negative numbers 1ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > throws for non-integer numbers 1ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > throws for values exceeding MAX_UINT256 2ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > throws for invalid types 1ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > throws for NaN 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > throws for Infinity 0ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > can be read back correctly using DataView for small values 1ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > can be read back correctly using DataView for MAX_UINT64 5ms
+ ✓ src/core/base/bytes.test.ts > bytes > hexToBytes 7ms
+ ✓ src/core/base/bytes.test.ts > bytes > isBytesHex 3ms
+ ✓ src/core/base/bytes.test.ts > bytes > assertIsBytesHex 6ms
+ ✓ src/core/base/bytes.test.ts > bytes > isBytes32Hex 1ms
+ ✓ src/core/base/bytes.test.ts > bytes > assertIsBytes32Hex 2ms
+ ✓ src/core/base/bytes.test.ts > bytes > assertBytes32HexProperty 2ms
+ ✓ src/core/base/bytes.test.ts > bytes > assertBytes32HexArrayProperty 2ms
+ ✓ src/core/base/bytes.test.ts > bytes > assertBytesHexProperty 1ms
+ ✓ src/core/base/bytes.test.ts > bytes > assertRecordBytesHexArrayProperty 2ms
+ ✓ src/core/base/bytes.test.ts > bytes > isBytesHexNo0x 2ms
+ ✓ src/core/base/bytes.test.ts > bytes > assertIsBytesHexNo0x 7ms
+ ✓ src/core/base/bytes.test.ts > bytesToBigInt > should return 0n for undefined input 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToBigInt > should return 0n for empty array 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToBigInt > should convert single byte correctly 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToBigInt > should convert two bytes correctly (big-endian) 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToBigInt > should convert multiple bytes correctly 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToBigInt > should handle large values 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToBigInt > should handle max uint256 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > converts a hex zero address to bytes 1ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > converts a hex to bytes 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > converts a bytes to hex 1ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > converts bytes to number 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles empty string 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles 0x only 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > throws for single hex character (odd length) 1ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > throws for 0x + single character (odd length) 1ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles valid lowercase hex 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles valid uppercase hex 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles mixed case hex 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles hex without 0x prefix 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > converts invalid hex chars to 0 (via parseInt NaN) 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles mixed valid and invalid chars 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles all zeros 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles all ones (0xff) 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles boundary byte values 1ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > whitespace in string throws for odd length 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles 32-byte (256-bit) hex string 1ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles 0X (uppercase X) prefix 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > preserves leading zeros 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > throws for three-character hex (odd length) 1ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > throws for five-character hex (odd length) 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles Ethereum address format (20 bytes) 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > handles Ethereum address without 0x prefix 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes edge cases > round-trips correctly with bytesToHex 1ms
+ ✓ src/core/base/bytes.test.ts > bytesToHex - hexToBytes > hexToBytes > converts a hex to bytes 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > handles empty string 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > handles 0x only 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > converts a hex zero address to bytes 1ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > converts single byte hex 1ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > converts multi-byte hex with 0x prefix 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > converts hex without 0x prefix 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > handles lowercase hex 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > handles uppercase hex 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > handles mixed case hex 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > throws for odd length hex string 1ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > converts invalid hex chars to 0 in non-strict mode 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > throws for invalid hex chars in strict mode 1ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > does not throw for valid hex in strict mode 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > preserves leading zeros 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > handles 32-byte (256-bit) hex string 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > handles Ethereum address format (20 bytes) 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > handles 0X (uppercase X) prefix differently than 0x 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > round-trips correctly with bytesToHex 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytesFaster > produces same results as hexToBytes for valid even-length hex 1ms
+ ✓ src/core/base/bytes.test.ts > isBytes > returns true for Uint8Array 0ms
+ ✓ src/core/base/bytes.test.ts > isBytes > returns false for non-Uint8Array 0ms
+ ✓ src/core/base/bytes.test.ts > isBytes > validates bytewidth when provided 0ms
+ ✓ src/core/base/bytes.test.ts > isBytes32 > returns true for 32-byte Uint8Array 0ms
+ ✓ src/core/base/bytes.test.ts > isBytes32 > returns false for non-32-byte values 0ms
+ ✓ src/core/base/bytes.test.ts > isBytes65 > returns true for 65-byte Uint8Array 0ms
+ ✓ src/core/base/bytes.test.ts > isBytes65 > returns false for non-65-byte values 1ms
+ ✓ src/core/base/bytes.test.ts > isBytes32HexNo0x > returns true for valid 32-byte hex without 0x 0ms
+ ✓ src/core/base/bytes.test.ts > isBytes32HexNo0x > returns false for invalid values 0ms
+ ✓ src/core/base/bytes.test.ts > isBytes65Hex > returns true for valid 65-byte hex with 0x 0ms
+ ✓ src/core/base/bytes.test.ts > isBytes65Hex > returns false for invalid values 1ms
+ ✓ src/core/base/bytes.test.ts > isBytes65HexNo0x > returns true for valid 65-byte hex without 0x 1ms
+ ✓ src/core/base/bytes.test.ts > isBytes65HexNo0x > returns false for invalid values 1ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes32 > does not throw for valid 32-byte Uint8Array 0ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes32 > throws for invalid values 1ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes65 > does not throw for valid 65-byte Uint8Array 1ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes65 > throws for invalid values 5ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes65Hex > does not throw for valid 65-byte hex 0ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes65Hex > throws for invalid values 1ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes32HexArray > does not throw for valid array 1ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes32HexArray > throws for non-array 0ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes32HexArray > throws for array with invalid elements 3ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytesHexArray > does not throw for valid array 4ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytesHexArray > throws for non-array 1ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytesHexArray > throws for array with invalid elements 1ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes65HexArray > does not throw for valid array 1ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes65HexArray > throws for non-array 2ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytes65HexArray > throws for array with invalid elements 0ms
+ ✓ src/core/base/bytes.test.ts > isRecordBytesHexProperty > returns true for valid BytesHex property 0ms
+ ✓ src/core/base/bytes.test.ts > isRecordBytesHexProperty > returns false for invalid values 0ms
+ ✓ src/core/base/bytes.test.ts > isRecordBytes32HexProperty > returns true for valid Bytes32Hex property 3ms
+ ✓ src/core/base/bytes.test.ts > isRecordBytes32HexProperty > returns false for invalid values 4ms
+ ✓ src/core/base/fetch.test.ts > fetchBytes > fetches bytes using arrayBuffer method 9ms
+ ✓ src/core/base/fetch.test.ts > fetchBytes > fetches bytes using bytes method when available 1ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > returns response on successful fetch 4ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > returns response on HTTP error (does not retry 4xx/5xx) 1ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > retries on network error and succeeds 3ms
+ ✓ src/core/base/uint.test.ts > uint256ToBytes32 > equivalent to hexToBytes(num.toString(16).padStart(64, "0")) 18ms
+ ✓ src/core/base/uint.test.ts > numberToBytesHexNo0x > converts numbers to hex strings without 0x prefix 1ms
+ ✓ src/core/base/uint.test.ts > numberToBytesHex > converts numbers to hex strings with 0x prefix 1ms
+ ✓ src/core/base/uint.test.ts > uintToHex > converts uint to hex string with 0x prefix (no padding) 1ms
+ ✓ src/core/base/uint.test.ts > isUint256 > returns true for valid uint256 values 1ms
+ ✓ src/core/base/uint.test.ts > isUint256 > returns false for invalid uint256 values 2ms
+ ✓ src/core/base/uint.test.ts > uint64ToBytes32 > converts uint64 to 32 bytes (big-endian, right-aligned) 2ms
+ ✓ src/core/base/uint.test.ts > uint64ToBytes32 > throws for values exceeding MAX_UINT64 1ms
+ ✓ src/core/base/uint.test.ts > uint64ToBytes32 > throws for negative numbers 0ms
+ ✓ src/core/base/uint.test.ts > uint64ToBytes32 > throws for non-integer numbers 0ms
+ ✓ src/core/base/uint.test.ts > uint64ToBytes32 > throws for invalid types 0ms
+ ✓ src/core/base/uint.test.ts > isRecordUint256Property > returns true for valid uint256 properties 0ms
+ ✓ src/core/base/uint.test.ts > isRecordUint256Property > returns false for invalid uint256 properties 0ms
+ ✓ src/core/base/uint.test.ts > assertRecordUint256Property > does not throw for valid uint256 properties 1ms
+ ✓ src/core/base/uint.test.ts > assertRecordUint256Property > throws for null property 0ms
+ ✓ src/core/base/uint.test.ts > assertRecordUint256Property > throws for undefined property 0ms
+ ✓ src/core/base/uint.test.ts > assertRecordUint256Property > throws for missing property 0ms
+ ✓ src/core/base/uint.test.ts > assertRecordUint256Property > throws for string property 0ms
+ ✓ src/core/base/uint.test.ts > assertRecordUint256Property > throws for negative number 3ms
+ ✓ src/core/base/uint.test.ts > assertRecordUint256Property > throws for float 0ms
+ ✓ src/core/base/uint.test.ts > assertRecordUint256Property > throws for value exceeding MAX_UINT256 0ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > preserves types correctly (parallel=true) 1ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > preserves types correctly (parallel=false) 0ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > handles mixed return values (parallel=true) 0ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > handles mixed return values (parallel=false) 0ms
+ ✓ src/core/base/bytes.test.ts > isRecordBytesHexNo0xProperty > returns true for valid BytesHexNo0x property 2ms
+ ✓ src/core/base/bytes.test.ts > isRecordBytesHexNo0xProperty > returns false for invalid values 12ms
+ ✓ src/core/base/bytes.test.ts > assertRecordBytesHexNo0xProperty > does not throw for valid BytesHexNo0x property 1ms
+ ✓ src/core/base/bytes.test.ts > assertRecordBytesHexNo0xProperty > throws for invalid values 1ms
+ ✓ src/core/base/bytes.test.ts > assertRecordBytes65HexArrayProperty > does not throw for valid array property 1ms
+ ✓ src/core/base/bytes.test.ts > assertRecordBytes65HexArrayProperty > throws for invalid values 0ms
+ ✓ src/core/base/bytes.test.ts > assertRecordBytesHexNo0xArrayProperty > does not throw for valid array property 1ms
+ ✓ src/core/base/bytes.test.ts > assertRecordBytesHexNo0xArrayProperty > throws for invalid values 0ms
+ ✓ src/core/base/bytes.test.ts > isRecordUint8ArrayProperty > returns true for valid Uint8Array property 0ms
+ ✓ src/core/base/bytes.test.ts > isRecordUint8ArrayProperty > returns false for invalid values 0ms
+ ✓ src/core/base/bytes.test.ts > assertRecordUint8ArrayProperty > does not throw for valid Uint8Array property 0ms
+ ✓ src/core/base/bytes.test.ts > assertRecordUint8ArrayProperty > throws for invalid values 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHexNo0x > converts bytes to hex without 0x prefix 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHexNo0x > handles empty and undefined 0ms
+ ✓ src/core/base/bytes.test.ts > hexToBytes32 > pads hex to 32 bytes 1ms
+ ✓ src/core/base/bytes.test.ts > hexToBytes32 > handles full 32-byte hex 1ms
+ ✓ src/core/base/bytes.test.ts > hexToBytes32 > handles hex without 0x prefix 0ms
+ ✓ src/core/base/bytes.test.ts > concatBytes > concatenates multiple Uint8Arrays 0ms
+ ✓ src/core/base/bytes.test.ts > concatBytes > handles empty arrays 0ms
+ ✓ src/core/base/bytes.test.ts > concatBytes > handles single array 0ms
+ ✓ src/core/base/bytes.test.ts > unsafeBytesEquals > returns true for equal byte arrays 0ms
+ ✓ src/core/base/bytes.test.ts > unsafeBytesEquals > returns false for different byte arrays 0ms
+ ✓ src/core/base/bytes.test.ts > unsafeBytesEquals > returns false for non-Uint8Array values 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes32HexArray > converts array of Bytes32Hex strings 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes32HexArray > converts array of Bytes32 Uint8Arrays 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes32HexArray > converts mixed array of Bytes32 and Bytes32Hex 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes32HexArray > returns empty array for empty input 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes32HexArray > throws for non-array input 1ms
+ ✓ src/core/base/bytes.test.ts > toBytes32HexArray > throws for invalid Bytes32Hex string 1ms
+ ✓ src/core/base/bytes.test.ts > toBytes32HexArray > throws for invalid Bytes32 Uint8Array (wrong length) 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes32HexArray > throws for invalid element types 0ms
+ ✓ src/core/base/bytes.test.ts > bigIntToBytesHex > converts 0n 0ms
+ ✓ src/core/base/bytes.test.ts > bigIntToBytesHex > converts single-byte values 0ms
+ ✓ src/core/base/bytes.test.ts > bigIntToBytesHex > converts multi-byte values 0ms
+ ✓ src/core/base/bytes.test.ts > bigIntToBytesHex > pads to byteLength 0ms
+ ✓ src/core/base/bytes.test.ts > bigIntToBytesHex > round-trips with bytesToBigInt 3ms
+ ✓ src/core/base/bytes.test.ts > bigIntToBytesHex > throws InvalidTypeError for negative values 0ms
+ ✓ src/core/base/bytes.test.ts > bigIntToBytesHex > throws InvalidTypeError when value exceeds byteLength 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes32 > accepts a 32-byte Uint8Array 1ms
+ ✓ src/core/base/bytes.test.ts > toBytes32 > accepts a Bytes32Hex string 1ms
+ ✓ src/core/base/bytes.test.ts > toBytes32 > accepts a Bytes32Able object with .bytes32 property 1ms
+ ✓ src/core/base/bytes.test.ts > toBytes32 > throws for wrong-length Uint8Array 1ms
+ ✓ src/core/base/bytes.test.ts > toBytes32 > throws for wrong-length hex string 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes32 > throws InvalidTypeError for unrecognized types 1ms
+ ✓ src/core/base/bytes.test.ts > toBytes > returns the same Uint8Array reference without copy 1ms
+ ✓ src/core/base/bytes.test.ts > toBytes > returns a new copy when copy: true 1ms
+ ✓ src/core/base/bytes.test.ts > toBytes > parses a 0x-prefixed hex string 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes > parses a hex string without 0x prefix 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes > throws for hex string with invalid characters (strict mode) 0ms
+ ✓ src/core/base/bytes.test.ts > toBytes > throws InvalidTypeError for non-bytes non-string values 1ms
+ ✓ src/core/base/bytes.test.ts > concatBytesHex > concatenates two hex strings 0ms
+ ✓ src/core/base/bytes.test.ts > concatBytesHex > handles empty array 0ms
+ ✓ src/core/base/bytes.test.ts > concatBytesHex > handles 0x-only value 0ms
+ ✓ src/core/base/bytes.test.ts > concatBytesHex > handles single value 0ms
+ ✓ src/core/base/bytes.test.ts > concatBytesHex > concatenates three values 0ms
+ ✓ src/core/base/bytes.test.ts > normalizeBytes > returns a same-realm Uint8Array as-is 0ms
+ ✓ src/core/base/bytes.test.ts > normalizeBytes > wraps an ArrayBuffer in a new Uint8Array 0ms
+ ✓ src/core/base/bytes.test.ts > normalizeBytes > wraps an empty ArrayBuffer 2ms
+ ✓ src/core/base/bytes.test.ts > normalizeBytes > throws TypeError for Uint16Array 0ms
+ ✓ src/core/base/bytes.test.ts > normalizeBytes > throws TypeError for string 0ms
+ ✓ src/core/base/bytes.test.ts > normalizeBytes > throws TypeError for number 0ms
+ ✓ src/core/base/bytes.test.ts > normalizeBytes > throws TypeError for null 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHexLarge (no0x path) > converts bytes to lowercase hex without 0x prefix 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHexLarge (no0x path) > returns empty string for empty input 0ms
+ ✓ src/core/base/bytes.test.ts > bytesToHexLarge (no0x path) > round-trips with hexToBytesFaster 0ms
+ ✓ src/core/base/bytes.test.ts > isBytesHex with byteLength > returns true when byte count matches byteLength 0ms
+ ✓ src/core/base/bytes.test.ts > isBytesHex with byteLength > returns false when byte count does not match byteLength 0ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytesOrBytesHex > does not throw for Uint8Array 0ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytesOrBytesHex > does not throw for valid BytesHex string 0ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytesOrBytesHex > throws InvalidTypeError for hex string without 0x prefix 0ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytesOrBytesHex > throws InvalidTypeError for number 0ms
+ ✓ src/core/base/bytes.test.ts > assertIsBytesOrBytesHex > throws InvalidTypeError for null 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexSlice > extracts 1 byte at position 0 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexSlice > extracts 1 byte at an interior position 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexSlice > extracts multiple bytes 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexSlice > extracts from a longer hex string at an offset 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexSlice > throws RangeError when position + length exceeds bounds 1ms
+ ✓ src/core/base/bytes.test.ts > bytesUint8At > reads the byte at each position 1ms
+ ✓ src/core/base/bytes.test.ts > bytesUint8At > throws RangeError for out-of-bounds position 0ms
+ ✓ src/core/base/bytes.test.ts > bytesUint8At > throws RangeError for any position on an empty array 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexUint8At > reads the byte at each position 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexUint8At > throws RangeError when position is out of bounds 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexUint64At > reads all-zero 8 bytes as 0n 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexUint64At > reads 8 bytes with last byte = 0xff as 255n 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexUint64At > reads from an interior position 0ms
+ ✓ src/core/base/bytes.test.ts > bytesHexUint64At > throws RangeError when fewer than 8 bytes remain 0ms
+ ✓ src/core/base/bytes.test.ts > createDeadbeefBytes > returns an array of the requested length 2ms
+ ✓ src/core/base/bytes.test.ts > createDeadbeefBytes > fills with the 0xdeadbeef byte pattern 0ms
+ ✓ src/core/base/bytes.test.ts > createDeadbeefBytes > repeats the pattern for lengths beyond 4 bytes 0ms
+ ✓ src/core/base/bytes.test.ts > createDeadbeefBytes > returns a Uint8Array instance 0ms
+ ✓ src/core/base/promise.test.ts > executeWithBatching > parallel is faster than sequential for independent operations 145ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isFheTypeId > returns true for valid FheTypeIds 4ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isFheTypeId > returns false for deprecated euint4 (id 1) 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isFheTypeId > returns false for invalid ids 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isFheTypeId > returns false for non-number values 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isFheType > returns true for valid FheTypeNames 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isFheType > returns false for deprecated euint4 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isFheType > returns false for invalid names 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isFheType > returns false for non-string values 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isEncryptionBits > returns true for valid encryption bit widths 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isEncryptionBits > returns false for deprecated euint4 bitwidth 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isEncryptionBits > returns false for invalid bit widths 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > isEncryptionBits > returns false for non-number values 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > assertIsEncryptionBits > does not throw for valid encryption bits 3ms
+ ✓ src/core/handle/FheType.test.ts > FheType > assertIsEncryptionBits > throws InvalidTypeError for invalid encryption bits 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > assertIsEncryptionBits > throws InvalidTypeError for non-number values 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > assertIsEncryptionBits > includes varName in error when provided 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > assertIsEncryptionBitsArray > does not throw for valid encryption bits array 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > assertIsEncryptionBitsArray > throws InvalidTypeError for non-array values 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > assertIsEncryptionBitsArray > throws InvalidTypeError for array with invalid encryption bits 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > assertIsEncryptionBitsArray > includes varName with index in error when provided 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > assertIsEncryptionBitsArray > throws without varName when not provided 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > fheTypeIdFromEncryptionBits > returns correct FheTypeId for valid bit widths 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > fheTypeIdFromEncryptionBits > undefined id for invalid bit widths 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asEncryptionBits > throws for invalid bit widths 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > fheTypeIdFromName > returns correct FheTypeId for valid names 3ms
+ ✓ src/core/handle/FheType.test.ts > FheType > fheTypeIdFromName > undefined id for invalid names 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asFheType > throws for invalid names 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > fheTypeNameFromId > returns correct FheTypeName for valid ids 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > fheTypeNameFromId > undefined name for invalid ids 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asFheTypeId > throws for invalid ids 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > solidityPrimitiveTypeNameFromFheTypeId > returns bool for ebool (id 0) 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > solidityPrimitiveTypeNameFromFheTypeId > returns address for eaddress (id 7) 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > solidityPrimitiveTypeNameFromFheTypeId > returns uint256 for all euint types 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > solidityPrimitiveTypeNameFromFheTypeId > undefined solidity type name for invalid ids 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > encryptionBitsFromFheTypeId > returns correct bit widths for valid ids 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > encryptionBitsFromFheTypeId > throws for invalid ids 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > encryptionBitsFromFheType > returns correct bit widths for valid names 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > encryptionBitsFromFheType > throws for invalid names 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > fheTypeNameFromTypeName > returns correct FheType for each ValueTypeName 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > typeNameFromFheTypeName > returns correct ValueTypeName for each FheType 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > resolveRawValueTypeName > resolves FHE type aliases to their clear ValueTypeName 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > resolveRawValueTypeName > returns non-FHE type names unchanged 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bigintToClearValueType > converts bigint to boolean for ebool 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bigintToClearValueType > converts bigint to checksummed address string for eaddress 4ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bigintToClearValueType > converts bigint to number for euint8/16/32 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bigintToClearValueType > throws for out-of-range bigint for euint8/16/32 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bigintToClearValueType > converts bigint to bigint for euint64/128/256 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bigintToClearValueType > throws for out-of-range bigint for euint64/128/256 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bytesToClearValueType > converts zero byte to false for ebool 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bytesToClearValueType > converts non-zero byte to true for ebool 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bytesToClearValueType > converts bytes to number for euint8 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bytesToClearValueType > converts bytes to bigint for euint64 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > bytesToClearValueType > throws for out-of-range bytes for euint8 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > accepts boolean for ebool 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > rejects non-boolean for ebool 2ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > accepts valid address string for eaddress 5ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > rejects invalid address for eaddress 10ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > accepts number for euint8/16/32 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > rejects bigint for euint8/16/32 2ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > rejects negative number for euint8/16/32 8ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > rejects non-integer number for euint8/16/32 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > accepts bigint for euint64/128/256 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > rejects number for euint64/128/256 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > asClearValueType > rejects negative bigint for euint64/128/256 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > toClearValueType > accepts boolean for ebool 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > toClearValueType > rejects non-boolean for ebool (no coercion) 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > toClearValueType > accepts valid address string for eaddress 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > toClearValueType > rejects invalid address for eaddress 2ms
+ ✓ src/core/handle/FheType.test.ts > FheType > toClearValueType > coerces number or bigint to number for euint8/16/32 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > toClearValueType > rejects negative number for euint8/16/32 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > toClearValueType > rejects non-integer number for euint8/16/32 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > toClearValueType > coerces number or bigint to bigint for euint64/128/256 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > toClearValueType > rejects negative bigint for euint64/128/256 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> id -> name roundtrip for 'ebool' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> id -> name roundtrip for 'euint8' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> id -> name roundtrip for 'euint16' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> id -> name roundtrip for 'euint32' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> id -> name roundtrip for 'euint64' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> id -> name roundtrip for 'euint128' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> id -> name roundtrip for 'eaddress' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> id -> name roundtrip for 'euint256' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > bits -> id -> bits roundtrip for 'ebool' 1ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > bits -> id -> bits roundtrip for 'euint8' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > bits -> id -> bits roundtrip for 'euint16' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > bits -> id -> bits roundtrip for 'euint32' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > bits -> id -> bits roundtrip for 'euint64' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > bits -> id -> bits roundtrip for 'euint128' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > bits -> id -> bits roundtrip for 'eaddress' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > bits -> id -> bits roundtrip for 'euint256' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> bits roundtrip for 'ebool' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> bits roundtrip for 'euint8' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> bits roundtrip for 'euint16' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> bits roundtrip for 'euint32' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> bits roundtrip for 'euint64' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> bits roundtrip for 'euint128' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> bits roundtrip for 'eaddress' 0ms
+ ✓ src/core/handle/FheType.test.ts > FheType > roundtrip conversions > name -> bits roundtrip for 'euint256' 0ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > throws last error after all retries exhausted 215ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > does not retry on AbortError 1ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > throws immediately if signal already aborted 2ms
+ ✓ src/core/modules/relayer/module/fetchFheEncryptionKeySource.test.ts > fetchFheEncryptionKeySource error surfacing > 401 surfaces the message from { error: { message } } 47ms
+ ✓ src/core/modules/relayer/module/fetchFheEncryptionKeySource.test.ts > fetchFheEncryptionKeySource error surfacing > 403 surfaces the message from a flat Cloudflare/Kong body 1ms
+ ✓ src/core/modules/relayer/module/fetchFheEncryptionKeySource.test.ts > fetchFheEncryptionKeySource error surfacing > 403 with a non-JSON body keeps the generic HTTP-error message 1ms
+ ✓ src/core/modules/relayer/module/fetchFheEncryptionKeySource.test.ts > _assertIsFetchKeyUrlResult accepted payloads > accepts a succeeded keyurl response with contextId and epochId 3ms
+ ✓ src/core/modules/relayer/module/fetchFheEncryptionKeySource.test.ts > _assertIsFetchKeyUrlResult accepted payloads > accepts a succeeded keyurl response without contextId and epochId 1ms
+ ✓ src/core/modules/relayer/module/fetchFheEncryptionKeySource.test.ts > _assertIsFetchKeyUrlResult rejected payloads > rejects a succeeded keyurl response without fheKeyInfo 4ms
+ ✓ src/core/modules/relayer/module/fetchFheEncryptionKeySource.test.ts > _assertIsFetchKeyUrlResult rejected payloads > rejects a succeeded keyurl response without crs 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProofBuilder > throws errors 14ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProofBuilder > throws if total bits is above 2048 3ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProofBuilder > count and totalBits getters 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProofBuilder > getBits returns copy of bits array 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProofBuilder > methods return this for chaining 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProofBuilder > throws on invalid ACL address 3ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProofBuilder > throws on invalid chainId 4ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProofBuilder > throws on negative values 3ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProofBuilder > throws on null/undefined values for addBool 2ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProofBuilder > throws if packing more than 256 variables 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > creates a valid ZkProof from ZkProofLike 4ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > is idempotent when passed an existing ZkProof 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > accepts a hex string for ciphertextWithZkProof 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > normalizes lowercase addresses to checksummed 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > copies ciphertextWithZkProof by default 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > takes ownership with copy:false 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > extracts encryptionBits from parser when not provided 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > accepts provided encryptionBits when parser agrees 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > throws on invalid chainId 0ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > throws on invalid aclContractAddress 0ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > throws on invalid contractAddress 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > throws on invalid userAddress 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > throws on empty ciphertextWithZkProof 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > throws when encryptionBits missing and no parser provided 2ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > throws on invalid encryptionBits value 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > throws when parser count mismatches provided encryptionBits 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toZkProof > throws when parser type mismatches provided encryptionBits 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > isZkProof / assertIsZkProof > isZkProof returns true for a ZkProof 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > isZkProof / assertIsZkProof > isZkProof returns false for non-ZkProof values 0ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > isZkProof / assertIsZkProof > assertIsZkProof passes for a valid ZkProof 2ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > isZkProof / assertIsZkProof > assertIsZkProof throws InvalidTypeError for non-ZkProof 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > getters > exposes all fields correctly 2ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > getters > ciphertextWithZkProof getter returns a fresh copy each time 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > getters > extraData is accessible via getExtraData() 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toString / toJSON > toString includes metadata without exposing ciphertext content 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toString / toJSON > toJSON returns a plain object with the expected shape 2ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > toString / toJSON > toJSON keeps chainId as bigint when above MAX_SAFE_INTEGER 3ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > getInputHandles > returns one handle per encrypted value 4ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > getInputHandles > each handle has a valid 32-byte hex representation 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > getInputHandles > handles are deterministic for identical inputs 2ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > getInputHandles > result is cached — same array reference on repeated calls 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > getInputHandles > different ciphertexts produce different handles 2ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > getInputHandles > different chainIds produce different handles 2ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > zkProofGetUnsafeRawBytes > returns the internal bytes without copying 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > zkProofGetUnsafeRawBytes > throws when passed a non-ZkProof 0ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > zkProofToExternalEncryptedValues > delegates to getInputHandles for a ZkProof instance 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > zkProofToExternalEncryptedValues > computes handles from a plain ZkProofLike with checksummed ACL 1ms
+ ✓ src/core/coprocessor/ZkProofBuilder.test.ts > ZkProof > zkProofToExternalEncryptedValues > throws ChecksummedAddressError for non-checksummed ACL in ZkProofLike 1ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > uses default retries (3) when not specified 370ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > clamps retries to max 1000 1ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > clamps negative retries to 0 2ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > clamps retryDelayMs to min 100ms 2ms
+ ✓ src/core/base/fetch.test.ts > fetchWithRetry > passes init options to fetch 2ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'undefined' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'null' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'number' 33ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'string' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'boolean' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'array (empty)' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'array (entries-shaped)' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'empty object' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'single string entry' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'mixed-case keys lower-cased' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'all-upper key' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'undefined value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'null value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'number value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'NaN value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'Infinity value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'bigint value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'boolean true dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'boolean false dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'symbol value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'function value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'async function value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'class value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'object value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'array value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'Date value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'Map value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'Set value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'RegExp value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'Uint8Array value dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'String wrapper object dropped' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'all values dropped → empty result' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'empty-string value kept' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'whitespace-only string kept' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'numeric-looking string kept' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > 'null-prototype object' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'two keys differing only in case' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'collision when second value is non-st…' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'three-way collision reports first dup…' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'CRLF injection in name' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'space in name' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'colon in name' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'tab in name' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'non-ASCII (unicode) in name' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'empty-string name' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'parentheses in name' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'CR in value' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'LF in value' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'CRLF in value (header smuggling)' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > throws: 'NUL byte in value' 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > accepts RFC 7230 token char: x-token-1.0 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > accepts RFC 7230 token char: x_test 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > accepts RFC 7230 token char: x-test! 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > accepts RFC 7230 token char: x#test 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > accepts RFC 7230 token char: x-test* 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > accepts RFC 7230 token char: x-test^h 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > accepts RFC 7230 token char: x-test|h 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > accepts RFC 7230 token char: x-test~h 1ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > accepts RFC 7230 token char: x-test`h 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > accepts RFC 7230 token char: x-test'h 0ms
+ ✓ src/core/base/fetch.test.ts > normalizeHeaders > returns a fresh object — mutating the result does not affect the input 0ms
+ ✓ src/core/base/address.test.ts > address > isAddress 6ms
+ ✓ src/core/base/address.test.ts > address > isChecksummedAddress 4ms
+ ✓ src/core/base/address.test.ts > address > assertIsAddress 3ms
+ ✓ src/core/base/address.test.ts > address > assertIsChecksummedAddress 3ms
+ ✓ src/core/base/address.test.ts > address > assertChecksummedAddressProperty 3ms
+ ✓ src/core/base/address.test.ts > address > assertChecksummedAddressArrayProperty 2ms
+ ✓ src/core/base/address.test.ts > address > checksummedAddressToBytes20 2ms
+ ✓ src/core/base/address.test.ts > address > assertIsChecksummedAddressArray 5ms
+ ✓ src/core/base/address.test.ts > address > isRecordChecksummedAddressProperty 3ms
+ ✓ src/core/base/address.test.ts > address > assertIsAddressArray 3ms
+ ✓ src/core/base/address.test.ts > address > isRecordAddressProperty 1ms
+ ✓ src/core/base/address.test.ts > address > assertRecordAddressProperty 2ms
+ ✓ src/core/base/typedValue.test.ts > createTypedValue > bool 4ms
+ ✓ src/core/base/typedValue.test.ts > createTypedValue > uint8 4ms
+ ✓ src/core/base/typedValue.test.ts > createTypedValue > uint16 / uint32 1ms
+ ✓ src/core/base/typedValue.test.ts > createTypedValue > uint64 / uint128 / uint256 2ms
+ ✓ src/core/base/typedValue.test.ts > createTypedValue > address 2ms
+ ✓ src/core/base/typedValue.test.ts > createTypedValue > null / undefined input 1ms
+ ✓ src/core/base/typedValue.test.ts > createTypedValue > invalid type name 1ms
+ ✓ src/core/base/typedValue.test.ts > createTypedValue > result is frozen 0ms
+ ✓ src/core/base/typedValue.test.ts > createTypedValue > identity pass-through 1ms
+ ✓ src/core/base/typedValue.test.ts > assertIsTypedValue > assertIsTypedValue 2ms
+ ✓ src/core/base/typedValue.test.ts > assertIsTypedValueArray > assertIsTypedValueArray 2ms
+ ✓ src/core/base/typedValue.test.ts > createTypedValueArray > createTypedValueArray 3ms
+ ✓ src/core/base/typedValue.test.ts > typedValueToBytes32Hex > typedValueToBytes32Hex 1ms
+ ✓ src/core/base/typedValue.test.ts > TypedValueArrayBuilder > build 1ms
+ ✓ src/core/base/typedValue.test.ts > TypedValueArrayBuilder > method chaining 0ms
+ ✓ src/core/base/typedValue.test.ts > TypedValueArrayBuilder > addBool / addUint8 / addUint16 / addUint32 1ms
+ ✓ src/core/base/typedValue.test.ts > TypedValueArrayBuilder > addUint64 / addUint128 / addUint256 0ms
+ ✓ src/core/base/typedValue.test.ts > TypedValueArrayBuilder > addAddress 1ms
+ ✓ src/core/base/typedValue.test.ts > TypedValueArrayBuilder > addTypedValue 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > buildHandle builds a computed handle by default (no index) 6ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > buildHandle builds an external/input handle when index is provided 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > buildHandle.bytes32 returns a defensive copy each time 3ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > isHandleBytes32Hex / assertIsHandleBytes32Hex accept a valid handle hex 2ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > isHandleBytes32Hex / assertIsHandleBytes32Hex reject a non bytes32-hex value 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > isHandleBytes32Hex / assertIsHandleBytes32Hex reject an unknown fheTypeId 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > isHandleBytes32Hex / assertIsHandleBytes32Hex reject an unknown version 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > assertIsInputHandleBytes32Hex accepts an external handle and rejects a computed one 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > isHandleBytes32 / assertIsHandleBytes32 accept a valid handle bytes32 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > isHandleBytes32 / assertIsHandleBytes32 reject invalid values 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > assertIsInputHandleBytes32 accepts an external handle and rejects a computed one 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > isHandle / assertIsHandle only accept genuine Handle instances 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > isInputHandle / assertIsInputHandle distinguish external from computed handles 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > assertIsEncryptedValueLike accepts a Handle, a bytes32Hex string, a {bytes32Hex} object, and Bytes32 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > assertIsEncryptedValueLike rejects null, undefined, and malformed values 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > asHandle / asHandleBytes32 / asHandleBytes32Hex return the value when valid 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > asHandle / asHandleBytes32 / asHandleBytes32Hex throw on invalid values 0ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > handleBytes32HexToHandle wraps a hex string without validation (trusted) 0ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > bytes32HexToHandle validates fheTypeId/version and builds a Handle 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > bytes32HexToInputHandle validates the index and rejects computed handles 0ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > bytes32ToHandle validates fheTypeId/version and builds a Handle from raw bytes 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > toFhevmHandle accepts a Handle instance, a {bytes32Hex} object, a hex string, and Bytes32 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > toFhevmHandle throws on invalid input 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > toInputHandle returns an input handle and rejects computed handles 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > handleEquals compares handles by bytes32Hex 0ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > assertHandleArrayEquals passes for matching arrays 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > assertHandleArrayEquals throws on length mismatch 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > assertHandleArrayEquals throws on content mismatch 0ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > assertHandlesBelongToSameChainId passes for an empty array 0ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > assertHandlesBelongToSameChainId passes when all handles share a chainId 1ms
+ ✓ src/core/handle/FhevmHandle.test.ts > FhevmHandle > assertHandlesBelongToSameChainId throws when a handle has a different chainId 2ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > resolves after specified delay 9ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > resolves without signal 3ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > resolves with undefined signal 1ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > throws immediately if signal already aborted 2ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > throws AbortError if signal already aborted 1ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > rejects when signal is aborted during sleep 2ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > rejected error has name AbortError when aborted during sleep 1ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > preserves abort reason as cause 1ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > clears timeout when aborted 3ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > works with zero delay 1ms
+ ✓ src/core/base/timeout.test.ts > abortableSleep > non-aborted signal allows sleep to complete 1ms
+ ✓ src/core/kms/TransportKeyRing.test.ts > disposeTransportKeyPair > zero-fills the private key and makes the key pair unusable 6ms
+ ✓ src/core/kms/TransportKeyRing.test.ts > createTransportKeyRing > issues a fresh key pair per request and zero-fills it on release 7ms
+ ✓ src/core/kms/TransportKeyRing.test.ts > createTransportKeyRing > purges every key pair and permit of a retired account, and only that account's 10ms
+ ✓ src/core/kms/TransportKeyRing.test.ts > createTransportKeyRing > rejects an invalid account address 2ms
+ ✓ src/core/host-contracts/KmsSignersContext-p.test.ts > kmsSignersContextToExtraData > derives the extraData version from the context shape (v11/v12-13/v14 eras) 11ms
+ ✓ src/core/host-contracts/KmsSignersContext-p.test.ts > assertKmsSignerThreshold — mixed-version rollout boundaries > accepts exactly-threshold distinct known signers (above-threshold rollout phase) 7ms
+ ✓ src/core/host-contracts/KmsSignersContext-p.test.ts > assertKmsSignerThreshold — mixed-version rollout boundaries > accepts more than threshold signers (all nodes responsive) 3ms
+ ✓ src/core/host-contracts/KmsSignersContext-p.test.ts > assertKmsSignerThreshold — mixed-version rollout boundaries > rejects below-threshold responses (below-threshold rollout phase must not decrypt alone) 3ms
+ ✓ src/core/host-contracts/KmsSignersContext-p.test.ts > assertKmsSignerThreshold — mixed-version rollout boundaries > rejects duplicated signers — one node cannot vote twice to fake a threshold 3ms
+ ✓ src/core/host-contracts/KmsSignersContext-p.test.ts > assertKmsSignerThreshold — mixed-version rollout boundaries > rejects shares signed by an address outside the context signer set 1ms
+ ✓ src/core/host-contracts/KmsSignersContext-p.test.ts > assertKmsSignerThreshold — mixed-version rollout boundaries > signer membership is case-insensitive (checksummed vs lowercase recovery) 2ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > encodes and decodes v0 extraData 6ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > encodes and decodes v1 extraData with a context id 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > encodes and decodes v2 extraData with a context id and epoch id 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > selects the smallest extraData version that can encode the provided ids 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > rejects invalid version/id combinations 5ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > rejects malformed extraData bytes 3ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > classifies any 0x00-prefixed payload as v0, ignoring trailing bytes (matches KMSVerifier) 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > decodes an unrecognized version as a future (unknown) extraData 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > reports isFutureVersion only for unrecognized versions 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > compares known versions with lt/le/gt/ge numerically 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > treats a future (unknown) version as greater than every version 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > gates "v2 or later" via lt(EXTRA_DATA_V2): rejects v0/v1, accepts v2 and future 0ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > narrows valid extraData objects and bytes 2ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > keeps KmsExtraDataImpl constructor private to the module 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > compares extraData values by version, context id, and epoch id 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > keeps old extraData versions compatible with newer KMSVerifier versions (stale-permit migration) 1ms
+ ✓ src/core/kms/kmsExtraData-p.test.ts > kmsExtraData > checks compatibility with KMSVerifier versions 1ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > reports a registry without the lifecycle Core 12ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > reports a retired account and its confirmed successor 4ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > reports a pending designation, and no E1 fields on a Core-only registry 6ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > getAuthorityStatus > answers per chain 5ms
+ ✓ src/core/actions/host/getAuthorityStatus.test.ts > purgeIfRetired > purges the ring only once the account is retired 6ms
+ ✓ src/core/base/string.test.ts > string > ensure0x 4ms
+ ✓ src/core/base/string.test.ts > string > removeSuffix 1ms
+ ✓ src/core/base/string.test.ts > string > is0x 1ms
+ ✓ src/core/base/string.test.ts > string > isNo0x 1ms
+ ✓ src/core/base/string.test.ts > string > remove0x 1ms
+ ✓ src/core/base/string.test.ts > string > assertIs0xString 3ms
+ ✓ src/core/base/string.test.ts > string > isRecordStringProperty 1ms
+ ✓ src/core/base/string.test.ts > string > assertRecordStringProperty 2ms
+ ✓ src/core/base/string.test.ts > string > assertRecordStringProperty with expectedValue (string) 2ms
+ ✓ src/core/base/string.test.ts > string > assertRecordStringProperty with expectedValue (array) 1ms
+ ✓ src/core/base/string.test.ts > string > assertRecordStringArrayProperty 2ms
+ ✓ src/core/base/string.test.ts > string > safeJSONstringify 1ms
+ ✓ src/core/base/string.test.ts > string > isNonEmptyString 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > createClearValue builds a ClearValue exposing value/type/handle 4ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > createClearValue supports ebool, euint64, and eaddress 2ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > createClearValue throws when the value has the wrong JS type for the handle fheType 2ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > createClearValue enforces the euint8/euint64 upper bound 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > createClearValue returns a frozen instance 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > createClearValue toString/toJSON do not leak the value 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > isClearValue / assertIsClearValue only pass for the matching origin token 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > isClearValue / assertIsClearValue reject non-ClearValue values 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > isClearValueArray / assertIsClearValueArray validate every element 2ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > assertIsClearValueArray rejects a non-array value 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > clearValueToTypedValue converts a ClearValue to a TypedValue 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > clearValueToTypedValue throws for a non-ClearValue or a mismatched token 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > createClearValueArray builds a frozen array of ClearValues in order 2ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > createClearValueArray throws when array lengths do not match 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > abiEncodeClearValues encodes ebool/euint/eaddress values as uint256 5ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > abiEncodeClearValues throws for an invalid ebool clear value 1ms
+ ✓ src/core/handle/ClearValue.test.ts > ClearValue > abiEncodeClearValues throws for an unsupported fheTypeId 1ms
+ ✓ src/core/host-contracts/readKmsSignersContext-p.test.ts > readKmsSignersContextFromPermitExtraData > passes a v0 sentinel through verbatim: id=0, signers from the on-chain v0 lookup 15ms
+ ✓ src/core/host-contracts/readKmsSignersContext-p.test.ts > readKmsSignersContextFromPermitExtraData > honors an explicit v1 context id, keyed by the extraData’s own id 5ms
+ ✓ src/core/host-contracts/readKmsSignersContext-p.test.ts > readKmsSignersContextFromPermitExtraData > preserves both contextId and epochId for a v2 extraData on a v14 chain 5ms
+ ✓ src/core/host-contracts/readKmsSignersContext-p.test.ts > readKmsSignersContextFromPermitExtraData > reads a v1 permit on a v14 chain via the shared reader (backward compat) 3ms
+ ✓ src/core/host-contracts/readKmsSignersContext-p.test.ts > readKmsSignersContextFromPermitExtraData > uses the v11 reader (getThreshold + getKmsSigners) on a KMSVerifier < 0.2.0 7ms
+ ✓ src/core/host-contracts/readKmsSignersContext-p.test.ts > readKmsSignersContextFromPermitExtraData > rejects extraData newer than the KMSVerifier supports (v2 on a v13 chain) 3ms
+ ✓ src/core/host-contracts/readKmsSignersContext-p.test.ts > readKmsSignersContextFromPermitExtraData > rejects a concrete v1 extraData on a context-less KMSVerifier < 0.2.0 1ms
+ ✓ src/core/host-contracts/readKmsSignersContext-p.test.ts > readKmsSignersContextFromPermitExtraData > rejects a value that is not a KmsExtraData, without any on-chain read 1ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > prefers client tfhe module version over runtime fallback 5ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > uses runtime tfhe fallback when client module version is missing that field 2ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > prefers client kms module version over runtime fallback 0ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > bypasses runtime fallback when client module versions are auto 2ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > throws by default when an explicit client tfhe module version is incompatible 1ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > throws by default when an explicit runtime kms module version is incompatible 1ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > allows compatible non-canonical explicit module versions 0ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > honors warn and off explicit module-version compatibility modes 5ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > keeps WASM compatibility rules partitioned for supported protocol contexts 3ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > auto-resolves WASM versions for every exact protocol context emitted by the protocol resolver 2ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > maps protocol versions before 0.13.0 to legacy WASM versions 0ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > maps protocol versions from 0.13.0 with current PubKey/CRS to current WASM versions 0ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > maps protocol versions from 0.13.0 with legacy PubKey/CRS to current canonical WASM versions 0ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > uses bounded protocol-context comparators when they are enough to select WASM versions 1ms
+ ✓ src/core/runtime/HyperWasmSolver-p.test.ts > HyperWasmSolver > throws when bounded protocol context comparators leave WASM auto-resolution ambiguous 1ms
+ ✓ src/core/modules/relayer/module/RelayerAsyncRequest.errors.test.ts > RelayerAsyncRequest auth/edge error surfacing > 401 surfaces the message from { error: { message } } 53ms
+ ✓ src/core/modules/relayer/module/RelayerAsyncRequest.errors.test.ts > RelayerAsyncRequest auth/edge error surfacing > 401 with an empty body falls back to the canned message 1ms
+ ✓ src/core/modules/relayer/module/RelayerAsyncRequest.errors.test.ts > RelayerAsyncRequest auth/edge error surfacing > 403 surfaces the message from a flat Cloudflare/Kong body 2ms
+ ✓ src/core/modules/relayer/module/RelayerAsyncRequest.errors.test.ts > RelayerAsyncRequest auth/edge error surfacing > 403 with a non-JSON body keeps the generic unexpected-status message 1ms
+ ✓ src/core/base/record.test.ts > record > isRecordNonNullableProperty 4ms
+ ✓ src/core/base/record.test.ts > record > assertRecordNonNullableProperty 5ms
+ ✓ src/core/base/record.test.ts > record > typeofProperty 1ms
+ ✓ src/core/base/record.test.ts > record > isRecordArrayProperty 1ms
+ ✓ src/core/base/record.test.ts > record > assertRecordArrayProperty 2ms
+ ✓ src/core/base/record.test.ts > record > isRecordBooleanProperty 1ms
+ ✓ src/core/base/record.test.ts > record > assertRecordBooleanProperty 2ms
+ ✓ src/core/base/record.test.ts > record > assertRecordBooleanProperty with expectedValue 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'bare origin gets trailing slash' 5ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'origin with trailing slash unchanged' 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'path prefix kept; trailing slash added' 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'path prefix kept; existing trailing s…' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'scheme/host lower-cased' 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'default https port collapsed' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'non-default port preserved' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'http allowed when no auth' 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'https + hasAuth allowed' 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'http + hasAuth + localhost allowed' 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'http + hasAuth + 127.0.0.1 allowed' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > 'http + hasAuth + ::1 allowed' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'undefined' 2ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'null' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'empty string' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'number' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'unparsable' 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'ftp protocol' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'file protocol' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'has username' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'has username + password' 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'http + hasAuth + non-localhost' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > validateRelayerBaseUrl > throws: 'http + hasAuth + non-loopback IP' 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > 'origin + simple path' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > 'origin + leading-slash path' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > 'origin + trailing-slash path' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > 'origin + leading & trailing slash path' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > 'path-prefixed base + simple path' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > 'path-prefixed base + leading-slash pa…' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > 'deep path-prefixed base' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > 'multi-segment path' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > 'single-segment path' 0ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > throws (assertion) when base pathname does not end with "/" 1ms
+ ✓ src/core/modules/relayer/module/relayerUrl.test.ts > buildRelayerUrlString > round-trips with validateRelayerBaseUrl regardless of input trailing slash 0ms
+ ✓ src/core/host-contracts/isAccountRetired.test.ts > checkPersistAllowed > types the refusal when the user is retired 11ms
+ ✓ src/core/host-contracts/isAccountRetired.test.ts > checkPersistAllowed > types the refusal when the app contract is retired 1ms
+ ✓ src/core/host-contracts/isAccountRetired.test.ts > checkPersistAllowed > keeps the generic error for an ordinary refusal 1ms
+ ✓ src/core/host-contracts/isAccountRetired.test.ts > checkPersistAllowed > keeps the generic error when the ACL has no lifecycle Core 2ms
+ ✓ src/core/host-contracts/isAccountRetired.test.ts > checkPersistAllowed > makes no extra call when the request is allowed 1ms
+ ✓ src/core/host-contracts/isAccountRetired.test.ts > checkDelegation > types the refusal when the delegator is retired 2ms
+ ✓ src/core/host-contracts/isAccountRetired.test.ts > checkDelegation > passes a retired delegator's successor, which the delegated view allows, with no extra call 1ms
+ ✓ src/core/host-contracts/isAccountRetired.test.ts > checkDelegation > keeps the generic error for an ordinary refusal 1ms
+ ✓ src/core/host-contracts/isAccountRetired.test.ts > isAccountRetired / findRetiredAccounts > reads each account and returns the retired ones without duplicates 2ms
+ ✓ src/core/host-contracts/isAccountRetired.test.ts > isAccountRetired / findRetiredAccounts > answers nothing when the ACL has no lifecycle Core 3ms
+ ✓ src/core/host-contracts/HostContractVersion-p.test.ts > HostContractVersion cache > invalidates one cached host contract version entry 12ms
+ ✓ src/core/host-contracts/HostContractVersion-p.test.ts > HostContractVersion cache > invalidates all cached host contract version entries 2ms
+ ✓ src/core/base/object.test.ts > object > toArray 5ms
+ ✓ src/core/base/object.test.ts > object > simpleDeepFreeze 2ms
+ ✓ src/core/base/object.test.ts > object > simpleDeepFreeze does not recurse into null values 1ms
+ ✓ src/core/base/object.test.ts > object > simpleDeepFreeze skips already-frozen nested objects 0ms
+ ✓ src/core/base/object.test.ts > object > isDeepEqual with primitives 1ms
+ ✓ src/core/base/object.test.ts > object > isDeepEqual with arrays 1ms
+ ✓ src/core/base/object.test.ts > object > isDeepEqual with objects 1ms
+ ✓ src/core/base/object.test.ts > object > addInternalFunction 3ms
+ ✓ src/core/base/errors/utils.test.ts > errors/utils > ensureError returns the same instance when given an Error 4ms
+ ✓ src/core/base/errors/utils.test.ts > errors/utils > ensureError wraps an error-shaped object, preserving message/name/cause 1ms
+ ✓ src/core/base/errors/utils.test.ts > errors/utils > ensureError falls back to defaults for missing message/name 1ms
+ ✓ src/core/base/errors/utils.test.ts > errors/utils > ensureError uses the caught value itself as cause when no cause is provided 0ms
+ ✓ src/core/base/errors/utils.test.ts > errors/utils > ensureError wraps primitive non-Error values 1ms
+ ✓ src/core/base/errors/utils.test.ts > errors/utils > ensureError throws when given null or undefined 1ms
+ ✓ src/core/base/errors/utils.test.ts > errors/utils > assertNever throws an InternalError with the given message 1ms
+ ✓ src/core/base/errors/utils.test.ts > errors/utils > getErrorMessage extracts the message from strings, Errors, and other values 1ms
+ ✓ src/core/base/errors/utils.test.ts > errors/utils > getErrorMessage strips leading and trailing quotes 1ms
+ ✓ src/core/base/errors/utils.test.ts > errors/utils > getErrorMessage only strips quotes at the boundaries, not inside the message 0ms
+ ✓ src/core/base/wasmScope.test.ts > WasmScope > track() returns the same reference it was given 3ms
+ ✓ src/core/base/wasmScope.test.ts > WasmScope > free() frees every tracked item exactly once, in reverse (LIFO) order 2ms
+ ✓ src/core/base/wasmScope.test.ts > WasmScope > free() on an empty scope is a no-op 2ms
+ ✓ src/core/base/wasmScope.test.ts > WasmScope > free() is best-effort: a throwing free() does not strand the other items 1ms
+ ✓ src/core/base/wasmScope.test.ts > WasmScope > free() drains the scope: a second free() does not re-free items 1ms
+ ✓ src/core/base/wasmScope.test.ts > WasmScope > is reusable: items tracked after a free() are freed on the next free() 1ms
+ ✓ src/core/base/semver.test.ts > isSemverInInterval > handles half-open intervals 5ms
+ ✓ src/core/base/semver.test.ts > isSemverInInterval > handles open-ended intervals 1ms
+ ✓ src/core/base/semver.test.ts > semverComparatorImpliesRange > handles exact constraints 1ms
+ ✓ src/core/base/semver.test.ts > semverComparatorImpliesRange > handles lower-bound constraints 1ms
+ ✓ src/core/base/semver.test.ts > semverComparatorImpliesRange > handles upper-bound constraints 1ms
+ ✓ src/core/base/trustedValue.test.ts > trustedValue > createTrustedValue + verifyTrustedValue roundtrips the value with the same token 4ms
+ ✓ src/core/base/trustedValue.test.ts > trustedValue > verifyTrustedValue throws on token mismatch 2ms
+ ✓ src/core/base/trustedValue.test.ts > trustedValue > verifyTrustedValue distinguishes tokens with the same description 1ms
+ ✓ src/core/base/trustedValue.test.ts > trustedValue > verifyTrustedValue throws on a forged / non-genuine value 1ms
+ ✓ src/core/base/trustedValue.test.ts > trustedValue > createTrustedValue returns a frozen, opaque instance 1ms
+ ✓ src/core/base/trustedValue.test.ts > trustedValue > each trusted value is independently verifiable 0ms
+ ✓ src/ethers/fhevmFactoryOptions.test.ts > ethers fhevm factory option types > keeps compile-time assertions active 3ms
+ ✓ src/viem/fhevmFactoryOptions.test.ts > viem fhevm factory option types > keeps compile-time assertions active 2ms
+ ✓ src/core/base/cachedFetch.test.ts > cachedFetch > defines CACHE_TTL_15MIN as fifteen minutes 3ms
+ ✓ src/core/kms/SignedDecryptionPermitV2-p.test.ts > isSignedDecryptionPermitV2 > returns false for non-object values 3ms
+ ✓ src/core/kms/SignedDecryptionPermitV2-p.test.ts > isSignedDecryptionPermitV2 > returns false for plain objects and arrays 0ms
+ ✓ src/core/kms/SignedDecryptionPermitV2-p.test.ts > isSignedDecryptionPermitV2 > returns false for an object that merely looks like a signed permit 0ms
+ ✓ src/core/kms/SignedDecryptionPermitV2-p.test.ts > parseSignedDecryptionPermitV2 > rejects an invalid transport key pair before doing anything else 2ms
+ ✓ src/core/kms/SignedDecryptionPermitV1-p.test.ts > isSignedDecryptionPermitV1 > returns false for non-object values 2ms
+ ✓ src/core/kms/SignedDecryptionPermitV1-p.test.ts > isSignedDecryptionPermitV1 > returns false for plain objects and arrays 0ms
+ ✓ src/core/kms/SignedDecryptionPermitV1-p.test.ts > isSignedDecryptionPermitV1 > returns false for an object that merely looks like a signed permit 0ms
+ ✓ src/core/kms/SignedDecryptionPermitV1-p.test.ts > parseSignedDecryptionPermitV1 > rejects an invalid transport key pair before doing anything else 2ms
+
+ Test Files  38 passed (38)
+      Tests  914 passed (914)
+Type Errors  no errors
+   Start at  18:01:55
+   Duration  3.57s (transform 7.95s, setup 0ms, import 12.53s, tests 2.62s, environment 13ms)
+

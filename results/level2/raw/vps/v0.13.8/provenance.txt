@@ -1,0 +1,26 @@
+date=2026-10-21T12:13:23Z host=VPS nproc=4 kernel=6.8.0-139-generic
+harness HEAD=fe3ca89b5111ca2b4abb220bf3c78417b821ceb5 pristine HEAD=fe3ca89b5111ca2b4abb220bf3c78417b821ceb5
+== git status --porcelain (harness worktree; only test files may appear)
+ M kms-connector/crates/utils/src/tests/setup/db.rs
+ M kms-connector/crates/utils/src/tests/setup/host.rs
+ M kms-connector/crates/utils/src/tests/setup/instance.rs
+?? kms-connector/crates/kms-worker/tests/acl_real_chain.rs
+?? kms-connector/crates/kms-worker/tests/acl_retirement_real_chain.rs
+?? kms-connector/crates/kms-worker/tests/acl_successor_real_chain.rs
+== git status --porcelain (pristine worktree; must be empty)
+== diff -rq pristine vs harness kms-connector, excluding directories named 'tests'
+IDENTICAL
+tree-sha256 crates/kms-worker/src (excluding ./tests): harness=06167ae86f71a5341497974ae1812a8aee33fb8cd7840a285837d78ea2cea305 pristine=06167ae86f71a5341497974ae1812a8aee33fb8cd7840a285837d78ea2cea305 EQUAL
+tree-sha256 crates/utils/src (excluding ./tests): harness=c5950090f9d7dbab3da5977228a07ebfdb251b54fdb78d2b1232851241e16939 pristine=c5950090f9d7dbab3da5977228a07ebfdb251b54fdb78d2b1232851241e16939 EQUAL
+== harness inputs
+6c71a509ef1644ae59da10d13f1690ae604fd60354ccac5adc15bd8b8c27c6a7  /srv/lifecycle/src/fhevm-v0.13.8-harness/kms-connector/crates/kms-worker/tests/acl_successor_real_chain.rs
+319d7bc7c37fe76f02b79bfc0b685c6ad1c136b952e2d5e732adcf237cd915df  /srv/lifecycle/harness/level2/level2_acl_main.json
+7e0b40c0a4aa0601911fe6c4f5f8637af9af2e21492f068cc80ecde93feff9be  /srv/lifecycle/harness/level2/level2_acl_v0.13.8.json
+f77d80a57ae7025c22f79d9a6cd3eeba9ec9159aaee32b8829a82056ec19355a  /srv/lifecycle/harness/level0/base_acl_main.json
+c535fb0cbf87776524f6f968f169e504853b1bc5b91f4792a5b9c58df1151bad  /srv/lifecycle/harness/sol/src/DappStub.sol
+613348ca2fe17f2d8057247a6476617b8d7dac24a68ab6438eb854b049bc7b08  /srv/lifecycle/harness/sol/src/ExecutorStub.sol
+37d0516d3e7c123bbf981774a2ab5ae26d25c5f61e53b23584aa81bcb97034ff  /srv/lifecycle/harness/sol/src/Proxy.sol
+ad23f33970285b6acf27ab88db86a366127e27d2c5d9a7fea07a8d536bcc3c9c  /srv/lifecycle/scripts/rpc_recorder.py
+d37d59c49a51462464ed253e5693f26bc0856fa23c45765fc9c4742cc1c23232  /srv/lifecycle/scripts/run_level2.sh
+badc99e5d0df5d7a6247127337c467b73ef52b988f28a614261352686ab5013b  /srv/lifecycle/scripts/decode_level2.py
+e49b0258959292eade4a4af304e52d0e660e4d0aa359e0d8235b93ec371bf572  /srv/lifecycle/scripts/indep_check_l2.py

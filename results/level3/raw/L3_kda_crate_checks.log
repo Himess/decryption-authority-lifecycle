@@ -1,0 +1,22 @@
+== cargo test (default features)
+     Running unittests src\lib.rs (impl/.tools/target-l3\debug\deps\user_decryption_signature-60de2470d2f14747.exe)
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests\kda.rs (impl/.tools/target-l3\debug\deps\kda-dbf5186b5e1e8859.exe)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests\profile_h.rs (impl/.tools/target-l3\debug\deps\profile_h-d33e9d7232870a39.exe)
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+== cargo test --features kda
+     Running unittests src\lib.rs (impl/.tools/target-l3\debug\deps\user_decryption_signature-2855e0705395ed66.exe)
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+     Running tests\kda.rs (impl/.tools/target-l3\debug\deps\kda-f23c57d04ea835f1.exe)
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.84s
+     Running tests\profile_h.rs (impl/.tools/target-l3\debug\deps\profile_h-7e04bf7e1d34de83.exe)
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+== clippy (default)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.56s
+== clippy --features kda
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.83s
+== rustfmt --check
+rustfmt rc=0

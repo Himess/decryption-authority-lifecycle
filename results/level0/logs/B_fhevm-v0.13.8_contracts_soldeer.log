@@ -1,0 +1,12 @@
+T  🦌 Soldeer Install 🦌
+|
+*  Done reading config
+|  
+*  Done reading lockfile
+|  
+o  Installing dependencies
+*  Migrated the lockfile to the v2 format and refreshed the integrity checksums
+|  
+*  Updated remappings
+|  
+—  Done installing!

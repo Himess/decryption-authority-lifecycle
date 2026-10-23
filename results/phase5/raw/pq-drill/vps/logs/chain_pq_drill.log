@@ -1,0 +1,33 @@
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 10 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-22T19:35:08Z START pq-drill-r1
+2026-10-22T19:35:35Z END pq-drill-r1 rc=1
+2026-10-22T19:35:35Z pq-drill-r1 failed (continuing)
+2026-10-22T19:35:36Z lifecycle-pg removed
+2026-10-22T19:35:36Z CHAIN DONE
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 6 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-22T19:37:32Z START pq-drill-r1
+2026-10-22T19:50:04Z END pq-drill-r1 rc=0
+2026-10-22T19:50:06Z lifecycle-pg removed
+2026-10-22T19:50:06Z CHAIN DONE
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 9 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-22T19:50:35Z START pq-drill-r2
+2026-10-22T20:03:43Z END pq-drill-r2 rc=0
+2026-10-22T20:03:43Z START pq-drill-r3
+2026-10-22T20:16:31Z END pq-drill-r3 rc=0
+2026-10-22T20:16:32Z lifecycle-pg removed
+2026-10-22T20:16:32Z CHAIN DONE

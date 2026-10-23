@@ -1,0 +1,5427 @@
+{
+ "runs": [
+  "pq-drill-r1-20261022T193733Z",
+  "pq-drill-r2-20261022T195036Z",
+  "pq-drill-r3-20261022T200344Z"
+ ],
+ "rows": [
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "R1.permit.v2-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "R2.permit.v2-http",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "account_retired"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "R3.legacy-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "R4.v2-delegated.a-for-v",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "R5.legacy-delegated.a-for-v",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "R6.v2-delegated.d-for-a",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "P1.history.h0",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "P1.history.h1",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "P1.history.h2",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "P1.history.h0.http",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "P2.e3.kda",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "R1.permit.v2-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "R2.permit.v2-http",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "account_retired"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "R3.legacy-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "R4.v2-delegated.a-for-v",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "R5.legacy-delegated.a-for-v",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "R6.v2-delegated.d-for-a",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "P1.history.h0",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "P1.history.h1",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "P1.history.h2",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "P1.history.h0.http",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "P2.e3.kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "R1.permit.v2-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "R2.permit.v2-http",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "account_retired"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "R3.legacy-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "R4.v2-delegated.a-for-v",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "R5.legacy-delegated.a-for-v",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "R6.v2-delegated.d-for-a",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "P1.history.h0",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "P1.history.h1",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "P1.history.h2",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "P1.history.h0.http",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "P2.e3.kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "R1.permit.v2-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "R2.permit.v2-http",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "user_signature_rejected"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "R3.legacy-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "R4.v2-delegated.a-for-v",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "R5.legacy-delegated.a-for-v",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "R6.v2-delegated.d-for-a",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "P1.history.h0",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "P1.history.h1",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "P1.history.h2",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "P1.history.h0.http",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "P2.e3.kda",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "R1.permit.v2-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "R2.permit.v2-http",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "user_signature_rejected"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "R3.legacy-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "R4.v2-delegated.a-for-v",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "R5.legacy-delegated.a-for-v",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "R6.v2-delegated.d-for-a",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "P1.history.h0",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "P1.history.h1",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "P1.history.h2",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "P1.history.h0.http",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "P2.e3.kda",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B1",
+   "action": "P3.late-grant",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2d",
+   "action": "P3.late-grant",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B2c",
+   "action": "P3.late-grant",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3a",
+   "action": "P3.late-grant",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "pre",
+   "path": "B3b",
+   "action": "P3.late-grant",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-off",
+   "path": "B1",
+   "action": "E1.attacker-after-forged-grant",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-off",
+   "path": "B1",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-off",
+   "path": "B2d",
+   "action": "E1.attacker-after-forged-grant",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-off",
+   "path": "B2d",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-off",
+   "path": "B2c",
+   "action": "E1.attacker-after-forged-grant",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-off",
+   "path": "B2c",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-off",
+   "path": "B3a",
+   "action": "E1.attacker-after-forged-grant",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-off",
+   "path": "B3a",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-off",
+   "path": "B3b",
+   "action": "E1.attacker-after-forged-grant",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-off",
+   "path": "B3b",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-on",
+   "path": "B1",
+   "action": "E1.attacker-after-forged-grant",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "2",
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-on",
+   "path": "B1",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-on",
+   "path": "B2d",
+   "action": "E1.attacker-after-forged-grant",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-on",
+   "path": "B2d",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-on",
+   "path": "B2c",
+   "action": "E1.attacker-after-forged-grant",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-on",
+   "path": "B2c",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-on",
+   "path": "B3a",
+   "action": "E1.attacker-after-forged-grant",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-on",
+   "path": "B3a",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-on",
+   "path": "B3b",
+   "action": "E1.attacker-after-forged-grant",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "effect-q-on",
+   "path": "B3b",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "undone",
+   "path": "B3a",
+   "action": "R6.v2-delegated.d-for-a",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "undone",
+   "path": "B3a",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "undone",
+   "path": "B3b",
+   "action": "R6.v2-delegated.d-for-a",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "undone",
+   "path": "B3b",
+   "action": "E2.attacker-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "3"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q",
+   "path": "-",
+   "action": "Q.ecdsa-eoa",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q",
+   "path": "-",
+   "action": "Q.legacy-direct",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q",
+   "path": "B1",
+   "action": "Q.P1.history.h0",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q",
+   "path": "B1",
+   "action": "Q.P2.e3.kda",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q",
+   "path": "B2d",
+   "action": "Q.P1.history.h0",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q",
+   "path": "B2c",
+   "action": "Q.P1.history.h0",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q",
+   "path": "B3a",
+   "action": "Q.P1.history.h0",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q",
+   "path": "B3a",
+   "action": "Q.P2.e3.kda",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q",
+   "path": "B3b",
+   "action": "Q.P1.history.h0",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q",
+   "path": "B3b",
+   "action": "Q.P2.e3.kda",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w00",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w00",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w00",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w00",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w00",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w00",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w01",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w01",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w01",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w01",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w01",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w01",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w02",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w02",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w02",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w02",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w02",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w02",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w03",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w03",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w03",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w03",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w03",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w03",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w04",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w04",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w04",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w04",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w04",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w04",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w05",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w05",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w05",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w05",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w05",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w05",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w06",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w06",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w06",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w06",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w06",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w06",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w07",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w07",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w07",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w07",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w07",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w07",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "ecdsa-eoa.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B1.P1.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2d.P1.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B2c.P1.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3a.P1.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k08",
+   "path": "-",
+   "action": "B3b.P1.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w00",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w00",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w00",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w00",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w00",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w00",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w01",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w01",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w01",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w01",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w01",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w01",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w02",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w02",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w02",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w02",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w02",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w02",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w03",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w03",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w03",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w03",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w03",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w03",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w04",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w04",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w04",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w04",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w04",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w04",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w05",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w05",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w05",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w05",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w05",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w05",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w06",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w06",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w06",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w06",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w06",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w06",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w07",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w07",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w07",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w07",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w07",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w07",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w08",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w08",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w09",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w10",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w11",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "ecdsa-eoa.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B1.P1.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2d.P1.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B2c.P1.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3a.P1.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "adoption.k09",
+   "path": "-",
+   "action": "B3b.P1.w12",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q5",
+   "path": "A6",
+   "action": "Q5.adopted.forged-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q5",
+   "path": "A6",
+   "action": "Q5.adopted.wallet-kda",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q5",
+   "path": "A6",
+   "action": "Q5.adopted.wallet-erc1271",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q5",
+   "path": "A6",
+   "action": "Q5.adopted.forged-kda.q-off",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q5",
+   "path": "A7",
+   "action": "Q5.succession.after-bq.q-off",
+   "runs": 3,
+   "expected": "Forwarded",
+   "observed": [
+    "Forwarded"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "q5",
+   "path": "A7",
+   "action": "Q5.succession.after-bq",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "-"
+   ],
+   "attempts": [
+    "1"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "after-t8",
+   "path": "B3a",
+   "action": "P4.holder-after-retirement",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "account_retired"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  },
+  {
+   "group": "after-t8",
+   "path": "B3b",
+   "action": "P4.holder-after-retirement",
+   "runs": 3,
+   "expected": "Rejected",
+   "observed": [
+    "Rejected"
+   ],
+   "error_codes": [
+    "account_retired"
+   ],
+   "attempts": [
+    "0"
+   ],
+   "conforms": true
+  }
+ ],
+ "transactions": [
+  {
+   "path": "B1",
+   "action": "T1.allow",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    34204
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B1",
+   "action": "T2.allowForDecryption",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    34691
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B1",
+   "action": "T3.delegate-to-kda",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    31900
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B1",
+   "action": "T4.designateSuccessor",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    31211
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B1",
+   "action": "T5.confirmSuccessor",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    30660
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B1",
+   "action": "T6.certificate",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "AccountAlreadyRetired"
+   ],
+   "gas_used": [
+    31898
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B1",
+   "action": "T7.invalidateSignaturesBefore",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    50280
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B1",
+   "action": "T8.retireAccount",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "AccountAlreadyRetired"
+   ],
+   "gas_used": [
+    28477
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2d",
+   "action": "T1.allow",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    34204
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2d",
+   "action": "T2.allowForDecryption",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    34691
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2d",
+   "action": "T3.delegate-to-kda",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    31900
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2d",
+   "action": "T4.designateSuccessor",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    31211
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2d",
+   "action": "T5.confirmSuccessor",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    30660
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2d",
+   "action": "T6.certificate",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "AccountAlreadyRetired"
+   ],
+   "gas_used": [
+    31886,
+    31898
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2d",
+   "action": "T7.invalidateSignaturesBefore",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    50280
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2d",
+   "action": "T8.retireAccount",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "AccountAlreadyRetired"
+   ],
+   "gas_used": [
+    28477
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2c",
+   "action": "T1.allow",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    34204
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2c",
+   "action": "T2.allowForDecryption",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    34691
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2c",
+   "action": "T3.delegate-to-kda",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    31900
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2c",
+   "action": "T4.designateSuccessor",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    31211
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2c",
+   "action": "T5.confirmSuccessor",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SenderRetired"
+   ],
+   "gas_used": [
+    30660
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2c",
+   "action": "T6.certificate",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "AccountAlreadyRetired"
+   ],
+   "gas_used": [
+    31874,
+    31886,
+    31898
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2c",
+   "action": "T7.invalidateSignaturesBefore",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    50280
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B2c",
+   "action": "T8.retireAccount",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "AccountAlreadyRetired"
+   ],
+   "gas_used": [
+    28477
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3a",
+   "action": "T1.allow",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    60686
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3a",
+   "action": "T2.allowForDecryption",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    61455,
+    61467
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3a",
+   "action": "T3.delegate-to-kda",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    58061
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3a",
+   "action": "T4.designateSuccessor",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    62128
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3a",
+   "action": "T5.confirmSuccessor",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SuccessionNotAccepted"
+   ],
+   "gas_used": [
+    33033
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3a",
+   "action": "T6.certificate",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "CertificateSuccessorMismatch"
+   ],
+   "gas_used": [
+    34373
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3a",
+   "action": "T7.invalidateSignaturesBefore",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    50280
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3b",
+   "action": "T1.allow",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    60686
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3b",
+   "action": "T2.allowForDecryption",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    61467
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3b",
+   "action": "T3.delegate-to-kda",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    58061
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3b",
+   "action": "T4.designateSuccessor",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    62128
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3b",
+   "action": "T5.confirmSuccessor",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "SuccessionNotAccepted"
+   ],
+   "gas_used": [
+    33033
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3b",
+   "action": "T6.certificate",
+   "runs": 3,
+   "expected": "reverted",
+   "observed": [
+    "reverted"
+   ],
+   "errors": [
+    "CertificateSuccessorMismatch"
+   ],
+   "gas_used": [
+    34361,
+    34373
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3b",
+   "action": "T7.invalidateSignaturesBefore",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    50280
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3a",
+   "action": "T8.retireAccount",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    54516
+   ],
+   "conforms": true
+  },
+  {
+   "path": "B3b",
+   "action": "T8.retireAccount",
+   "runs": 3,
+   "expected": "mined",
+   "observed": [
+    "mined"
+   ],
+   "errors": [
+    "-"
+   ],
+   "gas_used": [
+    54516
+   ],
+   "conforms": true
+  }
+ ],
+ "adoption": [
+  {
+   "k": 8,
+   "request": "B1.P1",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 8,
+   "request": "B2c.P1",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 8,
+   "request": "B2d.P1",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 8,
+   "request": "B3a.P1",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 8,
+   "request": "B3b.P1",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 8,
+   "request": "ecdsa-eoa",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 5,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 5,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 5,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 9,
+   "request": "B1.P1",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 9,
+   "request": "B2c.P1",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 9,
+   "request": "B2d.P1",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 9,
+   "request": "B3a.P1",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 9,
+   "request": "B3b.P1",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 13,
+     "released": true
+    }
+   },
+   "released": [
+    true
+   ]
+  },
+  {
+   "k": 9,
+   "request": "ecdsa-eoa",
+   "per_run": {
+    "pq-drill-r1-20261022T193733Z": {
+     "workers": 13,
+     "forwarded": 4,
+     "released": false
+    },
+    "pq-drill-r2-20261022T195036Z": {
+     "workers": 13,
+     "forwarded": 4,
+     "released": false
+    },
+    "pq-drill-r3-20261022T200344Z": {
+     "workers": 13,
+     "forwarded": 4,
+     "released": false
+    }
+   },
+   "released": [
+    false
+   ]
+  }
+ ],
+ "setup": {
+  "pq-drill-r1-20261022T193733Z": [
+   "path=B1 step=carry-and-retire handles=3 gas_used=156484",
+   "path=B2d step=designate gas_used=62128",
+   "path=B2c step=designate gas_used=62128",
+   "step=delay-passed seconds=604800",
+   "path=B2d step=confirm gas_used=57256",
+   "path=B2c step=confirm gas_used=57256",
+   "path=B2d step=retire gas_used=54516",
+   "path=B2c step=certificate-relayed digest=0xb959cb855cdb67bb1a70981e0a3deacbf9d45c4013e4583689296b088d7e4ab1 relayer=0x05fdd8D9C1C12c3da0EF3DF05bd6b883f3ad7aE6 gas_used=65622",
+   "path=B3a step=7702-delegate-and-initialize blob=0xc68cb86AcC1E6A2C4eDd196233306677A2D16413 gas_used=70571",
+   "path=B3b step=7702-delegate-and-initialize blob=0x8A95e625385d39E24915B12496bB1E390FE8c8eC gas_used=70571",
+   "path=B3b step=adopt-code code_len=2580 code_hash=0x92113ea20a120f27e5213d5aea6fbedc64b8187dc466c378641f2b969a5744db key_slot=0x8A95e625385d39E24915B12496bB1E390FE8c8eC",
+   "execute \"B2d W accepts\" status=true gas_used=1339930",
+   "execute \"B2c W accepts\" status=true gas_used=1337387",
+   "execute \"B1 holder declares its KDA\" status=true gas_used=1356427",
+   "execute \"B2d holder declares its KDA\" status=true gas_used=1339519",
+   "execute \"B2c holder declares its KDA\" status=true gas_used=1337666",
+   "execute \"B3a holder declares its KDA\" status=true gas_used=1356509",
+   "execute \"B3b holder declares its KDA\" status=true gas_used=1356095",
+   "execute \"B3a holder revokes the delegation to D\" status=true gas_used=1318239",
+   "execute \"B3a holder revokes the attacker's KDA\" status=true gas_used=1316982",
+   "execute \"B3a holder cancels the attacker's designation\" status=true gas_used=1312180",
+   "execute \"B3b holder revokes the delegation to D\" status=true gas_used=1315107",
+   "execute \"B3b holder revokes the attacker's KDA\" status=true gas_used=1316200",
+   "execute \"B3b holder cancels the attacker's designation\" status=true gas_used=1310503",
+   "execute \"A6 wallet declares a KDA after the adoption\" status=true gas_used=1353918",
+   "execute \"X7 accepts\" status=true gas_used=1338543"
+  ],
+  "pq-drill-r2-20261022T195036Z": [
+   "path=B1 step=carry-and-retire handles=3 gas_used=156484",
+   "path=B2d step=designate gas_used=62128",
+   "path=B2c step=designate gas_used=62116",
+   "step=delay-passed seconds=604800",
+   "path=B2d step=confirm gas_used=57256",
+   "path=B2c step=confirm gas_used=57256",
+   "path=B2d step=retire gas_used=54516",
+   "path=B2c step=certificate-relayed digest=0xb4c11cf8f36d11f9ca7d7419f506272a10fb6fa261034f4ecb30960b48f79fa9 relayer=0xc175A908021e906faB0057cC199Cf75998809905 gas_used=65610",
+   "path=B3a step=7702-delegate-and-initialize blob=0x2B36073Bbe4480900eA90987050C769dbefC8A9F gas_used=70571",
+   "path=B3b step=7702-delegate-and-initialize blob=0xea9311CEc7d037099E9b2F99752c39A8BF66F36d gas_used=70571",
+   "path=B3b step=adopt-code code_len=2580 code_hash=0x88eebee7475ef22065b5280e6009e205d932ba8f28365bf2e37bad68762ca555 key_slot=0xea9311CEc7d037099E9b2F99752c39A8BF66F36d",
+   "execute \"B2d W accepts\" status=true gas_used=1339796",
+   "execute \"B2c W accepts\" status=true gas_used=1338510",
+   "execute \"B1 holder declares its KDA\" status=true gas_used=1356936",
+   "execute \"B2d holder declares its KDA\" status=true gas_used=1338926",
+   "execute \"B2c holder declares its KDA\" status=true gas_used=1337121",
+   "execute \"B3a holder declares its KDA\" status=true gas_used=1357431",
+   "execute \"B3b holder declares its KDA\" status=true gas_used=1356960",
+   "execute \"B3a holder revokes the delegation to D\" status=true gas_used=1315569",
+   "execute \"B3a holder revokes the attacker's KDA\" status=true gas_used=1316158",
+   "execute \"B3a holder cancels the attacker's designation\" status=true gas_used=1312074",
+   "execute \"B3b holder revokes the delegation to D\" status=true gas_used=1316888",
+   "execute \"B3b holder revokes the attacker's KDA\" status=true gas_used=1316307",
+   "execute \"B3b holder cancels the attacker's designation\" status=true gas_used=1309180",
+   "execute \"A6 wallet declares a KDA after the adoption\" status=true gas_used=1355695",
+   "execute \"X7 accepts\" status=true gas_used=1336769"
+  ],
+  "pq-drill-r3-20261022T200344Z": [
+   "path=B1 step=carry-and-retire handles=3 gas_used=156448",
+   "path=B2d step=designate gas_used=62128",
+   "path=B2c step=designate gas_used=62128",
+   "step=delay-passed seconds=604800",
+   "path=B2d step=confirm gas_used=57256",
+   "path=B2c step=confirm gas_used=57256",
+   "path=B2d step=retire gas_used=54516",
+   "path=B2c step=certificate-relayed digest=0x77b3c52e4bd42035c8c3470ad4999d5040fc8dc4417722e377be654d8d7e524f relayer=0xB6670542de263677E0C5f7233a0819dA688473B8 gas_used=65610",
+   "path=B3a step=7702-delegate-and-initialize blob=0xD9856a868604d97b32CF0747F2d718954c31b10c gas_used=70571",
+   "path=B3b step=7702-delegate-and-initialize blob=0xf812239F9C058b1d6c98a8f8043afFd166E3Bc8A gas_used=70571",
+   "path=B3b step=adopt-code code_len=2580 code_hash=0xc7cf5fa7bcf08e68a81db2d9559bbfdbb46da6cb06a5ff1cfe3c1e9568c3fe51 key_slot=0xf812239F9C058b1d6c98a8f8043afFd166E3Bc8A",
+   "execute \"B2d W accepts\" status=true gas_used=1340016",
+   "execute \"B2c W accepts\" status=true gas_used=1338036",
+   "execute \"B1 holder declares its KDA\" status=true gas_used=1357660",
+   "execute \"B2d holder declares its KDA\" status=true gas_used=1339860",
+   "execute \"B2c holder declares its KDA\" status=true gas_used=1338235",
+   "execute \"B3a holder declares its KDA\" status=true gas_used=1355298",
+   "execute \"B3b holder declares its KDA\" status=true gas_used=1356521",
+   "execute \"B3a holder revokes the delegation to D\" status=true gas_used=1318263",
+   "execute \"B3a holder revokes the attacker's KDA\" status=true gas_used=1316667",
+   "execute \"B3a holder cancels the attacker's designation\" status=true gas_used=1311583",
+   "execute \"B3b holder revokes the delegation to D\" status=true gas_used=1317780",
+   "execute \"B3b holder revokes the attacker's KDA\" status=true gas_used=1314861",
+   "execute \"B3b holder cancels the attacker's designation\" status=true gas_used=1311514",
+   "execute \"A6 wallet declares a KDA after the adoption\" status=true gas_used=1356264",
+   "execute \"X7 accepts\" status=true gas_used=1339130"
+  ]
+ },
+ "summary": {
+  "request_rows": 258,
+  "request_rows_conforming": 258,
+  "request_rows_three_runs": 258,
+  "tx_rows": 40,
+  "tx_rows_conforming": 40,
+  "tx_rows_three_runs": 40
+ }
+}

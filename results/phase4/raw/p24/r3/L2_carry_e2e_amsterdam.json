@@ -1,0 +1,353 @@
+{
+  "hardfork": "amsterdam",
+  "anvil": "anvil/v1.8.6",
+  "scenario": {
+    "addresses": {
+      "acl": "0x22D691b66B0081f865f568bC2c1405BC97963044",
+      "appA": "0x4aFB38143cB2D5B1902e26619A91cCBE88dAf72b",
+      "token": "0x494e72654b49a7d22fE238cA42b7B5bbA46100c6",
+      "spammer": "0xa254ffDc39eBb7840A36C9c440d253834Dd272a8",
+      "OLD": "0x77968eeA8ec3378DB55c59Ef9123a3B14B0e2D5E",
+      "NEW": "0x1d01A897634b2faEF2655C8bA63737a79678ecA2",
+      "RETIRED": "0xd80aB6Ab24fd9cdFF9509beb68A2b8bacE9E878c"
+    },
+    "cliDryRun": {
+      "exit": 0,
+      "summaryLine": "427 grants to OLD, 426 distinct handles, 121 to carry in 3 transaction(s), the last one retiring OLD",
+      "listedHandles": 121,
+      "stderr": ""
+    },
+    "cliRefusal": {
+      "exit": 2,
+      "refused": [
+        "REFUSED: NEW is retired: grants to it would be inert"
+      ]
+    },
+    "dryRun": {
+      "grants": 427,
+      "handles": 426,
+      "kept": 121,
+      "chunks": [
+        50,
+        50,
+        21
+      ],
+      "refuse": [],
+      "breakdown": [
+        {
+          "caller": "0x4aFB38143cB2D5B1902e26619A91cCBE88dAf72b",
+          "allowlisted": true,
+          "balanceToken": false,
+          "grants": 121,
+          "handles": 121,
+          "kept": 120,
+          "skipped": {
+            "NEW already holds it": 1
+          }
+        },
+        {
+          "caller": "0xa254ffDc39eBb7840A36C9c440d253834Dd272a8",
+          "allowlisted": false,
+          "balanceToken": false,
+          "grants": 301,
+          "handles": 301,
+          "kept": 1,
+          "skipped": {
+            "caller not allowlisted": 300
+          }
+        },
+        {
+          "caller": "0x494e72654b49a7d22fE238cA42b7B5bbA46100c6",
+          "allowlisted": true,
+          "balanceToken": true,
+          "grants": 5,
+          "handles": 5,
+          "kept": 1,
+          "skipped": {
+            "stale balance handle": 4
+          }
+        }
+      ],
+      "keptMatchesExpectation": true,
+      "sentNothing": true
+    },
+    "dryRunNoAllowlist": {
+      "grants": 427,
+      "handles": 426,
+      "kept": 425,
+      "chunks": [
+        400,
+        25
+      ],
+      "refuse": [],
+      "breakdown": [
+        {
+          "caller": "0x4aFB38143cB2D5B1902e26619A91cCBE88dAf72b",
+          "allowlisted": null,
+          "balanceToken": false,
+          "grants": 121,
+          "handles": 121,
+          "kept": 120,
+          "skipped": {
+            "NEW already holds it": 1
+          }
+        },
+        {
+          "caller": "0xa254ffDc39eBb7840A36C9c440d253834Dd272a8",
+          "allowlisted": null,
+          "balanceToken": false,
+          "grants": 301,
+          "handles": 301,
+          "kept": 301,
+          "skipped": {}
+        },
+        {
+          "caller": "0x494e72654b49a7d22fE238cA42b7B5bbA46100c6",
+          "allowlisted": null,
+          "balanceToken": false,
+          "grants": 5,
+          "handles": 5,
+          "kept": 5,
+          "skipped": {}
+        }
+      ]
+    },
+    "refuseRetiredNew": [
+      "NEW is retired: grants to it would be inert"
+    ],
+    "refuseSameAccount": [
+      "NEW equals OLD"
+    ],
+    "injectedFailure": {
+      "sent": [
+        {
+          "chunk": 0,
+          "handles": 50,
+          "retires": false,
+          "status": 1,
+          "gasUsed": 5999856
+        }
+      ],
+      "stopped": "chunk 1 failed (SenderDenied(0x77968eeA8ec3378DB55c59Ef9123a3B14B0e2D5E)); OLD is not retired by this run",
+      "oldRetired": false,
+      "newHoldsChunk0": true
+    },
+    "resume": {
+      "plan": {
+        "grants": 427,
+        "handles": 426,
+        "kept": 71,
+        "chunks": [
+          50,
+          21
+        ],
+        "refuse": [],
+        "breakdown": [
+          {
+            "caller": "0x4aFB38143cB2D5B1902e26619A91cCBE88dAf72b",
+            "allowlisted": true,
+            "balanceToken": false,
+            "grants": 121,
+            "handles": 121,
+            "kept": 70,
+            "skipped": {
+              "NEW already holds it": 51
+            }
+          },
+          {
+            "caller": "0xa254ffDc39eBb7840A36C9c440d253834Dd272a8",
+            "allowlisted": false,
+            "balanceToken": false,
+            "grants": 301,
+            "handles": 301,
+            "kept": 1,
+            "skipped": {
+              "caller not allowlisted": 300
+            }
+          },
+          {
+            "caller": "0x494e72654b49a7d22fE238cA42b7B5bbA46100c6",
+            "allowlisted": true,
+            "balanceToken": true,
+            "grants": 5,
+            "handles": 5,
+            "kept": 1,
+            "skipped": {
+              "stale balance handle": 4
+            }
+          }
+        ]
+      },
+      "sent": [
+        {
+          "chunk": 0,
+          "handles": 50,
+          "retires": false,
+          "status": 1,
+          "gasUsed": 5999856,
+          "calldataBytes": 8068
+        },
+        {
+          "chunk": 1,
+          "handles": 21,
+          "retires": true,
+          "status": 1,
+          "gasUsed": 2652952,
+          "calldataBytes": 3524
+        }
+      ],
+      "stopped": null,
+      "verified": {
+        "oldRetired": true,
+        "carried": 71,
+        "newHoldsAll": true,
+        "newMissing": [],
+        "oldStillUsable": 0,
+        "ok": true
+      }
+    },
+    "afterRetirement": {
+      "allExpectedAtNew": true,
+      "spamAtNew": false,
+      "staleBalanceAtNew": false,
+      "oldUsableOnAny": false,
+      "secondRunRefused": [
+        "OLD is already retired: it can no longer grant anything"
+      ]
+    }
+  },
+  "gas": [
+    {
+      "handles": 0,
+      "transactions": 1,
+      "gasUsed": [
+        140646
+      ],
+      "calldataBytes": [
+        164
+      ],
+      "planMs": 94,
+      "executeMs": 63
+    },
+    {
+      "handles": 1,
+      "transactions": 1,
+      "gasUsed": [
+        264063
+      ],
+      "calldataBytes": [
+        324
+      ],
+      "planMs": 125,
+      "executeMs": 94
+    },
+    {
+      "handles": 10,
+      "transactions": 1,
+      "gasUsed": [
+        1339087
+      ],
+      "calldataBytes": [
+        1764
+      ],
+      "planMs": 122,
+      "executeMs": 77
+    },
+    {
+      "handles": 50,
+      "transactions": 1,
+      "gasUsed": [
+        6117018
+      ],
+      "calldataBytes": [
+        8164
+      ],
+      "planMs": 138,
+      "executeMs": 96
+    },
+    {
+      "handles": 100,
+      "transactions": 1,
+      "gasUsed": [
+        12088763
+      ],
+      "calldataBytes": [
+        16164
+      ],
+      "planMs": 184,
+      "executeMs": 160
+    },
+    {
+      "handles": 200,
+      "transactions": 2,
+      "gasUsed": [
+        15556874,
+        8506120
+      ],
+      "calldataBytes": [
+        20868,
+        11364
+      ],
+      "planMs": 252,
+      "executeMs": 287
+    },
+    {
+      "handles": 400,
+      "transactions": 4,
+      "gasUsed": [
+        15556982,
+        15556874,
+        15556826,
+        1339063
+      ],
+      "calldataBytes": [
+        20868,
+        20868,
+        20868,
+        1764
+      ],
+      "planMs": 428,
+      "executeMs": 594
+    },
+    {
+      "handles": 500,
+      "transactions": 4,
+      "gasUsed": [
+        15555314,
+        15555206,
+        15555314,
+        13283339
+      ],
+      "calldataBytes": [
+        20868,
+        20868,
+        20868,
+        17764
+      ],
+      "planMs": 491,
+      "executeMs": 690
+    }
+  ],
+  "fit": {
+    "perHandle": 119440.84444444445,
+    "base": 140646,
+    "points": [
+      10,
+      100
+    ],
+    "note": "gasUsed of one multicall transaction: allow(h, NEW) for k handles, then retireAccount()",
+    "maxHandlesUnderTxCap": 139
+  },
+  "capCheck": {
+    "estimatedMax": 137,
+    "sentAtMax": {
+      "status": 1,
+      "gasUsed": 16510359
+    },
+    "sentAtMaxPlusOne": {
+      "status": 0,
+      "gasUsed": 3004109
+    },
+    "gasLimit": 16777216
+  }
+}

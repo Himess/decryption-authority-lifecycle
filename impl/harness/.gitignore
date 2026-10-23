@@ -1,0 +1,6 @@
+# Local harness artifacts (not source)
+.vite-cache/
+cleartext-roundtrip/.vite-cache/
+cleartext-roundtrip/last-result.json
+cleartext-roundtrip/node_modules
+.env

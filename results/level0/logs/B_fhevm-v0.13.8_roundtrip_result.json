@@ -1,0 +1,229 @@
+{
+  "startedAt": "2026-10-21T05:41:52.337Z",
+  "rpcUrl": "http://127.0.0.1:18559",
+  "chainId": 31337,
+  "clientVersion": "anvil/v1.8.5",
+  "clone": "<repo>\\impl\\fhevm-v0.13.8",
+  "profileDir": "v0.13.0",
+  "addresses": {
+    "aclAdd": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+    "fhevmExecutorAdd": "0xe3a9105a3a932253A70F126eb1E3b589C643dD24",
+    "kmsVerifierAdd": "0x901F8942346f7AB3a01F6D7613119Bca447Bb030",
+    "inputVerifierAdd": "0x36772142b74871f255CbD7A3e89B401d3e45825f",
+    "hcuLimitAdd": "0x233ff88A48c172d29F675403e6A8e302b0F032D9",
+    "protocolConfigAdd": "0x44aA028fd264C76BF4A8f8B4d8A5272f6AE25CAc",
+    "kmsGenerationAdd": "0x216be43148dB537BeddBC268163deb1a802b5553",
+    "pauserSetAdd": "0xded0D2a71268DC12622BdD1b55d68a1CB5662327",
+    "fheTest": "0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0",
+    "gatewayChainId": 654321,
+    "decryption": "0xEaaA2FC6BC259dF015Aa7Dc8e59e0B67df622721",
+    "inputVerification": "0x6189F6c0c3E40B4a3c72ec86262295D78d845297"
+  },
+  "aclVersion": "ACL v0.4.0",
+  "kmsSignerCount": 4,
+  "relayerPathExpected": "on-chain (CleartextKMSVerifier view)",
+  "accounts": {
+    "alice": "0x0BaEB76c9142c345e313fB930dc44c0C235113F8",
+    "bob": "0x87c465Ef92E854d22A09871dDd43C03cCB6C6A62",
+    "carol": "0xBa6a05Ed7c1b85c29b163e9454E3955FDECea12A"
+  },
+  "fheTestCoprocessorConfig": [
+    "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+    "0xe3a9105a3a932253A70F126eb1E3b589C643dD24",
+    "0x901F8942346f7AB3a01F6D7613119Bca447Bb030"
+  ],
+  "encrypt": {
+    "inputHandle": "0xa06bf3a5f0465e14dd6765a77bcfe9d6f4375cc89d000000000000007a690500",
+    "storedHandle": "0xa06bf3a5f0465e14dd6765a77bcfe9d6f4375cc89d000000000000007a690500",
+    "setEuint64Tx": "0x0b9fb5afa6a7eb4c0aabc14710e98b0d89ac0eb20e84e4bb6443c48c10e07b1b",
+    "gasUsed": "284520",
+    "views": {
+      "persistAllowed_alice": true,
+      "persistAllowed_fheTest": true,
+      "persistAllowed_bob": false,
+      "persistAllowed_carol": false
+    }
+  },
+  "userDecrypt": {
+    "value": "424242",
+    "type": "uint64",
+    "ethCalls": [
+      {
+        "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "fn": "persistAllowed"
+      },
+      {
+        "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "fn": "persistAllowed"
+      },
+      {
+        "to": "0x901f8942346f7ab3a01f6d7613119bca447bb030",
+        "fn": "userDecrypt"
+      }
+    ],
+    "relayerCallTrace": [
+      {
+        "depth": 0,
+        "type": "CALL",
+        "to": "0x901f8942346f7ab3a01f6d7613119bca447bb030",
+        "fn": "userDecrypt"
+      },
+      {
+        "depth": 1,
+        "type": "DELEGATECALL",
+        "to": "0xc8d844bcf85739dccc1ddb972ba35a3e39402f3f",
+        "fn": "userDecrypt"
+      },
+      {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+        "fn": "0x976f3eb9"
+      },
+      {
+        "depth": 3,
+        "type": "DELEGATECALL",
+        "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+        "fn": "0x976f3eb9"
+      },
+      {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "fn": "plaintextForUserDecryption"
+      },
+      {
+        "depth": 3,
+        "type": "DELEGATECALL",
+        "to": "0x6933afcf0f4bce1a611bad0a6faaff0337a7ba1e",
+        "fn": "plaintextForUserDecryption"
+      },
+      {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x0000000000000000000000000000000000000001",
+        "fn": "0x85d4bc74"
+      },
+      {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+        "fn": "0x7eaac8f2"
+      },
+      {
+        "depth": 3,
+        "type": "DELEGATECALL",
+        "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+        "fn": "0x7eaac8f2"
+      },
+      {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+        "fn": "0x2a388998"
+      },
+      {
+        "depth": 3,
+        "type": "DELEGATECALL",
+        "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+        "fn": "0x2a388998"
+      }
+    ],
+    "permitPrimaryType": "UserDecryptRequestVerification"
+  },
+  "delegatedDecrypt": {
+    "delegateTx": "0xc5b328cb6f3b00846154155e56c6f34dbce681907fff7c2dc7d7369bc9677f3a",
+    "delegateGasUsed": "55660",
+    "expiration": "1792647713",
+    "value": "424242",
+    "type": "uint64",
+    "ethCalls": [
+      {
+        "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "fn": "isHandleDelegatedForUserDecryption"
+      },
+      {
+        "to": "0x901f8942346f7ab3a01f6d7613119bca447bb030",
+        "fn": "delegatedUserDecrypt"
+      }
+    ],
+    "relayerCallTrace": [
+      {
+        "depth": 0,
+        "type": "CALL",
+        "to": "0x901f8942346f7ab3a01f6d7613119bca447bb030",
+        "fn": "delegatedUserDecrypt"
+      },
+      {
+        "depth": 1,
+        "type": "DELEGATECALL",
+        "to": "0xc8d844bcf85739dccc1ddb972ba35a3e39402f3f",
+        "fn": "delegatedUserDecrypt"
+      },
+      {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+        "fn": "0x976f3eb9"
+      },
+      {
+        "depth": 3,
+        "type": "DELEGATECALL",
+        "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+        "fn": "0x976f3eb9"
+      },
+      {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "fn": "plaintextForDelegatedUserDecryption"
+      },
+      {
+        "depth": 3,
+        "type": "DELEGATECALL",
+        "to": "0x6933afcf0f4bce1a611bad0a6faaff0337a7ba1e",
+        "fn": "plaintextForDelegatedUserDecryption"
+      },
+      {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x0000000000000000000000000000000000000001",
+        "fn": "0x8d24fed6"
+      },
+      {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+        "fn": "0x7eaac8f2"
+      },
+      {
+        "depth": 3,
+        "type": "DELEGATECALL",
+        "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+        "fn": "0x7eaac8f2"
+      },
+      {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+        "fn": "0x2a388998"
+      },
+      {
+        "depth": 3,
+        "type": "DELEGATECALL",
+        "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+        "fn": "0x2a388998"
+      }
+    ],
+    "permitPrimaryType": "DelegatedUserDecryptRequestVerification"
+  },
+  "controlUnauthorizedUser": {
+    "sdkError": "FhevmErrorBase: User 0xBa6a05Ed7c1b85c29b163e9454E3955FDECea12A is not authorized to decrypt handle 0xa06bf3a5f0465e14dd6765a77bcfe9d6f4375cc89d000000000000007a690500!\nVersion: @fhevm/sdk@0.13.2-0",
+    "onchainRevert": "UserNotAuthorizedForDecrypt(0xa06bf3a5f0465e14dd6765a77bcfe9d6f4375cc89d000000000000007a690500, 0xBa6a05Ed7c1b85c29b163e9454E3955FDECea12A)"
+  },
+  "controlUndelegatedDelegate": {
+    "sdkError": "FhevmErrorBase: Delegate 0xBa6a05Ed7c1b85c29b163e9454E3955FDECea12A is not delegated by 0x0BaEB76c9142c345e313fB930dc44c0C235113F8 to user decrypt handle 0xa06bf3a5f0465e14dd6765a77bcfe9d6f4375cc89d000000000000007a690500 on contract 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0!\nVersion: @fhevm/sdk@0.13.2-0",
+    "onchainRevert": "HandleNotDelegatedForUserDecryption(0xa06bf3a5f0465e14dd6765a77bcfe9d6f4375cc89d000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x0BaEB76c9142c345e313fB930dc44c0C235113F8, 0xBa6a05Ed7c1b85c29b163e9454E3955FDECea12A)"
+  },
+  "finishedAt": "2026-10-21T05:41:53.802Z"
+}

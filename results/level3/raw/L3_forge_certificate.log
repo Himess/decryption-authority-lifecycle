@@ -1,0 +1,19 @@
+No files changed, compilation skipped
+
+Ran 13 tests for test/acl/ACLRetirementCertificate.t.sol:ACLRetirementCertificateTest
+[PASS] test_TC19_DelegationIndicatorAccount_NoEcdsaFallback() (gas: 346919)
+[PASS] test_TC19_Erc1271Account() (gas: 389892)
+[PASS] test_TC19_ErcVector() (gas: 105222)
+[PASS] test_TC19_InvalidSignatures() (gas: 134874)
+[PASS] test_TC19_LeakedCertificate_OnlyPlannedHandover() (gas: 125862)
+[PASS] test_TC19_NoSuccessor() (gas: 82822)
+[PASS] test_TC19_SecondSubmissionReverts_SubmitterIrrelevant() (gas: 138437)
+[PASS] test_TC19_SuccessorMismatch() (gas: 77130)
+[PASS] test_TC19_SupportsInterface() (gas: 11150)
+[PASS] test_TC19_WorksWhilePaused() (gas: 130178)
+[PASS] test_TC19_WrongChain() (gas: 78846)
+[PASS] test_TC24_OneCertificateRetiresOnEveryListedChain() (gas: 140135)
+[PASS] test_TC24_RetireOnOneChainOnly_OtherChainUnaffected() (gas: 93380)
+Suite result: ok. 13 passed; 0 failed; 0 skipped; finished in 3.64ms (17.62ms CPU time)
+
+Ran 1 test suite in 17.05ms (3.64ms CPU time): 13 tests passed, 0 failed, 0 skipped (13 total tests)

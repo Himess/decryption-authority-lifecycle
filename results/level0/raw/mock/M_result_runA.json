@@ -1,0 +1,2230 @@
+{
+  "label": "proven in mock: persistAllowed + delegated view + flow; plaintext is public in the mock",
+  "startedAt": "2026-10-21T08:45:54.676Z",
+  "refusals": [
+    {
+      "id": "R1.OLD.user",
+      "scenario": "S2",
+      "role": "user (direct path)",
+      "subject": "0x875A391c55C85e035EE088681413542DfdcC0026",
+      "handles": [
+        "0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500",
+        "0xc8952c0e6dfc182dac09fc4aae77062874c49307a5000000000000007a690500",
+        "0x0c2871dac80caf6793bd59119ed896f8f30e968f3c000000000000007a690400",
+        "0xeca130816426fb2537a29a21a938eb6377859c4911000000000000007a690200",
+        "0x87470a76d139836ac4426d3450e175b3ceef2e5f1f000000000000007a690000"
+      ],
+      "contract": "0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0",
+      "layers": {
+        "L1_sdk_precheck": {
+          "ok": false,
+          "errorClass": "AclUserDecryptionError",
+          "isAclUserDecryptionError": true,
+          "errorName": "FhevmErrorBase",
+          "error": "FhevmErrorBase: User 0x875A391c55C85e035EE088681413542DfdcC0026 is not authorized to decrypt handle 0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500!",
+          "ethCalls": [
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d"
+          ],
+          "relayerCalled": false
+        },
+        "L2_sdk_relayer_precheck_skipped": {
+          "ok": false,
+          "revert": "UserNotAuthorizedForDecrypt(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+          "revertName": "UserNotAuthorizedForDecrypt",
+          "error": "Error: execution reverted (unknown custom error)",
+          "ethCalls": [
+            "userDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+          ]
+        },
+        "L3a_kmsVerifier_direct": {
+          "ok": false,
+          "revert": "UserNotAuthorizedForDecrypt(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+          "error": "Error: execution reverted (unknown custom error)"
+        },
+        "L3b_cleartextAcl_direct": {
+          "ok": false,
+          "revert": "UserNotAuthorizedForDecrypt(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+          "error": "Error: execution reverted (unknown custom error)"
+        }
+      },
+      "refusedBy": [
+        "L1 SDK precheck (AclUserDecryptionError; relayer never called)",
+        "L2 on-chain mock via SDK relayer: UserNotAuthorizedForDecrypt(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+        "L3a CleartextKMSVerifier: UserNotAuthorizedForDecrypt(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+        "L3b CleartextACL: UserNotAuthorizedForDecrypt(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+      ],
+      "onchainRevertStatement": {
+        "at": "src/v0.13.0/cleartext/CleartextACL.sol:237",
+        "text": "revert UserNotAuthorizedForDecrypt(h, userAddress);"
+      },
+      "onchainRevertStatementIsUniqueAstRaiseSite": [
+        "src/v0.13.0/cleartext/CleartextACL.sol:237"
+      ],
+      "onchainSelectorPushesSeen_informational": [],
+      "onchainRevertOpcodeMappedTo": "src/v0.13.0/host-contracts/contracts/ACL.sol:346 (optimizer-shared revert tail)",
+      "aclSolLinesVisited": [
+        481,
+        597,
+        599,
+        346
+      ],
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:244",
+        "CleartextKMSVerifier.sol:246",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:222",
+        "CleartextACL.sol:225",
+        "CleartextACL.sol:227",
+        "CleartextACL.sol:228",
+        "CleartextACL.sol:229",
+        "CleartextACL.sol:230",
+        "CleartextACL.sol:231",
+        "ACL.sol:481",
+        "CleartextACL.sol:231",
+        "CleartextACL.sol:233",
+        "CleartextACL.sol:236",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:236",
+        "CleartextACL.sol:237",
+        "ACL.sol:346",
+        "CleartextKMSVerifier.sol:246"
+      ],
+      "callFrames": [
+        {
+          "depth": 0,
+          "type": "CALL",
+          "to": "0x901f8942346f7ab3a01f6d7613119bca447bb030",
+          "fn": "userDecrypt",
+          "error": "execution reverted",
+          "revert": "UserNotAuthorizedForDecrypt(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        },
+        {
+          "depth": 1,
+          "type": "DELEGATECALL",
+          "to": "0xc8d844bcf85739dccc1ddb972ba35a3e39402f3f",
+          "fn": "userDecrypt",
+          "error": "execution reverted",
+          "revert": "UserNotAuthorizedForDecrypt(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForUserDecryption",
+          "error": "execution reverted",
+          "revert": "UserNotAuthorizedForDecrypt(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x6933afcf0f4bce1a611bad0a6faaff0337a7ba1e",
+          "fn": "plaintextForUserDecryption",
+          "error": "execution reverted",
+          "revert": "UserNotAuthorizedForDecrypt(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        }
+      ],
+      "views": {
+        "isAccountRetired_subject": true,
+        "rawRetiredBit_subject": "1",
+        "persistAllowed(h,0x875A39)": false,
+        "rawPersistedPair(h,0x875A39)": "1",
+        "persistAllowed(h,0xe1bfFD)": true,
+        "rawPersistedPair(h,0xe1bfFD)": "1"
+      }
+    },
+    {
+      "id": "R2.fromOLD.delegator",
+      "scenario": "S3",
+      "role": "delegator (delegated path)",
+      "subject": "0x875A391c55C85e035EE088681413542DfdcC0026",
+      "handles": [
+        "0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500"
+      ],
+      "contract": "0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0",
+      "layers": {
+        "L1_sdk_precheck": {
+          "ok": false,
+          "errorClass": "AclUserDecryptionError",
+          "isAclUserDecryptionError": true,
+          "errorName": "FhevmErrorBase",
+          "error": "FhevmErrorBase: Delegate 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B is not delegated by 0x875A391c55C85e035EE088681413542DfdcC0026 to user decrypt handle 0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500 on contract 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0!",
+          "ethCalls": [
+            "isHandleDelegatedForUserDecryption@0x50157cffd6bbfa2dece204a89ec419c23ef5755d"
+          ],
+          "relayerCalled": false
+        },
+        "L2_sdk_relayer_precheck_skipped": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x875A391c55C85e035EE088681413542DfdcC0026, 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B)",
+          "revertName": "HandleNotDelegatedForUserDecryption",
+          "error": "Error: execution reverted (unknown custom error)",
+          "ethCalls": [
+            "delegatedUserDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+          ]
+        },
+        "L3a_kmsVerifier_direct": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x875A391c55C85e035EE088681413542DfdcC0026, 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B)",
+          "error": "Error: execution reverted (unknown custom error)"
+        },
+        "L3b_cleartextAcl_direct": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x875A391c55C85e035EE088681413542DfdcC0026, 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B)",
+          "error": "Error: execution reverted (unknown custom error)"
+        }
+      },
+      "refusedBy": [
+        "L1 SDK precheck (AclUserDecryptionError; relayer never called)",
+        "L2 on-chain mock via SDK relayer: HandleNotDelegatedForUserDecryption(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x875A391c55C85e035EE088681413542DfdcC0026, 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B)",
+        "L3a CleartextKMSVerifier: HandleNotDelegatedForUserDecryption(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x875A391c55C85e035EE088681413542DfdcC0026, 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B)",
+        "L3b CleartextACL: HandleNotDelegatedForUserDecryption(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x875A391c55C85e035EE088681413542DfdcC0026, 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B)"
+      ],
+      "onchainRevertStatement": {
+        "at": "src/v0.13.0/cleartext/CleartextACL.sol:258",
+        "text": "revert HandleNotDelegatedForUserDecryption(h, c, delegator, delegate);"
+      },
+      "onchainRevertStatementIsUniqueAstRaiseSite": [
+        "src/v0.13.0/cleartext/CleartextACL.sol:258"
+      ],
+      "onchainSelectorPushesSeen_informational": [
+        {
+          "error": "HandleNotDelegatedForUserDecryption",
+          "at": "(compiler-generated)"
+        }
+      ],
+      "onchainRevertOpcodeMappedTo": "src/v0.13.0/host-contracts/contracts/ACL.sol:346 (optimizer-shared revert tail)",
+      "aclSolLinesVisited": [
+        481,
+        571,
+        578,
+        576,
+        579,
+        599,
+        597,
+        346
+      ],
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:285",
+        "CleartextKMSVerifier.sol:286",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:246",
+        "CleartextACL.sol:250",
+        "CleartextACL.sol:251",
+        "CleartextACL.sol:252",
+        "CleartextACL.sol:253",
+        "CleartextACL.sol:254",
+        "CleartextACL.sol:255",
+        "ACL.sol:481",
+        "CleartextACL.sol:255",
+        "CleartextACL.sol:257",
+        "ACL.sol:571",
+        "ACL.sol:578",
+        "ACL.sol:576",
+        "ACL.sol:578",
+        "ACL.sol:579",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:257",
+        "CleartextACL.sol:258",
+        "ACL.sol:346",
+        "CleartextKMSVerifier.sol:286"
+      ],
+      "callFrames": [
+        {
+          "depth": 0,
+          "type": "CALL",
+          "to": "0x901f8942346f7ab3a01f6d7613119bca447bb030",
+          "fn": "delegatedUserDecrypt",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x875A391c55C85e035EE088681413542DfdcC0026, 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B)"
+        },
+        {
+          "depth": 1,
+          "type": "DELEGATECALL",
+          "to": "0xc8d844bcf85739dccc1ddb972ba35a3e39402f3f",
+          "fn": "delegatedUserDecrypt",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x875A391c55C85e035EE088681413542DfdcC0026, 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B)"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForDelegatedUserDecryption",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x875A391c55C85e035EE088681413542DfdcC0026, 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B)"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x6933afcf0f4bce1a611bad0a6faaff0337a7ba1e",
+          "fn": "plaintextForDelegatedUserDecryption",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x875A391c55C85e035EE088681413542DfdcC0026, 0xafAf21218dC145634FA392A1CD11fe1495ab3B4B)"
+        }
+      ],
+      "views": {
+        "isAccountRetired_subject": true,
+        "rawRetiredBit_subject": "1",
+        "isHandleDelegatedForUserDecryption": false,
+        "getUserDecryptionDelegationExpirationDate": "0",
+        "rawDelegationExpiry_isInFuture": true,
+        "rawPersistedPair(h,0x875A39)": "1",
+        "rawPersistedPair(h,0x61a8e9)": "1"
+      }
+    },
+    {
+      "id": "R3.toOLD.delegate",
+      "scenario": "S3",
+      "role": "delegate (delegated path)",
+      "subject": "0x875A391c55C85e035EE088681413542DfdcC0026",
+      "handles": [
+        "0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500"
+      ],
+      "contract": "0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0",
+      "layers": {
+        "L1_sdk_precheck": {
+          "ok": false,
+          "errorClass": "AclUserDecryptionError",
+          "isAclUserDecryptionError": true,
+          "errorName": "FhevmErrorBase",
+          "error": "FhevmErrorBase: Delegate 0x875A391c55C85e035EE088681413542DfdcC0026 is not delegated by 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef to user decrypt handle 0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500 on contract 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0!",
+          "ethCalls": [
+            "isHandleDelegatedForUserDecryption@0x50157cffd6bbfa2dece204a89ec419c23ef5755d"
+          ],
+          "relayerCalled": false
+        },
+        "L2_sdk_relayer_precheck_skipped": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+          "revertName": "HandleNotDelegatedForUserDecryption",
+          "error": "Error: execution reverted (unknown custom error)",
+          "ethCalls": [
+            "delegatedUserDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+          ]
+        },
+        "L3a_kmsVerifier_direct": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+          "error": "Error: execution reverted (unknown custom error)"
+        },
+        "L3b_cleartextAcl_direct": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+          "error": "Error: execution reverted (unknown custom error)"
+        }
+      },
+      "refusedBy": [
+        "L1 SDK precheck (AclUserDecryptionError; relayer never called)",
+        "L2 on-chain mock via SDK relayer: HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+        "L3a CleartextKMSVerifier: HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+        "L3b CleartextACL: HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+      ],
+      "onchainRevertStatement": {
+        "at": "src/v0.13.0/cleartext/CleartextACL.sol:258",
+        "text": "revert HandleNotDelegatedForUserDecryption(h, c, delegator, delegate);"
+      },
+      "onchainRevertStatementIsUniqueAstRaiseSite": [
+        "src/v0.13.0/cleartext/CleartextACL.sol:258"
+      ],
+      "onchainSelectorPushesSeen_informational": [
+        {
+          "error": "HandleNotDelegatedForUserDecryption",
+          "at": "(compiler-generated)"
+        }
+      ],
+      "onchainRevertOpcodeMappedTo": "src/v0.13.0/host-contracts/contracts/ACL.sol:346 (optimizer-shared revert tail)",
+      "aclSolLinesVisited": [
+        481,
+        571,
+        578,
+        576,
+        579,
+        599,
+        597,
+        346
+      ],
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:285",
+        "CleartextKMSVerifier.sol:286",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:246",
+        "CleartextACL.sol:250",
+        "CleartextACL.sol:251",
+        "CleartextACL.sol:252",
+        "CleartextACL.sol:253",
+        "CleartextACL.sol:254",
+        "CleartextACL.sol:255",
+        "ACL.sol:481",
+        "CleartextACL.sol:255",
+        "CleartextACL.sol:257",
+        "ACL.sol:571",
+        "ACL.sol:578",
+        "ACL.sol:576",
+        "ACL.sol:578",
+        "ACL.sol:579",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:257",
+        "CleartextACL.sol:258",
+        "ACL.sol:346",
+        "CleartextKMSVerifier.sol:286"
+      ],
+      "callFrames": [
+        {
+          "depth": 0,
+          "type": "CALL",
+          "to": "0x901f8942346f7ab3a01f6d7613119bca447bb030",
+          "fn": "delegatedUserDecrypt",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        },
+        {
+          "depth": 1,
+          "type": "DELEGATECALL",
+          "to": "0xc8d844bcf85739dccc1ddb972ba35a3e39402f3f",
+          "fn": "delegatedUserDecrypt",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForDelegatedUserDecryption",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x6933afcf0f4bce1a611bad0a6faaff0337a7ba1e",
+          "fn": "plaintextForDelegatedUserDecryption",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        }
+      ],
+      "views": {
+        "isAccountRetired_subject": true,
+        "rawRetiredBit_subject": "1",
+        "isHandleDelegatedForUserDecryption": false,
+        "getUserDecryptionDelegationExpirationDate": "0",
+        "rawDelegationExpiry_isInFuture": true,
+        "rawPersistedPair(h,0x25168A)": "1",
+        "rawPersistedPair(h,0x61a8e9)": "1"
+      }
+    },
+    {
+      "id": "R3b.toOLD.delegate.afterRedelegation",
+      "scenario": "S3",
+      "role": "delegate (delegated path), delegation renewed after retirement",
+      "subject": "0x875A391c55C85e035EE088681413542DfdcC0026",
+      "handles": [
+        "0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500"
+      ],
+      "contract": "0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0",
+      "layers": {
+        "L1_sdk_precheck": {
+          "ok": false,
+          "errorClass": "AclUserDecryptionError",
+          "isAclUserDecryptionError": true,
+          "errorName": "FhevmErrorBase",
+          "error": "FhevmErrorBase: Delegate 0x875A391c55C85e035EE088681413542DfdcC0026 is not delegated by 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef to user decrypt handle 0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500 on contract 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0!",
+          "ethCalls": [
+            "isHandleDelegatedForUserDecryption@0x50157cffd6bbfa2dece204a89ec419c23ef5755d"
+          ],
+          "relayerCalled": false
+        },
+        "L2_sdk_relayer_precheck_skipped": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+          "revertName": "HandleNotDelegatedForUserDecryption",
+          "error": "Error: execution reverted (unknown custom error)",
+          "ethCalls": [
+            "delegatedUserDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+          ]
+        },
+        "L3a_kmsVerifier_direct": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+          "error": "Error: execution reverted (unknown custom error)"
+        },
+        "L3b_cleartextAcl_direct": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+          "error": "Error: execution reverted (unknown custom error)"
+        }
+      },
+      "refusedBy": [
+        "L1 SDK precheck (AclUserDecryptionError; relayer never called)",
+        "L2 on-chain mock via SDK relayer: HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+        "L3a CleartextKMSVerifier: HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)",
+        "L3b CleartextACL: HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+      ],
+      "onchainRevertStatement": {
+        "at": "src/v0.13.0/cleartext/CleartextACL.sol:258",
+        "text": "revert HandleNotDelegatedForUserDecryption(h, c, delegator, delegate);"
+      },
+      "onchainRevertStatementIsUniqueAstRaiseSite": [
+        "src/v0.13.0/cleartext/CleartextACL.sol:258"
+      ],
+      "onchainSelectorPushesSeen_informational": [
+        {
+          "error": "HandleNotDelegatedForUserDecryption",
+          "at": "(compiler-generated)"
+        }
+      ],
+      "onchainRevertOpcodeMappedTo": "src/v0.13.0/host-contracts/contracts/ACL.sol:346 (optimizer-shared revert tail)",
+      "aclSolLinesVisited": [
+        481,
+        571,
+        578,
+        576,
+        579,
+        599,
+        597,
+        346
+      ],
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:285",
+        "CleartextKMSVerifier.sol:286",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:246",
+        "CleartextACL.sol:250",
+        "CleartextACL.sol:251",
+        "CleartextACL.sol:252",
+        "CleartextACL.sol:253",
+        "CleartextACL.sol:254",
+        "CleartextACL.sol:255",
+        "ACL.sol:481",
+        "CleartextACL.sol:255",
+        "CleartextACL.sol:257",
+        "ACL.sol:571",
+        "ACL.sol:578",
+        "ACL.sol:576",
+        "ACL.sol:578",
+        "ACL.sol:579",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:257",
+        "CleartextACL.sol:258",
+        "ACL.sol:346",
+        "CleartextKMSVerifier.sol:286"
+      ],
+      "callFrames": [
+        {
+          "depth": 0,
+          "type": "CALL",
+          "to": "0x901f8942346f7ab3a01f6d7613119bca447bb030",
+          "fn": "delegatedUserDecrypt",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        },
+        {
+          "depth": 1,
+          "type": "DELEGATECALL",
+          "to": "0xc8d844bcf85739dccc1ddb972ba35a3e39402f3f",
+          "fn": "delegatedUserDecrypt",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForDelegatedUserDecryption",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x6933afcf0f4bce1a611bad0a6faaff0337a7ba1e",
+          "fn": "plaintextForDelegatedUserDecryption",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500, 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0, 0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef, 0x875A391c55C85e035EE088681413542DfdcC0026)"
+        }
+      ],
+      "views": {
+        "isAccountRetired_subject": true,
+        "rawRetiredBit_subject": "1",
+        "isHandleDelegatedForUserDecryption": false,
+        "getUserDecryptionDelegationExpirationDate": "0",
+        "rawDelegationExpiry_isInFuture": true,
+        "rawPersistedPair(h,0x25168A)": "1",
+        "rawPersistedPair(h,0x61a8e9)": "1"
+      }
+    },
+    {
+      "id": "R4.contract.direct",
+      "scenario": "S4",
+      "role": "contract (direct path)",
+      "subject": "0x7d79fB2B5d02f14Aeff50011055736d90Ae96592",
+      "handles": [
+        "0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500"
+      ],
+      "contract": "0x7d79fB2B5d02f14Aeff50011055736d90Ae96592",
+      "layers": {
+        "L1_sdk_precheck": {
+          "ok": false,
+          "errorClass": "AclUserDecryptionError",
+          "isAclUserDecryptionError": true,
+          "errorName": "FhevmErrorBase",
+          "error": "FhevmErrorBase: Dapp contract 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592 is not authorized to user decrypt handle 0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500!",
+          "ethCalls": [
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+            "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d"
+          ],
+          "relayerCalled": false
+        },
+        "L2_sdk_relayer_precheck_skipped": {
+          "ok": false,
+          "revert": "ContractNotAuthorizedForDecrypt(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)",
+          "revertName": "ContractNotAuthorizedForDecrypt",
+          "error": "Error: execution reverted (unknown custom error)",
+          "ethCalls": [
+            "userDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+          ]
+        },
+        "L3a_kmsVerifier_direct": {
+          "ok": false,
+          "revert": "ContractNotAuthorizedForDecrypt(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)",
+          "error": "Error: execution reverted (unknown custom error)"
+        },
+        "L3b_cleartextAcl_direct": {
+          "ok": false,
+          "revert": "ContractNotAuthorizedForDecrypt(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)",
+          "error": "Error: execution reverted (unknown custom error)"
+        }
+      },
+      "refusedBy": [
+        "L1 SDK precheck (AclUserDecryptionError; relayer never called)",
+        "L2 on-chain mock via SDK relayer: ContractNotAuthorizedForDecrypt(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)",
+        "L3a CleartextKMSVerifier: ContractNotAuthorizedForDecrypt(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)",
+        "L3b CleartextACL: ContractNotAuthorizedForDecrypt(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)"
+      ],
+      "onchainRevertStatement": {
+        "at": "src/v0.13.0/cleartext/CleartextACL.sol:240",
+        "text": "revert ContractNotAuthorizedForDecrypt(h, c);"
+      },
+      "onchainRevertStatementIsUniqueAstRaiseSite": [
+        "src/v0.13.0/cleartext/CleartextACL.sol:240"
+      ],
+      "onchainSelectorPushesSeen_informational": [],
+      "onchainRevertOpcodeMappedTo": "src/v0.13.0/host-contracts/contracts/ACL.sol:346 (optimizer-shared revert tail)",
+      "aclSolLinesVisited": [
+        481,
+        597,
+        599,
+        346
+      ],
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:244",
+        "CleartextKMSVerifier.sol:246",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:222",
+        "CleartextACL.sol:225",
+        "CleartextACL.sol:227",
+        "CleartextACL.sol:228",
+        "CleartextACL.sol:229",
+        "CleartextACL.sol:230",
+        "CleartextACL.sol:231",
+        "ACL.sol:481",
+        "CleartextACL.sol:231",
+        "CleartextACL.sol:233",
+        "CleartextACL.sol:236",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:236",
+        "CleartextACL.sol:239",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:239",
+        "CleartextACL.sol:240",
+        "ACL.sol:346",
+        "CleartextKMSVerifier.sol:246"
+      ],
+      "callFrames": [
+        {
+          "depth": 0,
+          "type": "CALL",
+          "to": "0x901f8942346f7ab3a01f6d7613119bca447bb030",
+          "fn": "userDecrypt",
+          "error": "execution reverted",
+          "revert": "ContractNotAuthorizedForDecrypt(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)"
+        },
+        {
+          "depth": 1,
+          "type": "DELEGATECALL",
+          "to": "0xc8d844bcf85739dccc1ddb972ba35a3e39402f3f",
+          "fn": "userDecrypt",
+          "error": "execution reverted",
+          "revert": "ContractNotAuthorizedForDecrypt(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForUserDecryption",
+          "error": "execution reverted",
+          "revert": "ContractNotAuthorizedForDecrypt(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x6933afcf0f4bce1a611bad0a6faaff0337a7ba1e",
+          "fn": "plaintextForUserDecryption",
+          "error": "execution reverted",
+          "revert": "ContractNotAuthorizedForDecrypt(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)"
+        }
+      ],
+      "views": {
+        "isAccountRetired_subject": true,
+        "rawRetiredBit_subject": "1",
+        "persistAllowed(h,0x7d79fB)": false,
+        "rawPersistedPair(h,0x7d79fB)": "1",
+        "persistAllowed(h,0xBE17b0)": true,
+        "rawPersistedPair(h,0xBE17b0)": "1"
+      }
+    },
+    {
+      "id": "R5.contract.delegated",
+      "scenario": "S4",
+      "role": "contract (delegated path)",
+      "subject": "0x7d79fB2B5d02f14Aeff50011055736d90Ae96592",
+      "handles": [
+        "0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500"
+      ],
+      "contract": "0x7d79fB2B5d02f14Aeff50011055736d90Ae96592",
+      "layers": {
+        "L1_sdk_precheck": {
+          "ok": false,
+          "errorClass": "AclUserDecryptionError",
+          "isAclUserDecryptionError": true,
+          "errorName": "FhevmErrorBase",
+          "error": "FhevmErrorBase: Delegate 0x079B613A222BBadF6f31FD0feB60573775A52C58 is not delegated by 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E to user decrypt handle 0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500 on contract 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592!",
+          "ethCalls": [
+            "isHandleDelegatedForUserDecryption@0x50157cffd6bbfa2dece204a89ec419c23ef5755d"
+          ],
+          "relayerCalled": false
+        },
+        "L2_sdk_relayer_precheck_skipped": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592, 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E, 0x079B613A222BBadF6f31FD0feB60573775A52C58)",
+          "revertName": "HandleNotDelegatedForUserDecryption",
+          "error": "Error: execution reverted (unknown custom error)",
+          "ethCalls": [
+            "delegatedUserDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+          ]
+        },
+        "L3a_kmsVerifier_direct": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592, 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E, 0x079B613A222BBadF6f31FD0feB60573775A52C58)",
+          "error": "Error: execution reverted (unknown custom error)"
+        },
+        "L3b_cleartextAcl_direct": {
+          "ok": false,
+          "revert": "HandleNotDelegatedForUserDecryption(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592, 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E, 0x079B613A222BBadF6f31FD0feB60573775A52C58)",
+          "error": "Error: execution reverted (unknown custom error)"
+        }
+      },
+      "refusedBy": [
+        "L1 SDK precheck (AclUserDecryptionError; relayer never called)",
+        "L2 on-chain mock via SDK relayer: HandleNotDelegatedForUserDecryption(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592, 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E, 0x079B613A222BBadF6f31FD0feB60573775A52C58)",
+        "L3a CleartextKMSVerifier: HandleNotDelegatedForUserDecryption(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592, 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E, 0x079B613A222BBadF6f31FD0feB60573775A52C58)",
+        "L3b CleartextACL: HandleNotDelegatedForUserDecryption(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592, 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E, 0x079B613A222BBadF6f31FD0feB60573775A52C58)"
+      ],
+      "onchainRevertStatement": {
+        "at": "src/v0.13.0/cleartext/CleartextACL.sol:258",
+        "text": "revert HandleNotDelegatedForUserDecryption(h, c, delegator, delegate);"
+      },
+      "onchainRevertStatementIsUniqueAstRaiseSite": [
+        "src/v0.13.0/cleartext/CleartextACL.sol:258"
+      ],
+      "onchainSelectorPushesSeen_informational": [
+        {
+          "error": "HandleNotDelegatedForUserDecryption",
+          "at": "(compiler-generated)"
+        }
+      ],
+      "onchainRevertOpcodeMappedTo": "src/v0.13.0/host-contracts/contracts/ACL.sol:346 (optimizer-shared revert tail)",
+      "aclSolLinesVisited": [
+        481,
+        571,
+        578,
+        576,
+        579,
+        599,
+        597,
+        346
+      ],
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:285",
+        "CleartextKMSVerifier.sol:286",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:246",
+        "CleartextACL.sol:250",
+        "CleartextACL.sol:251",
+        "CleartextACL.sol:252",
+        "CleartextACL.sol:253",
+        "CleartextACL.sol:254",
+        "CleartextACL.sol:255",
+        "ACL.sol:481",
+        "CleartextACL.sol:255",
+        "CleartextACL.sol:257",
+        "ACL.sol:571",
+        "ACL.sol:578",
+        "ACL.sol:576",
+        "ACL.sol:578",
+        "ACL.sol:579",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:257",
+        "CleartextACL.sol:258",
+        "ACL.sol:346",
+        "CleartextKMSVerifier.sol:286"
+      ],
+      "callFrames": [
+        {
+          "depth": 0,
+          "type": "CALL",
+          "to": "0x901f8942346f7ab3a01f6d7613119bca447bb030",
+          "fn": "delegatedUserDecrypt",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592, 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E, 0x079B613A222BBadF6f31FD0feB60573775A52C58)"
+        },
+        {
+          "depth": 1,
+          "type": "DELEGATECALL",
+          "to": "0xc8d844bcf85739dccc1ddb972ba35a3e39402f3f",
+          "fn": "delegatedUserDecrypt",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592, 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E, 0x079B613A222BBadF6f31FD0feB60573775A52C58)"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x44aa028fd264c76bf4a8f8b4d8a5272f6ae25cac",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x3b04822d376447b20dafb21709b44899185a58b4",
+          "fn": "0x976f3eb9"
+        },
+        {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForDelegatedUserDecryption",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592, 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E, 0x079B613A222BBadF6f31FD0feB60573775A52C58)"
+        },
+        {
+          "depth": 3,
+          "type": "DELEGATECALL",
+          "to": "0x6933afcf0f4bce1a611bad0a6faaff0337a7ba1e",
+          "fn": "plaintextForDelegatedUserDecryption",
+          "error": "execution reverted",
+          "revert": "HandleNotDelegatedForUserDecryption(0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500, 0x7d79fB2B5d02f14Aeff50011055736d90Ae96592, 0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E, 0x079B613A222BBadF6f31FD0feB60573775A52C58)"
+        }
+      ],
+      "views": {
+        "isAccountRetired_subject": true,
+        "rawRetiredBit_subject": "1",
+        "isHandleDelegatedForUserDecryption": false,
+        "getUserDecryptionDelegationExpirationDate": "0",
+        "rawDelegationExpiry_isInFuture": true,
+        "rawPersistedPair(h,0xBE17b0)": "1",
+        "rawPersistedPair(h,0x7d79fB)": "1"
+      }
+    }
+  ],
+  "writeRefusals": [
+    {
+      "id": "S2.reverseOrder",
+      "from": "0x875A391c55C85e035EE088681413542DfdcC0026",
+      "to": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+      "staticRevert": "SenderRetired(0x875A391c55C85e035EE088681413542DfdcC0026)",
+      "minedStatus": 0,
+      "minedGasUsed": "63565",
+      "after": {
+        "isAccountRetired_OLD": false,
+        "persistAllowed_h0_NEW": false,
+        "persistAllowed_h0_OLD": true
+      }
+    },
+    {
+      "id": "W1.OLD.delegateForUserDecryption",
+      "from": "0x875A391c55C85e035EE088681413542DfdcC0026",
+      "to": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+      "staticRevert": "SenderRetired(0x875A391c55C85e035EE088681413542DfdcC0026)",
+      "minedStatus": 0,
+      "minedGasUsed": "31838",
+      "after": {
+        "expiryGetter_OLD_Z": "0",
+        "rawDelegationSlot_OLD_Z": "0"
+      }
+    },
+    {
+      "id": "W2.OLD.allow",
+      "from": "0x875A391c55C85e035EE088681413542DfdcC0026",
+      "to": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+      "staticRevert": "SenderRetired(0x875A391c55C85e035EE088681413542DfdcC0026)",
+      "minedStatus": 0,
+      "minedGasUsed": "36358",
+      "after": {
+        "rawPersistedPair_h0_Z": "0"
+      }
+    },
+    {
+      "id": "W3.OLD.retireAgain",
+      "from": "0x875A391c55C85e035EE088681413542DfdcC0026",
+      "to": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+      "staticRevert": "AccountAlreadyRetired(0x875A391c55C85e035EE088681413542DfdcC0026)",
+      "minedStatus": 0,
+      "minedGasUsed": "28470",
+      "after": {
+        "isAccountRetired_OLD": true
+      }
+    },
+    {
+      "id": "W4.vault.shareBalance",
+      "from": "0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E",
+      "to": "0x7d79fB2B5d02f14Aeff50011055736d90Ae96592",
+      "staticRevert": "SenderRetired(0x7d79fB2B5d02f14Aeff50011055736d90Ae96592)",
+      "minedStatus": 0,
+      "minedGasUsed": "43435",
+      "after": {
+        "rawPersistedPair_h_Z": "0"
+      }
+    }
+  ],
+  "gas": {
+    "carry_n5": "224200",
+    "retireAccount_contract_via_helper": "53148",
+    "retireAccount_eoa": "50116",
+    "carry_n1": "90980",
+    "carry_n10": "390747",
+    "carry_perHandle_derived": "33307",
+    "carry_fixed_derived": "57673",
+    "note": "transaction gasUsed from anvil receipts (includes intrinsic and calldata gas); CleartextACL.allow adds a handleSaved read before ACL.allow"
+  },
+  "accounts": {
+    "U": "0xF0C378c1a708E5065F37CB2624CC4220506846Cb",
+    "D": "0x613e70063EBFc83542FE467a6184f9c7c18b41D1",
+    "OLD": "0x875A391c55C85e035EE088681413542DfdcC0026",
+    "NEW": "0xe1bfFD5Cd71114E9f89CaB66889CaE1CB530efe0",
+    "DOLD": "0xafAf21218dC145634FA392A1CD11fe1495ab3B4B",
+    "X": "0x25168A5015D3406905C2b0a82c1D8e07bb4c75Ef",
+    "Z": "0x50E2022750Dd574D334003b7B834b4fD25c01F38",
+    "VOWNER": "0x69c6aaEAfa898A4d31F2207FcDC780b100D72568",
+    "WU": "0xBE17b02c0710123309Fd2D0E8cf5Dbb3F53B4d0E",
+    "WD": "0x079B613A222BBadF6f31FD0feB60573775A52C58",
+    "R": "0xE68b358bcA48Bb54476bD2Fcd116C0638BA8FD9A",
+    "OLD1": "0x2DA33c29B4Ad39A632909c0901257bcA8f7bEac3",
+    "OLD10": "0x586C710Fda07c21561f8f632fD3F9C46FA4BB5AC"
+  },
+  "env": {
+    "rpcUrl": "http://127.0.0.1:61630",
+    "chainId": 31337,
+    "clientVersion": "anvil/v1.8.5",
+    "hardFork": "Bpo1",
+    "blockGasLimit": "0x1c9c380",
+    "clone": "<repo>\\impl\\fhevm-v0.13.8",
+    "solcOfAnalysisBuild": "0.8.35+commit.47b9dedd",
+    "addresses": {
+      "aclAdd": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+      "fhevmExecutorAdd": "0xe3a9105a3a932253A70F126eb1E3b589C643dD24",
+      "kmsVerifierAdd": "0x901F8942346f7AB3a01F6D7613119Bca447Bb030",
+      "inputVerifierAdd": "0x36772142b74871f255CbD7A3e89B401d3e45825f",
+      "hcuLimitAdd": "0x233ff88A48c172d29F675403e6A8e302b0F032D9",
+      "protocolConfigAdd": "0x44aA028fd264C76BF4A8f8B4d8A5272f6AE25CAc",
+      "kmsGenerationAdd": "0x216be43148dB537BeddBC268163deb1a802b5553",
+      "pauserSetAdd": "0xded0D2a71268DC12622BdD1b55d68a1CB5662327",
+      "fheTest": "0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0",
+      "aclImplementation": "0x6933afcf0f4bce1a611bad0a6faaff0337a7ba1e",
+      "kmsVerifierImplementation": "0xc8d844bcf85739dccc1ddb972ba35a3e39402f3f"
+    }
+  },
+  "setup": {
+    "aclVersion": "ACL v0.4.1",
+    "supportsCoreInterface_0x556d2088": true,
+    "retirementStorageLocation": "0xe6ae1005b480da47ced1ed3eb5869a54ca87c5d592369277249f4148c0e86200",
+    "aclImplementationMatchesAnalysisBuild": true,
+    "aclImplementationRuntimeBytes": 14377,
+    "kmsVerifierImplementationMatchesAnalysisBuild": true,
+    "kmsSigners": [
+      "0x649c125e183640141c2ac329673a22df9fa81b3c",
+      "0xdb05a2edf583e3b1644a59434a163ad178595eaf",
+      "0x03d684498fb1d52286d09dd42e720c89b55c63c3",
+      "0x8252dd4d1350bcd34f419abd05f8cfa146d71c5d"
+    ],
+    "kmsSignerCount": 4,
+    "kmsThreshold": "1",
+    "forgeFhevmV1SignerPresent": false,
+    "relayerPath": "on-chain (CleartextKMSVerifier view)",
+    "overrideCheckFromAst": {
+      "ownFunctions": [
+        {
+          "name": "_getCleartextACLStorage",
+          "kind": "function",
+          "visibility": "private",
+          "stateMutability": "pure",
+          "virtual": false,
+          "overrides": false,
+          "line": 55
+        },
+        {
+          "name": "_tslot",
+          "kind": "function",
+          "visibility": "private",
+          "stateMutability": "pure",
+          "virtual": false,
+          "overrides": false,
+          "line": 64
+        },
+        {
+          "name": "_setTransientCleartext",
+          "kind": "function",
+          "visibility": "private",
+          "stateMutability": "nonpayable",
+          "virtual": false,
+          "overrides": false,
+          "line": 73
+        },
+        {
+          "name": "_isTransientCleartextSet",
+          "kind": "function",
+          "visibility": "private",
+          "stateMutability": "view",
+          "virtual": false,
+          "overrides": false,
+          "line": 90
+        },
+        {
+          "name": "_getTransientCleartextUnchecked",
+          "kind": "function",
+          "visibility": "private",
+          "stateMutability": "view",
+          "virtual": false,
+          "overrides": false,
+          "line": 99
+        },
+        {
+          "name": "_getTransientCleartext",
+          "kind": "function",
+          "visibility": "private",
+          "stateMutability": "view",
+          "virtual": false,
+          "overrides": false,
+          "line": 108
+        },
+        {
+          "name": "allowTransientWithCleartext",
+          "kind": "function",
+          "visibility": "external",
+          "stateMutability": "nonpayable",
+          "virtual": true,
+          "overrides": false,
+          "line": 122
+        },
+        {
+          "name": "isAllowedWithCleartext",
+          "kind": "function",
+          "visibility": "external",
+          "stateMutability": "view",
+          "virtual": false,
+          "overrides": false,
+          "line": 134
+        },
+        {
+          "name": "allow",
+          "kind": "function",
+          "visibility": "public",
+          "stateMutability": "nonpayable",
+          "virtual": true,
+          "overrides": true,
+          "line": 141
+        },
+        {
+          "name": "allowTransient",
+          "kind": "function",
+          "visibility": "public",
+          "stateMutability": "nonpayable",
+          "virtual": true,
+          "overrides": true,
+          "line": 156
+        },
+        {
+          "name": "allowForDecryption",
+          "kind": "function",
+          "visibility": "public",
+          "stateMutability": "nonpayable",
+          "virtual": true,
+          "overrides": true,
+          "line": 169
+        },
+        {
+          "name": "_persistCleartextFromTransient",
+          "kind": "function",
+          "visibility": "private",
+          "stateMutability": "nonpayable",
+          "virtual": false,
+          "overrides": false,
+          "line": 185
+        },
+        {
+          "name": "plaintext",
+          "kind": "function",
+          "visibility": "public",
+          "stateMutability": "view",
+          "virtual": false,
+          "overrides": false,
+          "line": 196
+        },
+        {
+          "name": "plaintextForPublicDecryption",
+          "kind": "function",
+          "visibility": "public",
+          "stateMutability": "view",
+          "virtual": false,
+          "overrides": false,
+          "line": 208
+        },
+        {
+          "name": "plaintextForUserDecryption",
+          "kind": "function",
+          "visibility": "public",
+          "stateMutability": "view",
+          "virtual": false,
+          "overrides": false,
+          "line": 222
+        },
+        {
+          "name": "plaintextForDelegatedUserDecryption",
+          "kind": "function",
+          "visibility": "public",
+          "stateMutability": "view",
+          "virtual": false,
+          "overrides": false,
+          "line": 246
+        },
+        {
+          "name": "registerInputCleartext",
+          "kind": "function",
+          "visibility": "external",
+          "stateMutability": "nonpayable",
+          "virtual": true,
+          "overrides": false,
+          "line": 270
+        },
+        {
+          "name": "requireNotPaused",
+          "kind": "function",
+          "visibility": "public",
+          "stateMutability": "view",
+          "virtual": true,
+          "overrides": false,
+          "line": 282
+        }
+      ],
+      "mustBeInherited": [
+        "persistAllowed",
+        "isHandleDelegatedForUserDecryption",
+        "isAllowed",
+        "getUserDecryptionDelegationExpirationDate",
+        "delegateForUserDecryption",
+        "retireAccount",
+        "isAccountRetired",
+        "supportsInterface",
+        "retirementStorageLocation",
+        "_authorizeUpgrade",
+        "_retired"
+      ],
+      "violations": [],
+      "inheritedDefs": {
+        "persistAllowed": "src/v0.13.0/host-contracts/contracts/ACL.sol:597",
+        "isHandleDelegatedForUserDecryption": "src/v0.13.0/host-contracts/contracts/ACL.sol:571",
+        "isAllowed": "src/v0.13.0/host-contracts/contracts/ACL.sol:542",
+        "getUserDecryptionDelegationExpirationDate": "src/v0.13.0/host-contracts/contracts/ACL.sol:481",
+        "delegateForUserDecryption": "src/v0.13.0/host-contracts/contracts/ACL.sol:340",
+        "retireAccount": "src/v0.13.0/host-contracts/contracts/ACL.sol:443",
+        "isAccountRetired": "src/v0.13.0/host-contracts/contracts/ACL.sol:617",
+        "supportsInterface": "src/v0.13.0/host-contracts/contracts/ACL.sol:701",
+        "retirementStorageLocation": "src/v0.13.0/host-contracts/contracts/ACL.sol:710",
+        "_authorizeUpgrade": "src/v0.13.0/host-contracts/contracts/ACL.sol:721",
+        "_retired": "src/v0.13.0/host-contracts/contracts/ACL.sol:761"
+      }
+    },
+    "fheTestCoprocessorConfig": [
+      "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+      "0xe3a9105a3a932253A70F126eb1E3b589C643dD24",
+      "0x901F8942346f7AB3a01F6D7613119Bca447Bb030"
+    ]
+  },
+  "s1": {
+    "handle": "0xf16cebdafac2c8cc9e9707a050285e9b3b7569b127000000000000007a690500",
+    "setEuint64GasUsed": "287276",
+    "user": {
+      "id": "S1.user",
+      "ok": true,
+      "values": [
+        "424242"
+      ],
+      "ethCalls": [
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "userDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+      ],
+      "relayerCalled": true,
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:244",
+        "CleartextKMSVerifier.sol:246",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:222",
+        "CleartextACL.sol:225",
+        "CleartextACL.sol:227",
+        "CleartextACL.sol:228",
+        "CleartextACL.sol:229",
+        "CleartextACL.sol:230",
+        "CleartextACL.sol:231",
+        "ACL.sol:481",
+        "CleartextACL.sol:231",
+        "CleartextACL.sol:233",
+        "CleartextACL.sol:236",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:236",
+        "CleartextACL.sol:239",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:239",
+        "CleartextACL.sol:242",
+        "CleartextACL.sol:196",
+        "CleartextACL.sol:197",
+        "CleartextACL.sol:90",
+        "CleartextACL.sol:91",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:38",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:91",
+        "CleartextACL.sol:94",
+        "CleartextACL.sol:96",
+        "CleartextACL.sol:90",
+        "CleartextACL.sol:197",
+        "CleartextACL.sol:201",
+        "CleartextACL.sol:202",
+        "CleartextACL.sol:56",
+        "CleartextACL.sol:202",
+        "CleartextACL.sol:205",
+        "CleartextACL.sol:196",
+        "CleartextACL.sol:242",
+        "CleartextACL.sol:229",
+        "CleartextACL.sol:226",
+        "CleartextACL.sol:222",
+        "ACL.sol:701",
+        "CleartextKMSVerifier.sol:246",
+        "CleartextKMSVerifier.sol:247",
+        "CleartextKMSVerifier.sol:185",
+        "CleartextKMSVerifier.sol:188",
+        "CleartextKMSVerifier.sol:190",
+        "CleartextKMSVerifier.sol:195",
+        "CleartextKMSVerifier.sol:198",
+        "CleartextKMSVerifier.sol:199",
+        "CleartextKMSVerifier.sol:200"
+      ],
+      "aclFrame": {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "fn": "plaintextForUserDecryption"
+      }
+    },
+    "delegateTxGasUsed": "57904",
+    "delegated": {
+      "id": "S1.delegated",
+      "ok": true,
+      "values": [
+        "424242"
+      ],
+      "ethCalls": [
+        "isHandleDelegatedForUserDecryption@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "delegatedUserDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+      ],
+      "relayerCalled": true,
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:285",
+        "CleartextKMSVerifier.sol:286",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:246",
+        "CleartextACL.sol:250",
+        "CleartextACL.sol:251",
+        "CleartextACL.sol:252",
+        "CleartextACL.sol:253",
+        "CleartextACL.sol:254",
+        "CleartextACL.sol:255",
+        "ACL.sol:481",
+        "CleartextACL.sol:255",
+        "CleartextACL.sol:257",
+        "ACL.sol:571",
+        "ACL.sol:578",
+        "ACL.sol:576",
+        "ACL.sol:578",
+        "ACL.sol:581",
+        "ACL.sol:582",
+        "ACL.sol:746",
+        "ACL.sol:745",
+        "ACL.sol:746",
+        "ACL.sol:586",
+        "ACL.sol:746",
+        "ACL.sol:745",
+        "ACL.sol:746",
+        "ACL.sol:587",
+        "ACL.sol:585",
+        "ACL.sol:571",
+        "CleartextACL.sol:257",
+        "CleartextACL.sol:260",
+        "CleartextACL.sol:196",
+        "CleartextACL.sol:197",
+        "CleartextACL.sol:90",
+        "CleartextACL.sol:91",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:38",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:91",
+        "CleartextACL.sol:94",
+        "CleartextACL.sol:96",
+        "CleartextACL.sol:90",
+        "CleartextACL.sol:197",
+        "CleartextACL.sol:201",
+        "CleartextACL.sol:202",
+        "CleartextACL.sol:56",
+        "CleartextACL.sol:202",
+        "CleartextACL.sol:205",
+        "CleartextACL.sol:196",
+        "CleartextACL.sol:260",
+        "CleartextACL.sol:253",
+        "CleartextACL.sol:250",
+        "CleartextACL.sol:246",
+        "CleartextACL.sol:222",
+        "ACL.sol:701",
+        "CleartextKMSVerifier.sol:286"
+      ],
+      "aclFrame": {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "fn": "plaintextForDelegatedUserDecryption"
+      }
+    },
+    "views": {
+      "persistAllowed_U": true,
+      "isHandleDelegated_U_D": true,
+      "isAccountRetired_U": false
+    }
+  },
+  "s2prep": {
+    "oldHistory": [
+      {
+        "handle": "0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500",
+        "kind": "uint64",
+        "value": "1001"
+      },
+      {
+        "handle": "0xc8952c0e6dfc182dac09fc4aae77062874c49307a5000000000000007a690500",
+        "kind": "uint64",
+        "value": "1002"
+      },
+      {
+        "handle": "0x0c2871dac80caf6793bd59119ed896f8f30e968f3c000000000000007a690400",
+        "kind": "uint32",
+        "value": "77"
+      },
+      {
+        "handle": "0xeca130816426fb2537a29a21a938eb6377859c4911000000000000007a690200",
+        "kind": "uint8",
+        "value": "42"
+      },
+      {
+        "handle": "0x87470a76d139836ac4426d3450e175b3ceef2e5f1f000000000000007a690000",
+        "kind": "bool",
+        "value": "true"
+      }
+    ],
+    "xHandle": "0x19ead7e17f04e6b7d6c733869e1d936dca4ebf763b000000000000007a690500",
+    "before": {
+      "OLD_decrypts_own_history": {
+        "id": "S2.before.OLD",
+        "ok": true,
+        "values": [
+          "1001",
+          "1002",
+          "77",
+          "42",
+          "true"
+        ],
+        "ethCalls": [
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "userDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+        ],
+        "relayerCalled": true,
+        "onchainLinePath": [
+          "CleartextKMSVerifier.sol:244",
+          "CleartextKMSVerifier.sol:246",
+          "CleartextACL.sol:20",
+          "CleartextACL.sol:222",
+          "CleartextACL.sol:225",
+          "CleartextACL.sol:227",
+          "CleartextACL.sol:228",
+          "CleartextACL.sol:229",
+          "CleartextACL.sol:230",
+          "CleartextACL.sol:231",
+          "ACL.sol:481",
+          "CleartextACL.sol:231",
+          "CleartextACL.sol:233",
+          "CleartextACL.sol:236",
+          "ACL.sol:597",
+          "ACL.sol:599",
+          "ACL.sol:597",
+          "CleartextACL.sol:236",
+          "CleartextACL.sol:239",
+          "ACL.sol:597",
+          "ACL.sol:599",
+          "ACL.sol:597",
+          "CleartextACL.sol:239",
+          "CleartextACL.sol:242",
+          "CleartextACL.sol:196",
+          "CleartextACL.sol:197",
+          "CleartextACL.sol:90",
+          "CleartextACL.sol:91",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:38",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:91",
+          "CleartextACL.sol:94",
+          "CleartextACL.sol:96",
+          "CleartextACL.sol:90",
+          "CleartextACL.sol:197",
+          "CleartextACL.sol:201",
+          "CleartextACL.sol:202",
+          "CleartextACL.sol:56",
+          "CleartextACL.sol:202",
+          "CleartextACL.sol:205",
+          "CleartextACL.sol:196",
+          "CleartextACL.sol:242",
+          "CleartextACL.sol:229",
+          "CleartextACL.sol:230",
+          "CleartextACL.sol:231",
+          "ACL.sol:481",
+          "CleartextACL.sol:231",
+          "CleartextACL.sol:233",
+          "CleartextACL.sol:236",
+          "ACL.sol:597",
+          "ACL.sol:599",
+          "ACL.sol:597",
+          "CleartextACL.sol:236",
+          "CleartextACL.sol:239",
+          "ACL.sol:597"
+        ],
+        "aclFrame": {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForUserDecryption"
+        }
+      },
+      "DOLD_decrypts_OLD_handle_as_delegate": {
+        "id": "S3.before.fromOLD",
+        "ok": true,
+        "values": [
+          "1001"
+        ],
+        "ethCalls": [
+          "isHandleDelegatedForUserDecryption@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "delegatedUserDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+        ],
+        "relayerCalled": true,
+        "onchainLinePath": [
+          "CleartextKMSVerifier.sol:285",
+          "CleartextKMSVerifier.sol:286",
+          "CleartextACL.sol:20",
+          "CleartextACL.sol:246",
+          "CleartextACL.sol:250",
+          "CleartextACL.sol:251",
+          "CleartextACL.sol:252",
+          "CleartextACL.sol:253",
+          "CleartextACL.sol:254",
+          "CleartextACL.sol:255",
+          "ACL.sol:481",
+          "CleartextACL.sol:255",
+          "CleartextACL.sol:257",
+          "ACL.sol:571",
+          "ACL.sol:578",
+          "ACL.sol:576",
+          "ACL.sol:578",
+          "ACL.sol:581",
+          "ACL.sol:582",
+          "ACL.sol:746",
+          "ACL.sol:745",
+          "ACL.sol:746",
+          "ACL.sol:586",
+          "ACL.sol:746",
+          "ACL.sol:745",
+          "ACL.sol:746",
+          "ACL.sol:587",
+          "ACL.sol:585",
+          "ACL.sol:571",
+          "CleartextACL.sol:257",
+          "CleartextACL.sol:260",
+          "CleartextACL.sol:196",
+          "CleartextACL.sol:197",
+          "CleartextACL.sol:90",
+          "CleartextACL.sol:91",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:38",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:91",
+          "CleartextACL.sol:94",
+          "CleartextACL.sol:96",
+          "CleartextACL.sol:90",
+          "CleartextACL.sol:197",
+          "CleartextACL.sol:201",
+          "CleartextACL.sol:202",
+          "CleartextACL.sol:56",
+          "CleartextACL.sol:202",
+          "CleartextACL.sol:205",
+          "CleartextACL.sol:196",
+          "CleartextACL.sol:260",
+          "CleartextACL.sol:253",
+          "CleartextACL.sol:250",
+          "CleartextACL.sol:246",
+          "CleartextACL.sol:222",
+          "ACL.sol:701",
+          "CleartextKMSVerifier.sol:286"
+        ],
+        "aclFrame": {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForDelegatedUserDecryption"
+        }
+      },
+      "OLD_decrypts_X_handle_as_delegate": {
+        "id": "S3.before.toOLD",
+        "ok": true,
+        "values": [
+          "31337"
+        ],
+        "ethCalls": [
+          "isHandleDelegatedForUserDecryption@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "delegatedUserDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+        ],
+        "relayerCalled": true,
+        "onchainLinePath": [
+          "CleartextKMSVerifier.sol:285",
+          "CleartextKMSVerifier.sol:286",
+          "CleartextACL.sol:20",
+          "CleartextACL.sol:246",
+          "CleartextACL.sol:250",
+          "CleartextACL.sol:251",
+          "CleartextACL.sol:252",
+          "CleartextACL.sol:253",
+          "CleartextACL.sol:254",
+          "CleartextACL.sol:255",
+          "ACL.sol:481",
+          "CleartextACL.sol:255",
+          "CleartextACL.sol:257",
+          "ACL.sol:571",
+          "ACL.sol:578",
+          "ACL.sol:576",
+          "ACL.sol:578",
+          "ACL.sol:581",
+          "ACL.sol:582",
+          "ACL.sol:746",
+          "ACL.sol:745",
+          "ACL.sol:746",
+          "ACL.sol:586",
+          "ACL.sol:746",
+          "ACL.sol:745",
+          "ACL.sol:746",
+          "ACL.sol:587",
+          "ACL.sol:585",
+          "ACL.sol:571",
+          "CleartextACL.sol:257",
+          "CleartextACL.sol:260",
+          "CleartextACL.sol:196",
+          "CleartextACL.sol:197",
+          "CleartextACL.sol:90",
+          "CleartextACL.sol:91",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:38",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:91",
+          "CleartextACL.sol:94",
+          "CleartextACL.sol:96",
+          "CleartextACL.sol:90",
+          "CleartextACL.sol:197",
+          "CleartextACL.sol:201",
+          "CleartextACL.sol:202",
+          "CleartextACL.sol:56",
+          "CleartextACL.sol:202",
+          "CleartextACL.sol:205",
+          "CleartextACL.sol:196",
+          "CleartextACL.sol:260",
+          "CleartextACL.sol:253",
+          "CleartextACL.sol:250",
+          "CleartextACL.sol:246",
+          "CleartextACL.sol:222",
+          "ACL.sol:701",
+          "CleartextKMSVerifier.sol:286"
+        ],
+        "aclFrame": {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForDelegatedUserDecryption"
+        }
+      },
+      "NEW_has_no_access": {
+        "ok": false,
+        "errorClass": "AclUserDecryptionError",
+        "isAclUserDecryptionError": true,
+        "errorName": "FhevmErrorBase",
+        "error": "FhevmErrorBase: User 0xe1bfFD5Cd71114E9f89CaB66889CaE1CB530efe0 is not authorized to decrypt handle 0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500!",
+        "ethCalls": [
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d"
+        ]
+      }
+    }
+  },
+  "s2": {
+    "carryTx": "0x954ef26262a888e6993638fa05bc856a12d59ad71164f2f6e57ab2ee670950f1",
+    "carryGasUsed": "224200",
+    "carriedHandles": 5,
+    "events": [
+      {
+        "name": "Allowed",
+        "args": [
+          "0x875A391c55C85e035EE088681413542DfdcC0026",
+          "0xe1bfFD5Cd71114E9f89CaB66889CaE1CB530efe0",
+          "0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500"
+        ]
+      },
+      {
+        "name": "Allowed",
+        "args": [
+          "0x875A391c55C85e035EE088681413542DfdcC0026",
+          "0xe1bfFD5Cd71114E9f89CaB66889CaE1CB530efe0",
+          "0xc8952c0e6dfc182dac09fc4aae77062874c49307a5000000000000007a690500"
+        ]
+      },
+      {
+        "name": "Allowed",
+        "args": [
+          "0x875A391c55C85e035EE088681413542DfdcC0026",
+          "0xe1bfFD5Cd71114E9f89CaB66889CaE1CB530efe0",
+          "0x0c2871dac80caf6793bd59119ed896f8f30e968f3c000000000000007a690400"
+        ]
+      },
+      {
+        "name": "Allowed",
+        "args": [
+          "0x875A391c55C85e035EE088681413542DfdcC0026",
+          "0xe1bfFD5Cd71114E9f89CaB66889CaE1CB530efe0",
+          "0xeca130816426fb2537a29a21a938eb6377859c4911000000000000007a690200"
+        ]
+      },
+      {
+        "name": "Allowed",
+        "args": [
+          "0x875A391c55C85e035EE088681413542DfdcC0026",
+          "0xe1bfFD5Cd71114E9f89CaB66889CaE1CB530efe0",
+          "0x87470a76d139836ac4426d3450e175b3ceef2e5f1f000000000000007a690000"
+        ]
+      },
+      {
+        "name": "AccountRetired",
+        "args": [
+          "0x875A391c55C85e035EE088681413542DfdcC0026",
+          "0x0000000000000000000000000000000000000000"
+        ]
+      }
+    ],
+    "isAccountRetired_OLD": true,
+    "persistAllowed_NEW": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "persistAllowed_OLD": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "NEW_decrypts_history": {
+      "id": "S2.NEW",
+      "ok": true,
+      "values": [
+        "1001",
+        "1002",
+        "77",
+        "42",
+        "true"
+      ],
+      "ethCalls": [
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "userDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+      ],
+      "relayerCalled": true,
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:244",
+        "CleartextKMSVerifier.sol:246",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:222",
+        "CleartextACL.sol:225",
+        "CleartextACL.sol:227",
+        "CleartextACL.sol:228",
+        "CleartextACL.sol:229",
+        "CleartextACL.sol:230",
+        "CleartextACL.sol:231",
+        "ACL.sol:481",
+        "CleartextACL.sol:231",
+        "CleartextACL.sol:233",
+        "CleartextACL.sol:236",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:236",
+        "CleartextACL.sol:239",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:239",
+        "CleartextACL.sol:242",
+        "CleartextACL.sol:196",
+        "CleartextACL.sol:197",
+        "CleartextACL.sol:90",
+        "CleartextACL.sol:91",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:38",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:91",
+        "CleartextACL.sol:94",
+        "CleartextACL.sol:96",
+        "CleartextACL.sol:90",
+        "CleartextACL.sol:197",
+        "CleartextACL.sol:201",
+        "CleartextACL.sol:202",
+        "CleartextACL.sol:56",
+        "CleartextACL.sol:202",
+        "CleartextACL.sol:205",
+        "CleartextACL.sol:196",
+        "CleartextACL.sol:242",
+        "CleartextACL.sol:229",
+        "CleartextACL.sol:230",
+        "CleartextACL.sol:231",
+        "ACL.sol:481",
+        "CleartextACL.sol:231",
+        "CleartextACL.sol:233",
+        "CleartextACL.sol:236",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:236",
+        "CleartextACL.sol:239",
+        "ACL.sol:597"
+      ],
+      "aclFrame": {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "fn": "plaintextForUserDecryption"
+      }
+    }
+  },
+  "s3": {
+    "redelegateToRetiredOLD": {
+      "status": 1,
+      "gasUsed": "40792"
+    },
+    "X_still_decrypts": {
+      "id": "S3.X.control",
+      "ok": true,
+      "values": [
+        "31337"
+      ],
+      "ethCalls": [
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "userDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+      ],
+      "relayerCalled": true,
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:244",
+        "CleartextKMSVerifier.sol:246",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:222",
+        "CleartextACL.sol:225",
+        "CleartextACL.sol:227",
+        "CleartextACL.sol:228",
+        "CleartextACL.sol:229",
+        "CleartextACL.sol:230",
+        "CleartextACL.sol:231",
+        "ACL.sol:481",
+        "CleartextACL.sol:231",
+        "CleartextACL.sol:233",
+        "CleartextACL.sol:236",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:236",
+        "CleartextACL.sol:239",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:239",
+        "CleartextACL.sol:242",
+        "CleartextACL.sol:196",
+        "CleartextACL.sol:197",
+        "CleartextACL.sol:90",
+        "CleartextACL.sol:91",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:38",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:91",
+        "CleartextACL.sol:94",
+        "CleartextACL.sol:96",
+        "CleartextACL.sol:90",
+        "CleartextACL.sol:197",
+        "CleartextACL.sol:201",
+        "CleartextACL.sol:202",
+        "CleartextACL.sol:56",
+        "CleartextACL.sol:202",
+        "CleartextACL.sol:205",
+        "CleartextACL.sol:196",
+        "CleartextACL.sol:242",
+        "CleartextACL.sol:229",
+        "CleartextACL.sol:226",
+        "CleartextACL.sol:222",
+        "ACL.sol:701",
+        "CleartextKMSVerifier.sol:246",
+        "CleartextKMSVerifier.sol:247",
+        "CleartextKMSVerifier.sol:185",
+        "CleartextKMSVerifier.sol:188",
+        "CleartextKMSVerifier.sol:190",
+        "CleartextKMSVerifier.sol:195",
+        "CleartextKMSVerifier.sol:198",
+        "CleartextKMSVerifier.sol:199",
+        "CleartextKMSVerifier.sol:200"
+      ],
+      "aclFrame": {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "fn": "plaintextForUserDecryption"
+      }
+    }
+  },
+  "s4": {
+    "vault": "0x7d79fB2B5d02f14Aeff50011055736d90Ae96592",
+    "vaultHandle": "0xebd544a3cb84a3b0abe7463d1c420eed08ddc1bcd9000000000000007a690500",
+    "depositGasUsed": "263943",
+    "views": {
+      "persistAllowed_h_vault": true,
+      "persistAllowed_h_WU": true,
+      "isHandleDelegated_WU_WD_vault": true
+    },
+    "before": {
+      "direct": {
+        "id": "S4.before.direct",
+        "ok": true,
+        "values": [
+          "5000"
+        ],
+        "ethCalls": [
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "userDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+        ],
+        "relayerCalled": true,
+        "onchainLinePath": [
+          "CleartextKMSVerifier.sol:244",
+          "CleartextKMSVerifier.sol:246",
+          "CleartextACL.sol:20",
+          "CleartextACL.sol:222",
+          "CleartextACL.sol:225",
+          "CleartextACL.sol:227",
+          "CleartextACL.sol:228",
+          "CleartextACL.sol:229",
+          "CleartextACL.sol:230",
+          "CleartextACL.sol:231",
+          "ACL.sol:481",
+          "CleartextACL.sol:231",
+          "CleartextACL.sol:233",
+          "CleartextACL.sol:236",
+          "ACL.sol:597",
+          "ACL.sol:599",
+          "ACL.sol:597",
+          "CleartextACL.sol:236",
+          "CleartextACL.sol:239",
+          "ACL.sol:597",
+          "ACL.sol:599",
+          "ACL.sol:597",
+          "CleartextACL.sol:239",
+          "CleartextACL.sol:242",
+          "CleartextACL.sol:196",
+          "CleartextACL.sol:197",
+          "CleartextACL.sol:90",
+          "CleartextACL.sol:91",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:38",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:91",
+          "CleartextACL.sol:94",
+          "CleartextACL.sol:96",
+          "CleartextACL.sol:90",
+          "CleartextACL.sol:197",
+          "CleartextACL.sol:201",
+          "CleartextACL.sol:202",
+          "CleartextACL.sol:56",
+          "CleartextACL.sol:202",
+          "CleartextACL.sol:205",
+          "CleartextACL.sol:196",
+          "CleartextACL.sol:242",
+          "CleartextACL.sol:229",
+          "CleartextACL.sol:226",
+          "CleartextACL.sol:222",
+          "ACL.sol:701",
+          "CleartextKMSVerifier.sol:246",
+          "CleartextKMSVerifier.sol:247",
+          "CleartextKMSVerifier.sol:185",
+          "CleartextKMSVerifier.sol:188",
+          "CleartextKMSVerifier.sol:190",
+          "CleartextKMSVerifier.sol:195",
+          "CleartextKMSVerifier.sol:198",
+          "CleartextKMSVerifier.sol:199",
+          "CleartextKMSVerifier.sol:200"
+        ],
+        "aclFrame": {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForUserDecryption"
+        }
+      },
+      "delegated": {
+        "id": "S4.before.delegated",
+        "ok": true,
+        "values": [
+          "5000"
+        ],
+        "ethCalls": [
+          "isHandleDelegatedForUserDecryption@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "delegatedUserDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+        ],
+        "relayerCalled": true,
+        "onchainLinePath": [
+          "CleartextKMSVerifier.sol:285",
+          "CleartextKMSVerifier.sol:286",
+          "CleartextACL.sol:20",
+          "CleartextACL.sol:246",
+          "CleartextACL.sol:250",
+          "CleartextACL.sol:251",
+          "CleartextACL.sol:252",
+          "CleartextACL.sol:253",
+          "CleartextACL.sol:254",
+          "CleartextACL.sol:255",
+          "ACL.sol:481",
+          "CleartextACL.sol:255",
+          "CleartextACL.sol:257",
+          "ACL.sol:571",
+          "ACL.sol:578",
+          "ACL.sol:576",
+          "ACL.sol:578",
+          "ACL.sol:581",
+          "ACL.sol:582",
+          "ACL.sol:746",
+          "ACL.sol:745",
+          "ACL.sol:746",
+          "ACL.sol:586",
+          "ACL.sol:746",
+          "ACL.sol:745",
+          "ACL.sol:746",
+          "ACL.sol:587",
+          "ACL.sol:585",
+          "ACL.sol:571",
+          "CleartextACL.sol:257",
+          "CleartextACL.sol:260",
+          "CleartextACL.sol:196",
+          "CleartextACL.sol:197",
+          "CleartextACL.sol:90",
+          "CleartextACL.sol:91",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:38",
+          "CleartextACL.sol:65",
+          "CleartextACL.sol:64",
+          "CleartextACL.sol:91",
+          "CleartextACL.sol:94",
+          "CleartextACL.sol:96",
+          "CleartextACL.sol:90",
+          "CleartextACL.sol:197",
+          "CleartextACL.sol:201",
+          "CleartextACL.sol:202",
+          "CleartextACL.sol:56",
+          "CleartextACL.sol:202",
+          "CleartextACL.sol:205",
+          "CleartextACL.sol:196",
+          "CleartextACL.sol:260",
+          "CleartextACL.sol:253",
+          "CleartextACL.sol:250",
+          "CleartextACL.sol:246",
+          "CleartextACL.sol:222",
+          "ACL.sol:701",
+          "CleartextKMSVerifier.sol:286"
+        ],
+        "aclFrame": {
+          "depth": 2,
+          "type": "STATICCALL",
+          "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+          "fn": "plaintextForDelegatedUserDecryption"
+        }
+      }
+    },
+    "retireViaHelper": {
+      "tx": "0x72454f79b718bdee99fe826021cc3a622d040b8c4dd4024c48b29dfa5cd84c6a",
+      "gasUsed": "53148",
+      "events": [
+        {
+          "name": "AccountRetired",
+          "args": [
+            "0x7d79fB2B5d02f14Aeff50011055736d90Ae96592",
+            "0x0000000000000000000000000000000000000000"
+          ]
+        }
+      ]
+    },
+    "WU_fhetest_handle_still_decrypts": {
+      "id": "S4.control.WU.FHETest",
+      "ok": true,
+      "values": [
+        "777"
+      ],
+      "ethCalls": [
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "persistAllowed@0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "userDecrypt@0x901f8942346f7ab3a01f6d7613119bca447bb030"
+      ],
+      "relayerCalled": true,
+      "onchainLinePath": [
+        "CleartextKMSVerifier.sol:244",
+        "CleartextKMSVerifier.sol:246",
+        "CleartextACL.sol:20",
+        "CleartextACL.sol:222",
+        "CleartextACL.sol:225",
+        "CleartextACL.sol:227",
+        "CleartextACL.sol:228",
+        "CleartextACL.sol:229",
+        "CleartextACL.sol:230",
+        "CleartextACL.sol:231",
+        "ACL.sol:481",
+        "CleartextACL.sol:231",
+        "CleartextACL.sol:233",
+        "CleartextACL.sol:236",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:236",
+        "CleartextACL.sol:239",
+        "ACL.sol:597",
+        "ACL.sol:599",
+        "ACL.sol:597",
+        "CleartextACL.sol:239",
+        "CleartextACL.sol:242",
+        "CleartextACL.sol:196",
+        "CleartextACL.sol:197",
+        "CleartextACL.sol:90",
+        "CleartextACL.sol:91",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:38",
+        "CleartextACL.sol:65",
+        "CleartextACL.sol:64",
+        "CleartextACL.sol:91",
+        "CleartextACL.sol:94",
+        "CleartextACL.sol:96",
+        "CleartextACL.sol:90",
+        "CleartextACL.sol:197",
+        "CleartextACL.sol:201",
+        "CleartextACL.sol:202",
+        "CleartextACL.sol:56",
+        "CleartextACL.sol:202",
+        "CleartextACL.sol:205",
+        "CleartextACL.sol:196",
+        "CleartextACL.sol:242",
+        "CleartextACL.sol:229",
+        "CleartextACL.sol:226",
+        "CleartextACL.sol:222",
+        "ACL.sol:701",
+        "CleartextKMSVerifier.sol:246",
+        "CleartextKMSVerifier.sol:247",
+        "CleartextKMSVerifier.sol:185",
+        "CleartextKMSVerifier.sol:188",
+        "CleartextKMSVerifier.sol:190",
+        "CleartextKMSVerifier.sol:195",
+        "CleartextKMSVerifier.sol:198",
+        "CleartextKMSVerifier.sol:199",
+        "CleartextKMSVerifier.sol:200"
+      ],
+      "aclFrame": {
+        "depth": 2,
+        "type": "STATICCALL",
+        "to": "0x50157cffd6bbfa2dece204a89ec419c23ef5755d",
+        "fn": "plaintextForUserDecryption"
+      }
+    }
+  },
+  "mockLimits": {
+    "note": "CleartextACL.plaintext(bytes32) is a public view with no ACL check; the mock proves the ACL flow, not confidentiality",
+    "retiredOldHandle": "0xd964dbe8b5e218a6933dc4564c3ec390522f14ca13000000000000007a690500",
+    "CleartextACL_plaintext_by_unrelated_caller": "1001",
+    "CleartextFHEVMExecutor_plaintexts": "1001"
+  },
+  "finishedAt": "2026-10-21T08:46:05.589Z"
+}

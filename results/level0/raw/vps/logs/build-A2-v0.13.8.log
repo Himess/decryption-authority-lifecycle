@@ -1,0 +1,85 @@
+INSCOPE start=2026-10-21T06:11:09Z cgroup=/system.slice/lifecycle-build-A2-v0.13.8-1792563069.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/kw.sh v0.13.8 build --lib --test acl]
+KW ver=v0.13.8 tree=harness step=build commit=fe3ca89b5111ca2b4abb220bf3c78417b821ceb5 date=2026-10-21T06:11:09Z host=VPS nproc=4
+KW dirty-files:  M kms-connector/crates/utils/src/tests/setup/db.rs  M kms-connector/crates/utils/src/tests/setup/instance.rs 
+KW toolchain=1.92.0-x86_64-unknown-linux-gnu (overridden by '/srv/lifecycle/src/fhevm-v0.13.8-harness/kms-connector/rust-toolchain.toml') | rustc 1.92.0 (ded5c06cf 2025-12-08) | cargo 1.92.0 (344c4567c 2025-10-21) | libprotoc 26.1 | jobs=1
+   Compiling tfhe v1.6.1
+   Compiling wasm-bindgen v0.2.114
+   Compiling protobuf v3.7.2
+   Compiling parse-display v0.9.1
+   Compiling sqlx-macros v0.8.6
+   Compiling opentelemetry-proto v0.30.0
+   Compiling kms-grpc v0.13.20-0 (https://github.com/zama-ai/kms.git?tag=v0.13.20-0#07b2a8fc)
+   Compiling ferroid v2.0.0
+   Compiling threshold-types v0.13.20-0 (https://github.com/zama-ai/kms.git?tag=v0.13.20-0#07b2a8fc)
+   Compiling actix-web-codegen v4.3.0
+   Compiling cookie v0.16.2
+   Compiling actix-router v0.5.3
+   Compiling actix-server v2.6.0
+   Compiling opentelemetry-http v0.30.0
+   Compiling toml_parser v1.0.4
+   Compiling clap_derive v4.5.47
+   Compiling etcetera v0.11.0
+   Compiling git-version-macro v0.3.9
+   Compiling actix-macros v0.2.4
+   Compiling pathdiff v0.2.3
+   Compiling impl-more v0.1.9
+   Compiling toml_datetime v0.7.3
+   Compiling humantime v2.3.0
+   Compiling humantime-serde v1.1.1
+   Compiling toml_edit v0.23.7
+   Compiling actix-web v4.11.0
+   Compiling config v0.15.19
+   Compiling git-version v0.3.9
+   Compiling testcontainers v0.27.3
+   Compiling clap v4.5.47
+   Compiling opentelemetry-otlp v0.30.0
+   Compiling sqlx v0.8.6
+   Compiling prometheus v0.14.0
+   Compiling fhevm_host_bindings v0.10.0 (/srv/lifecycle/src/fhevm-v0.13.8-harness/host-contracts/rust_bindings)
+   Compiling fhevm_gateway_bindings v0.1.0-rc14 (/srv/lifecycle/src/fhevm-v0.13.8-harness/gateway-contracts/rust_bindings)
+   Compiling tracing-opentelemetry v0.31.0
+   Compiling rstest_macros v0.26.1
+   Compiling connector-utils v0.12.0 (/srv/lifecycle/src/fhevm-v0.13.8-harness/kms-connector/crates/utils)
+   Compiling proc-macro-crate v3.4.0
+   Compiling tonic-health v0.14.5
+   Compiling sdd v3.0.10
+   Compiling glob v0.3.3
+   Compiling relative-path v1.9.3
+   Compiling scc v2.4.0
+   Compiling serial_test_derive v3.2.0
+   Compiling tracing-test-macro v0.2.5
+   Compiling futures-timer v3.0.3
+   Compiling rstest v0.26.1
+   Compiling tracing-test v0.2.5
+   Compiling serial_test v3.2.0
+   Compiling kms-worker v0.12.0 (/srv/lifecycle/src/fhevm-v0.13.8-harness/kms-connector/crates/kms-worker)
+   Compiling mocktail v0.3.2
+      Timing report saved to /srv/lifecycle/target/v0.13.8/cargo-timings/cargo-timing-20261021T061113.523492918Z.html
+    Finished `test` profile [unoptimized] target(s) in 12m 07s
+  Executable unittests src/lib.rs (/srv/lifecycle/target/v0.13.8/debug/deps/kms_worker-19b2fd6d5e0fc738)
+  Executable tests/acl.rs (/srv/lifecycle/target/v0.13.8/debug/deps/acl-5826cbaa5b0f478f)
+	Command being timed: "/srv/lifecycle/scripts/kw.sh v0.13.8 build --lib --test acl"
+	User time (seconds): 564.06
+	System time (seconds): 97.74
+	Percent of CPU this job got: 90%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 12:11.45
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2669488
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 133242
+	Minor (reclaiming a frame) page faults: 5262422
+	Voluntary context switches: 147646
+	Involuntary context switches: 7514
+	Swaps: 0
+	File system inputs: 5428064
+	File system outputs: 3221496
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T06:23:21Z rc=0 cgroup_memory.peak_bytes=2684354560 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=build-A2-v0.13.8 unit=lifecycle-build-A2-v0.13.8-1792563069 rc=0 wall_s=735 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=735 killed=no sampled_peak_anon_mb=2516 sampled_peak_cgroup_current_mb=2560 sampled_peak_swap_mb=1330

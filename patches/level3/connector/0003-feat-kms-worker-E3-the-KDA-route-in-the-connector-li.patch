@@ -1,0 +1,940 @@
+From 564d7d1705567d1010cc49c31a3ca96f69d47fb1 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 23:20:55 +0300
+Subject: [PATCH 3/5] feat(kms-worker): E3, the KDA route, in the connector
+ (lifecycle Level 3)
+
+The kms-worker takes the E3 route (rules K4-K6) in front of Profile H on
+the RFC-016 path, when `profile_h.kda_schemes` names at least one FIPS 204
+parameter set. A request whose signature field is
+abi.encode(signerBytes, sig) and whose requester is the key-derived
+address is verified natively; a failure is refused for good, with no
+ECDSA or ERC-1271 fallback. Any other request goes through Profile H as
+before. The delegation itself is the usual delegated V1 check with the
+KDA as delegate, so retirement and revocation apply unchanged.
+
+`profile_h.kda_k8_mode` selects how the node runs ML-DSA (K8):
+`single:<impl>` or `agree:<impl>,<impl>`; a disagreement is refused and
+logged. The worker logs the signature check's wall time with each
+verdict (`sig_check_us`), for the latency measurement.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ kms-connector/Cargo.lock                      | 401 +++++++++++++++++-
+ kms-connector/crates/kms-worker/Cargo.toml    |   5 +-
+ .../crates/kms-worker/src/core/config.rs      |  40 +-
+ .../src/core/event_processor/decryption.rs    |  80 +++-
+ .../src/core/event_processor/rpc.rs           |  28 +-
+ 5 files changed, 528 insertions(+), 26 deletions(-)
+
+diff --git a/kms-connector/Cargo.lock b/kms-connector/Cargo.lock
+index 144ac630..b8e42043 100644
+--- a/kms-connector/Cargo.lock
++++ b/kms-connector/Cargo.lock
+@@ -876,7 +876,7 @@ dependencies = [
+  "aws-config",
+  "aws-sdk-kms",
+  "k256",
+- "spki",
++ "spki 0.7.3",
+  "thiserror 2.0.20",
+  "tracing",
+ ]
+@@ -2097,6 +2097,26 @@ dependencies = [
+  "virtue",
+ ]
+ 
++[[package]]
++name = "bindgen"
++version = "0.72.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "993776b509cfb49c750f11b8f07a46fa23e0a1386ffc01fb1e7d343efc387895"
++dependencies = [
++ "bitflags",
++ "cexpr",
++ "clang-sys",
++ "itertools 0.10.5",
++ "log",
++ "prettyplease",
++ "proc-macro2",
++ "quote",
++ "regex",
++ "rustc-hash",
++ "shlex",
++ "syn 2.0.117",
++]
++
+ [[package]]
+ name = "bit-vec"
+ version = "0.9.1"
+@@ -2427,6 +2447,15 @@ dependencies = [
+  "shlex",
+ ]
+ 
++[[package]]
++name = "cexpr"
++version = "0.6.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "6fac387a98bb7c37292057cffc56d62ecb629900026402633ae9160df93a8766"
++dependencies = [
++ "nom",
++]
++
+ [[package]]
+ name = "cfg-if"
+ version = "1.0.4"
+@@ -2492,6 +2521,17 @@ dependencies = [
+  "tracing",
+ ]
+ 
++[[package]]
++name = "clang-sys"
++version = "1.9.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "157a8ba7b480713b56f4c09fd13fc3e0a22a5dfab8097ba61cbc5feef950788a"
++dependencies = [
++ "glob",
++ "libc",
++ "libloading",
++]
++
+ [[package]]
+ name = "clap"
+ version = "4.5.47"
+@@ -2541,6 +2581,12 @@ dependencies = [
+  "cc",
+ ]
+ 
++[[package]]
++name = "cmov"
++version = "0.5.4"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "0c9ea0ac24bc397ab3c98583a3c9ba74fa56b09a4449bbe172b9b1ddb016027a"
++
+ [[package]]
+ name = "colorchoice"
+ version = "1.0.5"
+@@ -2728,6 +2774,17 @@ version = "0.8.7"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
+ 
++[[package]]
++name = "core-models"
++version = "0.0.7"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ee3344d349528f449816cfa85e558c439bdca5a6d8a738cfb21e69f0b2b1952f"
++dependencies = [
++ "hax-lib",
++ "pastey",
++ "rand 0.10.1",
++]
++
+ [[package]]
+ name = "cpubits"
+ version = "0.1.1"
+@@ -2752,6 +2809,17 @@ dependencies = [
+  "libc",
+ ]
+ 
++[[package]]
++name = "crabgrind"
++version = "0.2.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "cc7459e07732f6de74001fcf73a3fdfbb0f368e4fd8e2392f4a2206a065e6e95"
++dependencies = [
++ "bindgen",
++ "cc",
++ "pkg-config",
++]
++
+ [[package]]
+ name = "crc"
+ version = "3.4.0"
+@@ -2844,7 +2912,18 @@ version = "0.2.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "77727bb15fa921304124b128af125e7e3b968275d1b108b379190264f4423710"
+ dependencies = [
++ "getrandom 0.4.2",
+  "hybrid-array",
++ "rand_core 0.10.1",
++]
++
++[[package]]
++name = "ctutils"
++version = "0.4.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "03bb0e1cc970d482d121d9a1744999169b69a07470b3d644a7894e53fcaf4574"
++dependencies = [
++ "cmov",
+ ]
+ 
+ [[package]]
+@@ -2944,6 +3023,16 @@ dependencies = [
+  "zeroize",
+ ]
+ 
++[[package]]
++name = "der"
++version = "0.8.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "a878c850e9e421b20262e9b41f9c860e4785fa07541c266b62ff9d1ef998a80a"
++dependencies = [
++ "const-oid 0.10.2",
++ "zeroize",
++]
++
+ [[package]]
+ name = "der-parser"
+ version = "10.0.0"
+@@ -3097,13 +3186,13 @@ version = "0.16.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "ee27f32b5c5292967d2d4a9d7f1e0b0aed2c15daded5a60300e4abb9d8020bca"
+ dependencies = [
+- "der",
++ "der 0.7.10",
+  "digest 0.10.7",
+  "elliptic-curve",
+  "rfc6979",
+  "serdect",
+- "signature",
+- "spki",
++ "signature 2.2.0",
++ "spki 0.7.3",
+ ]
+ 
+ [[package]]
+@@ -3139,7 +3228,7 @@ dependencies = [
+  "ff",
+  "generic-array",
+  "group",
+- "pkcs8",
++ "pkcs8 0.10.2",
+  "rand_core 0.6.4",
+  "sec1",
+  "serdect",
+@@ -3370,6 +3459,18 @@ version = "0.1.9"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
+ 
++[[package]]
++name = "fips204"
++version = "0.4.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "c9fb5a367b9846933e271a3c2a992930743f82ae5e8cb7faa780715a80fa0b15"
++dependencies = [
++ "rand_core 0.6.4",
++ "sha2",
++ "sha3 0.10.8",
++ "zeroize",
++]
++
+ [[package]]
+ name = "fixed-cache"
+ version = "0.1.10"
+@@ -3816,6 +3917,43 @@ dependencies = [
+  "hashbrown 0.15.5",
+ ]
+ 
++[[package]]
++name = "hax-lib"
++version = "0.3.7"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "01a33cb227f97ee5c419064c31d7c55a7d895f28d8019ccdadc311cc036500c4"
++dependencies = [
++ "hax-lib-macros",
++ "num-bigint 0.4.6",
++ "num-traits",
++]
++
++[[package]]
++name = "hax-lib-macros"
++version = "0.3.7"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "28da835a5f153e9f3d0cc1f42ee605a1cfa9093c93348193793d60a1b0908b51"
++dependencies = [
++ "hax-lib-macros-types",
++ "proc-macro-error2",
++ "proc-macro2",
++ "quote",
++ "syn 2.0.117",
++]
++
++[[package]]
++name = "hax-lib-macros-types"
++version = "0.3.7"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "eed327e9a28d6ee018a4a9ba842d4ee27e378c8a591d2beb6f42f32b24a02fcb"
++dependencies = [
++ "proc-macro2",
++ "quote",
++ "serde",
++ "serde_json",
++ "uuid",
++]
++
+ [[package]]
+ name = "heck"
+ version = "0.5.0"
+@@ -3959,6 +4097,7 @@ version = "0.4.11"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "08d46837a0ed51fe95bd3b05de33cd64a1ee88fc797477ca48446872504507c5"
+ dependencies = [
++ "ctutils",
+  "typenum",
+ ]
+ 
+@@ -4576,6 +4715,93 @@ version = "0.2.186"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "68ab91017fe16c622486840e4c83c9a37afeff978bd239b5293d61ece587de66"
+ 
++[[package]]
++name = "libcrux-intrinsics"
++version = "0.0.8"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "98a0c574d4eb81d0814bc2b91e4a433d7e0b35851b1d62eb5dd95c064f1f76d0"
++dependencies = [
++ "core-models",
++ "hax-lib",
++]
++
++[[package]]
++name = "libcrux-macros"
++version = "0.0.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ffd6aa2dcd5be681662001b81d493f1569c6d49a32361f470b0c955465cd0338"
++dependencies = [
++ "quote",
++ "syn 2.0.117",
++]
++
++[[package]]
++name = "libcrux-ml-dsa"
++version = "0.0.10"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "783ebed7cb27de6d44ef2aa662648d1a0869694f2f754f2f1ed45e959ef3b48e"
++dependencies = [
++ "core-models",
++ "hax-lib",
++ "libcrux-intrinsics",
++ "libcrux-macros",
++ "libcrux-platform",
++ "libcrux-secrets",
++ "libcrux-sha3",
++ "tls_codec",
++]
++
++[[package]]
++name = "libcrux-platform"
++version = "0.0.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "1d9e21d7ed31a92ac539bd69a8c970b183ee883872d2d19ce27036e24cb8ecc4"
++dependencies = [
++ "libc",
++]
++
++[[package]]
++name = "libcrux-secrets"
++version = "0.0.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "79054fc9037cb70d6a546cf094cea7d7df06af5e49d230ba24103d27ccc886f1"
++dependencies = [
++ "crabgrind",
++ "hax-lib",
++]
++
++[[package]]
++name = "libcrux-sha3"
++version = "0.0.10"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "c09f5c39afae0528e1f70a3c1e3c6ee649ec1f19dda26fc9b6ea91108fb879ef"
++dependencies = [
++ "hax-lib",
++ "libcrux-intrinsics",
++ "libcrux-platform",
++ "libcrux-traits",
++]
++
++[[package]]
++name = "libcrux-traits"
++version = "0.0.8"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "3fa7a21e8c2e8baa8b40f0b176740f2ca4baadd79d1b00e48d6b1e363c42085a"
++dependencies = [
++ "libcrux-secrets",
++ "rand 0.10.1",
++]
++
++[[package]]
++name = "libloading"
++version = "0.8.9"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d7c4b02199fee7c5d21a5ae7d8cfa79a6ef5bb2fc834d6e9058e89c825efdc55"
++dependencies = [
++ "cfg-if",
++ "windows-link",
++]
++
+ [[package]]
+ name = "libm"
+ version = "0.2.16"
+@@ -4767,6 +4993,22 @@ dependencies = [
+  "windows-sys 0.61.2",
+ ]
+ 
++[[package]]
++name = "ml-dsa"
++version = "0.1.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "add6b9d92e496f16f4526d68ff29da1483aba4b119baeab8bed3b9e3544a6f3d"
++dependencies = [
++ "const-oid 0.10.2",
++ "crypto-common 0.2.1",
++ "ctutils",
++ "hybrid-array",
++ "module-lattice",
++ "pkcs8 0.11.0",
++ "shake",
++ "signature 3.0.0",
++]
++
+ [[package]]
+ name = "mocktail"
+ version = "0.3.2"
+@@ -4792,6 +5034,17 @@ dependencies = [
+  "uuid",
+ ]
+ 
++[[package]]
++name = "module-lattice"
++version = "0.2.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "0c61b87c9683ab7cb1c6871d261ad5479b6b10ceb52c4352aaca3b5d35a8febe"
++dependencies = [
++ "ctutils",
++ "hybrid-array",
++ "num-traits",
++]
++
+ [[package]]
+ name = "multimap"
+ version = "0.10.1"
+@@ -5240,6 +5493,12 @@ version = "1.0.15"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
+ 
++[[package]]
++name = "pastey"
++version = "0.2.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "2ee67f1008b1ba2321834326597b8e186293b049a023cdef258527550b9935b4"
++
+ [[package]]
+ name = "pathdiff"
+ version = "0.2.3"
+@@ -5612,9 +5871,9 @@ version = "0.7.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "c8ffb9f10fa047879315e6625af03c164b16962a5368d724ed16323b68ace47f"
+ dependencies = [
+- "der",
+- "pkcs8",
+- "spki",
++ "der 0.7.10",
++ "pkcs8 0.10.2",
++ "spki 0.7.3",
+ ]
+ 
+ [[package]]
+@@ -5623,8 +5882,18 @@ version = "0.10.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "f950b2377845cebe5cf8b5165cb3cc1a5e0fa5cfa3e1f7f55707d8fd82e0a7b7"
+ dependencies = [
+- "der",
+- "spki",
++ "der 0.7.10",
++ "spki 0.7.3",
++]
++
++[[package]]
++name = "pkcs8"
++version = "0.11.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "451913da69c775a56034ea8d9003d27ee8948e12443eae7c038ba100a4f21cb7"
++dependencies = [
++ "der 0.8.2",
++ "spki 0.8.1",
+ ]
+ 
+ [[package]]
+@@ -5669,6 +5938,38 @@ dependencies = [
+  "zerocopy",
+ ]
+ 
++[[package]]
++name = "pqcrypto-internals"
++version = "0.2.11"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "b4a326caf27cbf2ac291ca7fd56300497ba9e76a8cc6a7d95b7a18b57f22b61d"
++dependencies = [
++ "cc",
++ "dunce",
++ "getrandom 0.3.4",
++ "libc",
++]
++
++[[package]]
++name = "pqcrypto-mldsa"
++version = "0.1.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "f9f812cd126a2582599478a434fea75937b4b05d234c64a49e0cea129e130528"
++dependencies = [
++ "cc",
++ "glob",
++ "libc",
++ "paste",
++ "pqcrypto-internals",
++ "pqcrypto-traits",
++]
++
++[[package]]
++name = "pqcrypto-traits"
++version = "0.3.5"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "94e851c7654eed9e68d7d27164c454961a616cf8c203d500607ef22c737b51bb"
++
+ [[package]]
+ name = "prettyplease"
+ version = "0.2.37"
+@@ -5699,6 +6000,16 @@ dependencies = [
+  "toml_edit",
+ ]
+ 
++[[package]]
++name = "proc-macro-error-attr2"
++version = "2.0.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "96de42df36bb9bba5542fe9f1a054b8cc87e172759a1868aa05c1f3acc89dfc5"
++dependencies = [
++ "proc-macro2",
++ "quote",
++]
++
+ [[package]]
+ name = "proc-macro-error-attr3"
+ version = "3.0.1"
+@@ -5709,6 +6020,18 @@ dependencies = [
+  "quote",
+ ]
+ 
++[[package]]
++name = "proc-macro-error2"
++version = "2.0.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "11ec05c52be0a07b08061f7dd003e7d7092e0472bc731b4af7bb1ef876109802"
++dependencies = [
++ "proc-macro-error-attr2",
++ "proc-macro2",
++ "quote",
++ "syn 2.0.117",
++]
++
+ [[package]]
+ name = "proc-macro-error3"
+ version = "3.0.1"
+@@ -6380,10 +6703,10 @@ dependencies = [
+  "num-integer",
+  "num-traits",
+  "pkcs1",
+- "pkcs8",
++ "pkcs8 0.10.2",
+  "rand_core 0.6.4",
+- "signature",
+- "spki",
++ "signature 2.2.0",
++ "spki 0.7.3",
+  "subtle",
+  "zeroize",
+ ]
+@@ -6679,9 +7002,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "d3e97a565f76233a6003f9f5c54be1d9c5bdfa3eccfb189469f11ec4901c47dc"
+ dependencies = [
+  "base16ct",
+- "der",
++ "der 0.7.10",
+  "generic-array",
+- "pkcs8",
++ "pkcs8 0.10.2",
+  "serdect",
+  "subtle",
+  "zeroize",
+@@ -7062,6 +7385,16 @@ dependencies = [
+  "rand_core 0.6.4",
+ ]
+ 
++[[package]]
++name = "signature"
++version = "3.0.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "28d567dcbaf0049cb8ac2608a76cd95ff9e4412e1899d389ee400918ca7537f5"
++dependencies = [
++ "digest 0.11.3",
++ "rand_core 0.10.1",
++]
++
+ [[package]]
+ name = "simd-adler32"
+ version = "0.3.9"
+@@ -7125,7 +7458,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "d91ed6c858b01f942cd56b37a94b3e0a1798290327d1236e4d9cf4eaca44d29d"
+ dependencies = [
+  "base64ct",
+- "der",
++ "der 0.7.10",
++]
++
++[[package]]
++name = "spki"
++version = "0.8.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "7ef958a98b9d5da290cfc78946e9f3e61e1e62a18db0d92cac0b83cc161491a9"
++dependencies = [
++ "base64ct",
++ "der 0.8.2",
+ ]
+ 
+ [[package]]
+@@ -7840,6 +8183,27 @@ version = "0.1.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
+ 
++[[package]]
++name = "tls_codec"
++version = "0.5.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "18cc98286004cea38f717e2b03d990fc774fbfd38a82720de40e5c94365067c8"
++dependencies = [
++ "tls_codec_derive",
++ "zeroize",
++]
++
++[[package]]
++name = "tls_codec_derive"
++version = "0.5.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "674f41dd95f76cdeb005c83f9444e20cf43daebef37cde9e49a9ca6f4e87b423"
++dependencies = [
++ "proc-macro2",
++ "quote",
++ "syn 2.0.117",
++]
++
+ [[package]]
+ name = "tokio"
+ version = "1.47.1"
+@@ -8468,6 +8832,11 @@ version = "0.14.0"
+ dependencies = [
+  "alloy",
+  "fhevm_gateway_bindings",
++ "fips204",
++ "libcrux-ml-dsa",
++ "ml-dsa",
++ "pqcrypto-mldsa",
++ "pqcrypto-traits",
+  "thiserror 2.0.20",
+ ]
+ 
+diff --git a/kms-connector/crates/kms-worker/Cargo.toml b/kms-connector/crates/kms-worker/Cargo.toml
+index 8146f1c4..98b26266 100644
+--- a/kms-connector/crates/kms-worker/Cargo.toml
++++ b/kms-connector/crates/kms-worker/Cargo.toml
+@@ -13,7 +13,8 @@ connector-utils.workspace = true
+ fhevm_gateway_bindings.workspace = true
+ fhevm_host_bindings.workspace = true
+ kms-connector-api.workspace = true
+-user-decryption-signature.workspace = true
++# [lifecycle Level 3] E3, the KDA route, with every K8 ML-DSA implementation (none independently audited).
++user-decryption-signature = { workspace = true, features = ["k8"] }
+ 
+ actix-web.workspace = true
+ alloy.workspace = true
+@@ -47,6 +48,8 @@ serial_test.workspace = true
+ testcontainers.workspace = true
+ toml.workspace = true
+ tracing-test.workspace = true
++# [lifecycle Level 3, K8] Test-only fault injection into one ML-DSA implementation.
++user-decryption-signature = { workspace = true, features = ["k8", "k8-fault-injection"] }
+ 
+ [[bin]]
+ name = "kms-worker"
+diff --git a/kms-connector/crates/kms-worker/src/core/config.rs b/kms-connector/crates/kms-worker/src/core/config.rs
+index 08107312..0043db59 100644
+--- a/kms-connector/crates/kms-worker/src/core/config.rs
++++ b/kms-connector/crates/kms-worker/src/core/config.rs
+@@ -18,7 +18,10 @@ use connector_utils::{
+ use serde::Serialize;
+ use serde::{Deserialize, Deserializer};
+ use std::{net::SocketAddr, num::NonZeroUsize, str::FromStr, time::Duration};
+-use user_decryption_signature::{CodeFirstMode, SignaturePolicy};
++use user_decryption_signature::{
++    CodeFirstMode, SignaturePolicy,
++    kda::{K8Mode, KdaScheme},
++};
+ 
+ /// Configuration of the `KmsWorker`.
+ #[derive(Clone, Debug, Deserialize, PartialEq)]
+@@ -307,6 +310,12 @@ pub struct ProfileHConfig {
+     /// H6: refuse requests on the legacy gateway path, where the user's signature is checked by ECDSA only, when the
+     /// user has regular code on the host chain (EIP-7702 delegated accounts are not regular code).
+     pub refuse_regular_code_on_legacy: bool,
++    /// [lifecycle Level 3, E3] FIPS 204 parameter sets the KDA route accepts (K5, K7): `ML-DSA-44`, `ML-DSA-65`,
++    /// `ML-DSA-87`. Empty (the default): no KDA route. The route runs in front of Profile H on the RFC-016 path.
++    pub kda_schemes: Vec<String>,
++    /// [lifecycle Level 3, K8] How this node runs ML-DSA: `single:<impl>` or `agree:<impl>,<impl>`, with `rustcrypto`,
++    /// `fips204`, `libcrux` or `pqclean`.
++    pub kda_k8_mode: String,
+ }
+ 
+ impl Default for ProfileHConfig {
+@@ -323,11 +332,40 @@ impl Default for ProfileHConfig {
+             eip7702_fallback: policy.eip7702_fallback,
+             final_retirement_denials: true,
+             refuse_regular_code_on_legacy: false,
++            kda_schemes: Vec::new(),
++            kda_k8_mode: K8Mode::default().to_string(),
+         }
+     }
+ }
+ 
+ impl ProfileHConfig {
++    /// [lifecycle Level 3, E3] The enabled KDA schemes. Panics on an unknown name (a startup error).
++    pub fn kda_schemes(&self) -> Vec<KdaScheme> {
++        self.kda_schemes
++            .iter()
++            .map(|name| {
++                KdaScheme::from_name(name)
++                    .unwrap_or_else(|| panic!("invalid profile_h.kda_schemes entry `{name}`"))
++            })
++            .collect()
++    }
++
++    /// [lifecycle Level 3, K8] The node's ML-DSA mode. Panics on an invalid value or on an implementation this build
++    /// does not include (a startup error).
++    pub fn kda_k8_mode(&self) -> K8Mode {
++        let mode: K8Mode = self
++            .kda_k8_mode
++            .parse()
++            .unwrap_or_else(|e| panic!("invalid profile_h.kda_k8_mode: {e}"));
++        for i in mode.implementations() {
++            assert!(
++                i.available(),
++                "profile_h.kda_k8_mode: {i} is not in this build"
++            );
++        }
++        mode
++    }
++
+     /// The shared-crate policy for these values. Panics on an unknown `code_first_mode` (a startup error).
+     pub fn signature_policy(&self) -> SignaturePolicy {
+         SignaturePolicy {
+diff --git a/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs b/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+index 9a9d0a89..91eed3f3 100644
+--- a/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
++++ b/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+@@ -34,9 +34,10 @@ use std::{
+     collections::HashMap,
+     sync::{Arc, Mutex},
+ };
+-use tracing::{info, warn};
++use tracing::{error, info, warn};
+ use user_decryption_signature::{
+     AttemptState, Disposition, SignatureInput, SignaturePolicy, compute_user_decrypt_digest,
++    kda::{K8Mode, KdaError, KdaOutcome, KdaScheme, KdaSkip},
+ };
+ 
+ #[derive(Clone)]
+@@ -70,6 +71,10 @@ pub struct DecryptionProcessor<GP: Provider, HP: Provider> {
+ struct ProfileH {
+     config: ProfileHConfig,
+     policy: SignaturePolicy,
++    /// [lifecycle Level 3, E3] Schemes of the KDA route; empty: no route.
++    kda_schemes: Vec<KdaScheme>,
++    /// [lifecycle Level 3, K8] How this node runs ML-DSA.
++    k8: K8Mode,
+     /// H4 attempt state per request, keyed by the request's EIP-712 digest, when no `attempt_store` is set. In
+     /// memory: a restart forgets it, which can grant at most `max_erc1271_attempts` further attempts to a request
+     /// already being retried. With an `attempt_store` the database copy is used instead and survives restarts.
+@@ -118,9 +123,16 @@ where
+                     config.profile_h.final_retirement_denials,
+                     config.profile_h.refuse_regular_code_on_legacy,
+                 );
++                let kda_schemes = config.profile_h.kda_schemes();
++                let k8 = config.profile_h.kda_k8_mode();
++                if !kda_schemes.is_empty() {
++                    info!("E3 KDA route enabled: schemes={kda_schemes:?} k8={k8}");
++                }
+                 ProfileH {
+                     config: config.profile_h.clone(),
+                     policy,
++                    kda_schemes,
++                    k8,
+                     attempts: Arc::default(),
+                 }
+             }),
+@@ -248,11 +260,14 @@ where
+     }
+ 
+     /// [lifecycle Level 1] The RFC-016 signature check: today's `verify_signature`, or Profile H when enabled.
++    /// [lifecycle Level 3] With KDA schemes enabled, the E3 route runs first (K5); `owners` are the request's
++    /// per-entry owners. A KDA signature that fails is refused for good, with no other path tried (K6).
+     async fn verify_user_signature(
+         &self,
+         host_client: &HostRpcClient<HP>,
+         payload: &fhevm_gateway_bindings::decryption::IDecryption::UserDecryptionRequestPayload,
+         digest: B256,
++        owners: &[Address],
+     ) -> Result<(), RequestCheckError> {
+         let Some(profile_h) = &self.profile_h else {
+             return host_client
+@@ -264,11 +279,62 @@ where
+                 )
+                 .await;
+         };
++        // [lifecycle Level 3] Wall time of the signature check, logged with its verdict (latency measurement).
++        let started = std::time::Instant::now();
+         let input = SignatureInput::from_payload(payload, digest);
+         let attempts = self.load_attempts(profile_h, digest).await?;
+-        let outcome = host_client
+-            .verify_signature_profile_h(&input, &profile_h.policy, attempts)
+-            .await;
++        let outcome = if profile_h.kda_schemes.is_empty() {
++            host_client
++                .verify_signature_profile_h(&input, &profile_h.policy, attempts)
++                .await
++        } else {
++            match host_client
++                .verify_signature_kda(
++                    &input,
++                    owners,
++                    &profile_h.policy,
++                    &profile_h.kda_schemes,
++                    profile_h.k8,
++                    attempts,
++                )
++                .await
++            {
++                KdaOutcome::Kda(Ok(scheme)) => {
++                    info!(
++                        "E3 KDA accepted signer={} scheme={scheme} k8={} sig_check_us={}",
++                        payload.userAddress,
++                        profile_h.k8,
++                        started.elapsed().as_micros()
++                    );
++                    return Ok(());
++                }
++                KdaOutcome::Kda(Err(e)) => {
++                    if matches!(e, KdaError::ImplementationsDisagree { .. }) {
++                        error!("E3 K8 DISAGREEMENT signer={} {e}", payload.userAddress);
++                    }
++                    warn!(
++                        "E3 KDA rejected signer={} error={e} k8={} sig_check_us={}",
++                        payload.userAddress,
++                        profile_h.k8,
++                        started.elapsed().as_micros()
++                    );
++                    return Err(RequestCheckError::irrecoverable(
++                        RequestCheckKind::Signature,
++                        ErrorCode::UserSignatureRejected,
++                        anyhow!("{e}"),
++                    ));
++                }
++                KdaOutcome::ProfileH { skip, outcome } => {
++                    if skip != KdaSkip::NotKdaSignature {
++                        info!(
++                            "E3 KDA route not taken signer={} skip={skip:?}",
++                            payload.userAddress
++                        );
++                    }
++                    *outcome
++                }
++            }
++        };
+         if let Some(report) = outcome.shadow()
+             && (report.would_reject() || report.would_accept())
+         {
+@@ -286,12 +352,13 @@ where
+             Ok(verification) => {
+                 self.clear_attempts(profile_h, digest).await;
+                 info!(
+-                    "PROFILE-H accepted signer={} path={:?} block={:?} code={:?} erc1271_calls={}",
++                    "PROFILE-H accepted signer={} path={:?} block={:?} code={:?} erc1271_calls={} sig_check_us={}",
+                     payload.userAddress,
+                     verification.path,
+                     verification.block,
+                     verification.code,
+                     verification.erc1271_calls,
++                    started.elapsed().as_micros(),
+                 );
+                 Ok(())
+             }
+@@ -668,6 +735,7 @@ where
+             salt: None,
+         };
+         let digest = compute_user_decrypt_digest(payload, &domain);
++        let owners: Vec<Address> = request.handles.iter().map(|h| h.ownerAddress).collect();
+ 
+         // Signature verification, invalidation, and per-handle ACL checks are all independent
+         // host-chain reads. Fire them concurrently so the smart-account happy path is faster.
+@@ -675,7 +743,7 @@ where
+         // order.
+         tokio::try_join!(
+             biased;
+-            self.verify_user_signature(host_client, payload, digest),
++            self.verify_user_signature(host_client, payload, digest, &owners),
+             self.inner_signature_invalidation_check(
+                 host_client,
+                 payload.userAddress,
+diff --git a/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs b/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+index 4d02abcc..3323c1a0 100644
+--- a/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
++++ b/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+@@ -8,8 +8,9 @@ use alloy::{
+ };
+ use fhevm_host_bindings::acl::ACL::ACLInstance;
+ use user_decryption_signature::{
+-    AccountCode, AttemptState, Outcome, SignatureInput, SignaturePolicy, read_account_code,
+-    verify_user_decryption_signature,
++    AccountCode, AttemptState, Outcome, SignatureInput, SignaturePolicy,
++    kda::{K8Mode, KdaOutcome, KdaScheme, verify_with_kda_k8},
++    read_account_code, verify_user_decryption_signature,
+ };
+ 
+ alloy::sol! {
+@@ -112,6 +113,29 @@ impl<P: Provider> HostRpcClient<P> {
+             .await
+     }
+ 
++    /// [lifecycle Level 3, E3] The KDA route (K5, K6) in front of Profile H, on this host chain. `owners` are the
++    /// request's per-entry owners; `k8` how this node runs ML-DSA.
++    pub async fn verify_signature_kda(
++        &self,
++        input: &SignatureInput<'_>,
++        owners: &[Address],
++        policy: &SignaturePolicy,
++        schemes: &[KdaScheme],
++        k8: K8Mode,
++        attempts: AttemptState,
++    ) -> KdaOutcome {
++        verify_with_kda_k8(
++            self.acl_contract.provider(),
++            input,
++            owners,
++            policy,
++            schemes,
++            k8,
++            attempts,
++        )
++        .await
++    }
++
+     /// [lifecycle Level 1, H5] `isAccountRetired(account)` on this chain's ACL, at the latest block. `None` when the
+     /// registry has no lifecycle Core (the call reverts) or the call fails: callers then keep the original denial.
+     pub async fn is_account_retired(&self, account: Address) -> Option<bool> {

@@ -1,0 +1,18 @@
+2026-10-21T22:31:17Z START p12-unit-l3
+2026-10-21T22:31:23Z END p12-unit-l3 rc=0
+2026-10-21T22:31:23Z START p12-clippy-l3
+2026-10-21T22:31:29Z END p12-clippy-l3 rc=0
+2026-10-21T22:31:29Z START p12-fmt-l3
+2026-10-21T22:31:34Z END p12-fmt-l3 rc=0
+2026-10-21T22:31:34Z START build-p12-main-l3
+2026-10-21T22:32:27Z END build-p12-main-l3 rc=0
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 11 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-21T22:32:41Z START p12-main-l3-r1
+2026-10-21T22:38:48Z END p12-main-l3-r1 rc=0
+2026-10-21T22:38:48Z CHAIN DONE
+2026-10-21T22:38:49Z lifecycle-pg removed

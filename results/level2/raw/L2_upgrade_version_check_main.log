@@ -1,0 +1,22 @@
+::group::Checking ACL
+ACL: bytecode CHANGED
+::endgroup::
+::group::Checking FHEVMExecutor
+FHEVMExecutor: bytecode unchanged
+::endgroup::
+::group::Checking KMSVerifier
+KMSVerifier: bytecode unchanged
+::endgroup::
+::group::Checking InputVerifier
+InputVerifier: bytecode unchanged
+::endgroup::
+::group::Checking HCULimit
+HCULimit: bytecode unchanged
+::endgroup::
+::group::Checking ProtocolConfig
+ProtocolConfig: bytecode unchanged
+::endgroup::
+::group::Checking KMSGeneration
+KMSGeneration: bytecode unchanged
+::endgroup::
+All contracts passed upgrade version checks

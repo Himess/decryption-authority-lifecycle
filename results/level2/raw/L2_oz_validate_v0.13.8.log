@@ -1,0 +1,21 @@
+== contracts/ACL.sol:ACL (reference test/acl/retirement/fixtures/ACL_v0_4_1.sol:ACL)
+ ✔  contracts/ACL.sol:ACL (upgrades from test/acl/retirement/fixtures/ACL_v0_4_1.sol:ACL)
+
+SUCCESS
+rc=0
+== contracts/ACL.sol:ACL (reference test/acl/retirement/fixtures/ACL_v0_4_0.sol:ACL)
+ ✔  contracts/ACL.sol:ACL (upgrades from test/acl/retirement/fixtures/ACL_v0_4_0.sol:ACL)
+
+SUCCESS
+rc=0
+== test/acl/retirement/fixtures/ACL_v0_4_1.sol:ACL (reference contracts/ACL.sol:ACL)
+ ✘  test/acl/retirement/fixtures/ACL_v0_4_1.sol:ACL (upgrades from contracts/ACL.sol:ACL)
+
+      ACL: Deleted `succession`
+        > Keep the variable even if unused
+      
+      ACL: Deleted `successorDelayOf`
+        > Keep the variable even if unused
+
+FAILED
+rc=1

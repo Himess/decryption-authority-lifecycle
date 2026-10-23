@@ -1,0 +1,97 @@
+# Times from the unmodified connector's own log timestamps (us resolution) and the recorder (time.time()).
+# check_ms   : 'Starting ACL check'/'Starting RFC016 check' -> 'ACL check passed' or the attempt's ERROR line
+# attempt_ms : 'Starting to process' -> 'Event successfully processed!' or the ERROR line
+# request_ms : first 'Starting to process' -> 'Successfully stored response in DB!' (forwarded) or the last
+#              'Successfully updated event in DB!' (rejected: status failed / restored)
+# rpc_ms     : per ACL eth_call, recorder arrival -> upstream (anvil) answer
+# gap_ms     : retry spacing, start of attempt k -> start of attempt k+1 (rejected requests)
+[base-bindings delegated fwd] requests=10 attempts/request=[1] calls/attempt=[1]
+   check_ms    n=10 median=7.51 p10=5.20 p90=15.92 min=4.76 max=18.64
+   attempt_ms  n=10 median=110.54 p10=103.37 p90=124.38 min=101.24 max=138.30
+   request_ms  n=10 median=121.13 p10=117.03 p90=153.41 min=111.89 max=269.87
+   rpc_ms      n=10 median=2.51 p10=1.67 p90=7.46 min=1.49 max=9.39
+[base-bindings delegated rej-noallow] requests=5 attempts/request=[3] calls/attempt=[1]
+   check_ms    n=15 median=8.28 p10=5.42 p90=15.53 min=5.14 max=34.57
+   attempt_ms  n=15 median=9.71 p10=6.00 p90=17.74 min=5.65 max=35.07
+   request_ms  n=5 median=1012.36 p10=640.21 p90=1027.67 min=499.61 max=1036.25
+   rpc_ms      n=15 median=2.81 p10=1.98 p90=5.57 min=1.60 max=30.80
+   gap_ms      n=10 median=493.65 p10=261.60 p90=525.81 min=44.23 max=544.95
+[base-bindings delegated rej-noallow-c] requests=5 attempts/request=[3] calls/attempt=[1]
+   check_ms    n=15 median=8.53 p10=6.06 p90=21.09 min=5.25 max=47.32
+   attempt_ms  n=15 median=9.27 p10=6.68 p90=23.02 min=5.73 max=47.78
+   request_ms  n=5 median=1014.82 p10=712.02 p90=1068.07 min=517.47 max=1075.23
+   rpc_ms      n=15 median=2.94 p10=2.24 p90=4.29 min=1.94 max=9.22
+   gap_ms      n=10 median=500.51 p10=300.07 p90=556.15 min=23.63 max=713.90
+[base-bindings direct fwd] requests=10 attempts/request=[1] calls/attempt=[2]
+   check_ms    n=10 median=10.01 p10=7.31 p90=30.79 min=5.78 max=42.46
+   attempt_ms  n=10 median=112.11 p10=101.58 p90=135.95 min=100.14 max=217.44
+   request_ms  n=10 median=122.24 p10=110.48 p90=179.52 min=108.70 max=228.89
+   rpc_ms      n=20 median=3.68 p10=2.14 p90=5.36 min=1.82 max=8.73
+[base-bindings direct rej-noallow] requests=5 attempts/request=[3] calls/attempt=[2]
+   check_ms    n=15 median=11.85 p10=5.92 p90=58.50 min=5.33 max=74.45
+   attempt_ms  n=15 median=12.41 p10=6.40 p90=59.61 min=5.84 max=76.47
+   request_ms  n=5 median=1014.73 p10=727.61 p90=1220.27 min=538.65 max=1318.01
+   rpc_ms      n=30 median=2.81 p10=1.67 p90=14.13 min=1.37 max=30.08
+   gap_ms      n=10 median=489.34 p10=418.62 p90=519.16 min=37.59 max=560.03
+[base-bindings direct rej-noallow-c] requests=5 attempts/request=[3] calls/attempt=[2]
+   check_ms    n=15 median=10.16 p10=6.89 p90=22.94 min=5.68 max=48.61
+   attempt_ms  n=15 median=10.65 p10=7.41 p90=42.02 min=6.20 max=138.94
+   request_ms  n=5 median=990.29 p10=694.32 p90=1019.70 min=499.81 max=1026.10
+   rpc_ms      n=30 median=3.41 p10=2.35 p90=5.73 min=1.65 max=10.43
+   gap_ms      n=10 median=496.99 p10=405.15 p90=501.79 min=45.54 max=504.41
+[level0 delegated fwd] requests=10 attempts/request=[1] calls/attempt=[1]
+   check_ms    n=10 median=12.38 p10=6.51 p90=24.93 min=6.07 max=93.41
+   attempt_ms  n=10 median=120.97 p10=107.49 p90=241.59 min=106.25 max=518.63
+   request_ms  n=10 median=133.78 p10=117.14 p90=295.12 min=113.70 max=767.50
+   rpc_ms      n=10 median=2.84 p10=1.61 p90=12.05 min=1.55 max=66.97
+[level0 delegated rej-noallow] requests=5 attempts/request=[3] calls/attempt=[1]
+   check_ms    n=15 median=12.28 p10=5.36 p90=28.09 min=3.77 max=48.64
+   attempt_ms  n=15 median=14.82 p10=6.08 p90=28.66 min=4.33 max=49.11
+   request_ms  n=5 median=1066.57 p10=846.91 p90=1104.60 min=736.58 max=1126.39
+   rpc_ms      n=15 median=4.29 p10=1.81 p90=11.12 min=1.37 max=16.93
+   gap_ms      n=10 median=502.26 p10=439.45 p90=554.49 min=39.09 max=569.16
+[level0 delegated rej-retired] requests=5 attempts/request=[3] calls/attempt=[1]
+   check_ms    n=15 median=9.25 p10=6.47 p90=45.40 min=5.38 max=47.32
+   attempt_ms  n=15 median=10.65 p10=7.65 p90=46.66 min=5.86 max=47.77
+   request_ms  n=5 median=570.54 p10=484.77 p90=834.76 min=474.77 max=992.03
+   rpc_ms      n=15 median=2.81 p10=1.94 p90=4.34 min=1.64 max=5.13
+   gap_ms      n=10 median=416.39 p10=18.04 p90=532.59 min=17.49 max=565.82
+[level0 direct fwd] requests=10 attempts/request=[1] calls/attempt=[2]
+   check_ms    n=10 median=15.38 p10=7.71 p90=21.35 min=7.12 max=22.94
+   attempt_ms  n=10 median=115.62 p10=109.00 p90=144.64 min=106.89 max=254.52
+   request_ms  n=10 median=134.84 p10=117.52 p90=191.54 min=117.43 max=282.31
+   rpc_ms      n=20 median=3.72 p10=2.08 p90=7.80 min=1.31 max=12.11
+[level0 direct rej-noallow] requests=5 attempts/request=[3] calls/attempt=[2]
+   check_ms    n=15 median=14.10 p10=7.82 p90=18.74 min=5.52 max=39.81
+   attempt_ms  n=15 median=15.48 p10=8.35 p90=24.29 min=6.03 max=40.33
+   request_ms  n=5 median=1056.89 p10=946.05 p90=1065.75 min=913.34 max=1068.70
+   rpc_ms      n=30 median=3.79 p10=1.58 p90=8.68 min=1.47 max=12.77
+   gap_ms      n=10 median=500.32 p10=463.49 p90=510.94 min=385.09 max=542.74
+[level0 direct rej-retired] requests=5 attempts/request=[3] calls/attempt=[2]
+   check_ms    n=15 median=11.00 p10=8.06 p90=17.34 min=5.21 max=33.14
+   attempt_ms  n=15 median=11.68 p10=8.86 p90=20.07 min=6.32 max=33.86
+   request_ms  n=5 median=1002.25 p10=965.15 p90=1011.23 min=949.70 max=1011.82
+   rpc_ms      n=30 median=3.32 p10=1.89 p90=5.94 min=1.78 max=19.17
+   gap_ms      n=10 median=495.96 p10=461.94 p90=499.98 min=447.97 max=500.35
+[scenario level0 delegated Forwarded] requests=5 attempts/request=[1] calls/attempt=[1]
+   check_ms    n=5 median=14.15 p10=6.04 p90=22.82 min=4.69 max=28.32
+   attempt_ms  n=5 median=128.53 p10=111.31 p90=168.94 min=103.12 max=187.70
+   request_ms  n=5 median=138.43 p10=126.21 p90=189.65 min=120.84 max=208.68
+   rpc_ms      n=5 median=5.28 p10=2.21 p90=15.38 min=1.57 max=21.62
+[scenario level0 delegated Rejected] requests=3 attempts/request=[3] calls/attempt=[1]
+   check_ms    n=9 median=7.46 p10=4.70 p90=82.20 min=4.68 max=135.09
+   attempt_ms  n=9 median=9.80 p10=5.19 p90=83.79 min=5.13 max=135.81
+   request_ms  n=3 median=909.77 p10=680.88 p90=1500.95 min=623.66 max=1648.74
+   rpc_ms      n=9 median=3.63 p10=1.53 p90=11.72 min=1.51 max=12.69
+   gap_ms      n=6 median=450.02 p10=193.50 p90=697.72 min=115.86 max=896.85
+[scenario level0 direct Forwarded] requests=5 attempts/request=[1] calls/attempt=[2]
+   check_ms    n=5 median=12.52 p10=8.61 p90=33.50 min=7.88 max=46.45
+   attempt_ms  n=5 median=159.12 p10=115.56 p90=226.97 min=111.23 max=256.40
+   request_ms  n=5 median=168.32 p10=132.04 p90=264.07 min=120.63 max=311.81
+   rpc_ms      n=10 median=3.80 p10=2.61 p90=11.94 min=1.61 max=24.11
+[scenario level0 direct Rejected] requests=3 attempts/request=[3, 20] calls/attempt=[2]
+   check_ms    n=26 median=11.02 p10=6.70 p90=30.27 min=4.90 max=120.24
+   attempt_ms  n=26 median=12.05 p10=7.50 p90=30.79 min=5.41 max=120.71
+   request_ms  n=3 median=977.85 p10=763.56 p90=43328.23 min=709.99 max=53915.83
+   rpc_ms      n=52 median=4.26 p10=1.84 p90=10.23 min=1.43 max=66.85
+   gap_ms      n=23 median=2998.39 p10=480.05 p90=3016.23 min=106.69 max=3162.98

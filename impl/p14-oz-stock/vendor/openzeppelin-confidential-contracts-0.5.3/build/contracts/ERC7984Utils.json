@@ -1,0 +1,27 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ERC7984Utils",
+  "sourceName": "contracts/token/ERC7984/utils/ERC7984Utils.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "ebool",
+          "name": "retval",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        }
+      ],
+      "name": "ERC7984UtilsUnauthorizedUseOfEncryptedAmount",
+      "type": "error"
+    }
+  ],
+  "bytecode": "0x60556032600b8282823980515f1a607314602657634e487b7160e01b5f525f60045260245ffd5b305f52607381538281f3fe730000000000000000000000000000000000000000301460806040525f5ffdfea2646970667358221220185a31b2d0f8d003f38c04cc9ada5493fa6e7563e7be4cd563d0b30e654301f364736f6c634300081b0033",
+  "deployedBytecode": "0x730000000000000000000000000000000000000000301460806040525f5ffdfea2646970667358221220185a31b2d0f8d003f38c04cc9ada5493fa6e7563e7be4cd563d0b30e654301f364736f6c634300081b0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

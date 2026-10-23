@@ -1,0 +1,167 @@
+"""Builds the TC13 fault matrix (Phase 4, P0.1) from the runs of run_tc13.sh.
+
+Usage: python -I analyze_tc13.py <out.json> <out.md> <run_dir> [<run_dir> ...]
+
+Each run directory holds test.log (TC13-RESULT lines) and host_rpc.jsonl (the fault proxy's record). For every
+(line, path, subject, view, fault) cell it reports, per run: what the worker did, how many times the fault fired,
+the attempts used and the KMS-mock hits; then whether the cell conforms to rule V1 ("an error, a revert, a timeout
+or a malformed answer counts as false") and whether the runs agree.
+
+V1 is judged on the authorization views (isAllowed, isHandleDelegatedForUserDecryption). V1 is a safety rule, so a
+refusal always conforms; a forward conforms only when the true answer it rests on was a correct one:
+  - a retired subject must never reach the KMS mock;
+  - an allowed subject may reach it only under `control` (no fault), `intermittent` (a later attempt gets the true
+    answer) and `delay` without a call timeout (the true answer arrives, late).
+An allowed subject refused under one of those three is reported separately as an availability note.
+decryptionSignatureInvalidatedBefore is the vendor's own signature-freshness getter, not a lifecycle view: its
+cells are recorded for information.
+"""
+import collections
+import json
+import pathlib
+import re
+import sys
+
+AUTH_VIEWS = {"isAllowed", "isHandleDelegatedForUserDecryption"}
+RESULT = re.compile(
+    r"TC13-RESULT label=(?P<label>\S+) version=(?P<version>\S+) path=(?P<path>\S+) subject=(?P<subject>\S+) "
+    r"view=(?P<view>\S+) fault=(?P<fault>\S+) observed=(?P<observed>\S+) kms_mock_hits=(?P<kms>\S+) "
+    r"error_counter=(?P<ec>\S+) error_code=(?P<code>\S+) wall_ms=(?P<wall>\d+)"
+)
+CONFIG = re.compile(r"TC13-CONFIG version=(\S+) run=(\S+) max_attempts=(\d+) fast_polling_ms=(\d+) host_rpc_call_timeout_s=(\S+)")
+
+
+def load_run(run_dir):
+    run_dir = pathlib.Path(run_dir)
+    text = (run_dir / "test.log").read_text(encoding="utf-8", errors="replace")
+    cfg = CONFIG.search(text)
+    results = {}
+    for m in RESULT.finditer(text):
+        d = m.groupdict()
+        results[d["label"]] = d
+    calls = collections.defaultdict(lambda: {"total": 0, "view_calls": 0, "faulted": 0, "client_gone": 0})
+    sel = {"isAllowed": "0x82027b6d", "isHandleDelegatedForUserDecryption": "0xd09c0dee",
+           "decryptionSignatureInvalidatedBefore": "0x0dff1525"}
+    for line in open(run_dir / "host_rpc.jsonl", encoding="utf-8"):
+        r = json.loads(line)
+        label = r["path"].strip("/")
+        c = calls[label]
+        c["total"] += 1
+        view = label.split(".")[4] if label.startswith("tc13.") and len(label.split(".")) == 6 else None
+        req = r["req"]
+        if view and req.get("method") == "eth_call":
+            data = (req["params"][0].get("input") or req["params"][0].get("data") or "")[:10].lower()
+            if data == sel.get(view):
+                c["view_calls"] += 1
+        if r.get("fault"):
+            c["faulted"] += 1
+        if r.get("client_gone"):
+            c["client_gone"] += 1
+    return {
+        "dir": str(run_dir),
+        "version": cfg.group(1) if cfg else None,
+        "run": cfg.group(2) if cfg else None,
+        "max_attempts": int(cfg.group(3)) if cfg else None,
+        "call_timeout_s": cfg.group(5) if cfg else None,
+        "results": results,
+        "calls": calls,
+    }
+
+
+def behaviour(d, c, max_attempts):
+    obs = d["observed"]
+    if obs == "Forwarded":
+        if d["fault"] in ("control",):
+            return "forward"
+        return "forward after retry" if d["ec"] not in ("-", "0") else "forward"
+    if obs == "Rejected":
+        if d["code"] not in ("-",):
+            return f"refuse ({d['code']})"
+        ec = d["ec"]
+        if ec.isdigit() and int(ec) >= max_attempts:
+            return f"refuse after {ec} attempts"
+        return f"refuse (attempts {ec})"
+    return obs
+
+
+def conforms(d, has_timeout):
+    """None when the cell is not a V1 cell (information only)."""
+    if d["view"] not in AUTH_VIEWS:
+        return None
+    if d["observed"] != "Forwarded":
+        return True
+    if d["subject"] == "retired":
+        return False
+    return d["fault"] in ("control", "intermittent") or (d["fault"] == "delay" and not has_timeout)
+
+
+def availability_note(d, has_timeout):
+    """True when an allowed subject was refused although a correct true answer was obtainable."""
+    if d["view"] not in AUTH_VIEWS or d["subject"] != "allowed" or d["observed"] == "Forwarded":
+        return False
+    return d["fault"] in ("control", "intermittent") or (d["fault"] == "delay" and not has_timeout)
+
+
+def main():
+    out_json, out_md = sys.argv[1], sys.argv[2]
+    runs = [load_run(p) for p in sys.argv[3:]]
+    by_version = collections.defaultdict(list)
+    for r in runs:
+        by_version[r["version"]].append(r)
+    report = {"versions": {}}
+    md = ["# TC13 fault matrix (generated by impl/harness/phase4/analyze_tc13.py)", ""]
+    for version, vruns in sorted(by_version.items()):
+        has_timeout = vruns[0]["call_timeout_s"] not in (None, "none")
+        cells = collections.OrderedDict()
+        for r in vruns:
+            for label, d in r["results"].items():
+                key = (d["path"], d["view"], d["subject"], d["fault"])
+                c = r["calls"].get(label, {"total": 0, "view_calls": 0, "faulted": 0, "client_gone": 0})
+                cells.setdefault(key, []).append({
+                    "run": r["run"], "observed": d["observed"], "behaviour": behaviour(d, c, r["max_attempts"]),
+                    "kms_hits": d["kms"], "attempts": d["ec"], "error_code": d["code"], "wall_ms": int(d["wall"]),
+                    "faulted_calls": c["faulted"], "view_calls": c["view_calls"], "rpc_calls": c["total"],
+                    "conforms": conforms(d, has_timeout),
+                    "availability_note": availability_note(d, has_timeout),
+                })
+        rows = []
+        n_v1 = n_ok = 0
+        for (path, view, subject, fault), obs in cells.items():
+            behaviours = sorted({o["behaviour"] for o in obs})
+            verdicts = {o["conforms"] for o in obs}
+            verdict = None if verdicts == {None} else all(v for v in verdicts if v is not None)
+            fired = all(o["faulted_calls"] > 0 for o in obs) if fault not in ("control",) else None
+            if verdict is not None:
+                n_v1 += 1
+                n_ok += 1 if verdict else 0
+            avail = any(o["availability_note"] for o in obs)
+            rows.append({
+                "availability_note": avail,
+                "path": path, "view": view, "subject": subject, "fault": fault, "runs": len(obs),
+                "behaviour": " / ".join(behaviours), "consistent": len(behaviours) == 1,
+                "kms_hits": sorted({o["kms_hits"] for o in obs}), "fault_fired_every_run": fired,
+                "v1": verdict, "observations": obs,
+            })
+        report["versions"][version] = {"runs": [r["run"] for r in vruns], "call_timeout_s": vruns[0]["call_timeout_s"],
+                                       "max_attempts": vruns[0]["max_attempts"], "cells": len(rows),
+                                       "v1_cells": n_v1, "v1_conforming": n_ok, "rows": rows}
+        md += [f"## {version} ({len(vruns)} runs: {', '.join(r['run'] for r in vruns)}; call timeout: "
+               f"{vruns[0]['call_timeout_s']} s; attempts: {vruns[0]['max_attempts']})", "",
+               f"V1 cells: {n_ok}/{n_v1} conform.", "",
+               "| Path | View | Subject | Fault | Runs | Worker behaviour | KMS hits | Fault fired | V1 | Availability |",
+               "|---|---|---|---|---|---|---|---|---|---|"]
+        for row in rows:
+            v1 = "info" if row["v1"] is None else ("yes" if row["v1"] else "**NO**")
+            fired = "-" if row["fault_fired_every_run"] is None else ("yes" if row["fault_fired_every_run"] else "**no**")
+            md.append(f"| {row['path']} | {row['view']} | {row['subject']} | {row['fault']} | {row['runs']} | "
+                      f"{row['behaviour']}{'' if row['consistent'] else ' (runs differ)'} | "
+                      f"{','.join(row['kms_hits'])} | {fired} | {v1} | {'refused a correct true' if row['availability_note'] else '-'} |")
+        md.append("")
+    pathlib.Path(out_json).write_text(json.dumps(report, indent=1), encoding="utf-8")
+    pathlib.Path(out_md).write_text("\n".join(md) + "\n", encoding="utf-8")
+    for version, v in report["versions"].items():
+        print(f"{version}: {v['cells']} cells, V1 {v['v1_conforming']}/{v['v1_cells']} conform, runs {v['runs']}")
+
+
+if __name__ == "__main__":
+    main()

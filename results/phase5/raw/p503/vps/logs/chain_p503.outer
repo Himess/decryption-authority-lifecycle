@@ -1,0 +1,62 @@
+2026-10-22T18:28:20Z START build-p503-v0.13.8
+2026-10-22T18:28:20Z <live-service>=active load=[0.19 0.26 0.27] mem_avail_mb=7148 swap_used_mb=145 tag=before:build-p503-v0.13.8
+HEAVY name=build-p503-v0.13.8 unit=lifecycle-build-p503-v0.13.8-1792693700 rc=0 wall_s=62 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=62 killed=no sampled_peak_anon_mb=626 sampled_peak_cgroup_current_mb=1866 sampled_peak_swap_mb=0
+2026-10-22T18:29:23Z <live-service>=active load=[0.81 0.42 0.32] mem_avail_mb=6943 swap_used_mb=145 tag=after:build-p503-v0.13.8
+2026-10-22T18:29:23Z END build-p503-v0.13.8 rc=0
+2026-10-22T18:29:23Z START build-p503-main
+2026-10-22T18:29:23Z <live-service>=active load=[0.81 0.42 0.32] mem_avail_mb=6944 swap_used_mb=145 tag=before:build-p503-main
+HEAVY name=build-p503-main unit=lifecycle-build-p503-main-1792693763 rc=0 wall_s=62 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=62 killed=no sampled_peak_anon_mb=791 sampled_peak_cgroup_current_mb=2226 sampled_peak_swap_mb=0
+2026-10-22T18:30:25Z <live-service>=active load=[1.17 0.63 0.40] mem_avail_mb=7038 swap_used_mb=145 tag=after:build-p503-main
+2026-10-22T18:30:25Z END build-p503-main rc=0
+2026-10-22T18:30:25Z START build-p503-main-l1
+2026-10-22T18:30:25Z <live-service>=active load=[1.17 0.63 0.40] mem_avail_mb=7038 swap_used_mb=145 tag=before:build-p503-main-l1
+HEAVY name=build-p503-main-l1 unit=lifecycle-build-p503-main-l1-1792693825 rc=0 wall_s=89 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=89 killed=no sampled_peak_anon_mb=803 sampled_peak_cgroup_current_mb=1308 sampled_peak_swap_mb=0
+2026-10-22T18:31:55Z <live-service>=active load=[1.47 0.85 0.51] mem_avail_mb=6991 swap_used_mb=145 tag=after:build-p503-main-l1
+2026-10-22T18:31:55Z END build-p503-main-l1 rc=0
+2026-10-22T18:32:08Z START p503-v0.13.8-r1
+2026-10-22T18:32:08Z <live-service>=active load=[2.06 1.00 0.56] mem_avail_mb=7056 swap_used_mb=145 tag=before:p503-v0.13.8-r1
+HEAVY name=p503-v0.13.8-r1 unit=lifecycle-p503-v0.13.8-r1-1792693928 rc=0 wall_s=15 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=15 killed=no sampled_peak_anon_mb=155 sampled_peak_cgroup_current_mb=176 sampled_peak_swap_mb=0
+2026-10-22T18:32:23Z <live-service>=active load=[1.60 0.95 0.55] mem_avail_mb=7063 swap_used_mb=145 tag=after:p503-v0.13.8-r1
+2026-10-22T18:32:24Z END p503-v0.13.8-r1 rc=0
+2026-10-22T18:32:24Z START p503-main-r1
+2026-10-22T18:32:24Z <live-service>=active load=[1.60 0.95 0.55] mem_avail_mb=7064 swap_used_mb=145 tag=before:p503-main-r1
+HEAVY name=p503-main-r1 unit=lifecycle-p503-main-r1-1792693944 rc=0 wall_s=31 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=31 killed=no sampled_peak_anon_mb=165 sampled_peak_cgroup_current_mb=180 sampled_peak_swap_mb=0
+2026-10-22T18:32:55Z <live-service>=active load=[1.28 0.95 0.56] mem_avail_mb=7049 swap_used_mb=145 tag=after:p503-main-r1
+2026-10-22T18:32:55Z END p503-main-r1 rc=0
+2026-10-22T18:32:55Z START p503-main-l1-r1
+2026-10-22T18:32:55Z <live-service>=active load=[1.28 0.95 0.56] mem_avail_mb=7054 swap_used_mb=145 tag=before:p503-main-l1-r1
+HEAVY name=p503-main-l1-r1 unit=lifecycle-p503-main-l1-r1-1792693975 rc=0 wall_s=41 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=41 killed=no sampled_peak_anon_mb=186 sampled_peak_cgroup_current_mb=189 sampled_peak_swap_mb=0
+2026-10-22T18:33:37Z <live-service>=active load=[0.97 0.93 0.57] mem_avail_mb=7059 swap_used_mb=145 tag=after:p503-main-l1-r1
+2026-10-22T18:33:37Z END p503-main-l1-r1 rc=0
+2026-10-22T18:33:37Z START p503-v0.13.8-r2
+2026-10-22T18:33:37Z <live-service>=active load=[0.97 0.93 0.57] mem_avail_mb=7059 swap_used_mb=145 tag=before:p503-v0.13.8-r2
+HEAVY name=p503-v0.13.8-r2 unit=lifecycle-p503-v0.13.8-r2-1792694017 rc=0 wall_s=15 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=15 killed=no sampled_peak_anon_mb=154 sampled_peak_cgroup_current_mb=156 sampled_peak_swap_mb=0
+2026-10-22T18:33:53Z <live-service>=active load=[0.83 0.90 0.57] mem_avail_mb=7069 swap_used_mb=145 tag=after:p503-v0.13.8-r2
+2026-10-22T18:33:53Z END p503-v0.13.8-r2 rc=0
+2026-10-22T18:33:53Z START p503-main-r2
+2026-10-22T18:33:53Z <live-service>=active load=[0.83 0.90 0.57] mem_avail_mb=7069 swap_used_mb=145 tag=before:p503-main-r2
+HEAVY name=p503-main-r2 unit=lifecycle-p503-main-r2-1792694033 rc=0 wall_s=26 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=26 killed=no sampled_peak_anon_mb=177 sampled_peak_cgroup_current_mb=179 sampled_peak_swap_mb=0
+2026-10-22T18:34:19Z <live-service>=active load=[0.74 0.87 0.57] mem_avail_mb=7042 swap_used_mb=145 tag=after:p503-main-r2
+2026-10-22T18:34:19Z END p503-main-r2 rc=0
+2026-10-22T18:34:19Z START p503-main-l1-r2
+2026-10-22T18:34:19Z <live-service>=active load=[0.74 0.87 0.57] mem_avail_mb=7042 swap_used_mb=145 tag=before:p503-main-l1-r2
+HEAVY name=p503-main-l1-r2 unit=lifecycle-p503-main-l1-r2-1792694059 rc=0 wall_s=36 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=36 killed=no sampled_peak_anon_mb=187 sampled_peak_cgroup_current_mb=189 sampled_peak_swap_mb=0
+2026-10-22T18:34:55Z <live-service>=active load=[0.94 0.92 0.60] mem_avail_mb=7041 swap_used_mb=145 tag=after:p503-main-l1-r2
+2026-10-22T18:34:55Z END p503-main-l1-r2 rc=0
+2026-10-22T18:34:55Z START p503-v0.13.8-r3
+2026-10-22T18:34:55Z <live-service>=active load=[0.94 0.92 0.60] mem_avail_mb=7041 swap_used_mb=145 tag=before:p503-v0.13.8-r3
+HEAVY name=p503-v0.13.8-r3 unit=lifecycle-p503-v0.13.8-r3-1792694095 rc=0 wall_s=16 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=16 killed=no sampled_peak_anon_mb=155 sampled_peak_cgroup_current_mb=157 sampled_peak_swap_mb=0
+2026-10-22T18:35:11Z <live-service>=active load=[0.93 0.92 0.60] mem_avail_mb=7055 swap_used_mb=145 tag=after:p503-v0.13.8-r3
+2026-10-22T18:35:11Z END p503-v0.13.8-r3 rc=0
+2026-10-22T18:35:11Z START p503-main-r3
+2026-10-22T18:35:11Z <live-service>=active load=[0.93 0.92 0.60] mem_avail_mb=7055 swap_used_mb=145 tag=before:p503-main-r3
+HEAVY name=p503-main-r3 unit=lifecycle-p503-main-r3-1792694111 rc=0 wall_s=31 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=31 killed=no sampled_peak_anon_mb=173 sampled_peak_cgroup_current_mb=176 sampled_peak_swap_mb=0
+2026-10-22T18:35:42Z <live-service>=active load=[0.99 0.93 0.62] mem_avail_mb=7048 swap_used_mb=145 tag=after:p503-main-r3
+2026-10-22T18:35:42Z END p503-main-r3 rc=0
+2026-10-22T18:35:42Z START p503-main-l1-r3
+2026-10-22T18:35:42Z <live-service>=active load=[0.99 0.93 0.62] mem_avail_mb=7047 swap_used_mb=145 tag=before:p503-main-l1-r3
+HEAVY name=p503-main-l1-r3 unit=lifecycle-p503-main-l1-r3-1792694142 rc=0 wall_s=41 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=41 killed=no sampled_peak_anon_mb=159 sampled_peak_cgroup_current_mb=167 sampled_peak_swap_mb=0
+2026-10-22T18:36:24Z <live-service>=active load=[0.90 0.92 0.63] mem_avail_mb=7052 swap_used_mb=145 tag=after:p503-main-l1-r3
+2026-10-22T18:36:24Z END p503-main-l1-r3 rc=0
+2026-10-22T18:36:24Z CHAIN DONE
+2026-10-22T18:36:27Z lifecycle-pg removed

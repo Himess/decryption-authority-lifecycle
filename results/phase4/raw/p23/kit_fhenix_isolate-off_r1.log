@@ -1,0 +1,24 @@
+No files changed, compilation skipped
+
+Ran 18 tests for test/conformance/FhenixConformance.t.sol:FhenixConformanceTest
+[PASS] test_kit_TC10_GrantsThenRetireAtomic_RetireThenGrantReverts() (gas: 1464139)
+[PASS] test_kit_TC11_TheUpgradeGuard() (gas: 3550694)
+[PASS] test_kit_TC12_ERC165() (gas: 16450)
+[SKIP] test_kit_TC17_DesignationRules() (gas: 0)
+[SKIP] test_kit_TC17_TheSuccessorReadsOnlyAfterRetirement_AndNothingMore() (gas: 0)
+[SKIP] test_kit_TC19_AContractAccountSignsThroughERC1271Only() (gas: 0)
+[SKIP] test_kit_TC19_TheERCVector() (gas: 0)
+[PASS] test_kit_TC1_R5_TheNextCallInTheSameTransaction() (gas: 755530)
+[PASS] test_kit_TC1_RetireOnce_SecondRevertsWithoutAnEvent() (gas: 48822)
+[PASS] test_kit_TC2_RetireUnderHostileConditions_AsAContract_WithNoHandles() (gas: 704815)
+[PASS] test_kit_TC3_NeverRetiredAccountsUnaffected() (gas: 1028798)
+[PASS] test_kit_TC4_EveryUseViewFalse_PublicUnchanged() (gas: 875579)
+[PASS] test_kit_TC4_R10_TheEngineAndTheOutput() (gas: 801010)
+[PASS] test_kit_TC5_OnBehalfFalseForEachRetiredParty() (gas: 826753)
+[PASS] test_kit_TC6_PermitFalseForARetiredIssuerOrRecipient() (gas: 515647)
+[PASS] test_kit_TC7_ARetiredGrantorRevertsOnEveryPath() (gas: 798308)
+[PASS] test_kit_TC8_GrantsToARetiredAccountSucceed_AndAreInert() (gas: 1032980)
+[PASS] test_kit_TC9_ComputeThenEveryExportReverts() (gas: 1184120)
+Suite result: ok. 14 passed; 0 failed; 4 skipped; finished in 7.34ms (29.72ms CPU time)
+
+Ran 1 test suite in 15.59ms (7.34ms CPU time): 14 tests passed, 0 failed, 4 skipped (18 total tests)

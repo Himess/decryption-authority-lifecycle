@@ -1,0 +1,101 @@
+INSCOPE start=2026-10-23T06:11:18Z cgroup=/system.slice/lifecycle-rc-p03-main-rc2-1792735878.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/run_p03.sh main rc2]
+RUN dir=/srv/lifecycle/runs/p03-main-rc2-20261023T061118Z tree=main anvil=127.0.0.1:58545 proxy=127.0.0.1:58546 endpoint=127.0.0.1:58547 anvil Version: 1.3.5-v1.3.5
+RUN listening 127.0.0.1:58545
+RUN listening 127.0.0.1:58546
+KW ver=main tree=harness step=test commit=ed851716c9a6b799996a23399ece2858336f96db date=2026-10-23T06:11:19Z host=VPS nproc=4
+KW dirty-files:  M kms-connector/crates/utils/src/tests/setup/host.rs ?? kms-connector/crates/kms-worker/tests/acl_p02_decision_lag.rs ?? kms-connector/crates/kms-worker/tests/acl_p03_stored_results.rs ?? kms-connector/crates/kms-worker/tests/acl_p04_eip7851.rs ?? kms-connector/crates/kms-worker/tests/acl_p11_e3.rs ?? kms-connector/crates/kms-worker/tests/acl_p503_eip8298.rs ?? kms-connector/crates/kms-worker/tests/acl_real_chain.rs ?? kms-connector/crates/kms-worker/tests/acl_retirement_real_chain.rs ?? kms-connector/crates/kms-worker/tests/acl_successor_real_chain.rs ?? kms-connector/crates/kms-worker/tests/acl_tc13_faults.rs 
+KW toolchain=1.99.1-x86_64-unknown-linux-gnu (overridden by '/srv/lifecycle/src/fhevm-main-harness/kms-connector/rust-toolchain.toml') | rustc 1.99.1 (58cf8f9c3 2026-10-13) | cargo 1.99.1 (5f94df478 2026-08-27) | libprotoc 34.1 | jobs=1
+    Finished `test` profile [unoptimized] target(s) in 0.89s
+     Running tests/acl_p03_stored_results.rs (/srv/lifecycle/target/recheck-harness/debug/deps/acl_p03_stored_results-be8ac337b074e0ee)
+
+running 1 test
+test p03_v6_stored_results ... 2026-10-23T06:11:21.186068Z  INFO acl_p03_stored_results: ACCOUNTS owner=0x5EBbf502e614202C9c152683c19aD27e844DF1B0 U=0x4e2051b80856cAcA11c3b664b8F2370a606f8DA2 V=0x0Ed611FB3dE9cd50D867a6bf16dF6829e44075E6 D=0x29D0A7ECd8D043F12DF18D05E4D6D744E3c77A47
+2026-10-23T06:11:21.191771Z  INFO acl_p03_stored_results: LOCAL-KEYS Uk=0x45fb4E5B8D968732432740BcFE58a7305caa4816 Vk=0x6d49a33054E2b71B7b345e468D3cBc1aBEFf12cc Dk=0x836cd5c2573004FB1ec5DAef2F29e499f7b81390
+2026-10-23T06:11:21.371499Z  INFO acl_p03_stored_results: Deployed real ACL (ACL v0.8.0) from artifact proxy=0x165F8a557ae145cC9e94B9701db7dcFC7E0d2DbB impl=0x0A96de33aB61108C9041C398DcfE3a8fD2Dc50F3 owner=0x5EBbf502e614202C9c152683c19aD27e844DF1B0 executor(stand-in)=0xe3a9105a3a932253A70F126eb1E3b589C643dD24 dapp C=0x480A9B278eAcB01125C116BDC8809f08E9eFcBf5
+2026-10-23T06:11:21.387034Z  INFO acl_p03_stored_results: ACL-DEPLOY kind=level0 version="ACL v0.8.0" proxy=0x165F8a557ae145cC9e94B9701db7dcFC7E0d2DbB impl=0x0A96de33aB61108C9041C398DcfE3a8fD2Dc50F3 runtime_bytes=11774 runtime_matches_reference=true reference_keccak=0xcb10baff188fb4030cb782e87b56f252e6eef2ff4a7c4c8e34dfc7fb8b18983a
+2026-10-23T06:11:21.399036Z  INFO acl_p03_stored_results: ACL-LEVEL0 supportsInterface(0x556d2088)=true retirementStorageLocation=0xe6ae1005b480da47ced1ed3eb5869a54ca87c5d592369277249f4148c0e86200
+2026-10-23T06:11:21.416278Z  INFO connector_utils::tests::setup::host: Granted handle 0x95969cda854acd65d2ef0ed4f107ba8a5e5c03729fff00000000000030390500 to user 0x4e2051b80856cAcA11c3b664b8F2370a606f8DA2 and dApp 0x480A9B278eAcB01125C116BDC8809f08E9eFcBf5 (tx 0x21925256dfab59c70280eeb6d83e96ecf8702de4ffc802de8406fbefe45eb3f3)
+2026-10-23T06:11:21.431230Z  INFO connector_utils::tests::setup::host: Granted handle 0x95969cda854acd65d2ef0ed4f107ba8a5e5c03729fff00000000000030390500 to user 0x45fb4E5B8D968732432740BcFE58a7305caa4816 and dApp 0x480A9B278eAcB01125C116BDC8809f08E9eFcBf5 (tx 0xc7409c2bfa5e3057b52a730a48ae4d147bf556dacfea73849b081d90a668a021)
+2026-10-23T06:11:21.455763Z  INFO connector_utils::tests::setup::host: Delegation 0x4e2051b80856cAcA11c3b664b8F2370a606f8DA2 -> 0x29D0A7ECd8D043F12DF18D05E4D6D744E3c77A47 for contract 0x480A9B278eAcB01125C116BDC8809f08E9eFcBf5 until 1792822281 (tx 0x1774f0f81525855d86903f50bf2eb505d8c02137caf6340c558f32ea9b782b03)
+2026-10-23T06:11:21.478899Z  INFO connector_utils::tests::setup::host: Delegation 0x0Ed611FB3dE9cd50D867a6bf16dF6829e44075E6 -> 0x29D0A7ECd8D043F12DF18D05E4D6D744E3c77A47 for contract 0x480A9B278eAcB01125C116BDC8809f08E9eFcBf5 until 1792822281 (tx 0xcfefcbb0372f340bc03b7aa84081079be859e8dd517c37431041aef99a9b20af)
+2026-10-23T06:11:21.496849Z  INFO connector_utils::tests::setup::host: Delegation 0x4e2051b80856cAcA11c3b664b8F2370a606f8DA2 -> 0x836cd5c2573004FB1ec5DAef2F29e499f7b81390 for contract 0x480A9B278eAcB01125C116BDC8809f08E9eFcBf5 until 1792822281 (tx 0x07ba344cc48a24cb84241bbb8127c5a943168621dc777a884d61f8840821ea8a)
+2026-10-23T06:11:21.507384Z  INFO connector_utils::tests::setup::host: Delegation 0x0Ed611FB3dE9cd50D867a6bf16dF6829e44075E6 -> 0x836cd5c2573004FB1ec5DAef2F29e499f7b81390 for contract 0x480A9B278eAcB01125C116BDC8809f08E9eFcBf5 until 1792822281 (tx 0x93e7e58c12200185eb522398eeeb2ed63b4227df30094459bf5ec993d9f78af9)
+2026-10-23T06:11:21.509645Z  INFO connector_utils::tests::setup::db: Creating per-test database 'kms_connector_test_572749_0' on shared Postgres server...
+2026-10-23T06:11:21.757452Z  INFO connector_utils::tests::setup::db: KMS Connector per-test DB url: postgresql://postgres@127.0.0.1:55432/kms_connector_test_572749_0
+2026-10-23T06:11:21.829580Z  INFO connector_utils::tests::setup::db: Running migrations...
+2026-10-23T06:11:22.862821Z  INFO connector_utils::tests::setup::db: KMS Connector DB ready!
+2026-10-23T06:11:22.862897Z  INFO connector_utils::tests::setup::db: Inserting context #0x0000000000000000000000000000000000000000000000000000000000000001, epoch #0x0800000000000000000000000000000000000000000000000000000000000001 for tests...
+2026-10-23T06:11:22.957736Z  INFO connector_utils::tests::setup::db: Context #0x0000000000000000000000000000000000000000000000000000000000000001 is ready for tests!
+2026-10-23T06:11:22.966371Z  INFO mocktail::server: started s3 [http] server on 127.0.0.1:16024
+2026-10-23T06:11:22.966852Z  INFO mocktail::server: s3 server ready
+2026-10-23T06:11:22.973834Z  INFO mocktail::server: started kms_service.v1.CoreServiceEndpoint [grpc] server on 127.0.0.1:26620
+2026-10-23T06:11:22.987301Z  INFO mocktail::server: kms_service.v1.CoreServiceEndpoint server ready
+2026-10-23T06:11:23.052172Z  INFO connector_utils::tests::setup::host: Host chain 12345: real ACL 0x165F8a557ae145cC9e94B9701db7dcFC7E0d2DbB via http://127.0.0.1:58546/p03.rc2.unmodified.worker
+2026-10-23T06:11:23.114007Z  INFO kms_worker::core::event_processor::kms_client: Attempting connection to KMS Core shard #0... (1/5)
+2026-10-23T06:11:23.119283Z  INFO kms_worker::core::event_processor::kms_client: Connected to KMS Core shard #0 at http://127.0.0.1:26620/
+2026-10-23T06:11:23.440731Z  INFO kms_worker::core::kms_worker: Starting KmsWorker
+2026-10-23T06:11:23.443637Z  INFO acl_p03_stored_results: P03-ENDPOINT endpoint-unmodified-rc2 up at http://127.0.0.1:58547 revalidate_stored_results=false
+2026-10-23T06:11:23.443714Z  INFO acl_p03_stored_results: P03-CONFIG tree=unmodified version=main run=rc2 revalidate_stored_results=n/a
+2026-10-23T06:11:23.762307Z  INFO kms_worker::core::event_picker::notifier: Received Postgres notification: user_decryption_request_available
+2026-10-23T06:11:23.783064Z  INFO kms_worker::core::event_picker::picker: Picked 1 UserDecryptionRequest successfully
+2026-10-23T06:11:23.783552Z  WARN connector_utils::tasks: The task number limit was not configured. Using default values 1000...
+2026-10-23T06:11:23.784013Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}: kms_worker::core::kms_worker: Starting to process UserDecryptionV2 { decryptionId: 79756659895695877335963773674614522072575131123210578820591741997931406643033, handles: [HandleEntry { handle: 0x95969cda854acd65d2ef0ed4f107ba8a5e5c03729fff00000000000030390500, contractAddress: 0x480a9b278eacb01125c116bdc8809f08e9efcbf5, ownerAddress: 0x45fb4e5b8d968732432740bcfe58a7305caa4816 }], payload: UserDecryptionRequestPayload { userAddress: 0x45fb4e5b8d968732432740bcfe58a7305caa4816, publicKey: 0xa7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758a7a6c62ac03c0ce4bc8a1b6f9b732ffd7327274c612e4091716f4fab9caaa758, allowedContracts: [], requestValidity: RequestValiditySeconds { startTimestamp: 1792735823, durationSeconds: 3600 }, extraData: 0x010000000000000000000000000000000000000000000000000000000000000001, signature: 0x7046e1269d37b78f7d40a080f7cf6508806d9e49f6a970016a7aa51378b34a9519978410046b0a520a202fc64c4a2af4d6e2ef00ffc40647ef68c73116f24cec1b } }...
+2026-10-23T06:11:23.784353Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:process:check_request:check_user_decryption_request_v2: kms_worker::core::event_processor::decryption: Starting RFC016 check for 1 handles...
+2026-10-23T06:11:23.797018Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:process:prepare_grpc_request: kms_worker::core::event_processor::ciphertext::manager: Resolving 1 handle(s) via off-chain attestation consensus...
+2026-10-23T06:11:23.811257Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:process:check_request:check_user_decryption_request_v2: kms_worker::core::event_processor::decryption: RFC016 ACL check passed for 1 handles!
+2026-10-23T06:11:23.812533Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:process:prepare_grpc_request: kms_worker::core::event_processor::ciphertext::manager: All 1 handle(s) resolved and verified! (key_id: 0x0000000000000000000000000000000000000000000000000000000000000000)
+2026-10-23T06:11:23.812987Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:process:send_request: kms_worker::core::event_processor::kms_client: Sending GRPC request to KMS shard #0
+2026-10-23T06:11:23.859153Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:process:send_request: kms_worker::core::event_processor::kms_client: GRPC request successfully sent to the KMS!
+2026-10-23T06:11:23.859377Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:process:poll_result: kms_worker::core::event_processor::kms_client: Sending GRPC request to KMS shard #0
+2026-10-23T06:11:23.859470Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:process:poll_result: kms_worker::core::event_processor::kms_client: #1/3 Trying to retrieve result from KMS Core...
+2026-10-23T06:11:23.903943Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:process:poll_result: kms_worker::core::event_processor::kms_client: Result successfully retrieved from KMS Core!
+2026-10-23T06:11:23.904153Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}: kms_worker::core::kms_worker: Event successfully processed!
+2026-10-23T06:11:23.904246Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:publish_response: kms_worker::core::kms_response_publisher: Storing response in DB...
+2026-10-23T06:11:23.949568Z  INFO handle_event{event=UserDecryptionRequest #0xb054ab766f1a95bf2333595c295af77c6893eaf1f9ea266ffb418ad30fed4f59}:publish_response: kms_worker::core::kms_response_publisher: Successfully stored response in DB!
+2026-10-23T06:11:24.332218Z  INFO acl_p03_stored_results: P03-RESULT tree=unmodified version=main step=first-request http_status=200 error_code=- kms_mock_hits_delta=4 request_row=completed error_counter=0 already_sent=false expected_status=200 expected_code=- wall_ms=514
+2026-10-23T06:11:24.679718Z  INFO acl_p03_stored_results: P03-RESULT tree=unmodified version=main step=same-request-live http_status=200 error_code=- kms_mock_hits_delta=0 request_row=completed error_counter=0 already_sent=false expected_status=200 expected_code=- wall_ms=30
+2026-10-23T06:11:25.105220Z  INFO acl_p03_stored_results: L0-RETIRE case=p03 role=p03-user account=0x45fb4E5B8D968732432740BcFE58a7305caa4816 tx=0xaa3c7428fe6edcd2beea3f0f51878b373157a17218dba5508633f576077f0c84 gas_used=50143 account_retired_event=true isAccountRetired=true
+2026-10-23T06:11:25.456134Z  INFO acl_p03_stored_results: P03-RESULT tree=unmodified version=main step=same-request-after-retirement http_status=200 error_code=- kms_mock_hits_delta=0 request_row=completed error_counter=0 already_sent=false expected_status=200 expected_code=- wall_ms=20
+2026-10-23T06:11:25.480568Z  INFO kms_worker::core::event_picker::notifier: Received Postgres notification: user_decryption_request_available
+2026-10-23T06:11:25.485709Z  INFO kms_worker::core::event_picker::picker: Picked 1 UserDecryptionRequest successfully
+2026-10-23T06:11:25.486227Z  INFO handle_event{event=UserDecryptionRequest #0x38a4615605067e1a123a4e59887f38eaaa64e338740216b7e0fb4b7e5f83b511}: kms_worker::core::kms_worker: Starting to process UserDecryptionV2 { decryptionId: 25619954227766857191624150095058112255653407935456833024077983256330362926353, handles: [HandleEntry { handle: 0x95969cda854acd65d2ef0ed4f107ba8a5e5c03729fff00000000000030390500, contractAddress: 0x480a9b278eacb01125c116bdc8809f08e9efcbf5, ownerAddress: 0x45fb4e5b8d968732432740bcfe58a7305caa4816 }], payload: UserDecryptionRequestPayload { userAddress: 0x45fb4e5b8d968732432740bcfe58a7305caa4816, publicKey: 0x8f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb667868f55597af3deb6b73e5dd7f3b1c95970f9569c05a1e91c757f9a30ba3cb66786, allowedContracts: [], requestValidity: RequestValiditySeconds { startTimestamp: 1792735855, durationSeconds: 3600 }, extraData: 0x010000000000000000000000000000000000000000000000000000000000000001, signature: 0x9fd42eaf70cbea70804645ed815cc122d09a651575116daa264bcb6d6f671a4a0e05a9d8387059243a92d9b037be78f20aae8bf985d5bc0f64190c5653f37b691c } }...
+2026-10-23T06:11:25.486982Z  INFO handle_event{event=UserDecryptionRequest #0x38a4615605067e1a123a4e59887f38eaaa64e338740216b7e0fb4b7e5f83b511}:process:check_request:check_user_decryption_request_v2: kms_worker::core::event_processor::decryption: Starting RFC016 check for 1 handles...
+2026-10-23T06:11:25.494623Z  INFO handle_event{event=UserDecryptionRequest #0x38a4615605067e1a123a4e59887f38eaaa64e338740216b7e0fb4b7e5f83b511}:process:prepare_grpc_request: kms_worker::core::event_processor::ciphertext::manager: Resolving 1 handle(s) via off-chain attestation consensus...
+2026-10-23T06:11:25.506449Z ERROR handle_event{event=UserDecryptionRequest #0x38a4615605067e1a123a4e59887f38eaaa64e338740216b7e0fb4b7e5f83b511}: kms_worker::core::kms_worker: Processing failed: 0x45fb4E5B8D968732432740BcFE58a7305caa4816 is not allowed to decrypt 95969cda854acd65d2ef0ed4f107ba8a5e5c03729fff00000000000030390500. Storing `acl_denied` error response for the HTTP-sourced request...
+2026-10-23T06:11:25.512851Z  INFO handle_event{event=UserDecryptionRequest #0x38a4615605067e1a123a4e59887f38eaaa64e338740216b7e0fb4b7e5f83b511}: kms_worker::core::kms_response_publisher: Successfully stored `acl_denied` error response in DB!
+2026-10-23T06:11:25.838222Z  INFO acl_p03_stored_results: P03-RESULT tree=unmodified version=main step=equivalent-request-after-retirement http_status=403 error_code=acl_denied kms_mock_hits_delta=0 request_row=failed error_counter=0 already_sent=false expected_status=403 expected_code=acl_denied wall_ms=56
+2026-10-23T06:11:25.852536Z  INFO kms_worker::core::kms_worker: Stopping KmsWorker
+2026-10-23T06:11:25.967040Z  INFO acl_p03_stored_results: P03-SUMMARY tree=unmodified version=main run=rc2 mismatches=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 17 filtered out; finished in 5.23s
+
+RUN rc=0 host_rpc_records=4
+RUN p03_results=4
+RUN P03-SUMMARY tree=unmodified version=main run=rc2 mismatches=0
+RUN teardown done
+	Command being timed: "/srv/lifecycle/scripts/run_p03.sh main rc2"
+	User time (seconds): 3.25
+	System time (seconds): 2.40
+	Percent of CPU this job got: 70%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:07.98
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 154484
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 82668
+	Voluntary context switches: 1696
+	Involuntary context switches: 300
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 144
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-23T06:11:26Z rc=0 cgroup_memory.peak_bytes=169541632 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=rc-p03-main-rc2 unit=lifecycle-rc-p03-main-rc2-1792735878 rc=0 wall_s=10 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=10 killed=no sampled_peak_anon_mb=157 sampled_peak_cgroup_current_mb=159 sampled_peak_swap_mb=0

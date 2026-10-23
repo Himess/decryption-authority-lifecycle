@@ -1,0 +1,67 @@
+{
+  "name": "@cofhe/mock-contracts",
+  "version": "1.0.1",
+  "description": "Mock smart contracts for testing CoFHE with FHE primitives locally",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FhenixProtocol/cofhesdk.git",
+    "directory": "packages/mock-contracts"
+  },
+  "files": [
+    "dist/**",
+    "src/**",
+    "contracts/**/*.sol",
+    "foundry.toml",
+    "remappings.txt",
+    "CHANGELOG.md",
+    "contracts/cofhe-contracts.json"
+  ],
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "smart-contracts",
+    "solidity",
+    "FHE",
+    "encryption",
+    "privacy",
+    "coprocessor",
+    "fhenix",
+    "cofhe"
+  ],
+  "dependencies": {
+    "@fhenixprotocol/cofhe-contracts": "1.0.0",
+    "@openzeppelin/contracts": "5.4.0",
+    "@openzeppelin/contracts-upgradeable": "5.4.0"
+  },
+  "devDependencies": {
+    "@typechain/ethers-v6": "0.5.1",
+    "@types/node": "20.19.15",
+    "ethers": "6.15.0",
+    "forge-std": "github:foundry-rs/forge-std#0051db19c2edc30e6b7147c6d029dc71aa621874",
+    "hardhat": "2.26.3",
+    "tsx": "4.21.0",
+    "tsup": "8.5.0",
+    "typechain": "8.3.2",
+    "@cofhe/sdk": "1.0.1",
+    "@cofhe/tsconfig": "0.1.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/cofhe-contracts.mjs --check && forge build -q && forge test -vvv",
+    "test:coverage": "forge coverage",
+    "anvil": "anvil --code-size-limit 100000",
+    "lint": "echo 'No linting configured for Solidity'",
+    "clean": "rm -rf out && rm -rf cache",
+    "dev": "anvil --code-size-limit 100000",
+    "update:cofhe-contracts": "node scripts/cofhe-contracts.mjs --update"
+  }
+}

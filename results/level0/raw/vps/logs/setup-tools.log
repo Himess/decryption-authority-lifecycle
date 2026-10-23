@@ -1,0 +1,111 @@
+INSCOPE start=2026-10-21T05:18:43Z cgroup=/system.slice/lifecycle-setup-tools-1792559922.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/setup_tools.sh]
+== rustup-init
+rustup-init: OK
+info: profile set to minimal
+info: default host tuple is x86_64-unknown-linux-gnu
+info: skipping toolchain installation
+
+
+Rust is installed now. Great!
+
+To get started you need Cargo's bin directory (/srv/lifecycle/.cargo/bin) in 
+your PATH
+environment variable. This has not been done automatically.
+
+To configure your current shell, you need to source
+the corresponding env file under /srv/lifecycle/.cargo.
+
+Consider running the right command for your shell (note the leading DOT):
+. "/srv/lifecycle/.cargo/env" # For sh/ash/dash/pdksh/bash
+cargo:rerun-if-env-changed=CC_x86_64-unknown-linux-gnu
+CC_x86_64-unknown-linux-gnu = None
+cargo:rerun-if-env-changed=CC_x86_64_unknown_linux_gnu
+CC_x86_64_unknown_linux_gnu = None
+cargo:rerun-if-env-changed=HOST_CC
+HOST_CC = None
+cargo:rerun-if-env-changed=CC
+CC = None
+cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+CRATE_CC_NO_DEFAULTS = None
+cargo:rerun-if-env-changed=CFLAGS
+CFLAGS = None
+cargo:rerun-if-env-changed=HOST_CFLAGS
+HOST_CFLAGS = None
+cargo:rerun-if-env-changed=CFLAGS_x86_64_unknown_linux_gnu
+CFLAGS_x86_64_unknown_linux_gnu = None
+cargo:rerun-if-env-changed=CFLAGS_x86_64-unknown-linux-gnu
+CFLAGS_x86_64-unknown-linux-gnu = None
+rustup 1.29.1 (d95a37b6a 2026-08-13)
+info: This is the version for the rustup toolchain manager, not the rustc compiler.
+info: no `rustc` is currently active
+info: syncing channel updates for 1.92.0-x86_64-unknown-linux-gnu
+info: latest update on 2025-12-11 for version 1.92.0 (ded5c06cf 2025-12-08)
+info: downloading 3 components
+
+  1.92.0-x86_64-unknown-linux-gnu installed - rustc 1.92.0 (ded5c06cf 2025-12-08)
+
+info: default toolchain set to 1.92.0-x86_64-unknown-linux-gnu
+info: checking for self-update (current version: 1.29.1)
+info: syncing channel updates for 1.99.1-x86_64-unknown-linux-gnu
+info: latest update on 2026-10-15 for version 1.99.1 (58cf8f9c3 2026-10-13)
+info: downloading 5 components
+
+  1.99.1-x86_64-unknown-linux-gnu installed - rustc 1.99.1 (58cf8f9c3 2026-10-13)
+
+info: checking for self-update (current version: 1.29.1)
+1.92.0-x86_64-unknown-linux-gnu (active, default)
+1.99.1-x86_64-unknown-linux-gnu
+== protoc 26.1 (v0.13.8 CI: arduino/setup-protoc version 26.x)
+a7be2928c0454f132c599e25b79b7ad1b57663f2337d7f7e468a1d59b98ec1b0  protoc-26.1-linux-x86_64.zip
+libprotoc 26.1
+== protoc 34.1 (main: .github/actions/setup-rust-and-protoc pins 34.1 + sha256)
+protoc-34.1-linux-x86_64.zip: OK
+libprotoc 34.1
+== foundry v1.3.5 (v0.13.8 harness pins ghcr.io/foundry-rs/foundry:v1.3.5)
+9746c51f76c57ee2b099aa67d8b6fb8a93c82175671b654b1b8fd8ddba8e3b42  foundry_v1.3.5_linux_amd64.tar.gz
+total 168196
+drwxr-xr-x 2 root    root        4096 Oct 21 07:19 .
+drwxr-xr-x 5 root    root        4096 Oct 21 07:19 ..
+-rwxr-xr-x 1 <other-service> <other-service> 25248488 Sep  8  2025 anvil
+-rwxr-xr-x 1 <other-service> <other-service> 48523424 Sep  8  2025 cast
+-rwxr-xr-x 1 <other-service> <other-service> 30864368 Sep  8  2025 chisel
+-rwxr-xr-x 1 <other-service> <other-service> 67578160 Sep  8  2025 forge
+anvil Version: 1.3.5-v1.3.5
+Commit SHA: 9979a41b5daa5da1572d973d7ac5a3dd2afc0221
+Build Timestamp: 2025-09-08T15:20:01.044260027Z (1757344801)
+Build Profile: maxperf
+forge Version: 1.3.5-v1.3.5
+Commit SHA: 9979a41b5daa5da1572d973d7ac5a3dd2afc0221
+Build Timestamp: 2025-09-08T15:20:01.044260027Z (1757344801)
+Build Profile: maxperf
+cast Version: 1.3.5-v1.3.5
+Commit SHA: 9979a41b5daa5da1572d973d7ac5a3dd2afc0221
+Build Timestamp: 2025-09-08T15:20:01.044260027Z (1757344801)
+Build Profile: maxperf
+== done
+	Command being timed: "/srv/lifecycle/scripts/setup_tools.sh"
+	User time (seconds): 33.77
+	System time (seconds): 11.98
+	Percent of CPU this job got: 90%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:50.60
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 599288
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 87
+	Minor (reclaiming a frame) page faults: 450526
+	Voluntary context switches: 33428
+	Involuntary context switches: 8974
+	Swaps: 0
+	File system inputs: 23872
+	File system outputs: 3541352
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T05:19:33Z rc=0 cgroup_memory.peak_bytes=2079014912 memory.max=3221225472 memory.swap.max=1073741824 cpu.max=[200000 100000]
+HEAVY name=setup-tools unit=lifecycle-setup-tools-1792559922 rc=0 wall_s=52 sampled_peak_anon_mb=553 sampled_peak_cgroup_current_mb=1938 sampled_peak_swap_mb=0 tripped=0

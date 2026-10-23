@@ -1,0 +1,243 @@
+{
+ "fixture": "TC14",
+ "rows": [
+  {
+   "id": "tc14.main.after",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "the subject retired at block N; the request arrives after N"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "after"
+   }
+  },
+  {
+   "id": "tc14.main.race",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "the views are evaluated at N-1 and the subject retires at N while the answers are held"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "race"
+   }
+  },
+  {
+   "id": "tc14.main.reorg-before",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "the subject retired at block N; the request is decided before any reorganisation"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "reorg-before"
+   }
+  },
+  {
+   "id": "tc14.main.reorg-after",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "the retirement block is rolled back (anvil_rollback(1)) before the request is decided"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "reorg-after"
+   }
+  },
+  {
+   "id": "tc14.main.restart-mid-check",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "the worker stops during the check of a retired subject; another worker picks the row up"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "restart-mid-check"
+   }
+  },
+  {
+   "id": "tc14.main.already-sent-live",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "a request already sent to the KMS is retried while the subject is active"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "already-sent-live"
+   }
+  },
+  {
+   "id": "tc14.main.already-sent-retired",
+   "line": "main",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "a request already sent to the KMS is retried after the subject retired"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "already-sent-retired"
+   }
+  },
+  {
+   "id": "tc14.v0.13.8.after",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "the subject retired at block N; the request arrives after N"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "after"
+   }
+  },
+  {
+   "id": "tc14.v0.13.8.race",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "the views are evaluated at N-1 and the subject retires at N while the answers are held"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "race"
+   }
+  },
+  {
+   "id": "tc14.v0.13.8.reorg-before",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "the subject retired at block N; the request is decided before any reorganisation"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "reorg-before"
+   }
+  },
+  {
+   "id": "tc14.v0.13.8.reorg-after",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "the retirement block is rolled back (anvil_rollback(1)) before the request is decided"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "reorg-after"
+   }
+  },
+  {
+   "id": "tc14.v0.13.8.restart-mid-check",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "the worker stops during the check of a retired subject; another worker picks the row up"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "restart-mid-check"
+   }
+  },
+  {
+   "id": "tc14.v0.13.8.already-sent-live",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "a request already sent to the KMS is retried while the subject is active"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "already-sent-live"
+   }
+  },
+  {
+   "id": "tc14.v0.13.8.already-sent-retired",
+   "line": "v0.13.8",
+   "request": {
+    "path": "legacy-direct",
+    "view": "isAllowed"
+   },
+   "chain_state": {
+    "describes": "a request already sent to the KMS is retried after the subject retired"
+   },
+   "rule": "V5 and freshness (L = 0)",
+   "expect": "not-forwarded",
+   "harness": {
+    "result_line": "P02-RESULT",
+    "case": "already-sent-retired"
+   }
+  }
+ ]
+}

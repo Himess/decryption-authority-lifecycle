@@ -1,0 +1,95 @@
+From f1b440e7aeec994bc291e1007cf7198e6f9d40e1 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 18:44:40 +0300
+Subject: [PATCH 5/6] test(host-contracts): Profile Q on-chain door, asserted
+ residual (TC22, lifecycle Level 3)
+
+On a host that accepts ECDSA transactions, forged transactions from an
+unprepared victim grant its handle to the attacker's post-quantum identity
+and delegate to the attacker's key-derived address; the registry accepts
+both, so an oracle under Profile Q would serve them (Q7). A retirement made
+beforehand closes every such grant path.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../test/acl/ACLProfileQResidual.t.sol        | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 host-contracts/test/acl/ACLProfileQResidual.t.sol
+
+diff --git a/host-contracts/test/acl/ACLProfileQResidual.t.sol b/host-contracts/test/acl/ACLProfileQResidual.t.sol
+new file mode 100644
+index 00000000..e047b48d
+--- /dev/null
++++ b/host-contracts/test/acl/ACLProfileQResidual.t.sol
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: BSD-3-Clause-Clear
++pragma solidity ^0.8.24;
++
++import {ACL} from "../../contracts/ACL.sol";
++import {HostContractsDeployerTestUtils} from "../../fhevm-foundry/HostContractsDeployerTestUtils.sol";
++import {aclAdd} from "../../addresses/FHEVMHostAddresses.sol";
++
++/**
++ * @title ACLProfileQResidualTest
++ * @notice Level 3, Profile Q (TC22, asserted residual Q7): Profile Q closes the off-chain door at the oracle, not the
++ *         on-chain one. On a host chain that still accepts ECDSA transactions, whoever can forge the victim's ECDSA
++ *         signature (a thief today, a quantum adversary later; here `vm.prank` stands for the forged transaction)
++ *         grants the victim's handle to their own post-quantum identity, or delegates to their own key-derived
++ *         address. Those identities qualify under Profile Q, so the oracle would serve them. Only a retirement or
++ *         migration made beforehand, or a host-chain ECDSA freeze, closes this door.
++ */
++contract ACLProfileQResidualTest is HostContractsDeployerTestUtils {
++    ACL internal acl;
++
++    address internal constant owner = address(456);
++    bytes32 internal constant ACL_STORAGE_LOCATION = 0xa688f31953c2015baaf8c0a488ee1ee22eb0e05273cc1fd31ea4cbee42febc00;
++    address internal constant WILDCARD = address(type(uint160).max);
++
++    address internal victim = makeAddr("victim");
++    address internal attackerPqAccount = makeAddr("attackerPqAccount"); // e.g. an ML-DSA smart account
++    address internal attackerKda = makeAddr("attackerKda"); // the key-derived address of the attacker's ML-DSA key
++    address internal app = makeAddr("app");
++    bytes32 internal h = keccak256("profile-q-handle");
++
++    function setUp() public {
++        _deployACL(owner);
++        acl = ACL(aclAdd);
++        _deployPauserSet();
++        _persist(h, victim);
++        _persist(h, app);
++    }
++
++    function _persist(bytes32 handle, address holder) internal {
++        bytes32 inner = keccak256(abi.encode(handle, ACL_STORAGE_LOCATION));
++        vm.store(aclAdd, keccak256(abi.encode(holder, inner)), bytes32(uint256(1)));
++    }
++
++    /// @dev Asserted residual: forged ECDSA transactions from an unprepared victim open the door on chain.
++    function test_TC22_OnChainDoorStaysOpen_AssertedResidual() public {
++        vm.prank(victim); // a forged ECDSA transaction from the victim
++        acl.allow(h, attackerPqAccount);
++        assertTrue(acl.persistAllowed(h, attackerPqAccount), "the attacker's PQ account holds the victim's handle");
++
++        vm.prank(victim);
++        acl.delegateForUserDecryption(attackerKda, WILDCARD, uint64(block.timestamp + 365 days));
++        assertTrue(
++            acl.isHandleDelegatedForUserDecryption(victim, attackerKda, app, h),
++            "the attacker's KDA reads as the victim's delegate"
++        );
++    }
++
++    /// @dev The same forgeries after a retirement made beforehand: every grant path is closed.
++    function test_TC22_RetirementBeforehandClosesTheDoor() public {
++        vm.prank(victim);
++        acl.retireAccount();
++
++        vm.prank(victim);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, victim));
++        acl.allow(h, attackerPqAccount);
++        vm.prank(victim);
++        vm.expectRevert(abi.encodeWithSelector(ACL.SenderRetired.selector, victim));
++        acl.delegateForUserDecryption(attackerKda, WILDCARD, uint64(block.timestamp + 365 days));
++        assertFalse(acl.persistAllowed(h, attackerPqAccount));
++        assertFalse(acl.isHandleDelegatedForUserDecryption(victim, attackerKda, app, h));
++    }
++}

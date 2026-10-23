@@ -1,0 +1,19 @@
+[L1/local] tx deploy OwnerWallet1271: 0x118eef3f30b51180639b3b7edbc2bd39933be408038ece35971b115d90be7a4d block 1 gasUsed 208426
+[L1/local] tx deploy RejectAll1271Wallet: 0x386442a2eae642a2f2fa79a0322e24e6f8b8d7135d5101397ae86b53fef935e4 block 2 gasUsed 171651
+[L1/local] tx deploy RootKey7702Delegate: 0x36807aa8ab15c3685cbc4be252169aef42396e5b0ecc6bc117981bc0eee28f7c block 3 gasUsed 231290
+[L1/local] tx deploy NoErc1271: 0x507cd1fbe1def3e903a78771ee0841958a0ae0d1dbfd249897443511b0fd37c3 block 4 gasUsed 56439
+[L1/local] tx deploy EmptyRevert1271: 0xeb14a6de60114b5848f0310ebeeb4caf7a90803335e8ae2e10f76c46b77a0062 block 5 gasUsed 141251
+[L1/local] tx deploy ReasonRevert1271: 0x2bc480834609a6d49815af52c6204c11f01292c5724e7056bc87a2e305d0a78e block 6 gasUsed 161711
+[L1/local] tx deploy Erc7739LikeWallet: 0xceac2a471465b96a8e500d85093ec21e3e1c9e198f9c2e230dc426a06d1f5cba block 7 gasUsed 275047
+[L1/local] tx deploy GasBurner1271: 0x1653a3267355395c30ac4257cb8ab9e92a4908496273a5830ef88322f605b8d6 block 8 gasUsed 110295
+[L1/local] tx EIP-7702 delegate 0x4F229D80F1f752655D974DD0aD3ad209210cdBd8 -> 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512: 0x67431de2a79f80f15fb17f2d574325a85a30613fe1079309a6ebb116e47cf993 block 9 gasUsed 37160
+[L1/local] tx EIP-7702 delegate 0xEb5F6c00aC075fEa6A727E0872004E67A3707118 -> 0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0: 0xbc5719f86e116bf961a593a89ca322c210a5c52d93163bb736b2f23ebb05d614 block 10 gasUsed 37136
+[L1/local] tx EIP-7702 delegate 0x3200FBADD6c75dE5343a6E34f393B225818c716f -> 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9: 0x9b7ac51409b706bd84d83d9c0aa02ccb94ba92a1447c1f310466686eeaa37895 block 11 gasUsed 36852
+[L1/local] tx EIP-7702 delegate 0x50f222aE808948B615696F6aBbbAA7756D93712F -> 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9: 0x1db31c7dfd830a23be1dfe9ccc96635d6d9e66739ef10953b091edf8b43bcf0c block 12 gasUsed 37156
+[L1/local] tx EIP-7702 delegate 0x10dF371F561da45B820B2a2db4253CcE34E7421D -> 0x5FC8d32690cc91D4c39d9d3abcBD16989F875707: 0xe2a76bec7e4b895af8ed9d37dbfa6b42bf58e7caf1094a660b96bb59f6be18d4 block 13 gasUsed 37143
+[L1/local] tx deploy Keccak-f1600 helper (upstream helpers/f1600_170.hex): 0xc19babf83142f7568fcaae616d293c729be22f975407337fa4707760675c6014 block 14 gasUsed 4716322
+[L1/local] tx deploy MLDSA44Verifier: 0x4bbc0a3535694e00e72b601393e8fa529f61e1b4ff4e9ea944f6da0888ff7341 block 15 gasUsed 5166161
+[L1/local] tx deploy ML-DSA-44 pk blob (prepare.py output): 0xbbb0a6121c77772351ff107ea651fe781b033670d296cda8843f20c3dc32f498 block 16 gasUsed 4434717
+[L1/local] tx deploy MLDSA44Account1271: 0xb34cfb3888f62cb085e38832d860378b1ed09f61ef2124c914a59abd8aff1812 block 17 gasUsed 317011
+[L1/local] tx deploy Erc1271GasMeter: 0x3e9ecc73a6aa4ec8510264181259e8064a5072028df6ff100f4602ce1ce727b2 block 18 gasUsed 223128
+written <repo>\results\level1\raw\L1_profile_h_local.json

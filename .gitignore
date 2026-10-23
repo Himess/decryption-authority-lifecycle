@@ -1,0 +1,10 @@
+# Created by the reproduction targets and by builds; not part of the repository.
+impl/fhevm-*/
+impl/.tools/
+repro-out/
+node_modules/
+out/
+cache/
+target/
+__pycache__/
+.env

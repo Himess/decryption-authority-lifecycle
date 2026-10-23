@@ -1,0 +1,37 @@
+{
+  "hardfork": "amsterdam",
+  "gas": {
+    "retireAccount_noSuccessionRecord": {
+      "gasUsed": 136934,
+      "calldataBytes": 4,
+      "contractAddress": null
+    },
+    "retireAccount_withConfirmedSuccessor": {
+      "gasUsed": 136934,
+      "calldataBytes": 4,
+      "contractAddress": null
+    },
+    "retireAccountWithSig_eoa_1chain": {
+      "gasUsed": 148504,
+      "calldataBytes": 324,
+      "contractAddress": null
+    },
+    "retireAccountWithSig_eoa_2chain": {
+      "gasUsed": 148674,
+      "calldataBytes": 356,
+      "contractAddress": null
+    },
+    "retireAccountWithSig_eoa_5chain": {
+      "gasUsed": 149197,
+      "calldataBytes": 452,
+      "contractAddress": null
+    },
+    "retireAccountWithSig_erc1271_1chain": {
+      "gasUsed": 150935,
+      "calldataBytes": 324,
+      "contractAddress": null
+    }
+  },
+  "client": "anvil/v1.8.6",
+  "version": "ACL v0.10.0"
+}

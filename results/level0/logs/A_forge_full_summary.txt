@@ -1,0 +1,4 @@
+fhevm-main forge full (isolate=false) rc=0 seconds=55
+Ran 16 test suites in 53.04s (270.08s CPU time): 711 tests passed, 0 failed, 0 skipped (711 total tests)
+fhevm-v0.13.8 forge full (isolate=false) rc=0 seconds=66
+Ran 11 test suites in 65.40s (318.74s CPU time): 494 tests passed, 0 failed, 0 skipped (494 total tests)

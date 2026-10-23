@@ -1,0 +1,18 @@
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 6 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-21T21:08:48Z START zama-kms-worker-harness
+2026-10-21T21:14:40Z END zama-kms-worker-harness rc=101
+2026-10-21T21:14:40Z zama-kms-worker-harness: failures (see log)
+2026-10-21T21:14:40Z START zama-kms-worker-l1
+2026-10-21T21:22:59Z END zama-kms-worker-l1 rc=101
+2026-10-21T21:22:59Z zama-kms-worker-l1: failures (see log)
+2026-10-21T21:22:59Z START zama-kms-worker-l3
+2026-10-21T21:30:27Z END zama-kms-worker-l3 rc=101
+2026-10-21T21:30:27Z zama-kms-worker-l3: failures (see log)
+2026-10-21T21:30:28Z containers now: 1 (lifecycle-pg plus the host's own)
+2026-10-21T21:30:28Z CHAIN DONE
+2026-10-21T21:30:31Z lifecycle-pg removed

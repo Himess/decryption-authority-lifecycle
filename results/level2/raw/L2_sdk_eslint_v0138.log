@@ -1,0 +1,22 @@
+
+<repo>\impl\wt-l2-mock\sdk\js-sdk\src\core\actions\host\getAuthorityStatus.test.ts
+  0:0  warning  File ignored because of a matching ignore pattern. Use "--no-ignore" to disable file ignore settings or use "--no-warn-ignored" to suppress this warning
+
+<repo>\impl\wt-l2-mock\sdk\js-sdk\src\core\actions\host\getAuthorityStatus.ts
+  113:19  error  This assertion is unnecessary since it does not change the type of the expression                  @typescript-eslint/no-unnecessary-type-assertion
+  119:26  error  Passing a string to String() does not change the type or value of the string                       @typescript-eslint/no-unnecessary-type-conversion
+  133:23  error  This expression unnecessarily compares a boolean value to a boolean instead of using it directly   @typescript-eslint/no-unnecessary-boolean-literal-compare
+  143:11  error  Array type using 'readonly T[]' is forbidden for non-simple types. Use 'ReadonlyArray<T>' instead  @typescript-eslint/array-type
+
+<repo>\impl\wt-l2-mock\sdk\js-sdk\src\core\errors\AclError.ts
+  88:14  error  Literals should be exposed using readonly fields  @typescript-eslint/class-literal-property-style
+
+<repo>\impl\wt-l2-mock\sdk\js-sdk\src\core\host-contracts\isAccountRetired.test.ts
+  0:0  warning  File ignored because of a matching ignore pattern. Use "--no-ignore" to disable file ignore settings or use "--no-warn-ignored" to suppress this warning
+
+<repo>\impl\wt-l2-mock\sdk\js-sdk\src\core\kms\TransportKeyRing.test.ts
+  0:0  warning  File ignored because of a matching ignore pattern. Use "--no-ignore" to disable file ignore settings or use "--no-warn-ignored" to suppress this warning
+
+✖ 8 problems (5 errors, 3 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+

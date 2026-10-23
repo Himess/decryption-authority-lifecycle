@@ -1,0 +1,18 @@
+2026-10-21T19:43:34.225954Z  INFO connector_utils::config::deserialize: Loading config using environment variables only
+2026-10-21T19:43:34.226255Z  INFO connector_utils::config::deserialize: Adding environment variables with prefix KMS_CONNECTOR_
+2026-10-21T19:43:34.234807Z  INFO connector_utils::conn: Attempting connection to DB... (1/5)
+2026-10-21T19:43:34.325403Z  INFO connector_utils::conn: Connected to Postgres database successfully
+2026-10-21T19:43:34.339603Z  INFO connector_utils::monitoring::server: Monitoring server listening at: 127.0.0.1:58548
+2026-10-21T19:43:34.339793Z  INFO endpoint::core::endpoint: Starting Endpoint
+2026-10-21T19:43:34.341390Z  INFO actix_server::builder: starting 2 workers
+2026-10-21T19:43:34.341454Z  INFO endpoint::core::endpoint: HTTP server listening at: 127.0.0.1:58547
+2026-10-21T19:43:34.343007Z  INFO actix_server::server: Tokio runtime found; starting in existing Tokio runtime
+2026-10-21T19:43:34.343080Z  INFO actix_server::server: starting service: "actix-web-service-127.0.0.1:58547", workers: 2, listening on: 127.0.0.1:58547
+2026-10-21T19:43:34.344981Z  INFO actix_server::builder: starting 1 workers
+2026-10-21T19:43:34.345084Z  INFO actix_server::server: Tokio runtime found; starting in existing Tokio runtime
+2026-10-21T19:43:34.345121Z  INFO actix_server::server: starting service: "actix-web-service-127.0.0.1:58548", workers: 1, listening on: 127.0.0.1:58548
+2026-10-21T19:43:34.346895Z  INFO endpoint::core::response_listener: Starting ResponseListener
+2026-10-21T19:43:34.661373Z  INFO user_decrypt{decryption_id="0x7894b6055ade56f1deda465ea12cbd8be0ce7c5f5b68c79d2e77c4fd5295343c"}: endpoint::core::http::decrypt: Decryption request stored in DB decryption_id=0x7894b6055ade56f1deda465ea12cbd8be0ce7c5f5b68c79d2e77c4fd5295343c
+2026-10-21T19:43:34.864112Z  INFO endpoint::core::response_listener: Waiting connection(s) woken up decryption_id=0x7894b6055ade56f1deda465ea12cbd8be0ce7c5f5b68c79d2e77c4fd5295343c
+2026-10-21T19:43:36.036333Z  INFO user_decrypt{decryption_id="0x3faafea045f1e88367b8c364a031872d70f587c6845a5da9688b3420d373a725"}: endpoint::core::http::decrypt: Decryption request stored in DB decryption_id=0x3faafea045f1e88367b8c364a031872d70f587c6845a5da9688b3420d373a725
+2026-10-21T19:43:36.084579Z  INFO endpoint::core::response_listener: Waiting connection(s) woken up decryption_id=0x3faafea045f1e88367b8c364a031872d70f587c6845a5da9688b3420d373a725

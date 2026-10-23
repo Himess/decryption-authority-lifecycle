@@ -1,0 +1,50 @@
+# lifecycle Phase 4, P1.4: Profile A on stock OpenZeppelin confidential-contracts 0.5.3.
+#
+# vendor/ holds the npm tarballs, unmodified, and their extracted contents (provenance in vendor/PROVENANCE.md).
+# The FHE library and the host contracts of the test environment come from our branch, Zama's main with the level0,
+# level2 and level3 patch series: impl/fhevm-main as `python scripts/repro.py profile-a` builds it (the default
+# profile), or the authors' worktree impl/wt-l2-main (`FOUNDRY_PROFILE=worktree`). Both hold the same FHE library and
+# host contracts (`lifecycle/level3`). Everything compiles here with solc 0.8.27 (OpenZeppelin 0.5.3 needs ^0.8.27)
+# and OpenZeppelin contracts 5.6.1 (its peer dependency); the host contracts keep Zama's OpenZeppelin 5.1.0 (context
+# remappings below) but compile with solc 0.8.27 here, not Zama's 0.8.24.
+[profile.default]
+src = "src"
+test = "test"
+out = "out"
+cache_path = "cache"
+libs = ["vendor"]
+solc = "0.8.27"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+bytecode_hash = "none"
+cbor_metadata = false
+allow_paths = ["../fhevm-main"]
+# Context remappings: the host contracts (and Zama's OpenZeppelin copies under them) resolve OpenZeppelin to the
+# 5.1.0 that Zama builds them with; everything else, the stock confidential-contracts included, to 5.6.1.
+remappings = [
+    "../fhevm-main/host-contracts/:@openzeppelin/contracts/=../fhevm-main/host-contracts/node_modules/@openzeppelin/contracts/",
+    "../fhevm-main/host-contracts/:@openzeppelin/contracts-upgradeable/=../fhevm-main/host-contracts/node_modules/@openzeppelin/contracts-upgradeable/",
+    "@openzeppelin/confidential-contracts/=vendor/openzeppelin-confidential-contracts-0.5.3/",
+    "@openzeppelin/contracts/=vendor/openzeppelin-contracts-5.6.1/",
+    "@openzeppelin/contracts-upgradeable/=vendor/openzeppelin-contracts-upgradeable-5.6.1/",
+    "encrypted-types/=vendor/encrypted-types-0.0.4/",
+    "@fhevm/solidity/=../fhevm-main/library-solidity/",
+    "@fhevm-host-contracts/=../fhevm-main/host-contracts/",
+    "forge-std/=../fhevm-main/host-contracts/dependencies/forge-std-1.11.0/src/",
+]
+
+# The authors' layout: the same tree as the worktree impl/wt-l2-main.
+[profile.worktree]
+allow_paths = ["../wt-l2-main"]
+remappings = [
+    "../wt-l2-main/host-contracts/:@openzeppelin/contracts/=../wt-l2-main/host-contracts/node_modules/@openzeppelin/contracts/",
+    "../wt-l2-main/host-contracts/:@openzeppelin/contracts-upgradeable/=../wt-l2-main/host-contracts/node_modules/@openzeppelin/contracts-upgradeable/",
+    "@openzeppelin/confidential-contracts/=vendor/openzeppelin-confidential-contracts-0.5.3/",
+    "@openzeppelin/contracts/=vendor/openzeppelin-contracts-5.6.1/",
+    "@openzeppelin/contracts-upgradeable/=vendor/openzeppelin-contracts-upgradeable-5.6.1/",
+    "encrypted-types/=vendor/encrypted-types-0.0.4/",
+    "@fhevm/solidity/=../wt-l2-main/library-solidity/",
+    "@fhevm-host-contracts/=../wt-l2-main/host-contracts/",
+    "forge-std/=../wt-l2-main/host-contracts/dependencies/forge-std-1.11.0/src/",
+]

@@ -1,0 +1,430 @@
+{
+ "fixture": "TC15",
+ "rows": [
+  {
+   "id": "tc15.v7.main.off.legacy-direct.u-retired",
+   "line": "main",
+   "request": {
+    "describes": "legacy direct; the user is retired"
+   },
+   "chain_state": {
+    "profile_h": "off"
+   },
+   "rule": "V7",
+   "expect": "final-denial",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.off.legacy-direct.u-retired"
+   }
+  },
+  {
+   "id": "tc15.v7.main.off.legacy-delegated.delegator-u-retired",
+   "line": "main",
+   "request": {
+    "describes": "legacy delegated; the delegator is retired"
+   },
+   "chain_state": {
+    "profile_h": "off"
+   },
+   "rule": "V7",
+   "expect": "final-denial",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.off.legacy-delegated.delegator-u-retired"
+   }
+  },
+  {
+   "id": "tc15.v7.main.off.v2-direct.uk-retired",
+   "line": "main",
+   "request": {
+    "describes": "RFC-016 direct; the signer is retired"
+   },
+   "chain_state": {
+    "profile_h": "off"
+   },
+   "rule": "V7",
+   "expect": "final-denial",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.off.v2-direct.uk-retired"
+   }
+  },
+  {
+   "id": "tc15.v7.main.off.v2-http-direct.uk-retired",
+   "line": "main",
+   "request": {
+    "describes": "RFC-016 over HTTP; the signer is retired"
+   },
+   "chain_state": {
+    "profile_h": "off"
+   },
+   "rule": "V7",
+   "expect": "typed-denial",
+   "expect_code": "account_retired",
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.off.v2-http-direct.uk-retired"
+   }
+  },
+  {
+   "id": "tc15.v7.main.off.legacy-direct.v-no-allowance",
+   "line": "main",
+   "request": {
+    "describes": "legacy direct; the user holds nothing (an ordinary denial)"
+   },
+   "chain_state": {
+    "profile_h": "off"
+   },
+   "rule": "V1 (an ordinary denial may be retried)",
+   "expect": "not-forwarded",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.off.legacy-direct.v-no-allowance"
+   }
+  },
+  {
+   "id": "tc15.v7.main.off.legacy-delegated.v-no-allowance-to-d",
+   "line": "main",
+   "request": {
+    "describes": "legacy delegated; nothing was delegated (an ordinary denial)"
+   },
+   "chain_state": {
+    "profile_h": "off"
+   },
+   "rule": "V1 (an ordinary denial may be retried)",
+   "expect": "not-forwarded",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.off.legacy-delegated.v-no-allowance-to-d"
+   }
+  },
+  {
+   "id": "tc15.v7.main.off.v2-http-direct.vk-no-allowance",
+   "line": "main",
+   "request": {
+    "describes": "RFC-016 over HTTP; the signer holds nothing (an ordinary denial)"
+   },
+   "chain_state": {
+    "profile_h": "off"
+   },
+   "rule": "V1 (an ordinary denial may be retried)",
+   "expect": "not-forwarded",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.off.v2-http-direct.vk-no-allowance"
+   }
+  },
+  {
+   "id": "tc15.v7.main.off.lapse",
+   "line": "main",
+   "request": {
+    "describes": "legacy direct; the user is retired, and retirement is cleared right after the first denial (a simulated governance lapse)"
+   },
+   "chain_state": {
+    "profile_h": "off"
+   },
+   "rule": "V7",
+   "expect": "final-denial",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.lapse.off.legacy-direct.u-retired"
+   }
+  },
+  {
+   "id": "tc15.v7.main.on.legacy-direct.u-retired",
+   "line": "main",
+   "request": {
+    "describes": "legacy direct; the user is retired"
+   },
+   "chain_state": {
+    "profile_h": "on"
+   },
+   "rule": "V7",
+   "expect": "final-denial",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.on.legacy-direct.u-retired"
+   }
+  },
+  {
+   "id": "tc15.v7.main.on.legacy-delegated.delegator-u-retired",
+   "line": "main",
+   "request": {
+    "describes": "legacy delegated; the delegator is retired"
+   },
+   "chain_state": {
+    "profile_h": "on"
+   },
+   "rule": "V7",
+   "expect": "final-denial",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.on.legacy-delegated.delegator-u-retired"
+   }
+  },
+  {
+   "id": "tc15.v7.main.on.v2-direct.uk-retired",
+   "line": "main",
+   "request": {
+    "describes": "RFC-016 direct; the signer is retired"
+   },
+   "chain_state": {
+    "profile_h": "on"
+   },
+   "rule": "V7",
+   "expect": "final-denial",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.on.v2-direct.uk-retired"
+   }
+  },
+  {
+   "id": "tc15.v7.main.on.v2-http-direct.uk-retired",
+   "line": "main",
+   "request": {
+    "describes": "RFC-016 over HTTP; the signer is retired"
+   },
+   "chain_state": {
+    "profile_h": "on"
+   },
+   "rule": "V7",
+   "expect": "typed-denial",
+   "expect_code": "account_retired",
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.on.v2-http-direct.uk-retired"
+   }
+  },
+  {
+   "id": "tc15.v7.main.on.legacy-direct.v-no-allowance",
+   "line": "main",
+   "request": {
+    "describes": "legacy direct; the user holds nothing (an ordinary denial)"
+   },
+   "chain_state": {
+    "profile_h": "on"
+   },
+   "rule": "V1 (an ordinary denial may be retried)",
+   "expect": "not-forwarded",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.on.legacy-direct.v-no-allowance"
+   }
+  },
+  {
+   "id": "tc15.v7.main.on.legacy-delegated.v-no-allowance-to-d",
+   "line": "main",
+   "request": {
+    "describes": "legacy delegated; nothing was delegated (an ordinary denial)"
+   },
+   "chain_state": {
+    "profile_h": "on"
+   },
+   "rule": "V1 (an ordinary denial may be retried)",
+   "expect": "not-forwarded",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.on.legacy-delegated.v-no-allowance-to-d"
+   }
+  },
+  {
+   "id": "tc15.v7.main.on.v2-http-direct.vk-no-allowance",
+   "line": "main",
+   "request": {
+    "describes": "RFC-016 over HTTP; the signer holds nothing (an ordinary denial)"
+   },
+   "chain_state": {
+    "profile_h": "on"
+   },
+   "rule": "V1 (an ordinary denial may be retried)",
+   "expect": "not-forwarded",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.h5.on.v2-http-direct.vk-no-allowance"
+   }
+  },
+  {
+   "id": "tc15.v7.main.on.lapse",
+   "line": "main",
+   "request": {
+    "describes": "legacy direct; the user is retired, and retirement is cleared right after the first denial (a simulated governance lapse)"
+   },
+   "chain_state": {
+    "profile_h": "on"
+   },
+   "rule": "V7",
+   "expect": "final-denial",
+   "expect_code": null,
+   "harness": {
+    "result_line": "L0-RESULT",
+    "label": "l1.lapse.on.legacy-direct.u-retired"
+   }
+  },
+  {
+   "id": "tc15.v6.main.unmodified.first-request",
+   "line": "main",
+   "request": {
+    "describes": "the subject is active; a first request"
+   },
+   "chain_state": {
+    "tree": "unmodified"
+   },
+   "rule": "V6",
+   "expect": "served",
+   "harness": {
+    "result_line": "P03-RESULT",
+    "tree": "unmodified",
+    "step": "first-request"
+   }
+  },
+  {
+   "id": "tc15.v6.main.unmodified.same-request-live",
+   "line": "main",
+   "request": {
+    "describes": "the same request again while the subject is active"
+   },
+   "chain_state": {
+    "tree": "unmodified"
+   },
+   "rule": "V6",
+   "expect": "served",
+   "harness": {
+    "result_line": "P03-RESULT",
+    "tree": "unmodified",
+    "step": "same-request-live"
+   }
+  },
+  {
+   "id": "tc15.v6.main.unmodified.same-request-after-retirement",
+   "line": "main",
+   "request": {
+    "describes": "the same request again after the subject retired"
+   },
+   "chain_state": {
+    "tree": "unmodified"
+   },
+   "rule": "V6",
+   "expect": "not-served",
+   "harness": {
+    "result_line": "P03-RESULT",
+    "tree": "unmodified",
+    "step": "same-request-after-retirement"
+   }
+  },
+  {
+   "id": "tc15.v6.main.unmodified.equivalent-request-after-retirement",
+   "line": "main",
+   "request": {
+    "describes": "an equivalent request (another signature or window) after retirement"
+   },
+   "chain_state": {
+    "tree": "unmodified"
+   },
+   "rule": "V6",
+   "expect": "not-served",
+   "harness": {
+    "result_line": "P03-RESULT",
+    "tree": "unmodified",
+    "step": "equivalent-request-after-retirement"
+   }
+  },
+  {
+   "id": "tc15.v6.main.level1.first-request",
+   "line": "main",
+   "request": {
+    "describes": "the subject is active; a first request"
+   },
+   "chain_state": {
+    "tree": "level1"
+   },
+   "rule": "V6",
+   "expect": "served",
+   "harness": {
+    "result_line": "P03-RESULT",
+    "tree": "level1",
+    "step": "first-request"
+   }
+  },
+  {
+   "id": "tc15.v6.main.level1.same-request-live",
+   "line": "main",
+   "request": {
+    "describes": "the same request again while the subject is active"
+   },
+   "chain_state": {
+    "tree": "level1"
+   },
+   "rule": "V6",
+   "expect": "served",
+   "harness": {
+    "result_line": "P03-RESULT",
+    "tree": "level1",
+    "step": "same-request-live"
+   }
+  },
+  {
+   "id": "tc15.v6.main.level1.same-request-after-retirement",
+   "line": "main",
+   "request": {
+    "describes": "the same request again after the subject retired"
+   },
+   "chain_state": {
+    "tree": "level1"
+   },
+   "rule": "V6",
+   "expect": "not-served",
+   "harness": {
+    "result_line": "P03-RESULT",
+    "tree": "level1",
+    "step": "same-request-after-retirement"
+   }
+  },
+  {
+   "id": "tc15.v6.main.level1.equivalent-request-after-retirement",
+   "line": "main",
+   "request": {
+    "describes": "an equivalent request (another signature or window) after retirement"
+   },
+   "chain_state": {
+    "tree": "level1"
+   },
+   "rule": "V6",
+   "expect": "not-served",
+   "harness": {
+    "result_line": "P03-RESULT",
+    "tree": "level1",
+    "step": "equivalent-request-after-retirement"
+   }
+  },
+  {
+   "id": "tc15.v6.main.level1.same-request-again",
+   "line": "main",
+   "request": {
+    "describes": "the same request a third time, after retirement"
+   },
+   "chain_state": {
+    "tree": "level1"
+   },
+   "rule": "V6",
+   "expect": "not-served",
+   "harness": {
+    "result_line": "P03-RESULT",
+    "tree": "level1",
+    "step": "same-request-again"
+   }
+  }
+ ]
+}

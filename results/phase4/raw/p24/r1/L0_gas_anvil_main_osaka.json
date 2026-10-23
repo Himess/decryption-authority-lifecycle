@@ -1,0 +1,104 @@
+{
+  "hardfork": "osaka",
+  "anvilNodeInfo": {
+    "hardFork": "Osaka",
+    "chainId": 31337,
+    "gasLimit": "0x77359400"
+  },
+  "calibration": {
+    "eth_transfer_no_data": {
+      "gasUsed": 21000,
+      "contractAddress": null,
+      "calldataBytes": 0
+    },
+    "calldata_1000_zero_bytes": {
+      "gasUsed": 31000,
+      "contractAddress": null,
+      "calldataBytes": 1000
+    },
+    "calldata_1000_nonzero_bytes": {
+      "gasUsed": 61000,
+      "contractAddress": null,
+      "calldataBytes": 1000
+    },
+    "sstore_new_slot": {
+      "gasUsed": 43609,
+      "contractAddress": null,
+      "calldataBytes": 32
+    },
+    "sstore_same_value_again": {
+      "gasUsed": 23709,
+      "contractAddress": null,
+      "calldataBytes": 32
+    }
+  },
+  "v0_7_0": {
+    "allow_new_pair": {
+      "gasUsed": 58360,
+      "contractAddress": null,
+      "calldataBytes": 68
+    },
+    "allow_existing_pair": {
+      "gasUsed": 38460,
+      "contractAddress": null,
+      "calldataBytes": 68
+    },
+    "carry_n1": {
+      "gasUsed": 62192,
+      "contractAddress": null,
+      "calldataBytes": 228
+    },
+    "carry_n10": {
+      "gasUsed": 342013,
+      "contractAddress": null,
+      "calldataBytes": 1668
+    },
+    "carry_n100": {
+      "gasUsed": 3140457,
+      "contractAddress": null,
+      "calldataBytes": 16068
+    },
+    "carry_n500": {
+      "gasUsed": 15603846,
+      "contractAddress": null,
+      "calldataBytes": 80068
+    }
+  },
+  "v0_8_0": {
+    "allow_new_pair": {
+      "gasUsed": 60593,
+      "contractAddress": null,
+      "calldataBytes": 68
+    },
+    "allow_existing_pair": {
+      "gasUsed": 40693,
+      "contractAddress": null,
+      "calldataBytes": 68
+    },
+    "retireAccount": {
+      "gasUsed": 50099,
+      "contractAddress": null,
+      "calldataBytes": 4
+    },
+    "carry_n1": {
+      "gasUsed": 89113,
+      "contractAddress": null,
+      "calldataBytes": 324
+    },
+    "carry_n10": {
+      "gasUsed": 371045,
+      "contractAddress": null,
+      "calldataBytes": 1764
+    },
+    "carry_n100": {
+      "gasUsed": 3191061,
+      "contractAddress": null,
+      "calldataBytes": 16164
+    },
+    "carry_n500": {
+      "gasUsed": 15750135,
+      "contractAddress": null,
+      "calldataBytes": 80164
+    }
+  }
+}

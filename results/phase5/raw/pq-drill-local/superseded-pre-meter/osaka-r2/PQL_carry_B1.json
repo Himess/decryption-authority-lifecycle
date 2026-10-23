@@ -1,0 +1,75 @@
+{
+  "options": {
+    "allowContract": [
+      "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+    ],
+    "balanceToken": [],
+    "fromBlock": 0,
+    "logRange": 10000,
+    "chunk": 400,
+    "signer": "env",
+    "rpc": "http://127.0.0.1:8761",
+    "acl": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "old": "0x9D6B03054E7A0d66921383d1a03F4189C737E7D5",
+    "new": "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f",
+    "json": "<repo>\\results\\phase5\\raw\\pq-drill-local\\osaka-r2\\PQL_carry_B1.json"
+  },
+  "plan": {
+    "checks": {
+      "core": true,
+      "oldRetired": false,
+      "newRetired": false,
+      "oldDenied": false
+    },
+    "refuse": [],
+    "head": 60,
+    "logRequests": 1,
+    "grants": 3,
+    "handles": 3,
+    "breakdown": [
+      {
+        "caller": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+        "allowlisted": true,
+        "balanceToken": false,
+        "grants": 3,
+        "handles": 3,
+        "kept": 3,
+        "skipped": {}
+      }
+    ],
+    "kept": [
+      "0xd4fc15536627883eb74a030e79de2907485de94784ff0000000000007a690500",
+      "0x93b92b45d62fc6348b985d2471b163f9868affe42aff0000000000007a690500",
+      "0xa3cdc0854663572d189ddc25d07a1b559c82062cbcff0000000000007a690500"
+    ],
+    "chunks": [
+      [
+        "0xd4fc15536627883eb74a030e79de2907485de94784ff0000000000007a690500",
+        "0x93b92b45d62fc6348b985d2471b163f9868affe42aff0000000000007a690500",
+        "0xa3cdc0854663572d189ddc25d07a1b559c82062cbcff0000000000007a690500"
+      ]
+    ]
+  },
+  "result": {
+    "sent": [
+      {
+        "chunk": 0,
+        "handles": 3,
+        "retires": true,
+        "tx": "0xdbf9d13d0e15e4d2cea53f2c9544d64473c425e98f58ee54987a285ab4c0f62c",
+        "status": 1,
+        "gasUsed": 156448,
+        "calldataBytes": 644
+      }
+    ],
+    "stopped": null,
+    "verified": {
+      "oldRetired": true,
+      "carried": 3,
+      "newHoldsAll": true,
+      "newMissing": [],
+      "oldStillUsable": 0,
+      "ok": true
+    }
+  }
+}

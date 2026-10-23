@@ -1,0 +1,24 @@
+
+ RUN  v4.1.11 <repo>/.stage/r10/impl/harness/level0-mock
+
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > setup: the deployed mock IS the re-pointed build (ACL v0.4.1), with a non-forge 4-signer KMS set 309ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S1 control: never-retired U decrypts its handle; delegated U -> D decrypts 1130ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S2/S3 preparation: OLD history, delegations from and to OLD, positive controls before retirement 2118ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S2: the reverse multicall order [retireAccount(), allow(h, NEW)] reverts and changes nothing 153ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S2: carry and retire, OLD runs ACL.multicall([allow(h_i, NEW) x5, retireAccount()]) 156ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S2: NEW user-decrypts the carried history through the SDK 439ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S2 + S5: OLD (retired, user role) is refused at every layer 345ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S3 + S5: delegation FROM OLD (OLD delegator, created before retirement) is refused at every layer 237ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S3 + S5: delegation TO OLD (OLD delegate of X, created before retirement; then re-delegated after it) is refused at every layer 854ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S3: OLD cannot create a new delegation (SenderRetired); its other grant paths are closed too 397ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S4: a contract that holds handles (RetirableVault): setup and positive controls before it retires 1021ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S4 + S5: the contract retires through its helper; its handles are refused on the direct path (contract role) 288ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S4 + S5: ...and on the delegated path (contract role) 571ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > mock limit: plaintext is public in the mock (no ACL on the cleartext getters) 22ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > gas: retireAccount (EOA; contract helper above) and the carry multicall at n = 1, 5 (above), 10 6199ms
+
+ Test Files  1 passed (1)
+      Tests  15 passed (15)
+   Start at  11:45:28
+   Duration  16.95s (transform 1.53s, setup 0ms, import 2.11s, tests 14.66s, environment 0ms)
+

@@ -1,0 +1,32 @@
+INSCOPE start=2026-10-21T13:51:15Z cgroup=/system.slice/lifecycle-l1-lint2-main-1792590674.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/kw.sh main cargo clippy --locked --keep-going -p kms-worker -p kms-connector-api --all-targets -- -D warnings]
+KW ver=main tree=l1 step=cargo commit=ed851716c9a6b799996a23399ece2858336f96db date=2026-10-21T13:51:15Z host=VPS nproc=4
+KW dirty-files:  M kms-connector/crates/api/src/error.rs  M kms-connector/crates/kms-worker/src/core/config.rs  M kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs  M kms-connector/crates/kms-worker/src/core/event_processor/error.rs  M kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs  M kms-connector/crates/kms-worker/src/core/mod.rs  M kms-connector/crates/utils/src/tests/setup/host.rs  M shared/user-decryption-signature/src/lib.rs ?? kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs ?? shared/user-decryption-signature/src/profile_h.rs ?? shared/user-decryption-signature/tests/ 
+KW toolchain=1.99.1-x86_64-unknown-linux-gnu (overridden by '/srv/lifecycle/src/fhevm-main-l1/kms-connector/rust-toolchain.toml') | rustc 1.99.1 (58cf8f9c3 2026-10-13) | cargo 1.99.1 (5f94df478 2026-08-27) | libprotoc 34.1 | jobs=1
+    Checking kms-worker v0.15.0 (/srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker)
+    Checking kms-connector-api v0.15.0 (/srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/api)
+    Finished `dev` profile [unoptimized] target(s) in 22.72s
+	Command being timed: "/srv/lifecycle/scripts/kw.sh main cargo clippy --locked --keep-going -p kms-worker -p kms-connector-api --all-targets -- -D warnings"
+	User time (seconds): 16.47
+	System time (seconds): 6.75
+	Percent of CPU this job got: 97%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:23.72
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 637548
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 3
+	Minor (reclaiming a frame) page faults: 414396
+	Voluntary context switches: 1629
+	Involuntary context switches: 193
+	Swaps: 0
+	File system inputs: 9112
+	File system outputs: 904
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T13:51:39Z rc=0 cgroup_memory.peak_bytes=386830336 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=l1-lint2-main unit=lifecycle-l1-lint2-main-1792590674 rc=0 wall_s=25 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=25 killed=no sampled_peak_anon_mb=348 sampled_peak_cgroup_current_mb=357 sampled_peak_swap_mb=0

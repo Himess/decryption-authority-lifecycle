@@ -1,0 +1,164 @@
+Compiling 2 files with Solc 0.8.28
+Solc 0.8.28 finished in 8.52s
+Compiler run successful!
+
+Ran 4 tests for e2e/vendor-baseline/MockSecurityZones.t.sol:MockSecurityZonesTest
+[PASS] testSetSecurityZoneMaxBelowMinReverts() (gas: 15223)
+[PASS] testSetSecurityZoneMinAboveMaxReverts() (gas: 14900)
+[PASS] testSetSecurityZonesAcceptsSingleZoneRange() (gas: 64592)
+[PASS] testSetSecurityZonesRejectsInvertedRange() (gas: 55580)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 4.07ms (737.60µs CPU time)
+
+Ran 3 tests for e2e/vendor-baseline/MockNegativeSecurityZone.t.sol:MockNegativeSecurityZoneTest
+[PASS] testAllowGrantsNegativeZoneHandle() (gas: 182771)
+[PASS] testNegativeZoneHandleIsNotAllowedForOthers() (gas: 141359)
+[PASS] testZeroZoneHandleIsNotAllowedForOthers() (gas: 138255)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 4.41ms (1.25ms CPU time)
+
+Ran 7 tests for e2e/vendor-baseline/MockTrivialEncrypt.t.sol:MockTrivialEncryptTest
+[PASS] testEuint128OutOfRangeReverts() (gas: 21117)
+[PASS] testEuint16OutOfRangeReverts() (gas: 20850)
+[PASS] testEuint32OutOfRangeReverts() (gas: 20697)
+[PASS] testEuint64OutOfRangeReverts() (gas: 21600)
+[PASS] testEuint8OutOfRangeReverts() (gas: 21146)
+[PASS] testInvalidSecurityZoneReverts() (gas: 20809)
+[PASS] testMaxValuesStillEncrypt() (gas: 161825)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 5.12ms (1.79ms CPU time)
+
+Ran 3 tests for e2e/vendor-baseline/MockIsPubliclyAllowed.t.sol:MockIsPubliclyAllowedTest
+[PASS] testAllowThisIsNotPublic() (gas: 128356)
+[PASS] testNotPubliclyAllowedByDefault() (gas: 100636)
+[PASS] testPubliclyAllowedAfterAllowGlobal() (gas: 125393)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 5.04ms (2.14ms CPU time)
+
+Ran 5 tests for e2e/vendor-baseline/BatchVerifyInput.t.sol:BatchVerifyInputTest
+[PASS] testDebugBypass_worksWithZeroSigner() (gas: 249048)
+[PASS] testTamperedInput_reverts() (gas: 190136)
+[PASS] testValidBatch_storesAllValuesInOrder() (gas: 542289)
+[PASS] testWrongConsumingContract_reverts() (gas: 475975)
+[PASS] testWrongSigner_reverts() (gas: 170396)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 7.47ms (3.88ms CPU time)
+
+Ran 2 tests for e2e/vendor-baseline/GasMetering.t.sol:GasMeteringRevertTest
+[PASS] test_meteringResumesAfterDecryptRevert() (gas: 202252)
+[PASS] test_meteringResumesAfterMockRevert() (gas: 207227)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 8.66ms (2.20ms CPU time)
+
+Ran 4 tests for e2e/vendor-baseline/MockRandom.t.sol:MockRandomTest
+[PASS] testRandomHandleCarriesTypeAndZone() (gas: 65370)
+[PASS] testRandomHandleIsUsable() (gas: 144922)
+[PASS] testRandomRejectsInvalidSecurityZone() (gas: 16516)
+[PASS] testRandomValuesDifferWithinOneTransaction() (gas: 86579)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 2.45ms (799.50µs CPU time)
+
+Ran 6 tests for e2e/vendor-baseline/MockDecryptResultBatch.t.sol:MockDecryptResultBatchTest
+[PASS] testPublishDecryptResultBatchEmitsCallerAsRequestor() (gas: 216667)
+[PASS] testPublishDecryptResultBatchRevertsOnExtraResult() (gas: 62036)
+[PASS] testPublishDecryptResultBatchRevertsOnMissingSignature() (gas: 51300)
+[PASS] testVerifyDecryptResultBatchAcceptsMatchingArrays() (gas: 72271)
+[PASS] testVerifyDecryptResultBatchRevertsOnLengthMismatch() (gas: 42757)
+[PASS] testVerifyDecryptResultBatchSafeRevertsOnLengthMismatch() (gas: 44244)
+Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 87.68ms (1.99ms CPU time)
+
+Ran 7 tests for e2e/vendor-baseline/GasMetering.t.sol:GasMeteringTest
+[PASS] test_adjustedMatchesExcluded_logsOff() (gas: 2969403)
+[PASS] test_adjustedMatchesExcluded_logsOn() (gas: 3717312)
+[FAIL: addToCounter exclusion delta too small: 48886 <= 50000] test_exclusionReducesReportedGas() (gas: 2950455)
+[PASS] test_noEventsWhenExcluded() (gas: 1130475)
+[PASS] test_resultsUnchangedWithExclusion() (gas: 962114)
+[PASS] test_userOwnedPauseNotClobbered() (gas: 730552)
+[PASS] test_worksWithLogsEnabled() (gas: 727921)
+Suite result: FAILED. 6 passed; 1 failed; 0 skipped; finished in 129.41ms (60.87ms CPU time)
+
+Ran 3 tests for e2e/vendor-baseline/ACPShareRegistry.t.sol:ACPShareRegistryTest
+[PASS] testInitializedBehindTheProxy() (gas: 21638)
+[PASS] testServedByTheAcl() (gas: 10371)
+[PASS] testSharesAndLists() (gas: 158722)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 144.56ms (381.50µs CPU time)
+
+Ran 4 tests for e2e/vendor-baseline/SimpleTest.t.sol:SimpleTestTest
+[PASS] test128BitsNoOverflow() (gas: 96295)
+[PASS] testDivideByZero() (gas: 100377)
+[PASS] testOverflow() (gas: 95957)
+[PASS] testSetNumberFuzz(uint32) (runs: 512, μ: 244656, ~: 249631)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 144.54ms (142.63ms CPU time)
+
+Ran 24 tests for e2e/vendor-baseline/CofhePlugin.t.sol:CofheTestUtilsTest
+[PASS] testCreateCofheClient_returnsValidClient() (gas: 2659859)
+[PASS] testDeployMocks_contractsExist() (gas: 27858)
+[PASS] testDeployMocks_contractsLinked() (gas: 35189)
+[PASS] testDeployMocks_signersFunded() (gas: 2780)
+[PASS] testEnableLogs_smokeTest() (gas: 11039)
+[PASS] testExpectPlaintext_eaddress() (gas: 49942)
+[PASS] testExpectPlaintext_eaddress_withMessage() (gas: 49451)
+[PASS] testExpectPlaintext_ebool() (gas: 49793)
+[PASS] testExpectPlaintext_ebool_withMessage() (gas: 49598)
+[PASS] testExpectPlaintext_euint128() (gas: 49098)
+[PASS] testExpectPlaintext_euint16() (gas: 49756)
+[PASS] testExpectPlaintext_euint64() (gas: 49625)
+[PASS] testExpectPlaintext_euint8() (gas: 48643)
+[PASS] testExpectPlaintext_withMessage() (gas: 49057)
+[PASS] testGetPlaintext_bytes32() (gas: 48855)
+[PASS] testGetPlaintext_eaddress() (gas: 48856)
+[PASS] testGetPlaintext_ebool() (gas: 76020)
+[PASS] testGetPlaintext_euint128() (gas: 48934)
+[PASS] testGetPlaintext_euint16() (gas: 49609)
+[PASS] testGetPlaintext_euint32() (gas: 49610)
+[PASS] testGetPlaintext_euint64() (gas: 49765)
+[PASS] testGetPlaintext_euint8() (gas: 49509)
+[PASS] testGetPlaintext_reverts_nonExistent() (gas: 13767)
+[PASS] testGetPlaintext_storedValue() (gas: 48559)
+Suite result: ok. 24 passed; 0 failed; 0 skipped; finished in 152.74ms (5.36ms CPU time)
+
+Ran 5 tests for e2e/vendor-baseline/MockRem.t.sol:MockRemTest
+[PASS] testRem() (gas: 178321)
+[PASS] testRemByZeroEuint128() (gas: 101049)
+[PASS] testRemByZeroEuint32() (gas: 100611)
+[PASS] testRemByZeroEuint8() (gas: 100431)
+[PASS] testRemByZeroFuzz(uint32) (runs: 512, μ: 99491, ~: 100484)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 154.17ms (150.37ms CPU time)
+
+Ran 31 tests for e2e/vendor-baseline/CofhePlugin.t.sol:CofheClientTest
+[PASS] testACPCreateSelf_isValid() (gas: 49551)
+[PASS] testACPCreateSelf_revertsWhenNotConnected() (gas: 2669226)
+[PASS] testACPCreateShared_isValid() (gas: 34579)
+[PASS] testACPExportImportShared() (gas: 2782993)
+[PASS] testACPImportShared_recipientMismatch_reverts() (gas: 2753396)
+[PASS] testACPSharedDecryptFlow() (gas: 2916223)
+[PASS] testAccount_revertsWhenNotConnected() (gas: 2664763)
+[PASS] testConnect_canReconnect() (gas: 21089)
+[PASS] testConnect_setsAccount() (gas: 11237)
+[PASS] testCreateEuint32sBatch_revertsWhenConsumedByWrongContract() (gas: 1435250)
+[PASS] testCreateExternalEaddress() (gas: 229127)
+[PASS] testCreateExternalEbool_false() (gas: 209127)
+[PASS] testCreateExternalEbool_true() (gas: 227927)
+[PASS] testCreateExternalEuint128() (gas: 227782)
+[PASS] testCreateExternalEuint16() (gas: 227771)
+[PASS] testCreateExternalEuint32_fuzz(uint32) (runs: 512, μ: 224078, ~: 228976)
+[PASS] testCreateExternalEuint32_revertsWhenConsumedByWrongContract() (gas: 1378805)
+[PASS] testCreateExternalEuint32_revertsWhenConsumingContractIsZeroAddress() (gas: 15080)
+[PASS] testCreateExternalEuint32_revertsWhenNotConnected() (gas: 2668446)
+[PASS] testCreateExternalEuint64() (gas: 228088)
+[PASS] testCreateExternalEuint8() (gas: 229290)
+[PASS] testDecryptForTx_revertsWhenNotConnected() (gas: 2665604)
+[PASS] testDecryptForTx_withACP() (gas: 205078)
+[PASS] testDecryptForTx_withACP_revertsWithoutAllow() (gas: 195688)
+[PASS] testDecryptForTx_withoutACP() (gas: 183221)
+[PASS] testDecryptForTx_withoutACP_revertsIfNotGlobal() (gas: 151003)
+[PASS] testDecryptForView() (gas: 194876)
+[PASS] testDecryptForView_revertsWhenNotConnected() (gas: 2668833)
+[PASS] testDecryptForView_revertsWithoutPermission() (gas: 189026)
+[PASS] testPublishDecryptResult_fullFlow() (gas: 266860)
+[PASS] testPublishDecryptResult_getResultSafe() (gas: 270024)
+Suite result: ok. 31 passed; 0 failed; 0 skipped; finished in 152.65ms (166.41ms CPU time)
+
+Ran 14 test suites in 156.95ms (1.00s CPU time): 107 tests passed, 1 failed, 0 skipped (108 total tests)
+
+Failing tests:
+Encountered 1 failing test in e2e/vendor-baseline/GasMetering.t.sol:GasMeteringTest
+[FAIL: addToCounter exclusion delta too small: 48886 <= 50000] test_exclusionReducesReportedGas() (gas: 2950455)
+
+Encountered a total of 1 failing tests, 107 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 1 failed test
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger

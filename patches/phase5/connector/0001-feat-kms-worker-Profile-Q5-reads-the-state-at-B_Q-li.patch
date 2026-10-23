@@ -1,0 +1,244 @@
+From a4416155c419b0f1e95af1e6c23244db217f3b72 Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Thu, 22 Oct 2026 22:32:26 +0300
+Subject: [PATCH] feat(kms-worker): Profile Q5 reads the state at B_Q
+ (lifecycle Phase 5)
+
+Two cases of the delegation cutoff now read the host chain's state at
+the activation block B_Q:
+
+- adopted code: a delegator whose code is regular now but was empty
+  or an EIP-7702/7851 indicator at B_Q adopted it after B_Q (EIP-8298
+  SETCODEFROM), which reading today's code cannot tell from a
+  contract's; the cutoff applies to every change since B_Q;
+- successions: for a retired account the registry's delegated view
+  answers true only for its confirmed successor, which a key still
+  accepted after B_Q could have designated and confirmed; the
+  succession counts only if the same successor was confirmed at B_Q.
+
+Unreadable state at B_Q fails closed. Unit tests for both decisions.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ .../src/core/event_processor/decryption.rs    | 43 +++++++++++++-
+ .../src/core/event_processor/rpc.rs           | 46 +++++++++++++++
+ .../crates/kms-worker/src/core/profile_q.rs   | 58 +++++++++++++++++++
+ 3 files changed, 145 insertions(+), 2 deletions(-)
+
+diff --git a/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs b/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+index e689d535..e523261e 100644
+--- a/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
++++ b/kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs
+@@ -253,6 +253,9 @@ where
+     /// delegation from an ECDSA-rooted delegator counts only if one of its records (the per-contract one or the
+     /// wildcard) is active and unchanged since `B_Q`. Every read is at one block N. The records are read from the
+     /// ACL's storage, for a known layout only. A refusal is final: a record's last change can only move later.
++    /// [Phase 5] Two cases read the state at `B_Q`: a delegator whose code was empty or an indicator at `B_Q` and is
++    /// regular now (adopted code) is ECDSA-rooted for the cutoff; and a retired delegator's successor counts only if
++    /// it was already confirmed at `B_Q`.
+     async fn profile_q_cutoff(
+         &self,
+         host_client: &HostRpcClient<HP>,
+@@ -269,10 +272,16 @@ where
+             profile_q::delegation_slot(delegator, delegate, WILDCARD_DELEGATION_ADDRESS),
+         ];
+         let reads = host_client.cutoff_reads(delegator, slots, block).await?;
+-        let Some(rooted) = profile_q::cutoff_applies(&reads.code) else {
++        // [Phase 5] Code adopted after B_Q (EIP-8298) reads like a contract's: for a delegator with regular code now,
++        // its code at B_Q decides.
++        let rooted = match profile_q::cutoff_applies(&reads.code) {
++            Some(why) => Some(why),
++            None => profile_q::cutoff_applies_at(&reads.code, host_client.code_at(delegator, b_q).await.as_deref()),
++        };
++        let Some(rooted) = rooted else {
+             info!(
+                 "PROFILE-Q cutoff not applied delegator={delegator} delegate={delegate} contract={contract} \
+-                block={block} b_q={b_q}: regular code"
++                block={block} b_q={b_q}: regular code now and at B_Q"
+             );
+             return Ok(());
+         };
+@@ -289,6 +298,36 @@ where
+                 ),
+             )
+         };
++        // [Phase 5] A succession, not a delegation: for a retired account the registry's delegated view answers true
++        // only for its confirmed successor (E1). A key still accepted after B_Q could have designated and confirmed
++        // one, so the succession counts only if the same successor was already confirmed at B_Q.
++        let (retired_now, successor_now) = host_client.retired_and_successor_at(delegator, block).await;
++        if retired_now == Some(true) {
++            let (_, successor_at_bq) = host_client.retired_and_successor_at(delegator, b_q).await;
++            let Some(successor_at_bq) = successor_at_bq else {
++                // Not established either way (the node cannot serve the state at B_Q now): retried, never served
++                // while it stays unreadable.
++                return Err(RequestCheckError::recoverable(
++                    RequestCheckKind::Acl,
++                    ErrorCode::AclDenied,
++                    anyhow!("Profile Q (Q5): the successor of {delegator} at B_Q {b_q} cannot be read"),
++                ));
++            };
++            let successor_at_bq = Some(successor_at_bq);
++            let successor_now = successor_now.unwrap_or_default();
++            if profile_q::succession_counts(successor_now, successor_at_bq, delegate) {
++                info!(
++                    "PROFILE-Q cutoff passed (succession) delegator={delegator} successor={delegate} \
++                    contract={contract} block={block} b_q={b_q} delegator_code=\"{rooted}\": confirmed at B_Q"
++                );
++                return Ok(());
++            }
++            return Err(refuse(format!(
++                "succession: successor now {successor_now}, at B_Q {}; a succession counts only if it was \
++                confirmed at B_Q",
++                successor_at_bq.map(|a| a.to_string()).unwrap_or_else(|| "unreadable".into())
++            )));
++        }
+         if !profile_q::KNOWN_LAYOUT_VERSIONS.contains(&reads.version.as_str()) {
+             return Err(refuse(format!(
+                 "unknown ACL layout `{}`, the cutoff cannot be established",
+diff --git a/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs b/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+index ee6732cd..6ec74a42 100644
+--- a/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
++++ b/kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs
+@@ -19,6 +19,11 @@ alloy::sol! {
+     interface IAclLifecycleCore {
+         function isAccountRetired(address account) external view returns (bool);
+     }
++
++    /// [Phase 5] The E1 Successor view, for Profile Q5's succession cutoff.
++    interface IAclLifecycleSuccessor {
++        function successorOf(address account) external view returns (address);
++    }
+ }
+ 
+ /// [lifecycle Level 3, Profile Q5] The host-chain reads behind one delegation cutoff decision, all at one block.
+@@ -201,6 +206,47 @@ impl<P: Provider> HostRpcClient<P> {
+             .map_err(|e| self.acl_err(e))
+     }
+ 
++    /// [Phase 5, Profile Q5] An account's raw code at `block` (`B_Q`). `None` if the node cannot serve that state, for
++    /// example a pruned node: the caller then fails closed.
++    pub async fn code_at(&self, account: Address, block: u64) -> Option<Vec<u8>> {
++        self.acl_contract
++            .provider()
++            .get_code_at(account)
++            .block_id(BlockId::number(block))
++            .await
++            .ok()
++            .map(|c| c.to_vec())
++    }
++
++    /// [Phase 5, Profile Q5] `isAccountRetired(account)` and `successorOf(account)` at `block`. `None` for a value the
++    /// node cannot serve, or that the registry does not answer.
++    pub async fn retired_and_successor_at(&self, account: Address, block: u64) -> (Option<bool>, Option<Address>) {
++        let provider = self.acl_contract.provider();
++        let at = BlockId::number(block);
++        let acl = *self.acl_contract.address();
++        let retired = provider
++            .call(
++                TransactionRequest::default()
++                    .to(acl)
++                    .input(IAclLifecycleCore::isAccountRetiredCall { account }.abi_encode().into()),
++            )
++            .block(at)
++            .await
++            .ok()
++            .and_then(|r| IAclLifecycleCore::isAccountRetiredCall::abi_decode_returns(&r).ok());
++        let successor = provider
++            .call(
++                TransactionRequest::default()
++                    .to(acl)
++                    .input(IAclLifecycleSuccessor::successorOfCall { account }.abi_encode().into()),
++            )
++            .block(at)
++            .await
++            .ok()
++            .and_then(|r| IAclLifecycleSuccessor::successorOfCall::abi_decode_returns(&r).ok());
++        (retired, successor)
++    }
++
+     /// [lifecycle Level 3, Profile Q5] What the delegation cutoff reads, all at `block`: the delegator's raw code, the
+     /// block's timestamp, the ACL's version string, and the storage words at `slots`.
+     pub async fn cutoff_reads<const N: usize>(
+diff --git a/kms-connector/crates/kms-worker/src/core/profile_q.rs b/kms-connector/crates/kms-worker/src/core/profile_q.rs
+index 31a2d8d0..82f0b481 100644
+--- a/kms-connector/crates/kms-worker/src/core/profile_q.rs
++++ b/kms-connector/crates/kms-worker/src/core/profile_q.rs
+@@ -11,6 +11,9 @@
+ //!   before `B_Q`. The registry has no getter for that block, so it is read from the ACL's ERC-7201 storage
+ //!   (`UserDecryptionDelegation.lastBlockDelegateOrRevoke`) with `eth_getStorageAt`, only for an ACL version whose
+ //!   layout is known; any other version fails closed.
++//!   [Phase 5] A delegator whose code is regular now but was empty or an indicator at `B_Q` (EIP-8298 adopted code)
++//!   gets the cutoff too ([`cutoff_applies_at`]); and a retired ECDSA-rooted account's successor counts only if it
++//!   was already confirmed at `B_Q` ([`succession_counts`]). Both read the host chain's state at `B_Q`.
+ 
+ use alloy::primitives::{Address, B256, U256, keccak256};
+ use serde::Deserialize;
+@@ -257,6 +260,31 @@ impl DelegationRecord {
+     }
+ }
+ 
++/// [Phase 5] Whether Q5's cutoff applies to a delegator, from its code now and its code at `B_Q`. Code adopted from a
++/// deployed contract (EIP-8298) reads like a contract's, so a delegator whose code is regular now but was empty or an
++/// indicator at `B_Q` adopted it after `B_Q`; this node cannot establish the adoption block, so the cutoff applies to
++/// every change since `B_Q`. `code_at_bq` is `None` when the state at `B_Q` cannot be read: a regular-code delegator
++/// then gets the cutoff too.
++pub fn cutoff_applies_at(code_now: &[u8], code_at_bq: Option<&[u8]>) -> Option<&'static str> {
++    if let Some(why) = cutoff_applies(code_now) {
++        return Some(why);
++    }
++    match code_at_bq {
++        None => Some("regular code, state at B_Q unavailable"),
++        Some(at_bq) if cutoff_applies(at_bq).is_some() => {
++            Some("regular code adopted after B_Q (adoption block unknown)")
++        }
++        Some(_) => None,
++    }
++}
++
++/// [Phase 5] Q5 for a succession: the registry's delegated view answers true for a retired account's confirmed
++/// successor, which a key that is still accepted after `B_Q` could have designated and confirmed. It counts only if the
++/// same successor was already confirmed at `B_Q` (`successor_at_bq`; `None` when the state at `B_Q` cannot be read).
++pub fn succession_counts(successor_now: Address, successor_at_bq: Option<Address>, delegate: Address) -> bool {
++    successor_now == delegate && delegate != Address::ZERO && successor_at_bq == Some(delegate)
++}
++
+ /// Whether Q5's cutoff applies to a delegator with this code, and why: no code and an EIP-7702 indicator are
+ /// ECDSA-rooted; for an EIP-7851 ECDSA-disabled indicator this node cannot establish when the key was disabled, so the
+ /// cutoff applies to every change. `None` for other code: not ECDSA-rooted, no cutoff.
+@@ -321,6 +349,36 @@ mod tests {
+         assert_eq!(cutoff_applies(&[&ind(0x00)[..], &[0u8][..]].concat()), None);
+     }
+ 
++    #[test]
++    fn cutoff_applies_to_code_adopted_after_b_q() {
++        let d = [0xabu8; 20];
++        let ind = |p: u8| [&[0xef, 0x01, p][..], &d[..]].concat();
++        let wallet = [0x60u8, 0x80, 0x60, 0x40, 0x52];
++        // Rooted now: as before, whatever the code at B_Q.
++        assert_eq!(cutoff_applies_at(&[], Some(&wallet)), Some("no code"));
++        assert!(cutoff_applies_at(&ind(0x01), None).is_some());
++        // Regular now and at B_Q: a contract, no cutoff.
++        assert_eq!(cutoff_applies_at(&wallet, Some(&wallet)), None);
++        // Regular now, empty or an indicator at B_Q: adopted after B_Q (EIP-8298), cutoff.
++        assert!(cutoff_applies_at(&wallet, Some(&[])).is_some());
++        assert!(cutoff_applies_at(&wallet, Some(&ind(0x00))).is_some());
++        assert!(cutoff_applies_at(&wallet, Some(&ind(0x01))).is_some());
++        // Regular now, state at B_Q unavailable: cutoff (fails closed).
++        assert!(cutoff_applies_at(&wallet, None).is_some());
++    }
++
++    #[test]
++    fn a_succession_counts_only_if_confirmed_at_b_q() {
++        let w = Address::repeat_byte(0x11);
++        let x = Address::repeat_byte(0x22);
++        assert!(succession_counts(w, Some(w), w));
++        assert!(!succession_counts(w, Some(Address::ZERO), w), "confirmed after B_Q");
++        assert!(!succession_counts(w, Some(x), w), "another successor at B_Q");
++        assert!(!succession_counts(w, None, w), "state at B_Q unavailable");
++        assert!(!succession_counts(x, Some(w), w), "not the successor now");
++        assert!(!succession_counts(Address::ZERO, Some(Address::ZERO), Address::ZERO));
++    }
++
+     #[test]
+     fn statement_message_layout() {
+         let s = Statement {

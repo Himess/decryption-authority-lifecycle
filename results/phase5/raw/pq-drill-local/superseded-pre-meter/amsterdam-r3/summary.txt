@@ -1,0 +1,14 @@
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B1: the carry tool carries the history to W1 and retires A in one transaction 477ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B2: designation, acceptance through execute, the delay, confirmation; B2d retires, B2c through the watchtower 2049ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B3: a type-4 transaction delegates A to the wallet code and sets its key; B3a reads as EIP-7851, B3b adopts the code 4380ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > SDK: getAuthorityStatus of every A and holder 1657ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > SDK: the Profile H precheck accepts each holder ML-DSA-44 signature; it refuses the old key where A has code 3171ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B6: the old key transactions after each path 6751ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B5: operator-ratified upgrades: 8 signatures revert, 9 pass the guard to a Core release, a release without Core reverts at the guard; the canary stays green 15688ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B8: the ERC-1271 call each holder needs (gas and time on this node) 3353ms
+ ✓ pq-drill-local.test.ts > Part B on a local chain (amsterdam) > B3 does not combine with Core retirement: the old key retires A, which ends its wallet too 1662ms
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+vitest rc=0
+git status of the worktree (tracked files must be unchanged):
+RESULT secret_or_hostname_hits=0

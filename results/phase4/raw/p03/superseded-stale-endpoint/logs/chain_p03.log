@@ -1,0 +1,37 @@
+2026-10-21T19:03:52Z START build-endpoint-harness
+2026-10-21T19:28:48Z END build-endpoint-harness rc=0
+2026-10-21T19:28:48Z endpoint-main-harness 6a4ac1729c3f8801d5bf019b29d675160816ebdd7264d84fb2e2d38b4ac7a685
+2026-10-21T19:28:48Z START build-endpoint-l1
+2026-10-21T19:32:24Z END build-endpoint-l1 rc=0
+2026-10-21T19:32:24Z endpoint-main-l1 3020c4d06c7d035ce91d56272b44b5007f70d161581be71c2f27fc77a3281087
+2026-10-21T19:32:24Z START build-p03-main
+2026-10-21T19:33:21Z END build-p03-main rc=0
+2026-10-21T19:33:21Z START build-p03-main-l1
+2026-10-21T19:34:46Z END build-p03-main-l1 rc=0
+image postgres:17.5 id=sha256:aadf2c0696f5ef357aa7a68da995137f0cf17bad0bf6e1f17de06ae5c769b302 size=161418413
+127.0.0.1:5432 - accepting connections
+container lifecycle-pg postgres:17.5 Up 14 seconds ports=127.0.0.1:55432->5432/tcp
+listening 127.0.0.1:55432
+secrets file mode=-rw------- size=67
+secrets file mode=-rw------- size=76
+2026-10-21T19:35:03Z START suite-endpoint-l1
+2026-10-21T19:42:30Z END suite-endpoint-l1 rc=0
+2026-10-21T19:42:30Z START suite-kms-worker-lib-l1
+2026-10-21T19:42:56Z END suite-kms-worker-lib-l1 rc=0
+2026-10-21T19:42:56Z START p03-main-r1
+2026-10-21T19:43:08Z END p03-main-r1 rc=0
+2026-10-21T19:43:08Z START p03-main-l1-r1
+2026-10-21T19:43:29Z END p03-main-l1-r1 rc=101
+2026-10-21T19:43:29Z p03-main-l1-r1 failed (continuing)
+2026-10-21T19:43:29Z START p03-main-r2
+2026-10-21T19:43:40Z END p03-main-r2 rc=0
+2026-10-21T19:43:40Z START p03-main-l1-r2
+2026-10-21T19:44:01Z END p03-main-l1-r2 rc=101
+2026-10-21T19:44:01Z p03-main-l1-r2 failed (continuing)
+2026-10-21T19:44:01Z START p03-main-r3
+2026-10-21T19:44:11Z END p03-main-r3 rc=0
+2026-10-21T19:44:11Z START p03-main-l1-r3
+2026-10-21T19:44:32Z END p03-main-l1-r3 rc=101
+2026-10-21T19:44:32Z p03-main-l1-r3 failed (continuing)
+2026-10-21T19:44:32Z CHAIN DONE
+2026-10-21T19:44:33Z lifecycle-pg removed

@@ -1,0 +1,11 @@
+{
+  "acl": "0x763a38f28C104a063755432aD9c6B0A1Af081bA1",
+  "chain_id": 12345,
+  "ics": "fhe-authority-lifecycle reference deployment, Phase 5 drill (local)",
+  "profile_q": {
+    "n": 13,
+    "operator_scheme": "ML-DSA-65",
+    "t": 4,
+    "threshold": 9
+  }
+}

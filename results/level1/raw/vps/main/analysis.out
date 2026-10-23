@@ -1,0 +1,233 @@
+run: /srv/lifecycle/runs/level1-main-20261021T135952Z
+
+== l1.h2.off.v2-direct.eoa-uk  [profile_h=off path=v2-direct source=onchain] expected=Forwarded observed=Forwarded kms=4 error_counter=0 error_code=- calls=2
+     decryptionSignatureInvalidatedBefore(Uk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,Uk) -> True
+
+== l1.h2.off.v2-direct.7702-reject-all-root-key  [profile_h=off path=v2-direct source=onchain] expected=Forwarded observed=Forwarded kms=4 error_counter=0 error_code=- calls=2
+     decryptionSignatureInvalidatedBefore(Kx) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,Kx) -> True
+
+== l1.h2.mode-off.v2-direct.eoa-uk  [profile_h=on:off:h5 path=v2-direct source=onchain] expected=Forwarded observed=Forwarded kms=4 error_counter=0 error_code=- calls=2
+     isAllowed(h,Uk) -> True
+     decryptionSignatureInvalidatedBefore(Uk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+
+== l1.h2.mode-off.v2-direct.7702-reject-all-root-key  [profile_h=on:off:h5 path=v2-direct source=onchain] expected=Forwarded observed=Forwarded kms=4 error_counter=0 error_code=- calls=2
+     isAllowed(h,Kx) -> True
+     decryptionSignatureInvalidatedBefore(Kx) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+
+== l1.h2.shadow.v2-direct.eoa-uk  [profile_h=on:shadow:h5 path=v2-direct source=onchain] expected=Forwarded observed=Forwarded kms=4 error_counter=0 error_code=- calls=4
+     isAllowed(h,Uk) -> True
+     eth_blockNumber -> 0xc
+     decryptionSignatureInvalidatedBefore(Uk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     eth_getCode(Uk, 0xc) -> empty
+
+== l1.h2.shadow.v2-direct.7702-reject-all-root-key  [profile_h=on:shadow:h5 path=v2-direct source=onchain] expected=Forwarded observed=Forwarded kms=4 error_counter=0 error_code=- calls=5
+     eth_blockNumber -> 0xc
+     isAllowed(h,Kx) -> True
+     decryptionSignatureInvalidatedBefore(Kx) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     eth_getCode(Kx, 0xc) -> 7702
+     isValidSignature(digest,<bytes>) -> 0xffffffff @0xc
+
+== l1.h2.enforce.v2-direct.eoa-uk  [profile_h=on:enforce:h5 path=v2-direct source=onchain] expected=Forwarded observed=Forwarded kms=4 error_counter=0 error_code=- calls=4
+     decryptionSignatureInvalidatedBefore(Uk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,Uk) -> True
+     eth_blockNumber -> 0xc
+     eth_getCode(Uk, 0xc) -> empty
+
+== l1.h2.enforce.v2-direct.7702-reject-all-root-key  [profile_h=on:enforce:h5 path=v2-direct source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=3 error_code=- calls=13
+     isAllowed(h,Kx) -> True
+     decryptionSignatureInvalidatedBefore(Kx) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     eth_blockNumber -> 0xc
+     eth_getCode(Kx, 0xc) -> 7702
+     isValidSignature(digest,<bytes>) -> 0xffffffff @0xc
+     decryptionSignatureInvalidatedBefore(Kx) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,Kx) -> True
+     eth_blockNumber -> 0xc
+     eth_getCode(Kx, 0xc) -> 7702
+     isAllowed(h,Kx) -> True
+     eth_blockNumber -> 0xc
+     decryptionSignatureInvalidatedBefore(Kx) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     eth_getCode(Kx, 0xc) -> 7702
+
+== l1.h5.off.legacy-direct.u-retired  [profile_h=off path=direct source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=3 error_code=- calls=9
+     isAllowed(h,U) -> False
+     decryptionSignatureInvalidatedBefore(U) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,C) -> True
+     decryptionSignatureInvalidatedBefore(U) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,C) -> True
+     isAllowed(h,U) -> False
+     decryptionSignatureInvalidatedBefore(U) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,U) -> False
+     isAllowed(h,C) -> True
+
+== l1.h5.off.legacy-delegated.delegator-u-retired  [profile_h=off path=delegated source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=3 error_code=- calls=6
+     isHandleDelegatedForUserDecryption(U,D,C,h) -> False
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isHandleDelegatedForUserDecryption(U,D,C,h) -> False
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isHandleDelegatedForUserDecryption(U,D,C,h) -> False
+
+== l1.h5.off.v2-direct.uk-retired  [profile_h=off path=v2-direct source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=3 error_code=- calls=6
+     isAllowed(h,Uk) -> False
+     decryptionSignatureInvalidatedBefore(Uk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,Uk) -> False
+     decryptionSignatureInvalidatedBefore(Uk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     decryptionSignatureInvalidatedBefore(Uk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,Uk) -> False
+
+== l1.h5.off.v2-http-direct.uk-retired  [profile_h=off path=v2-direct source=http] expected=Rejected observed=Rejected kms=0 error_counter=0 error_code=acl_denied calls=2
+     decryptionSignatureInvalidatedBefore(Uk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,Uk) -> False
+
+== l1.h5.off.legacy-direct.v-no-allowance  [profile_h=off path=direct source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=3 error_code=- calls=9
+     isAllowed(h,V) -> False
+     isAllowed(h,C) -> True
+     decryptionSignatureInvalidatedBefore(V) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,C) -> True
+     decryptionSignatureInvalidatedBefore(V) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,V) -> False
+     isAllowed(h,V) -> False
+     isAllowed(h,C) -> True
+     decryptionSignatureInvalidatedBefore(V) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+
+== l1.h5.off.v2-http-direct.vk-no-allowance  [profile_h=off path=v2-direct source=http] expected=Rejected observed=Rejected kms=0 error_counter=0 error_code=acl_denied calls=2
+     isAllowed(h,Vk) -> False
+     decryptionSignatureInvalidatedBefore(Vk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+
+== l1.h5.off.legacy-delegated.v-no-allowance-to-d  [profile_h=off path=delegated source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=3 error_code=- calls=6
+     isHandleDelegatedForUserDecryption(V,D,C,h) -> False
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isHandleDelegatedForUserDecryption(V,D,C,h) -> False
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isHandleDelegatedForUserDecryption(V,D,C,h) -> False
+
+== l1.h5.on.legacy-direct.u-retired  [profile_h=on:off:h5 path=direct source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=1 error_code=- calls=4
+     isAllowed(h,C) -> True
+     isAllowed(h,U) -> False
+     decryptionSignatureInvalidatedBefore(U) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAccountRetired(U) -> True
+
+== l1.h5.on.legacy-delegated.delegator-u-retired  [profile_h=on:off:h5 path=delegated source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=1 error_code=- calls=3
+     isHandleDelegatedForUserDecryption(U,D,C,h) -> False
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAccountRetired(U) -> True
+
+== l1.h5.on.v2-direct.uk-retired  [profile_h=on:off:h5 path=v2-direct source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=1 error_code=- calls=3
+     decryptionSignatureInvalidatedBefore(Uk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,Uk) -> False
+     isAccountRetired(Uk) -> True
+
+== l1.h5.on.v2-http-direct.uk-retired  [profile_h=on:off:h5 path=v2-direct source=http] expected=Rejected observed=Rejected kms=0 error_counter=0 error_code=account_retired calls=3
+     isAllowed(h,Uk) -> False
+     decryptionSignatureInvalidatedBefore(Uk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAccountRetired(Uk) -> True
+
+== l1.h5.on.legacy-direct.v-no-allowance  [profile_h=on:off:h5 path=direct source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=3 error_code=- calls=15
+     isAllowed(h,V) -> False
+     decryptionSignatureInvalidatedBefore(V) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,C) -> True
+     isAccountRetired(V) -> False
+     isAccountRetired(C) -> False
+     decryptionSignatureInvalidatedBefore(V) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,V) -> False
+     isAllowed(h,C) -> True
+     isAccountRetired(V) -> False
+     isAccountRetired(C) -> False
+     isAllowed(h,V) -> False
+     decryptionSignatureInvalidatedBefore(V) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,C) -> True
+     isAccountRetired(V) -> False
+     isAccountRetired(C) -> False
+
+== l1.h5.on.v2-http-direct.vk-no-allowance  [profile_h=on:off:h5 path=v2-direct source=http] expected=Rejected observed=Rejected kms=0 error_counter=0 error_code=acl_denied calls=3
+     decryptionSignatureInvalidatedBefore(Vk) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,Vk) -> False
+     isAccountRetired(Vk) -> False
+
+== l1.h5.on.legacy-delegated.v-no-allowance-to-d  [profile_h=on:off:h5 path=delegated source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=3 error_code=- calls=15
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isHandleDelegatedForUserDecryption(V,D,C,h) -> False
+     isAccountRetired(V) -> False
+     isAccountRetired(D) -> False
+     isAccountRetired(C) -> False
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isHandleDelegatedForUserDecryption(V,D,C,h) -> False
+     isAccountRetired(V) -> False
+     isAccountRetired(D) -> False
+     isAccountRetired(C) -> False
+     isHandleDelegatedForUserDecryption(V,D,C,h) -> False
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAccountRetired(V) -> False
+     isAccountRetired(D) -> False
+     isAccountRetired(C) -> False
+
+== l1.lapse.off.legacy-direct.u-retired  [profile_h=off path=direct source=onchain] expected=Forwarded observed=Forwarded kms=4 error_counter=1 error_code=- calls=6
+     isAllowed(h,C) -> True
+     isAllowed(h,U) -> False
+     decryptionSignatureInvalidatedBefore(U) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,C) -> True
+     decryptionSignatureInvalidatedBefore(U) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,U) -> True
+
+== l1.lapse.on.legacy-direct.u-retired  [profile_h=on:off:h5 path=direct source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=1 error_code=- calls=4
+     decryptionSignatureInvalidatedBefore(U) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,C) -> True
+     isAllowed(h,U) -> False
+     isAccountRetired(U) -> True
+
+== l1.h6.off.legacy-direct.u-regular-code  [profile_h=off path=direct source=onchain] expected=Forwarded observed=Forwarded kms=4 error_counter=0 error_code=- calls=3
+     decryptionSignatureInvalidatedBefore(U) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+     isAllowed(h,C) -> True
+     isAllowed(h,U) -> True
+
+== l1.h6.on.legacy-direct.u-regular-code  [profile_h=on:off:h5:h6 path=direct source=onchain] expected=Rejected observed=Rejected kms=0 error_counter=1 error_code=- calls=2
+     eth_blockNumber -> 0x3c
+     eth_getCode(U, 0x3c) -> regular
+
+== l1.h6.on.legacy-delegated.d-7702  [profile_h=on:off:h5:h6 path=delegated source=onchain] expected=Forwarded observed=Forwarded kms=4 error_counter=0 error_code=- calls=4
+     eth_blockNumber -> 0x3c
+     eth_getCode(D, 0x3c) -> 7702
+     isHandleDelegatedForUserDecryption(U,D,C,h) -> True
+     decryptionSignatureInvalidatedBefore(D) -> 0x0000000000000000000000000000000000000000000000000000000000000000
+
+markers:
+   L1-H2 Kx delegated to RejectAll1271Wallet at 0x8d499569E30a814cEA0aFdC13fFbB40fA3d9e9bE
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H accepted signer=0xF642037621979a2885d5EE12f03B420e73089B8F path=Ecrecover block=None code=None erc1271_calls=0
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H accepted signer=0xaFFb0eECDcC5133469Fcc4D326a96cFA56665F19 path=Ecrecover block=None code=None erc1271_calls=0
+   PROFILE-H enabled: mode=shadow b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H accepted signer=0xF642037621979a2885d5EE12f03B420e73089B8F path=Ecrecover block=Some(12) code=Some(Empty) erc1271_calls=0
+   PROFILE-H enabled: mode=shadow b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H-SHADOW signer=0xaFFb0eECDcC5133469Fcc4D326a96cFA56665F19 would_reject=true would_accept=false served=Accept(Ecrecover) code_first=Reject(WrongMagic(0xaffb0eecdcc5133469fcc4d326a96cfa56665f19, 0xffffffff)) code=Some(Eip7702 { delegate: 0x8d499569e30a8
+   PROFILE-H accepted signer=0xaFFb0eECDcC5133469Fcc4D326a96cFA56665F19 path=Ecrecover block=Some(12) code=Some(Eip7702 { delegate: 0x8d499569e30a814cea0afdc13ffbb40fa3d9e9be }) erc1271_calls=1
+   PROFILE-H enabled: mode=enforce b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H accepted signer=0xF642037621979a2885d5EE12f03B420e73089B8F path=Ecrecover block=Some(12) code=Some(Empty) erc1271_calls=0
+   PROFILE-H enabled: mode=enforce b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H rejected signer=0xaFFb0eECDcC5133469Fcc4D326a96cFA56665F19 error=ERC-1271 isValidSignature returned non-magic value 0xffffffff for userAddress 0xaFFb0eECDcC5133469Fcc4D326a96cFA56665F19 disposition=RetryNextBlock block=Some(12) code=Some(Eip7702 { de
+   PROFILE-H rejected signer=0xaFFb0eECDcC5133469Fcc4D326a96cFA56665F19 error=ERC-1271 retry for userAddress 0xaFFb0eECDcC5133469Fcc4D326a96cFA56665F19 waits for a block after 12 (current block 12) disposition=AwaitingNextBlock block=Some(12) code=Some(Eip7702 { 
+   PROFILE-H rejected signer=0xaFFb0eECDcC5133469Fcc4D326a96cFA56665F19 error=ERC-1271 retry for userAddress 0xaFFb0eECDcC5133469Fcc4D326a96cFA56665F19 waits for a block after 12 (current block 12) disposition=AwaitingNextBlock block=Some(12) code=Some(Eip7702 { 
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H accepted signer=0xea8CA9Bb4d589935D42df7501749418eAEa07eBb path=Ecrecover block=None code=None erc1271_calls=0
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H accepted signer=0xea8CA9Bb4d589935D42df7501749418eAEa07eBb path=Ecrecover block=None code=None erc1271_calls=0
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   PROFILE-H accepted signer=0xDE7974eE46c93734c6edAA985f945002052Dba9D path=Ecrecover block=None code=None erc1271_calls=0
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   L1-LAPSE applied: retired[U] cleared in the ACL proxy 0xbCe4F88dE6f08F4bA7Bd28dC731BF648d9449985 (slot 0x0a6b0bfe04c717b70d5a7c3be486d2d8d111cc6d0fe220245e7c979cef09798c) after the first denial
+   L1-LAPSE result case=l1.lapse.off observed=Forwarded kms_mock_hits=4 error_counter=Some(1) isAccountRetired(U)_after_lapse=false
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=false
+   L1-LAPSE applied: retired[U] cleared in the ACL proxy 0x01222423522E2511D4E8bbf593679db018cCbBe4 (slot 0x0a6b0bfe04c717b70d5a7c3be486d2d8d111cc6d0fe220245e7c979cef09798c) after the first denial
+   L1-LAPSE result case=l1.lapse.on observed=Rejected kms_mock_hits=0 error_counter=Some(1) isAccountRetired(U)_after_lapse=false
+   L1-H6 code set: U regular (5 bytes), D EIP-7702 indicator (23 bytes)
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=true
+   PROFILE-H6: 0xAd0854d04fBA75cAA63D303B5BBB1467E3F667Eb has regular code (Regular { len: 5 }) on host chain 12345; this path verifies its signature by ECDSA only
+   PROFILE-H enabled: mode=off b_exec=2000000 caps=(65536, 4096, 1024) attempts=2 eip7702_fallback=true final_retirement_denials=true refuse_regular_code_on_legacy=true
+
+requests=27 PROBLEMS: none

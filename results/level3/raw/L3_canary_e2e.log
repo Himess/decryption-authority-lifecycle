@@ -1,0 +1,66 @@
+[
+ {
+  "step": "baseline (no upgrade)",
+  "ok": true,
+  "halt": [],
+  "rpcCalls": 6,
+  "viewCalls": 4,
+  "upgradesSeen": 0,
+  "backdoorReads": false
+ },
+ {
+  "step": "honest redeploy, not ratified",
+  "ok": false,
+  "halt": [
+   "the implementation is not pinned"
+  ],
+  "rpcCalls": 6,
+  "viewCalls": 4,
+  "upgradesSeen": 1,
+  "backdoorReads": false
+ },
+ {
+  "step": "the same release, ratified",
+  "ok": true,
+  "halt": [],
+  "rpcCalls": 6,
+  "viewCalls": 4,
+  "upgradesSeen": 0,
+  "backdoorReads": false
+ },
+ {
+  "step": "Core-less liar",
+  "ok": false,
+  "halt": [
+   "isAccountRetired(canary) reverts",
+   "isAllowed(handle, canary) is true",
+   "persistAllowed(handle, canary) is true",
+   "delegated view from the canary is true",
+   "the implementation is not pinned"
+  ],
+  "rpcCalls": 6,
+  "viewCalls": 4,
+  "upgradesSeen": 1,
+  "backdoorReads": false
+ },
+ {
+  "step": "the ratified release again",
+  "ok": true,
+  "halt": [],
+  "rpcCalls": 6,
+  "viewCalls": 4,
+  "upgradesSeen": 1,
+  "backdoorReads": false
+ },
+ {
+  "step": "backdoored release",
+  "ok": false,
+  "halt": [
+   "the implementation is not pinned"
+  ],
+  "rpcCalls": 6,
+  "viewCalls": 4,
+  "upgradesSeen": 1,
+  "backdoorReads": true
+ }
+]

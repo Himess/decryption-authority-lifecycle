@@ -1,0 +1,26 @@
+Compiling 69 files with Solc 0.8.25
+Solc 0.8.25 finished in 48.01s
+Compiler run successful!
+
+Ran 18 tests for test/conformance/FhenixConformance.t.sol:FhenixConformanceTest
+[PASS] test_kit_TC10_GrantsThenRetireAtomic_RetireThenGrantReverts() (gas: 1865895)
+[PASS] test_kit_TC11_TheUpgradeGuard() (gas: 4324568)
+[PASS] test_kit_TC12_ERC165() (gas: 46450)
+[SKIP] test_kit_TC17_DesignationRules() (gas: 0)
+[SKIP] test_kit_TC17_TheSuccessorReadsOnlyAfterRetirement_AndNothingMore() (gas: 0)
+[SKIP] test_kit_TC19_AContractAccountSignsThroughERC1271Only() (gas: 0)
+[SKIP] test_kit_TC19_TheERCVector() (gas: 0)
+[PASS] test_kit_TC1_R5_TheNextCallInTheSameTransaction() (gas: 899150)
+[PASS] test_kit_TC1_RetireOnce_SecondRevertsWithoutAnEvent() (gas: 110950)
+[PASS] test_kit_TC2_RetireUnderHostileConditions_AsAContract_WithNoHandles() (gas: 957955)
+[PASS] test_kit_TC3_NeverRetiredAccountsUnaffected() (gas: 1291930)
+[PASS] test_kit_TC4_EveryUseViewFalse_PublicUnchanged() (gas: 1234975)
+[PASS] test_kit_TC4_R10_TheEngineAndTheOutput() (gas: 1022598)
+[PASS] test_kit_TC5_OnBehalfFalseForEachRetiredParty() (gas: 1133896)
+[PASS] test_kit_TC6_PermitFalseForARetiredIssuerOrRecipient() (gas: 930555)
+[PASS] test_kit_TC7_ARetiredGrantorRevertsOnEveryPath() (gas: 1091184)
+[PASS] test_kit_TC8_GrantsToARetiredAccountSucceed_AndAreInert() (gas: 1249940)
+[PASS] test_kit_TC9_ComputeThenEveryExportReverts() (gas: 1446804)
+Suite result: ok. 14 passed; 0 failed; 4 skipped; finished in 87.65ms (64.06ms CPU time)
+
+Ran 1 test suite in 89.06ms (87.65ms CPU time): 14 tests passed, 0 failed, 4 skipped (18 total tests)

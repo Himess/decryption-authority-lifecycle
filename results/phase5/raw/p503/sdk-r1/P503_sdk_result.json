@@ -1,0 +1,332 @@
+{
+  "label": "proven in mock: the SDK status read on a local chain; EIP-8298 simulated by anvil_setCode (adopted regular code)",
+  "startedAt": "2026-10-22T18:41:35.411Z",
+  "env": {
+    "clientVersion": "anvil/v1.8.5",
+    "hardFork": "Bpo1",
+    "aclVersion": "ACL v0.4.2",
+    "acl": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+    "wallet": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+    "accounts": {
+      "E": "0x1a5B2dc206563F4A51A649AA1eEBe62303963C13",
+      "X": "0x95908141A4Bd45Bbbb3C96F035142E7Cc5ADc4Bb"
+    }
+  },
+  "adopted": {
+    "source": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+    "codeLength": 1218,
+    "codeHash": "0xd631d4bb06ab245c4b1945de19d22c31bcddc984ff29d0b518bdf1e2350502ce"
+  },
+  "retirement": {
+    "gasUsed": "54459"
+  },
+  "rows": [
+    {
+      "label": "p503.ethers.E.eoa",
+      "adapter": "ethers",
+      "account": "E",
+      "nodeCodeLength": 0,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x1a5B2dc206563F4A51A649AA1eEBe62303963C13",
+        "accountCode": {
+          "kind": "empty"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.viem.E.eoa",
+      "adapter": "viem",
+      "account": "E",
+      "nodeCodeLength": 0,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x1a5B2dc206563F4A51A649AA1eEBe62303963C13",
+        "accountCode": {
+          "kind": "empty"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.ethers.X.eoa",
+      "adapter": "ethers",
+      "account": "X",
+      "nodeCodeLength": 0,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x95908141A4Bd45Bbbb3C96F035142E7Cc5ADc4Bb",
+        "accountCode": {
+          "kind": "empty"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.viem.X.eoa",
+      "adapter": "viem",
+      "account": "X",
+      "nodeCodeLength": 0,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x95908141A4Bd45Bbbb3C96F035142E7Cc5ADc4Bb",
+        "accountCode": {
+          "kind": "empty"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.ethers.wallet.contract",
+      "adapter": "ethers",
+      "account": "wallet",
+      "nodeCodeLength": 1218,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+        "accountCode": {
+          "kind": "regular"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.viem.wallet.contract",
+      "adapter": "viem",
+      "account": "wallet",
+      "nodeCodeLength": 1218,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+        "accountCode": {
+          "kind": "regular"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.ethers.X.8298",
+      "adapter": "ethers",
+      "account": "X",
+      "nodeCodeLength": 1218,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x95908141A4Bd45Bbbb3C96F035142E7Cc5ADc4Bb",
+        "accountCode": {
+          "kind": "regular"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.viem.X.8298",
+      "adapter": "viem",
+      "account": "X",
+      "nodeCodeLength": 1218,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x95908141A4Bd45Bbbb3C96F035142E7Cc5ADc4Bb",
+        "accountCode": {
+          "kind": "regular"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.ethers.X.8298-retired",
+      "adapter": "ethers",
+      "account": "X",
+      "nodeCodeLength": 1218,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x95908141A4Bd45Bbbb3C96F035142E7Cc5ADc4Bb",
+        "accountCode": {
+          "kind": "regular"
+        },
+        "lifecycle": true,
+        "retired": true,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.viem.X.8298-retired",
+      "adapter": "viem",
+      "account": "X",
+      "nodeCodeLength": 1218,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x95908141A4Bd45Bbbb3C96F035142E7Cc5ADc4Bb",
+        "accountCode": {
+          "kind": "regular"
+        },
+        "lifecycle": true,
+        "retired": true,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.ethers.E.eoa-after",
+      "adapter": "ethers",
+      "account": "E",
+      "nodeCodeLength": 0,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x1a5B2dc206563F4A51A649AA1eEBe62303963C13",
+        "accountCode": {
+          "kind": "empty"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    },
+    {
+      "label": "p503.viem.E.eoa-after",
+      "adapter": "viem",
+      "account": "E",
+      "nodeCodeLength": 0,
+      "status": {
+        "chainId": 31337,
+        "aclAddress": "0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D",
+        "account": "0x1a5B2dc206563F4A51A649AA1eEBe62303963C13",
+        "accountCode": {
+          "kind": "empty"
+        },
+        "lifecycle": true,
+        "retired": false,
+        "successor": null,
+        "pendingSuccessor": null
+      }
+    }
+  ],
+  "wire": {
+    "p503.ethers.E.eoa": {
+      "eth_call getVersion": 3,
+      "eth_getCode (0 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.viem.E.eoa": {
+      "eth_call getVersion": 3,
+      "eth_getCode (0 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.ethers.X.eoa": {
+      "eth_getCode (0 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.viem.X.eoa": {
+      "eth_getCode (0 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.ethers.wallet.contract": {
+      "eth_getCode (1218 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.viem.wallet.contract": {
+      "eth_getCode (1218 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.ethers.X.8298": {
+      "eth_getCode (1218 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.viem.X.8298": {
+      "eth_getCode (1218 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.ethers.X.8298-retired": {
+      "eth_getCode (1218 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.viem.X.8298-retired": {
+      "eth_getCode (1218 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.ethers.E.eoa-after": {
+      "eth_getCode (0 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    },
+    "p503.viem.E.eoa-after": {
+      "eth_getCode (0 B)": 1,
+      "eth_call supportsInterface": 2,
+      "eth_call isAccountRetired": 1,
+      "eth_call successorOf": 1,
+      "eth_call pendingSuccessorOf": 1
+    }
+  },
+  "proxyRewritten": 0,
+  "proxyStderrTail": "",
+  "finishedAt": "2026-10-22T18:41:38.475Z"
+}

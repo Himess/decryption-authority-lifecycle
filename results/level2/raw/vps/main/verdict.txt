@@ -1,0 +1,15 @@
+OK   l2.legacy.delegate-d.u-active expected=Forwarded observed=Forwarded kms=4 attempts=1 verified=0 false_views=-
+OK   l2.legacy.successor-s.u-active expected=Rejected observed=Rejected kms=0 attempts=3 verified=3 false_views=isHandleDelegatedForUserDecryption(U,S,C,h)
+OK   l2.legacy.successor-s.u-retired expected=Forwarded observed=Forwarded kms=4 attempts=1 verified=0 false_views=-
+OK   l2.legacy.delegate-d.u-retired expected=Rejected observed=Rejected kms=0 attempts=3 verified=3 false_views=isHandleDelegatedForUserDecryption(U,D,C,h)
+OK   l2.legacy.successor-s-direct.u-retired expected=Rejected observed=Rejected kms=0 attempts=3 verified=3 false_views=isAllowed(h,S)
+OK   l2.legacy.h2-holder-v expected=Forwarded observed=Forwarded kms=4 attempts=1 verified=0 false_views=-
+OK   l2.legacy.successor-s.straggler-h2 expected=Forwarded observed=Forwarded kms=4 attempts=1 verified=0 false_views=-
+OK   l2.legacy.successor-s.after-resign expected=Rejected observed=Rejected kms=0 attempts=3 verified=3 false_views=isHandleDelegatedForUserDecryption(U,S,C,h)
+OK   l2.v2.delegate-dk.u-active expected=Forwarded observed=Forwarded kms=4 attempts=1 verified=0 false_views=-
+OK   l2.v2.successor-sk.u-active expected=Rejected observed=Rejected kms=0 attempts=3 verified=3 false_views=isHandleDelegatedForUserDecryption(U,Sk,C,h)
+OK   l2.v2.successor-sk.u-retired expected=Forwarded observed=Forwarded kms=4 attempts=1 verified=0 false_views=-
+OK   l2.v2.delegate-dk.u-retired expected=Rejected observed=Rejected kms=0 attempts=3 verified=3 false_views=isHandleDelegatedForUserDecryption(U,Dk,C,h)
+OK   l2.v2.successor-sk-direct.u-retired expected=Rejected observed=Rejected kms=0 attempts=3 verified=3 false_views=isAllowed(h,Sk)
+REQUESTS ALL OK (13 requests)
+ZERO-NEW-RPC OK

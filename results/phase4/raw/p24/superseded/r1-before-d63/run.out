@@ -1,0 +1,9 @@
+L0 amsterdam rc=0
+L2 amsterdam rc=0
+L3 amsterdam rc=1
+carry amsterdam rc=1
+L0 osaka rc=0
+L2 osaka rc=0
+L3 osaka rc=0
+carry osaka rc=0
+exit 0

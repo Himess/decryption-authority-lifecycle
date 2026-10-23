@@ -1,0 +1,7 @@
+date_utc: 2026-10-21T07:39:52Z
+machine: AMD Ryzen 5 5600 6-Core Processor              , 15,9 GB RAM, Microsoft Windows 10 Pro
+forge: forge Version: 1.8.5
+anvil: anvil Version: 1.8.5
+node: v22.13.0
+fhevm-main: lifecycle/base=ed85171 lifecycle/level0=5e61f3d worktree-dirty=0
+fhevm-v0.13.8: lifecycle/base=fe3ca89 lifecycle/level0=06d769f worktree-dirty=0

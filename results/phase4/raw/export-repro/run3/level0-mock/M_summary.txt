@@ -1,0 +1,50 @@
+=== Level 0 G2-mock (part 1): Core end to end in Zama's cleartext mock ===
+clone:   <repo>/.stage/r10/impl/fhevm-v0.13.8
+commit:  a4b0c4f52a89f474a3af02e1456a84673827ed11 branch: lifecycle/repro
+base:    lifecycle/level0 (not in this clone)
+machine: AMD Ryzen 5 5600 6-Core Processor, 12 logical CPUs, 15.9 GiB RAM, Windows_NT 10.0.19045
+date_utc:   2026-10-22T08:40:09Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         jq-1.7.1
+git:        git version 2.47.1.windows.2
+solc:    FOUNDRY_SOLC_VERSION=0.8.35
+rpc:     http://127.0.0.1:56314 (anvil pid 34508)
+{"hardFork":"Bpo1","chainId":31337,"gasLimit":"0x1c9c380","baseFee":"0x3b9aca00"}
+fhevm_deploy rc=0 seconds=24 log=M_fhevm_deploy.log
+fhetest_deploy rc=1 seconds=3 log=M_fhetest_deploy.log
+fhetest_deploy rc=1; FHETest 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0 codesize=12475 config=(0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D, 0xe3a9105a3a932253A70F126eb1E3b589C643dD24, 0x901F8942346f7AB3a01F6D7613119Bca447Bb030)
+Error: Failed to estimate gas: server returned an error response: error code 3: execution reverted, data: "0x"
+ACL on chain: "ACL v0.4.1"
+analysis_build rc=0 seconds=18 log=M_analysis_build.log
+static_checks rc=0 seconds=1 log=M_static_checks.log
+RESULT: PASS, CleartextACL overrides none of them
+RESULT: PASS, all pinned lines hold
+RESULT: PASS, all pinned lines hold (contracts and SDK)
+RESULT: PASS, each decryption error has exactly one revert statement in CleartextACL.sol
+vault_build rc=0 seconds=1 log=M_vault_build.log
+vitest rc=0 seconds=14 log=M_vitest.log
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > setup: the deployed mock IS the re-pointed build (ACL v0.4.1), with a non-forge 4-signer KMS set 280ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S1 control: never-retired U decrypts its handle; delegated U -> D decrypts 1166ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S2/S3 preparation: OLD history, delegations from and to OLD, positive controls before retirement 2121ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S2: the reverse multicall order [retireAccount(), allow(h, NEW)] reverts and changes nothing 155ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S2: carry and retire, OLD runs ACL.multicall([allow(h_i, NEW) x5, retireAccount()]) 173ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S2: NEW user-decrypts the carried history through the SDK 422ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S2 + S5: OLD (retired, user role) is refused at every layer 356ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S3 + S5: delegation FROM OLD (OLD delegator, created before retirement) is refused at every layer 263ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S3 + S5: delegation TO OLD (OLD delegate of X, created before retirement; then re-delegated after it) is refused at every layer 782ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S3: OLD cannot create a new delegation (SenderRetired); its other grant paths are closed too 398ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S4: a contract that holds handles (RetirableVault): setup and positive controls before it retires 1034ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S4 + S5: the contract retires through its helper; its handles are refused on the direct path (contract role) 340ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > S4 + S5: ...and on the delegated path (contract role) 565ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > mock limit: plaintext is public in the mock (no ACL on the cleartext getters) 25ms
+ ✓ mock-e2e.test.ts > Level 0 Core in the Zama cleartext mock (G2-mock part 1) > gas: retireAccount (EOA; contract helper above) and the carry multicall at n = 1, 5 (above), 10 2210ms
+ Test Files  1 passed (1)
+      Tests  15 passed (15)
+git status of the clone (tracked files must be unchanged):
+?? sdk/js-sdk/contracts/remappings.txt
+secret scan of results/level0/raw/mock (lines naming a private key or mnemonic):
+0

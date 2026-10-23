@@ -1,0 +1,30 @@
+{
+  "hardfork": "prague",
+  "anvilNodeInfo": {
+    "hardFork": "Prague",
+    "chainId": 31337
+  },
+  "note": "receipt gasUsed per transaction (includes 21,000 intrinsic and calldata); view_* = eth_estimateGas of a call to the view",
+  "v0_8_0": {
+    "retireAccount": 50099,
+    "view_isHandleDelegated_active": 44373,
+    "view_isAllowed_active": 32225
+  },
+  "v0_9_0": {
+    "retireAccount_noSuccessionRecord": 54464,
+    "view_isHandleDelegated_active": 44405,
+    "view_isAllowed_active": 32202,
+    "designateSuccessor": 62014,
+    "acceptSuccession": 40074,
+    "confirmSuccessor": 57188,
+    "view_isHandleDelegated_active_withConfirmedSuccessor": 44405,
+    "retireAccount_withConfirmedSuccessor": 54464,
+    "view_isHandleDelegated_successorPath": 41989,
+    "view_isHandleDelegated_retiredDelegator_otherDelegate": 41989,
+    "resignSuccession_afterRetirement": 28688,
+    "designateSuccessor_replacingPending": 44914,
+    "retireAccount_voidingPendingDesignation": 52691,
+    "cancelSuccessorDesignation": 30371,
+    "raiseSuccessorDelay": 52711
+  }
+}

@@ -1,0 +1,278 @@
+From 53f389de7dcb61d78815c9fe05dd01ae03f149ac Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 18:27:34 +0300
+Subject: [PATCH 4/6] test(host-contracts): governance profile tests (timelock,
+ guard, canary, pinning)
+
+An OpenZeppelin TimelockController (7-day delay) owns the ACL and, through
+ACLOwnable, the FHEVMExecutor. The upgrade guard still refuses a Core-less
+implementation sent through the timelock. The operator canary (four views
+on a retired account) catches a Core-less liar; a backdoored release that
+spares the canary is caught only by implementation pinning.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ host-contracts/test/acl/ACLGovernance.t.sol   | 202 ++++++++++++++++++
+ .../test/acl/retirement/GovernanceMocks.sol   |  44 ++++
+ 2 files changed, 246 insertions(+)
+ create mode 100644 host-contracts/test/acl/ACLGovernance.t.sol
+ create mode 100644 host-contracts/test/acl/retirement/GovernanceMocks.sol
+
+diff --git a/host-contracts/test/acl/ACLGovernance.t.sol b/host-contracts/test/acl/ACLGovernance.t.sol
+new file mode 100644
+index 00000000..d63a5c35
+--- /dev/null
++++ b/host-contracts/test/acl/ACLGovernance.t.sol
+@@ -0,0 +1,202 @@
++// SPDX-License-Identifier: BSD-3-Clause-Clear
++pragma solidity ^0.8.24;
++
++import {TimelockController} from "@openzeppelin/contracts/governance/TimelockController.sol";
++import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
++import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
++import {ACL} from "../../contracts/ACL.sol";
++import {FHEVMExecutor} from "../../contracts/FHEVMExecutor.sol";
++import {ACLOwnable} from "../../contracts/shared/ACLOwnable.sol";
++import {HostContractsDeployerTestUtils} from "../../fhevm-foundry/HostContractsDeployerTestUtils.sol";
++import {aclAdd, confidentialBridgeAdd, fhevmExecutorAdd} from "../../addresses/FHEVMHostAddresses.sol";
++import {ACL as ACL_v0_7_0} from "./retirement/fixtures/ACL_v0_7_0.sol";
++import {NoopConfidentialBridge, ACLLyingCoreless, ACLBackdoored} from "./retirement/GovernanceMocks.sol";
++
++/**
++ * @title ACLGovernanceTest
++ * @notice Level 3, the governance profile of the Decryption Authority Lifecycle draft (TARGET_ARCHITECTURE §4.4 (d)):
++ *         an OpenZeppelin TimelockController (7-day minimum delay) owns the ACL and, through ACLOwnable, the
++ *         FHEVMExecutor; the upgrade guard still blocks a Core-less implementation sent through the timelock; the
++ *         operator canary (4 views on a known retired account) catches an implementation that stops enforcing
++ *         retirement; implementation pinning catches the one that spares the canary.
++ */
++contract ACLGovernanceTest is HostContractsDeployerTestUtils {
++    ACL internal acl;
++    TimelockController internal timelock;
++
++    address internal constant owner = address(456);
++    uint256 internal constant DELAY = 7 days;
++    bytes32 internal constant IMPLEMENTATION_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
++    bytes32 internal constant ACL_STORAGE_LOCATION = 0xa688f31953c2015baaf8c0a488ee1ee22eb0e05273cc1fd31ea4cbee42febc00;
++
++    address internal proposer = makeAddr("proposer");
++    address internal canary = makeAddr("canary");
++    address internal canaryDelegate = makeAddr("canaryDelegate");
++    address internal app = makeAddr("app");
++    address internal attacker = makeAddr("attacker");
++    bytes32 internal canaryHandle = keccak256("canary-handle");
++    uint256 internal salt;
++
++    /// The implementations the operators have ratified (pinning), by runtime code hash.
++    mapping(bytes32 codeHash => bool) internal pinned;
++
++    function setUp() public {
++        (, address aclImplementation) = _deployACL(owner);
++        acl = ACL(aclAdd);
++        _deployPauserSet();
++        _deployFHEVMExecutor(owner);
++        vm.etch(confidentialBridgeAdd, address(new NoopConfidentialBridge()).code);
++        pinned[aclImplementation.codehash] = true;
++
++        // The canary: an account with a handle and a delegation, retired before any upgrade.
++        _persist(canaryHandle, canary);
++        _persist(canaryHandle, app);
++        vm.prank(canary);
++        acl.delegateForUserDecryption(canaryDelegate, app, uint64(block.timestamp + 3650 days));
++        vm.prank(canary);
++        acl.retireAccount();
++
++        // Governance: a timelock with a 7-day minimum delay takes ownership (Ownable2Step: accepted through itself).
++        address[] memory proposers = new address[](1);
++        proposers[0] = proposer;
++        address[] memory executors = new address[](1); // address(0): anyone may execute once the delay has passed
++        timelock = new TimelockController(DELAY, proposers, executors, address(0));
++        vm.prank(owner);
++        acl.transferOwnership(address(timelock));
++        _viaTimelock(aclAdd, abi.encodeCall(acl.acceptOwnership, ()));
++        assertEq(acl.owner(), address(timelock));
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // helpers
++    ////////////////////////////////////////////////////////////////////////////
++
++    function _persist(bytes32 handle, address holder) internal {
++        bytes32 inner = keccak256(abi.encode(handle, ACL_STORAGE_LOCATION));
++        vm.store(aclAdd, keccak256(abi.encode(holder, inner)), bytes32(uint256(1)));
++    }
++
++    function _schedule(address target, bytes memory data) internal returns (bytes32 id) {
++        salt++;
++        vm.prank(proposer);
++        timelock.schedule(target, 0, data, bytes32(0), bytes32(salt), DELAY);
++        id = timelock.hashOperation(target, 0, data, bytes32(0), bytes32(salt));
++    }
++
++    function _execute(address target, bytes memory data) internal {
++        timelock.execute(target, 0, data, bytes32(0), bytes32(salt));
++    }
++
++    function _viaTimelock(address target, bytes memory data) internal {
++        _schedule(target, data);
++        vm.warp(block.timestamp + DELAY);
++        _execute(target, data);
++    }
++
++    function _upgradeData(address implementation) internal pure returns (bytes memory) {
++        return abi.encodeCall(UUPSUpgradeable.upgradeToAndCall, (implementation, ""));
++    }
++
++    /// @dev The operator canary: run on every `Upgraded` event and periodically. Four views on the retired canary
++    ///      account, then pinning. Returns an empty string when every check passes.
++    function _canary() internal view returns (string memory) {
++        try acl.isAccountRetired(canary) returns (bool retired) {
++            if (!retired) return "isAccountRetired(canary) is false";
++        } catch {
++            return "isAccountRetired reverts";
++        }
++        if (acl.isAllowed(canaryHandle, canary)) return "isAllowed(h, canary) is true";
++        if (acl.persistAllowed(canaryHandle, canary)) return "persistAllowed(h, canary) is true";
++        if (acl.isHandleDelegatedForUserDecryption(canary, canaryDelegate, app, canaryHandle)) {
++            return "a delegation from the retired canary answers true";
++        }
++        return "";
++    }
++
++    function _pinningCheck() internal view returns (string memory) {
++        address implementation = address(uint160(uint256(vm.load(aclAdd, IMPLEMENTATION_SLOT))));
++        return pinned[implementation.codehash] ? "" : "the implementation is not pinned";
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // the timelock owns the ACL and, through ACLOwnable, the executor
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_Gov_TimelockOwnsTheACL_DelayEnforced() public {
++        address next = address(new ACL());
++        vm.prank(owner);
++        vm.expectRevert(abi.encodeWithSelector(OwnableUpgradeable.OwnableUnauthorizedAccount.selector, owner));
++        acl.upgradeToAndCall(next, "");
++
++        bytes memory data = _upgradeData(next);
++        bytes32 id = _schedule(aclAdd, data);
++        vm.warp(block.timestamp + DELAY - 1);
++        vm.expectRevert(
++            abi.encodeWithSelector(
++                TimelockController.TimelockUnexpectedOperationState.selector,
++                id,
++                bytes32(1 << uint8(TimelockController.OperationState.Ready))
++            )
++        );
++        _execute(aclAdd, data);
++        vm.warp(block.timestamp + 1);
++        _execute(aclAdd, data);
++        assertEq(address(uint160(uint256(vm.load(aclAdd, IMPLEMENTATION_SLOT)))), next);
++        assertEq(_canary(), "");
++    }
++
++    function test_Gov_ExecutorFollowsTheACLOwner() public {
++        address next = address(new FHEVMExecutor());
++        vm.prank(owner);
++        vm.expectRevert(abi.encodeWithSelector(ACLOwnable.NotHostOwner.selector, owner));
++        FHEVMExecutor(fhevmExecutorAdd).upgradeToAndCall(next, "");
++        _viaTimelock(fhevmExecutorAdd, _upgradeData(next));
++        assertEq(address(uint160(uint256(vm.load(fhevmExecutorAdd, IMPLEMENTATION_SLOT)))), next);
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // the guard holds through the timelock
++    ////////////////////////////////////////////////////////////////////////////
++
++    function test_Gov_GuardBlocksACorelessUpgradeThroughTheTimelock() public {
++        address coreless = address(new ACL_v0_7_0());
++        bytes memory data = _upgradeData(coreless);
++        _schedule(aclAdd, data);
++        vm.warp(block.timestamp + DELAY);
++        vm.expectRevert(abi.encodeWithSelector(ACL.UpgradeDropsRetirement.selector, coreless));
++        _execute(aclAdd, data);
++        assertTrue(acl.isAccountRetired(canary));
++        assertEq(_canary(), "");
++    }
++
++    ////////////////////////////////////////////////////////////////////////////
++    // canary and pinning
++    ////////////////////////////////////////////////////////////////////////////
++
++    /// @dev The ratified next release: the canary passes and the implementation is pinned.
++    function test_Gov_Canary_HonestUpgrade() public {
++        address next = address(new ACL());
++        pinned[next.codehash] = true;
++        _viaTimelock(aclAdd, _upgradeData(next));
++        assertEq(_canary(), "");
++        assertEq(_pinningCheck(), "");
++    }
++
++    /// @dev A Core-less liar passes the guard (it claims Core and the location) and stops enforcing retirement. The
++    ///      canary catches it at the first check, and the operators halt user decryption on this chain.
++    function test_Gov_Canary_CatchesTheLyingUpgrade() public {
++        _viaTimelock(aclAdd, _upgradeData(address(new ACLLyingCoreless())));
++        assertEq(_canary(), "isAccountRetired reverts");
++        assertTrue(acl.persistAllowed(canaryHandle, canary), "enforcement lapsed: why the halt is needed");
++        assertEq(_pinningCheck(), "the implementation is not pinned");
++    }
++
++    /// @dev A backdoored upgrade spares the canary: retirement is still enforced, so every canary view passes. The
++    ///      backdoor reads any handle. Only pinning catches it.
++    function test_Gov_Canary_MissesTheBackdoor_PinningCatchesIt() public {
++        _viaTimelock(aclAdd, _upgradeData(address(new ACLBackdoored(attacker))));
++        assertEq(_canary(), "", "the canary passes");
++        assertTrue(acl.persistAllowed(canaryHandle, attacker), "the backdoor reads the canary's handle");
++        assertEq(_pinningCheck(), "the implementation is not pinned");
++    }
++}
+diff --git a/host-contracts/test/acl/retirement/GovernanceMocks.sol b/host-contracts/test/acl/retirement/GovernanceMocks.sol
+new file mode 100644
+index 00000000..2259ad4a
+--- /dev/null
++++ b/host-contracts/test/acl/retirement/GovernanceMocks.sol
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: BSD-3-Clause-Clear
++pragma solidity ^0.8.24;
++
++import {ACL} from "@fhevm-host-contracts/contracts/ACL.sol";
++import {ACL as ACL_v0_7_0} from "./fixtures/ACL_v0_7_0.sol";
++
++/// @notice Test-only stand-in for the ConfidentialBridge, so that `ACL.acceptOwnership` can re-sync it.
++contract NoopConfidentialBridge {
++    function syncDelegate() external {}
++}
++
++/**
++ * @notice A malicious upgrade the guard cannot see: v0.7.0 code that claims Core and the retirement location
++ *         (the U7 liar of the upgrade matrix). Retirement stops being enforced; the canary catches it.
++ */
++contract ACLLyingCoreless is ACL_v0_7_0 {
++    function supportsInterface(bytes4) external pure returns (bool) {
++        return true;
++    }
++
++    function retirementStorageLocation() external pure returns (bytes32) {
++        return 0xe6ae1005b480da47ced1ed3eb5869a54ca87c5d592369277249f4148c0e86200;
++    }
++}
++
++/**
++ * @notice A malicious upgrade that spares every canary: the current ACL, with a backdoor account allowed on every
++ *         handle. Retirement stays enforced, so the canary passes; only implementation pinning catches it.
++ */
++contract ACLBackdoored is ACL {
++    address public immutable backdoor;
++
++    constructor(address backdoor_) {
++        backdoor = backdoor_;
++    }
++
++    function isAllowed(bytes32 handle, address account) public view virtual override returns (bool) {
++        return account == backdoor || super.isAllowed(handle, account);
++    }
++
++    function persistAllowed(bytes32 handle, address account) public view virtual override returns (bool) {
++        return account == backdoor || super.persistAllowed(handle, account);
++    }
++}

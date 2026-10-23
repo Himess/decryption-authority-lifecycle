@@ -1,0 +1,105 @@
+2026-10-22T07:01:50Z
+$ C:\Program Files\Git\mingw64\bin\git.EXE clone -c core.autocrlf=false -c core.longpaths=true --filter=blob:none --no-checkout https://github.com/zama-ai/fhevm.git <repo>\.stage\r8\impl\fhevm-main
+Cloning into '<repo>\.stage\r8\impl\fhevm-main'...
+$ C:\Program Files\Git\mingw64\bin\git.EXE -C <repo>\.stage\r8\impl\fhevm-main checkout -b lifecycle/base ed851716c9a6b799996a23399ece2858336f96db
+Switched to a new branch 'lifecycle/base'
+$ C:\Program Files\Git\mingw64\bin\git.EXE -C <repo>\.stage\r8\impl\fhevm-main checkout -b lifecycle/repro
+Switched to a new branch 'lifecycle/repro'
+$ C:\Program Files\Git\mingw64\bin\git.EXE -C <repo>\.stage\r8\impl\fhevm-main am --quiet <repo>\.stage\r8\patches\level0\main\0001-feat-host-contracts-ACL-v0.8.0-with-account-retireme.patch <repo>\.stage\r8\patches\level0\main\0002-test-host-contracts-Level-0-retirement-tests-for-ACL.patch <repo>\.stage\r8\patches\level0\main\0003-test-host-contracts-follow-the-ACL-v0.8.0-version-bu.patch
+$ C:\Program Files\Git\usr\bin\bash.EXE <repo>\.stage\r8\impl\harness\baselineA_host_contracts.sh main acl
+=== Baseline A (main, scope=acl) ===
+commit: 6599dff25d665ebb8aca5f9240b8ed887e7195d3 branch: lifecycle/repro
+date_utc:   2026-10-22T07:08:09Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         
+git:        git version 2.47.1.windows.2
+npm_ci rc=0 seconds=233 log=A_fhevm-main_npm_ci.log
+npm_rebuild_sqlite3 rc=0 seconds=6 log=A_fhevm-main_npm_rebuild_sqlite3.log
+hardhat_test_acl rc=0 seconds=84 log=A_fhevm-main_hardhat_test_acl.log
+deploy_emptyProxies rc=0 seconds=16 log=A_fhevm-main_deploy_emptyProxies.log
+soldeer_install rc=0 seconds=3 log=A_fhevm-main_soldeer_install.log
+forge_test_acl_isolate-default rc=1 seconds=70 log=A_fhevm-main_forge_test_acl_isolate-default.log
+forge_test_acl_isolate-false rc=0 seconds=31 log=A_fhevm-main_forge_test_acl_isolate-false.log
+--- suite results
+[A_fhevm-main_hardhat_test_acl.log]
+  3 passing (86ms)
+[A_fhevm-main_forge_test_acl_isolate-default.log]
+Ran 7 test suites in 16.79s (67.22s CPU time): 79 tests passed, 64 failed, 0 skipped (143 total tests)
+[A_fhevm-main_forge_test_acl_isolate-false.log]
+Ran 7 test suites in 29.72s (90.00s CPU time): 143 tests passed, 0 failed, 0 skipped (143 total tests)
+git status (must be empty):
+$ C:\Program Files\Git\mingw64\bin\git.EXE clone -c core.autocrlf=false -c core.longpaths=true --filter=blob:none --no-checkout https://github.com/zama-ai/fhevm.git <repo>\.stage\r8\impl\fhevm-v0.13.8
+Cloning into '<repo>\.stage\r8\impl\fhevm-v0.13.8'...
+$ C:\Program Files\Git\mingw64\bin\git.EXE -C <repo>\.stage\r8\impl\fhevm-v0.13.8 checkout -b lifecycle/base fe3ca89b5111ca2b4abb220bf3c78417b821ceb5
+Switched to a new branch 'lifecycle/base'
+$ C:\Program Files\Git\mingw64\bin\git.EXE -C <repo>\.stage\r8\impl\fhevm-v0.13.8 checkout -b lifecycle/repro
+Switched to a new branch 'lifecycle/repro'
+$ C:\Program Files\Git\mingw64\bin\git.EXE -C <repo>\.stage\r8\impl\fhevm-v0.13.8 am --quiet <repo>\.stage\r8\patches\level0\v0.13.8\0001-feat-host-contracts-ACL-v0.4.1-backport-of-account-r.patch <repo>\.stage\r8\patches\level0\v0.13.8\0002-test-host-contracts-Level-0-retirement-tests-for-the.patch <repo>\.stage\r8\patches\level0\v0.13.8\0003-test-host-contracts-follow-the-ACL-v0.4.1-version-bu.patch
+$ C:\Program Files\Git\usr\bin\bash.EXE <repo>\.stage\r8\impl\harness\baselineA_host_contracts.sh v0.13.8 acl
+=== Baseline A (v0.13.8, scope=acl) ===
+commit: dda3cf86b6249e51289a46082f042153cbe0577b branch: lifecycle/repro
+date_utc:   2026-10-22T07:24:16Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         
+git:        git version 2.47.1.windows.2
+npm_ci rc=0 seconds=183 log=A_fhevm-v0.13.8_npm_ci.log
+npm_rebuild_sqlite3 rc=0 seconds=4 log=A_fhevm-v0.13.8_npm_rebuild_sqlite3.log
+hardhat_test_acl rc=0 seconds=57 log=A_fhevm-v0.13.8_hardhat_test_acl.log
+soldeer_install rc=1 seconds=31 log=A_fhevm-v0.13.8_soldeer_install.log
+forge_test_acl_isolate-default rc=1 seconds=6 log=A_fhevm-v0.13.8_forge_test_acl_isolate-default.log
+forge_test_acl_isolate-false rc=1 seconds=1 log=A_fhevm-v0.13.8_forge_test_acl_isolate-false.log
+--- suite results
+[A_fhevm-v0.13.8_hardhat_test_acl.log]
+  3 passing (79ms)
+[A_fhevm-v0.13.8_forge_test_acl_isolate-default.log]
+[A_fhevm-v0.13.8_forge_test_acl_isolate-false.log]
+git status (must be empty):
+Expected (test/acl/*, FOUNDRY_ISOLATE=false): 143 passed on main, 128 on v0.13.8; summaries in <repo>\.stage\r8\repro-out\level0
+2026-10-22T07:29:08Z
+$ <home>\.foundry\bin\forge.EXE test --match-path test/conformance/*
+$ <home>\.foundry\bin\forge.EXE test
+$ C:\Program Files\Git\mingw64\bin\git.EXE -C <repo>\.stage\r8\impl\fhevm-main am --quiet <repo>\.stage\r8\patches\level2\main\0001-feat-host-contracts-ACL-v0.9.0-with-the-E1-successor.patch <repo>\.stage\r8\patches\level2\main\0002-test-host-contracts-E1-successor-tests-for-ACL-v0.9..patch <repo>\.stage\r8\patches\level2\main\0003-test-host-contracts-follow-the-ACL-v0.9.0-version-bu.patch <repo>\.stage\r8\patches\level2\main\0004-feat-library-solidity-FHE.isAccountRetired-for-appli.patch <repo>\.stage\r8\patches\level2\main\0005-test-host-contracts-Profile-A-ERC-7984-variant-and-T.patch <repo>\.stage\r8\patches\level2\main\0006-style-host-contracts-prettier-on-the-lifecycle-tests.patch <repo>\.stage\r8\patches\level2\main\0007-feat-sdk-lifecycle-hygiene-in-the-SDK-Decryption-Aut.patch <repo>\.stage\r8\patches\level2\main\0008-fix-sdk-refuse-a-disposed-transport-key-pair-before-.patch
+$ C:\Program Files\Git\mingw64\bin\git.EXE -C <repo>\.stage\r8\impl\fhevm-main am --quiet <repo>\.stage\r8\patches\level3\main\0001-test-host-contracts-exclude-every-declared-interface.patch <repo>\.stage\r8\patches\level3\main\0002-feat-host-contracts-ACL-v0.10.0-with-the-E2-retireme.patch <repo>\.stage\r8\patches\level3\main\0003-test-host-contracts-E2-retirement-certificate-tests-.patch <repo>\.stage\r8\patches\level3\main\0004-test-host-contracts-governance-profile-tests-timeloc.patch <repo>\.stage\r8\patches\level3\main\0005-test-host-contracts-Profile-Q-on-chain-door-asserted.patch <repo>\.stage\r8\patches\level3\main\0006-test-conformance-add-the-Decryption-Authority-Lifecy.patch
+$ C:\Program Files\Git\usr\bin\bash.EXE <repo>\.stage\r8\impl\harness\baselineA_host_contracts.sh main acl
+=== Baseline A (main, scope=acl) ===
+commit: d037c9752c80799d8e46c3ee16e3447a972126e1 branch: lifecycle/repro
+date_utc:   2026-10-22T07:32:22Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         
+git:        git version 2.47.1.windows.2
+hardhat_test_acl rc=0 seconds=111 log=A_fhevm-main_hardhat_test_acl.log
+deploy_emptyProxies rc=0 seconds=16 log=A_fhevm-main_deploy_emptyProxies.log
+forge_test_acl_isolate-default rc=1 seconds=79 log=A_fhevm-main_forge_test_acl_isolate-default.log
+forge_test_acl_isolate-false rc=0 seconds=31 log=A_fhevm-main_forge_test_acl_isolate-false.log
+--- suite results
+[A_fhevm-main_hardhat_test_acl.log]
+  3 passing (104ms)
+[A_fhevm-main_forge_test_acl_isolate-default.log]
+Ran 12 test suites in 15.79s (28.71s CPU time): 144 tests passed, 82 failed, 0 skipped (226 total tests)
+[A_fhevm-main_forge_test_acl_isolate-false.log]
+Ran 12 test suites in 28.71s (115.05s CPU time): 226 tests passed, 0 failed, 0 skipped (226 total tests)
+git status (must be empty):
+$ <home>\.foundry\bin\forge.EXE test --match-path test/conformance/*
+$ <home>\AppData\Local\Programs\Python\Python311\python.exe <repo>\.stage\r8\conformance\install.py <repo>\.stage\r8 --check
+ok   Zama main (lifecycle/level3): impl\fhevm-main\host-contracts\test\conformance 69436bc45afb3b89
+skip Zama v0.13 line (lifecycle/level3): no copy here (impl\wt-l3-v0138\host-contracts\test\conformance or impl\fhevm-v0.13.8\host-contracts\test\conformance)
+ok   Fhenix CoFHE port: impl\fhenix-port\test\conformance 69436bc45afb3b89
+ok   Zama main series: patches\level3\main 69436bc45afb3b89
+ok   Zama v0.13 series: patches\level3\v0.13.8 69436bc45afb3b89
+ERC assets (erc\assets\erc-XXXX\conformance): ok
+kit sha256 69436bc45afb3b896750618e7154e18d3280a269d4d7b8a0e8a2f8ec25b8aa46
+Expected: the Fhenix port 69 passed, 4 skipped (its kit adapter 14 passed, 4 skipped); Zama main's kit 17 passed, 1 skipped. Logs in <repo>\.stage\r8\repro-out
+repro rc=0
+2026-10-22T07:36:49Z

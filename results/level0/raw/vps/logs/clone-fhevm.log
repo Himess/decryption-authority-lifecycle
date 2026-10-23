@@ -1,0 +1,27 @@
+INSCOPE start=2026-10-21T05:09:29Z cgroup=/system.slice/lifecycle-clone-fhevm-1792559369.scope nice=19 ionice=[idle] cmd=[git clone --filter=blob:none --no-checkout https://github.com/zama-ai/fhevm.git /srv/lifecycle/src/fhevm.git]
+Cloning into '/srv/lifecycle/src/fhevm.git'...
+	Command being timed: "git clone --filter=blob:none --no-checkout https://github.com/zama-ai/fhevm.git /srv/lifecycle/src/fhevm.git"
+	User time (seconds): 1.29
+	System time (seconds): 0.66
+	Percent of CPU this job got: 48%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:04.04
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 15084
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 47
+	Minor (reclaiming a frame) page faults: 5415
+	Voluntary context switches: 10788
+	Involuntary context switches: 2182
+	Swaps: 0
+	File system inputs: 14016
+	File system outputs: 37544
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T05:09:33Z rc=0 cgroup_memory.peak_bytes=40374272 memory.max=3221225472 memory.swap.max=1073741824 cpu.max=[200000 100000]
+HEAVY name=clone-fhevm unit=lifecycle-clone-fhevm-1792559369 rc=0 wall_s=5 sampled_peak_anon_mb=0 sampled_peak_cgroup_current_mb=0 sampled_peak_swap_mb=0 tripped=0

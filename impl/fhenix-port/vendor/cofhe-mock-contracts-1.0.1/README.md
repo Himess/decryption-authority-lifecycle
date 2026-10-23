@@ -1,0 +1,208 @@
+# cofhe/mock-contracts [![NPM Package][npm-badge]][npm] [![License: MIT][license-badge]][license]
+
+[npm]: https://www.npmjs.com/package/@cofhe/mock-contracts
+[npm-badge]: https://img.shields.io/npm/v/@cofhe/mock-contracts.svg
+[license]: https://opensource.org/licenses/MIT
+[license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
+
+A mock smart contract library for testing CoFHE (Confidential Computing Framework for Homomorphic Encryption) with FHE primitives. This package provides mock implementations of core CoFHE contracts for development and testing purposes.
+
+## Features
+
+- Mock implementations of core CoFHE contracts:
+  - MockCoFHEAddressBook (deployed at FHE.sol's `COFHE_ADDRESS_BOOK`, resolves the TaskManager)
+  - MockTaskManager
+  - MockThresholdNetwork
+  - MockZkVerifier
+  - ACL (Access Control List)
+- Synchronous operation simulation with mock delays
+- On-chain access to unencrypted values for testing
+- Compatible with the main `@fhenixprotocol/cofhe-contracts` package
+
+## Installation
+
+npm
+
+```bash
+npm install @cofhe/mock-contracts
+```
+
+foundry
+
+```bash
+forge install FhenixProtocol/cofhesdk
+```
+
+## Usages and Integrations
+
+### Who is this for?
+
+This package is intended for **developers building and testing CoFHE-enabled applications and smart contracts**.
+
+Use these mocks when you want to:
+
+- Run **local tests** without depending on the real CoFHE coprocessor infrastructure.
+- Debug flows end-to-end (encrypt → submit → operate → decrypt) with fast iteration.
+- Assert on results deterministically in CI.
+
+Do **not** use these mocks for production deployments: they intentionally make testing convenient (e.g. storing plaintext on-chain for inspection) and therefore **do not provide real confidentiality guarantees**.
+
+### Hardhat integration vs Foundry integration
+
+Both integrations use the same underlying mock contracts, but they differ in **how mocks get deployed** and **how you interact with them**.
+
+#### Hardhat (recommended for TS/SDK + Solidity tests)
+
+Use this when you are already using **Hardhat** and/or want to run the **TypeScript SDK (`@cofhe/sdk`)** against a local chain.
+
+- The `@cofhe/hardhat-plugin` watches Hardhat `node` and `test` tasks.
+- It automatically deploys the mocks to the Hardhat network at fixed addresses.
+- The `cofheClient` (created with `createCofheClient(...)`) detects the mocks and routes CoFHE actions to them.
+
+Minimal setup:
+
+```ts
+// hardhat.config.ts
+import '@cofhe/hardhat-plugin';
+
+export default {
+  cofhe: {
+    logMocks: true, // optional
+  },
+};
+```
+
+Run:
+
+```bash
+npx hardhat test
+# or
+npx hardhat node
+```
+
+If you want to assert on plaintext values in Hardhat tests, the plugin exposes helpers like `mock_expectPlaintext(...)` (see the hardhat-plugin README).
+
+#### Foundry (recommended for Solidity-only tests)
+
+Use this when you are writing tests in **Solidity** and running them with `forge test`.
+
+- You inherit from `@cofhe/foundry-plugin`'s abstract `CofheTest` helper to deploy/setup the necessary FHE mock environment.
+- You use `createCofheClient()` and its `createExternal*` helpers to create encrypted inputs, and `expectPlaintext`/`getPlaintext` to assert their underlying values.
+
+> **Important**: You must set `isolate = true` in your `foundry.toml`. Without this setting, some variables may be used without proper permission checks, which will cause failures on production chains.
+
+`@cofhe/sdk` is designed to work with mock contracts in a testing / hardhat environment. `@cofhe/hardhat-plugin` deploys the mock contracts in this repo, and the `cofheClient` detects a testnet chain and interacts correctly using the mocks rather than the true CoFHE coprocessor.
+
+When installed and imported in the `hardhat.config.ts`, `@cofhe/hardhat-plugin` will watch for Hardhat `node` and `test` tasks, and will deploy the mocks to the hardhat testnet chain at fixed addresses.
+
+Once deployed, interaction with the mock contracts is handled by the `cofheClient` (created with `createCofheClient(...)`). The client checks for the existence of mock contracts at known addresses, and if they exist, marks the current connection as a testnet.
+
+## Logging
+
+By default the mock CoFHE contracts log the internal "FHE" operations using `hardhat/console.sol`. Logs can be enabled or disabled using the `setLogOps()` function in `MockTaskManager.sol`.
+
+## Differences between Cofhe and Mocks
+
+### Symbolic Execution
+
+The CoFHE coprocessor uses symbolic execution when performing operations on chain. Each ciphertext exists off-chain, and is represented by an on-chain ciphertext hash (`ctHash`).
+
+FHE operations between one or more `ctHash`es returns a resultant `ctHash`, which is symbolically linked to the true `ciphertext` which includes the encrypted values.
+
+In `@cofhe/mock-contracts` the symbolic execution is preserved. In the case of the mocks, the `ciphertext` is not encrypted to be used in the FHE scheme, but is stored as a plaintext value. In this case, the `ctHash` associated with the `ciphertext` is pointing directly at the plaintext value instead.
+
+During the execution of a mock FHE operation, say `FHE.add(euint8 ctHashA, euint8 ctHashB) -> euint8 ctHashC`, rather than being performed off-chain by the FHE computation engine, the input `ctHashes` are mapped to their plaintext value, and the operation performed as plaintext math on-chain. The result is inserted into the symbolic value position of `ctHashC`.
+
+### Decryption for On-chain Use
+
+For tx-oriented decryption, the consumer calls the Threshold Network decrypt endpoint and receives the plaintext together with a signature binding that plaintext to the `ctHash`. Contracts can then use that signature with `FHE.publishDecryptResult(...)` or `FHE.verifyDecryptResult(...)`.
+
+When working with the mocks, the equivalent result is produced by the mock contracts. A random number between 1 and 10 is generated to simulate async delay, but the flow still resolves to the same kind of tx-ready decrypt result.
+
+### ZkVerifying
+
+A key component of CoFHE is the ability to pre-encrypt inputs in a secure and verifiable way. `cofhesdk` prepares these inputs automatically, and requests a verification signature from the coprocessor `ZkVerifier` module. The zkVerifier returns a signature indicating that the encrypted ciphertext is valid, and has been stored on the Fhenix L2 blockchain.
+
+The mocks are then responsible for mocking two actions:
+
+1. Creating the signature.
+2. Storing the plaintext value on-chain.
+
+The `MockZkVerifier` contract handles the on-chain storage of encrypted inputs. The signature creation is handled automatically within `cofheClient.encryptInputs` when executing against a testnet.
+
+### Off-chain Decryption / Sealing
+
+For view-oriented decryption, use the SDK flow `cofheClient.decryptForView(...)` (also exposed as `decryptHandle(...)`) with a valid `ctHash`, the matching FHE type, and a valid `acp` when required.
+
+When interacting with CoFHE this request is routed to the Threshold Network, which returns the plaintext to the consumer for local use.
+
+When working with the mocks, the `cofheClient` instead queries the `MockThresholdNetwork` contract, which verifies the request `acp` and returns the decrypted result.
+
+### Gas
+
+Because the mocks replicate the off-chain FHE computation on-chain (plaintext math, mock storage writes, logging), transactions consume more gas than they would on a real CoFHE network. The mocks account for this in two ways:
+
+- **Foundry**: when gas exclusion is enabled (`setMockGasExcluded(true)` — the foundry plugin's `deployMocks()` does this automatically), the mock-only work runs between `pauseGasMetering` / `resumeGasMetering` cheatcodes, so forge's reported gas approximates real-network cost. Requires cheatcode access (`vm.allowCheatcodes(taskManagerAddress)`) and forge ≥ 1.0; without either, execution silently stays metered.
+- **Everywhere else** (Hardhat, anvil): `MockTaskManager` measures each block of mock-only work with `gasleft()` and emits a `MockGasConsumed(uint256)` event. Summing these events from a receipt and subtracting from `gasUsed` yields the adjusted cost — the hardhat plugins expose this as `getAdjustedGasUsed(receipt)` / `getAdjustedGasBreakdown(receipt)` and an opt-in `gasSummary` table.
+
+`eth_estimateGas` is never adjusted: the mock work really executes, so transactions still need the raw gas limit.
+
+### Using Foundry
+
+Use [`@cofhe/foundry-plugin`](../foundry-plugin/README.md), which builds on these mocks. Inherit its
+abstract `CofheTest` contract and call `deployMocks()` to deploy the full mock stack, then
+`createCofheClient()` for an SDK-like client that encrypts inputs, decrypts outputs, and manages
+acps.
+
+`CofheTest` exposes useful test helpers such as
+
+- `expectPlaintext(euint32, uint32)` - asserts an encrypted value equals an expected plaintext value
+- `getPlaintext(euint32)` - reads the plaintext behind an encrypted handle
+
+and `CofheClient` exposes
+
+- `createExternalEuint32(value, consumingContract)` (and variants for `bool`, `uint8`…`uint128`,
+  `address`) - creates an encrypted input bound to the contract that will consume it, returning
+  `(externalEuint32 hash, bytes signature)`
+- `createEuint32sBatch(values, consumingContract)` - a whole batch sharing one signature
+
+Example:
+
+```solidity
+import {CofheTest} from "@cofhe/foundry-plugin/contracts/CofheTest.sol";
+import {CofheClient} from "@cofhe/foundry-plugin/contracts/CofheClient.sol";
+import {MyFheContract} from "./MyFheContract.sol";
+
+contract MyFheContractExample is CofheTest {
+
+  MyFheContract private target;
+  CofheClient private client;
+
+  uint256 private constant USER_PKEY = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
+
+  function setUp() public {
+    // optional ... enable verbose logging for fhe mocks
+    // enableLogs();
+
+    deployMocks();
+    client = createCofheClient();
+    client.connect(USER_PKEY);
+    target = new MyFheContract();
+  }
+
+  function testSetValue() public {
+    uint32 n = 10;
+
+    // The last argument binds the input to the contract that will consume it.
+    (externalEuint32 hash, bytes memory signature) = client.createExternalEuint32(n, address(target));
+    externalEuint32[] memory hashes = new externalEuint32[](1);
+    hashes[0] = hash;
+
+    // Must be the account that encrypted the input, or FHE.allow permissions will be invalid.
+    vm.prank(client.account());
+    target.setValueBatch(hashes, signature);
+
+    expectPlaintext(target.getValue(), n);
+  }
+}
+```

@@ -1,0 +1,31 @@
+date=2026-10-21T19:42:57Z host=VPS nproc=4 kernel=6.8.0-139-generic
+tree HEAD=ed851716c9a6b799996a23399ece2858336f96db pristine HEAD=ed851716c9a6b799996a23399ece2858336f96db
+== git status --porcelain (tree)
+ M kms-connector/crates/utils/src/tests/setup/host.rs
+?? kms-connector/crates/kms-worker/tests/acl_p02_decision_lag.rs
+?? kms-connector/crates/kms-worker/tests/acl_p03_stored_results.rs
+?? kms-connector/crates/kms-worker/tests/acl_p04_eip7851.rs
+?? kms-connector/crates/kms-worker/tests/acl_real_chain.rs
+?? kms-connector/crates/kms-worker/tests/acl_retirement_real_chain.rs
+?? kms-connector/crates/kms-worker/tests/acl_successor_real_chain.rs
+?? kms-connector/crates/kms-worker/tests/acl_tc13_faults.rs
+== sha256 of every changed or added file of the tree
+9259f755845719ff6bd3048c6e462b4f49bd161ea66bc67d8e1da0e3af20a305  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/utils/src/tests/setup/host.rs
+be9d4734365dfebeb0f49f5e26cf58f15f7be164aa272120615e35d8b719eeaa  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_p02_decision_lag.rs
+66dbcffefec341c867b06337dca7cf78c457a493b71d93430131ecea081a1c6d  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_p03_stored_results.rs
+28b9bb51659d6c8deca0686d395700c463b45c0a82bf1bf7670dd21fea51b224  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_p04_eip7851.rs
+dbae636ca9e49acfe44a118f965df1e7ae7f12f9d90da2f9e57e5178ed2ecd73  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_real_chain.rs
+a2df85549eaa9d17a9024a8c9da679dd8a88e2d5eb92ea3fd995098636e43fca  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_retirement_real_chain.rs
+cea6d9e1dfa60c54471178a43380751d7947ca81c2a24ce60dddc5402a0a5919  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_successor_real_chain.rs
+f3bb9f9648de7cf0d9455ed4f6c55a476047ba4ad87e18378b4956d69b9b0269  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_tc13_faults.rs
+== endpoint binary and harness inputs
+6a4ac1729c3f8801d5bf019b29d675160816ebdd7264d84fb2e2d38b4ac7a685  /srv/lifecycle/bin/p03/endpoint-main-harness
+f77d80a57ae7025c22f79d9a6cd3eeba9ec9159aaee32b8829a82056ec19355a  /srv/lifecycle/harness/level0/base_acl_main.json
+b6c9361d70ab108e773dfaea81183fb4428e333a32ec47878c46cb289153b2b7  /srv/lifecycle/harness/level0/level0_acl_main.json
+4605658bedb1872fb595ea9ac6f4094cab169adacb4094480f63b278b694797d  /srv/lifecycle/harness/level0/level0_acl_v0.13.8.json
+445ef517c1b0f3b1978685707a2b084a40080fabef179b9be16534666802e68e  /srv/lifecycle/harness/level1/RejectAll1271Wallet.json
+c535fb0cbf87776524f6f968f169e504853b1bc5b91f4792a5b9c58df1151bad  /srv/lifecycle/harness/sol/src/DappStub.sol
+613348ca2fe17f2d8057247a6476617b8d7dac24a68ab6438eb854b049bc7b08  /srv/lifecycle/harness/sol/src/ExecutorStub.sol
+37d0516d3e7c123bbf981774a2ab5ae26d25c5f61e53b23584aa81bcb97034ff  /srv/lifecycle/harness/sol/src/Proxy.sol
+46aa3b639ade6877794a18349339cee9fd452b2c7a5bde6a6e3049885653efa8  /srv/lifecycle/scripts/fault_proxy_v2.py
+53f5e0c395ddc5132ef288416e5f54d77d42b5b839a7b98187b815e515ccf2b1  /srv/lifecycle/scripts/run_p03.sh

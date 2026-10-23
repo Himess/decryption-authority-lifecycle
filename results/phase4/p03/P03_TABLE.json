@@ -1,0 +1,244 @@
+{
+ "connector": {
+  "unmodified": {
+   "first-request": {
+    "runs": 3,
+    "http": "200",
+    "code": "-",
+    "kms_hits": [
+     "4"
+    ],
+    "row": "completed",
+    "matches_expectation": true
+   },
+   "same-request-live": {
+    "runs": 3,
+    "http": "200",
+    "code": "-",
+    "kms_hits": [
+     "0"
+    ],
+    "row": "completed",
+    "matches_expectation": true
+   },
+   "same-request-after-retirement": {
+    "runs": 3,
+    "http": "200",
+    "code": "-",
+    "kms_hits": [
+     "0"
+    ],
+    "row": "completed",
+    "matches_expectation": true
+   },
+   "equivalent-request-after-retirement": {
+    "runs": 3,
+    "http": "403",
+    "code": "acl_denied",
+    "kms_hits": [
+     "0"
+    ],
+    "row": "failed",
+    "matches_expectation": true
+   }
+  },
+  "level1": {
+   "first-request": {
+    "runs": 3,
+    "http": "200",
+    "code": "-",
+    "kms_hits": [
+     "4"
+    ],
+    "row": "completed",
+    "matches_expectation": true
+   },
+   "same-request-live": {
+    "runs": 3,
+    "http": "200",
+    "code": "-",
+    "kms_hits": [
+     "4"
+    ],
+    "row": "completed",
+    "matches_expectation": true
+   },
+   "same-request-after-retirement": {
+    "runs": 3,
+    "http": "403",
+    "code": "account_retired",
+    "kms_hits": [
+     "0"
+    ],
+    "row": "failed",
+    "matches_expectation": true
+   },
+   "equivalent-request-after-retirement": {
+    "runs": 3,
+    "http": "403",
+    "code": "account_retired",
+    "kms_hits": [
+     "0"
+    ],
+    "row": "failed",
+    "matches_expectation": true
+   },
+   "same-request-again": {
+    "runs": 3,
+    "http": "403",
+    "code": "account_retired",
+    "kms_hits": [
+     "0"
+    ],
+    "row": "failed",
+    "matches_expectation": true
+   }
+  }
+ },
+ "h4": [
+  {
+   "run": "r4",
+   "variant": "db",
+   "worker_a": 1,
+   "worker_b": 1,
+   "total": 2,
+   "max": 2,
+   "final_status": "failed"
+  },
+  {
+   "run": "r4",
+   "variant": "memory",
+   "worker_a": 1,
+   "worker_b": 2,
+   "total": 3,
+   "max": 2,
+   "final_status": "failed"
+  },
+  {
+   "run": "r5",
+   "variant": "db",
+   "worker_a": 1,
+   "worker_b": 1,
+   "total": 2,
+   "max": 2,
+   "final_status": "failed"
+  },
+  {
+   "run": "r5",
+   "variant": "memory",
+   "worker_a": 1,
+   "worker_b": 2,
+   "total": 3,
+   "max": 2,
+   "final_status": "failed"
+  },
+  {
+   "run": "r6",
+   "variant": "db",
+   "worker_a": 1,
+   "worker_b": 1,
+   "total": 2,
+   "max": 2,
+   "final_status": "failed"
+  },
+  {
+   "run": "r6",
+   "variant": "memory",
+   "worker_a": 1,
+   "worker_b": 2,
+   "total": 3,
+   "max": 2,
+   "final_status": "failed"
+  }
+ ],
+ "relayer": {
+  "h7": {
+   "equivalent-request-after-retirement": {
+    "runs": 3,
+    "status": "400",
+    "error": "not_allowed_on_host_acl",
+    "shares": "0",
+    "same_job": "false"
+   },
+   "first": {
+    "runs": 3,
+    "status": "200",
+    "error": "-",
+    "shares": "9",
+    "same_job": "-"
+   },
+   "same-request-after-retirement": {
+    "runs": 3,
+    "status": "400",
+    "error": "not_allowed_on_host_acl",
+    "shares": "0",
+    "same_job": "true"
+   }
+  },
+  "unmodified": {
+   "equivalent-request-after-retirement": {
+    "runs": 3,
+    "status": "200",
+    "error": "-",
+    "shares": "9",
+    "same_job": "true"
+   },
+   "first": {
+    "runs": 3,
+    "status": "200",
+    "error": "-",
+    "shares": "9",
+    "same_job": "-"
+   },
+   "same-request-after-retirement": {
+    "runs": 3,
+    "status": "200",
+    "error": "-",
+    "shares": "9",
+    "same_job": "true"
+   }
+  }
+ },
+ "disagreements": [],
+ "summaries": [
+  "P03-SUMMARY tree=unmodified version=main run=r1 mismatches=0",
+  "P03-SUMMARY tree=unmodified version=main run=r2 mismatches=0",
+  "P03-SUMMARY tree=unmodified version=main run=r3 mismatches=0",
+  "P03-SUMMARY tree=level1-h4 version=main run=r4 mismatches=0",
+  "P03-SUMMARY tree=level1 version=main run=r4 mismatches=0",
+  "P03-SUMMARY tree=level1-h4 version=main run=r5 mismatches=0",
+  "P03-SUMMARY tree=level1 version=main run=r5 mismatches=0",
+  "P03-SUMMARY tree=level1-h4 version=main run=r6 mismatches=0",
+  "P03-SUMMARY tree=level1 version=main run=r6 mismatches=0"
+ ],
+ "host_calls": {
+  "unmodified": [
+   {
+    "run": "p03-main-r1-20261021T194257Z",
+    "host_rpc_records": 4
+   },
+   {
+    "run": "p03-main-r2-20261021T194329Z",
+    "host_rpc_records": 4
+   },
+   {
+    "run": "p03-main-r3-20261021T194401Z",
+    "host_rpc_records": 4
+   }
+  ],
+  "level1": [
+   {
+    "run": "p03-main-l1-r4-20261021T195919Z",
+    "host_rpc_records": 59
+   },
+   {
+    "run": "p03-main-l1-r5-20261021T195940Z",
+    "host_rpc_records": 58
+   },
+   {
+    "run": "p03-main-l1-r6-20261021T195956Z",
+    "host_rpc_records": 42
+   }
+  ]
+ }
+}

@@ -1,0 +1,34 @@
+=== Level 2 in Zama's cleartext mock: E1 successor and SDK hygiene ===
+worktree: <repo>/impl/wt-l2-mock
+commit:   b272882c5c2d71cbb2120ed0df4038a54a4b05f0 branch: lifecycle/level2-mock
+base:     lifecycle/level2 588e639708f04dbeb07f290caa9762e4de7f5f93
+machine:  AMD Ryzen 5 5600 6-Core Processor, 12 logical CPUs, 15.9 GiB RAM, Windows_NT 10.0.19045
+date_utc:   2026-10-21T14:55:39Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         jq-1.7.1
+git:        git version 2.47.1.windows.2
+solc:     FOUNDRY_SOLC_VERSION=0.8.35
+rpc:      http://127.0.0.1:49810 (anvil pid 16867)
+{"hardFork":"Bpo1","chainId":31337,"gasLimit":"0x1c9c380","baseFee":"0x3b9aca00"}
+fhevm_deploy rc=0 seconds=32 log=L2M_fhevm_deploy.log
+fhetest_deploy rc=1 seconds=5 log=L2M_fhetest_deploy.log
+fhetest_deploy rc=1; FHETest 0x61a8e950161daCCA06b0b623Efa2b7237BaBD4a0 codesize=12475 config=(0x50157CFfD6bBFA2DECe204a89ec419c23ef5755D, 0xe3a9105a3a932253A70F126eb1E3b589C643dD24, 0x901F8942346f7AB3a01F6D7613119Bca447Bb030)
+Error: Failed to estimate gas: server returned an error response: error code 3: execution reverted, data: "0x"
+ACL on chain: "ACL v0.4.2"
+vitest rc=0 seconds=9 log=L2M_vitest.log
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > setup: the mock runs ACL v0.4.2 with the lifecycle Core and E1 70ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > E1: designate, accept, wait D, confirm; the successor has no right while the account is active 1220ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > E1: after retirement the successor reads, every other party gets the typed refusal 218ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > E1: a handle granted to the retired account afterwards (a straggler) is readable by the successor only 220ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > E1: a pending designation dies with the retirement 416ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > SDK hygiene: an ordinary refusal stays generic 50ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > SDK hygiene: one transport key per request, unusable once released, purged on retirement 373ms
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+git status of the worktree (tracked files must be unchanged):
+secret scan of results/level2/raw/mock (lines naming a private key or mnemonic):
+0

@@ -1,0 +1,24 @@
+A5 deliberation (AA / PQ accounts) - native verification measurements
+=====================================================================
+Purpose   : cost of verifying a decryption-permit signature natively (32-byte EIP-712 digest),
+            and a Wycheproof cross-check of the native ML-DSA-44 verifier.
+Status    : throwaway measurement code. Not production. Not wired to any Zama component.
+Date (UTC): 2026-10-21, 05:16-05:18 (raw outputs: bench_run1.txt, bench_run2.txt, wycheproof_run.txt)
+Hardware  : AMD Ryzen 5 5600 (6C/12T), 15.9 GiB RAM, Windows 10 Pro 19045
+Toolchain : rustc 1.95.0 (59807616e 2026-04-14), x86_64-pc-windows-msvc, release, thin LTO, codegen-units=1
+Build     : offline from the local cargo cache (cargo build --release --offline); no network.
+Crates (all UNAUDITED for this use):
+  ml-dsa 0.1.1 (RustCrypto; README: "never been independently audited")
+  slh-dsa 0.2.0-rc.5 (RustCrypto, pre-release)
+  fn-dsa 0.4.0 (T. Pornin; pre-standard, README: no FN-DSA draft published, no compatibility promise before 1.0)
+  k256 0.13.4 (pure Rust; the curve backend alloy uses in Zama's shared crate)
+  secp256k1 0.30.0 / secp256k1-sys 0.10.1 (libsecp256k1 C bindings)
+Method    : median and min of N rounds x M calls (see each line); every bench asserts acceptance,
+            and each scheme has a negative control (flipped digest must fail).
+            "cold" = decode public key and signature, then verify (what a stateless verifier does per request).
+            "declared-signer path" = keccak256(pk) commitment check + cold verify (key-derived signer shape).
+Wycheproof: vectors read as data from the Fireblocks clone (test/vectors/wycheproof/mldsa_44_verify_test.json,
+            C2SP upstream commit 6d7cccd, sha256 5ec04790...b9ea per its provenance.txt); 180 tests.
+Commands  : target/release/a5-native-verify.exe bench
+            target/release/a5-native-verify.exe wycheproof <path to mldsa_44_verify_test.json>
+Caveat    : desktop machine, other agents may have been running; k256 varied 177-213 us between runs.

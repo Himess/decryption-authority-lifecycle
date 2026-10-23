@@ -1,0 +1,201 @@
+INSCOPE start=2026-10-21T13:54:08Z cgroup=/system.slice/lifecycle-l1-unit2-main-1792590848.scope nice=19 ionice=[idle] cmd=[/srv/lifecycle/scripts/kw.sh main cargo test --locked -p kms-worker -p kms-connector-api --lib --no-fail-fast]
+KW ver=main tree=l1 step=cargo commit=ed851716c9a6b799996a23399ece2858336f96db date=2026-10-21T13:54:08Z host=VPS nproc=4
+KW dirty-files:  M kms-connector/crates/api/src/error.rs  M kms-connector/crates/kms-worker/src/core/config.rs  M kms-connector/crates/kms-worker/src/core/event_processor/decryption.rs  M kms-connector/crates/kms-worker/src/core/event_processor/error.rs  M kms-connector/crates/kms-worker/src/core/event_processor/rpc.rs  M kms-connector/crates/kms-worker/src/core/mod.rs  M kms-connector/crates/utils/src/tests/setup/host.rs  M shared/user-decryption-signature/src/lib.rs ?? kms-connector/crates/kms-worker/tests/acl_profile_h_real_chain.rs ?? shared/user-decryption-signature/src/profile_h.rs ?? shared/user-decryption-signature/tests/ 
+KW toolchain=1.99.1-x86_64-unknown-linux-gnu (overridden by '/srv/lifecycle/src/fhevm-main-l1/kms-connector/rust-toolchain.toml') | rustc 1.99.1 (58cf8f9c3 2026-10-13) | cargo 1.99.1 (5f94df478 2026-08-27) | libprotoc 34.1 | jobs=1
+   Compiling kms-worker v0.15.0 (/srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker)
+    Finished `test` profile [unoptimized] target(s) in 19.63s
+     Running unittests src/lib.rs (/srv/lifecycle/target/main/debug/deps/kms_connector_api-28cc54e9507b1787)
+
+running 11 tests
+test error::tests::account_retired_is_a_final_403 ... ok
+test error::tests::as_str_matches_serde_wire_name ... ok
+test error::tests::auth_expired_is_a_retryable_401 ... ok
+test error::tests::from_str_round_trips_wire_name ... ok
+test error::tests::unknown_error_code_still_parses ... ok
+test types::tests::attestation_type_is_not_enforced_by_serde ... ok
+test types::tests::unknown_fields_are_rejected ... ok
+test types::vector_tests::public_decryption_id_vectors ... ok
+test types::vector_tests::requests_round_trip_through_serde ... ok
+test types::tests::id_is_deterministic_and_input_sensitive ... ok
+test types::vector_tests::user_decryption_id_vectors ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running unittests src/lib.rs (/srv/lifecycle/target/main/debug/deps/kms_worker-e29d2ad16f2bb8a3)
+
+running 53 tests
+[2m2026-10-21T13:54:29.052713Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Loading config from: /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/../../config/kms-worker.toml
+[2m2026-10-21T13:54:29.052872Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Adding environment variables with prefix KMS_CONNECTOR_
+[2m2026-10-21T13:54:29.054444Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain name is empty, will use default 'KMSGeneration'
+[2m2026-10-21T13:54:29.054511Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   KMSGeneration domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.054531Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.054655Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain name is empty, will use default 'GatewayConfig'
+[2m2026-10-21T13:54:29.054677Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   GatewayConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.054691Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.054712Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m Decryption domain name is empty, will use default 'Decryption'
+[2m2026-10-21T13:54:29.054728Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   Decryption domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.054771Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m Decryption domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.055227Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m ProtocolConfig domain name is empty, will use default 'ProtocolConfig'
+[2m2026-10-21T13:54:29.055254Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   ProtocolConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.055266Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m ProtocolConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.055838Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Loading config from: /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/../../config/kms-worker.toml
+[2m2026-10-21T13:54:29.055902Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Adding environment variables with prefix KMS_CONNECTOR_
+[2m2026-10-21T13:54:29.057266Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain name is empty, will use default 'KMSGeneration'
+[2m2026-10-21T13:54:29.057301Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   KMSGeneration domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.057314Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.057449Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain name is empty, will use default 'GatewayConfig'
+[2m2026-10-21T13:54:29.057471Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   GatewayConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.057483Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.057502Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m ProtocolConfig domain name is empty, will use default 'ProtocolConfig'
+[2m2026-10-21T13:54:29.057516Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   ProtocolConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.057527Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m ProtocolConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.057546Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m Decryption domain name is empty, will use default 'Decryption'
+[2m2026-10-21T13:54:29.057560Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   Decryption domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.057571Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m Decryption domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.057822Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Loading config from: /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/../../config/kms-worker.toml
+[2m2026-10-21T13:54:29.057849Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Adding environment variables with prefix KMS_CONNECTOR_
+test core::config::tests::test_host_chains_from_env_camel_case ... ok
+[2m2026-10-21T13:54:29.059081Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m ProtocolConfig domain name is empty, will use default 'ProtocolConfig'
+[2m2026-10-21T13:54:29.102030Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   ProtocolConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.102096Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m ProtocolConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.102190Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain name is empty, will use default 'GatewayConfig'
+[2m2026-10-21T13:54:29.102358Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   GatewayConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.102376Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.102528Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m Decryption domain name is empty, will use default 'Decryption'
+[2m2026-10-21T13:54:29.102566Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   Decryption domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.102579Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m Decryption domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.102601Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain name is empty, will use default 'KMSGeneration'
+[2m2026-10-21T13:54:29.102617Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   KMSGeneration domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.102629Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain version is empty, will use default '1'
+test core::config::tests::test_env_overrides_file ... ok
+[2m2026-10-21T13:54:29.109035Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Loading config from: /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/../../config/kms-worker.toml
+[2m2026-10-21T13:54:29.109136Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Adding environment variables with prefix KMS_CONNECTOR_
+[2m2026-10-21T13:54:29.110602Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m ProtocolConfig domain name is empty, will use default 'ProtocolConfig'
+[2m2026-10-21T13:54:29.110640Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   ProtocolConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.110653Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m ProtocolConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.110706Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain name is empty, will use default 'KMSGeneration'
+[2m2026-10-21T13:54:29.110734Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   KMSGeneration domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.110756Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.111087Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain name is empty, will use default 'GatewayConfig'
+[2m2026-10-21T13:54:29.111118Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   GatewayConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.111132Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.111255Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m Decryption domain name is empty, will use default 'Decryption'
+[2m2026-10-21T13:54:29.111337Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   Decryption domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.111350Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m Decryption domain version is empty, will use default '1'
+test core::config::tests::test_load_valid_config_from_file ... ok
+[2m2026-10-21T13:54:29.113500Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Loading config from: /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/../../config/kms-worker.toml
+[2m2026-10-21T13:54:29.113648Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Adding environment variables with prefix KMS_CONNECTOR_
+[2m2026-10-21T13:54:29.116283Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain name is empty, will use default 'GatewayConfig'
+[2m2026-10-21T13:54:29.116360Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   GatewayConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.116373Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.116427Z[0m [31mERROR[0m [2mconnector_utils::config::deserialize[0m[2m:[0m invalid value: integer `0`, expected a nonzero usize for key `s3_max_concurrent_heads_per_bucket`
+[2m2026-10-21T13:54:29.116650Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Loading config from: /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/../../config/kms-worker.toml
+[2m2026-10-21T13:54:29.116677Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Adding environment variables with prefix KMS_CONNECTOR_
+[2m2026-10-21T13:54:29.118518Z[0m [31mERROR[0m [2mconnector_utils::config::deserialize[0m[2m:[0m invalid value: integer `0`, expected a nonzero usize for key `s3_max_concurrent_gets`
+[2m2026-10-21T13:54:29.118748Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Loading config from: /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/../../config/kms-worker.toml
+[2m2026-10-21T13:54:29.118819Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Adding environment variables with prefix KMS_CONNECTOR_
+[2m2026-10-21T13:54:29.119858Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain name is empty, will use default 'GatewayConfig'
+[2m2026-10-21T13:54:29.119896Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   GatewayConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.119910Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.119936Z[0m [31mERROR[0m [2mconnector_utils::config::deserialize[0m[2m:[0m invalid value: integer `0`, expected a nonzero usize for key `s3_max_ciphertext_size`
+[2m2026-10-21T13:54:29.120121Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Loading config from: /srv/lifecycle/src/fhevm-main-l1/kms-connector/crates/kms-worker/../../config/kms-worker.toml
+[2m2026-10-21T13:54:29.120143Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Adding environment variables with prefix KMS_CONNECTOR_
+[2m2026-10-21T13:54:29.121255Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain name is empty, will use default 'GatewayConfig'
+[2m2026-10-21T13:54:29.121291Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   GatewayConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.121305Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.121325Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain name is empty, will use default 'KMSGeneration'
+[2m2026-10-21T13:54:29.121338Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   KMSGeneration domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:29.121350Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain version is empty, will use default '1'
+[2m2026-10-21T13:54:29.121376Z[0m [31mERROR[0m [2mconnector_utils::config::deserialize[0m[2m:[0m invalid value: integer `0`, expected a nonzero usize for key `host_rpc_max_concurrent_calls`
+test core::config::tests::test_zero_ceiling_is_rejected ... ok
+test core::event_processor::ciphertext::manager::tests::aggregate_accepts_matching_key_ids ... ok
+test core::event_processor::ciphertext::manager::tests::aggregate_rejects_divergent_key_ids ... ok
+test core::event_processor::ciphertext::manager::tests::aggregate_rejects_empty ... ok
+test core::event_processor::ciphertext::s3::tests::a_failing_bucket_is_skipped_in_favor_of_the_next_one ... ok
+test core::event_processor::ciphertext::s3::tests::empty_winning_buckets_is_recoverable ... ok
+test core::event_processor::ciphertext::s3::tests::unprocessable_handle_is_irrecoverable ... ok
+test core::event_processor::decryption::tests::acl_errors_carry_host_chain_context ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_delegated_user_decryption::case_1_transport_error ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_delegated_user_decryption::case_2_allowed ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_delegated_user_decryption::case_3_not_delegated ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_public_decryption::case_1_transport_error ... ok
+[2m2026-10-21T13:54:30.126439Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Loading config using environment variables only
+[2m2026-10-21T13:54:30.126542Z[0m [32m INFO[0m [2mconnector_utils::config::deserialize[0m[2m:[0m Adding environment variables with prefix KMS_CONNECTOR_
+[2m2026-10-21T13:54:30.139524Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m ProtocolConfig domain name is empty, will use default 'ProtocolConfig'
+[2m2026-10-21T13:54:30.139630Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   ProtocolConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:30.139643Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m ProtocolConfig domain version is empty, will use default '1'
+[2m2026-10-21T13:54:30.139771Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain name is empty, will use default 'KMSGeneration'
+[2m2026-10-21T13:54:30.139965Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   KMSGeneration domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:30.139977Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m KMSGeneration domain version is empty, will use default '1'
+[2m2026-10-21T13:54:30.140001Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m Decryption domain name is empty, will use default 'Decryption'
+[2m2026-10-21T13:54:30.140014Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   Decryption domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:30.140024Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m Decryption domain version is empty, will use default '1'
+[2m2026-10-21T13:54:30.140086Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain name is empty, will use default 'GatewayConfig'
+[2m2026-10-21T13:54:30.140109Z[0m [32m INFO[0m [2mconnector_utils::config::contract[0m[2m:[0m   GatewayConfig domain name EIP-712 compatibility check: OK
+[2m2026-10-21T13:54:30.140125Z[0m [33m WARN[0m [2mconnector_utils::config::contract[0m[2m:[0m GatewayConfig domain version is empty, will use default '1'
+test core::config::tests::test_load_from_env ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_public_decryption::case_3_not_allowed ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_public_decryption::case_2_allowed ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_user_decryption::case_1_transport_error ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_user_decryption::case_2_allowed ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_user_decryption::case_3_not_allowed ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_user_decryption::case_4_user_allowed_contract_not_allowed ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_user_decryption::case_5_user_not_allowed_contract_allowed ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_user_decryption_invalidation::case_1_direct_not_invalidated ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_user_decryption_invalidation::case_3_direct_boundary_passes ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_user_decryption_invalidation::case_4_direct_transport_error ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_user_decryption_invalidation::case_2_direct_invalidated ... ok
+test core::event_processor::decryption::tests::check_ciphertexts_allowed_for_user_decryption_invalidation::case_5_delegated_invalidated ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_allowed_contracts::case_2_at_least_one_allowed ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_allowed_contracts::case_1_transport_error ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_allowed_contracts::case_3_none_allowed ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_invalidation::case_1_not_invalidated ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_invalidation::case_2_invalidated ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_invalidation::case_3_boundary_passes ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_invalidation::case_4_transport_error ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_ownership::case_1_direct_transport_error ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_ownership::case_2_direct_allowed ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_ownership::case_3_direct_not_allowed ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_ownership::case_5_delegated_yes ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_ownership::case_4_delegated_transport_error ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_ownership::case_6_delegated_no ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_signature_mismatch ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_smart_account_accepts ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_user_in_allowed_contracts ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_validity_window::case_1_not_yet_valid ... ok
+test core::event_processor::decryption::tests::check_user_decryption_request_v2_validity_window::case_2_expired ... ok
+test core::event_processor::decryption::tests::fetch_calldata_only_accepts_direct_decryption_tx::case_1_accepts_direct_decryption_tx ... ok
+test core::event_processor::decryption::tests::fetch_calldata_only_accepts_direct_decryption_tx::case_2_rejects_tx_not_sent_to_decryption_contract ... ok
+test core::event_processor::decryption::tests::kms_decryption_extra_data_keeps_empty_and_versioned_values ... ok
+test core::event_processor::decryption::tests::kms_decryption_extra_data_normalizes_legacy_zero_marker ... ok
+test core::event_processor::kms::tests::prepares_keygen_request::case_1_fresh ... ok
+test core::event_processor::kms::tests::prepares_keygen_request::case_2_migration ... ok
+test core::event_processor::decryption::tests::fetch_calldata_only_accepts_direct_decryption_tx::case_3_rejects_contract_creation_tx ... ok
+
+test result: ok. 53 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.67s
+
+	Command being timed: "/srv/lifecycle/scripts/kw.sh main cargo test --locked -p kms-worker -p kms-connector-api --lib --no-fail-fast"
+	User time (seconds): 22.76
+	System time (seconds): 5.47
+	Percent of CPU this job got: 117%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:24.03
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 1165864
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 12
+	Minor (reclaiming a frame) page faults: 344998
+	Voluntary context switches: 1288
+	Involuntary context switches: 312
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 94496
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+INSCOPE end=2026-10-21T13:54:32Z rc=0 cgroup_memory.peak_bytes=863748096 memory.max=2684354560 memory.swap.max=3221225472 cpu.max=[200000 100000]
+HEAVY name=l1-unit2-main unit=lifecycle-l1-unit2-main-1792590848 rc=0 wall_s=26 waited_before_start_s=0 freezes=0 frozen_total_s=0 running_s=26 killed=no sampled_peak_anon_mb=444 sampled_peak_cgroup_current_mb=458 sampled_peak_swap_mb=0

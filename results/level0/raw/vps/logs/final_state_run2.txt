@@ -1,0 +1,31 @@
+== final state run 2 2026-10-21T07:04:20Z host=VPS kernel=6.8.0-139-generic
+2026-10-21T07:04:20Z <live-service>=active load=[0.42 0.58 0.83] mem_avail_mb=7215 swap_used_mb=153 tag=final-run2
+== STOP marker: absent
+== lifecycle units: 0  containers: 0  ports 55432/58545/58546: 0
+== docker image left (outside /srv/lifecycle):
+postgres:17.5 id=aadf2c0696f5 size=647MB
+== disk use
+12G	/srv/lifecycle
+3.3G	/srv/lifecycle/target/main
+5.3G	/srv/lifecycle/target/v0.13.8
+1.2G	/srv/lifecycle/.rustup
+1009M	/srv/lifecycle/.cargo
+520M	/srv/lifecycle/src
+184M	/srv/lifecycle/bin
+94M	/srv/lifecycle/dl
+16M	/srv/lifecycle/harness
+15M	/srv/lifecycle/home
+376K	/srv/lifecycle/runs
+584K	/srv/lifecycle/logs
+/dev/sda1        96G   40G   56G  42% /
+== worktrees
+-- fhevm-v0.13.8 HEAD=fe3ca89b5111ca2b4abb220bf3c78417b821ceb5
+-- fhevm-main HEAD=ed851716c9a6b799996a23399ece2858336f96db
+-- fhevm-v0.13.8-harness HEAD=fe3ca89b5111ca2b4abb220bf3c78417b821ceb5
+    M kms-connector/crates/utils/src/tests/setup/db.rs
+    M kms-connector/crates/utils/src/tests/setup/host.rs
+    M kms-connector/crates/utils/src/tests/setup/instance.rs
+   ?? kms-connector/crates/kms-worker/tests/acl_real_chain.rs
+-- fhevm-main-harness HEAD=ed851716c9a6b799996a23399ece2858336f96db
+    M kms-connector/crates/utils/src/tests/setup/host.rs
+   ?? kms-connector/crates/kms-worker/tests/acl_real_chain.rs

@@ -1,0 +1,14 @@
+label	acl_kind	path	source	expected	observed	kms_hits	s3_hits	error_counter	error_code	attempts	calls_per_attempt	false_views	expect_false	verified_attempts	check_ms_attempt1	attempt_ms_attempt1	request_ms
+l2.legacy.delegate-d.u-active	level0	delegated	onchain	Forwarded	Forwarded	4	2	0	-	1	2	-	-	0	100.15	195.03	204.56
+l2.legacy.successor-s.u-active	level0	delegated	onchain	Rejected	Rejected	0	5	3	-	3	2	isHandleDelegatedForUserDecryption(U,S,C,h)	isHandleDelegatedForUserDecryption(U,S,C,h)	3	16.36	16.99	498.30
+l2.legacy.successor-s.u-retired	level0	delegated	onchain	Forwarded	Forwarded	4	2	0	-	1	2	-	-	0	14.41	104.83	117.98
+l2.legacy.delegate-d.u-retired	level0	delegated	onchain	Rejected	Rejected	0	5	3	-	3	2	isHandleDelegatedForUserDecryption(U,D,C,h)	isHandleDelegatedForUserDecryption(U,D,C,h)	3	14.61	15.20	589.43
+l2.legacy.successor-s-direct.u-retired	level0	direct	onchain	Rejected	Rejected	0	6	3	-	3	3	isAllowed(h,S)	isAllowed(h,S)	3	17.82	18.30	621.50
+l2.legacy.h2-holder-v	level0	direct	onchain	Forwarded	Forwarded	4	2	0	-	1	3	-	-	0	86.58	322.07	341.53
+l2.legacy.successor-s.straggler-h2	level0	delegated	onchain	Forwarded	Forwarded	4	2	0	-	1	2	-	-	0	17.61	124.43	145.57
+l2.legacy.successor-s.after-resign	level0	delegated	onchain	Rejected	Rejected	0	6	3	-	3	2	isHandleDelegatedForUserDecryption(U,S,C,h)	isHandleDelegatedForUserDecryption(U,S,C,h)	3	50.71	54.19	690.28
+l2.v2.delegate-dk.u-active	level0	v2-delegated	onchain	Forwarded	Forwarded	4	2	0	-	1	2	-	-	0	21.17	111.14	127.17
+l2.v2.successor-sk.u-active	level0	v2-delegated	onchain	Rejected	Rejected	0	6	3	-	3	2	isHandleDelegatedForUserDecryption(U,Sk,C,h)	isHandleDelegatedForUserDecryption(U,Sk,C,h)	3	25.92	26.11	338.78
+l2.v2.successor-sk.u-retired	level0	v2-delegated	onchain	Forwarded	Forwarded	4	2	0	-	1	2	-	-	0	85.93	188.53	206.02
+l2.v2.delegate-dk.u-retired	level0	v2-delegated	onchain	Rejected	Rejected	0	6	3	-	3	2	isHandleDelegatedForUserDecryption(U,Dk,C,h)	isHandleDelegatedForUserDecryption(U,Dk,C,h)	3	25.12	25.32	569.96
+l2.v2.successor-sk-direct.u-retired	level0	v2-direct	onchain	Rejected	Rejected	0	6	3	-	3	2	isAllowed(h,Sk)	isAllowed(h,Sk)	3	29.44	29.83	1215.81

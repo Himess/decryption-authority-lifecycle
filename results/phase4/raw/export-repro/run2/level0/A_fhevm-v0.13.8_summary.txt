@@ -1,0 +1,22 @@
+=== Baseline A (v0.13.8, scope=acl) ===
+commit: dda3cf86b6249e51289a46082f042153cbe0577b branch: lifecycle/repro
+date_utc:   2026-10-22T07:24:16Z
+node:       v22.13.0
+npm:        10.9.2
+forge:      forge Version: 1.8.5
+anvil:      anvil Version: 1.8.5
+rustc:      rustc 1.95.0 (59807616e 2026-04-14)
+jq:         
+git:        git version 2.47.1.windows.2
+npm_ci rc=0 seconds=183 log=A_fhevm-v0.13.8_npm_ci.log
+npm_rebuild_sqlite3 rc=0 seconds=4 log=A_fhevm-v0.13.8_npm_rebuild_sqlite3.log
+hardhat_test_acl rc=0 seconds=57 log=A_fhevm-v0.13.8_hardhat_test_acl.log
+soldeer_install rc=1 seconds=31 log=A_fhevm-v0.13.8_soldeer_install.log
+forge_test_acl_isolate-default rc=1 seconds=6 log=A_fhevm-v0.13.8_forge_test_acl_isolate-default.log
+forge_test_acl_isolate-false rc=1 seconds=1 log=A_fhevm-v0.13.8_forge_test_acl_isolate-false.log
+--- suite results
+[A_fhevm-v0.13.8_hardhat_test_acl.log]
+  3 passing (79ms)
+[A_fhevm-v0.13.8_forge_test_acl_isolate-default.log]
+[A_fhevm-v0.13.8_forge_test_acl_isolate-false.log]
+git status (must be empty):

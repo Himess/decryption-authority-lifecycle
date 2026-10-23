@@ -1,0 +1,37 @@
+{
+ "hardfork": "osaka",
+ "gas": {
+  "retireAccount_noSuccessionRecord": {
+   "gasUsed": 54514,
+   "calldataBytes": 4,
+   "contractAddress": null
+  },
+  "retireAccount_withConfirmedSuccessor": {
+   "gasUsed": 54514,
+   "calldataBytes": 4,
+   "contractAddress": null
+  },
+  "retireAccountWithSig_eoa_1chain": {
+   "gasUsed": 65572,
+   "calldataBytes": 324,
+   "contractAddress": null
+  },
+  "retireAccountWithSig_eoa_2chain": {
+   "gasUsed": 65754,
+   "calldataBytes": 356,
+   "contractAddress": null
+  },
+  "retireAccountWithSig_eoa_5chain": {
+   "gasUsed": 66277,
+   "calldataBytes": 452,
+   "contractAddress": null
+  },
+  "retireAccountWithSig_erc1271_1chain": {
+   "gasUsed": 68015,
+   "calldataBytes": 324,
+   "contractAddress": null
+  }
+ },
+ "client": "anvil/v1.8.6",
+ "version": "ACL v0.10.0"
+}

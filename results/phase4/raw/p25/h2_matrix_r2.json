@@ -1,0 +1,673 @@
+{
+ "meta": {
+  "run": "r2",
+  "anvil": "anvil Version: 1.8.5\nCommit SHA: 51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f\nBuild Timestamp: 2026-10-05T17:01:32.131957300Z (1791219692)\nBuild Profile: dist",
+  "hardfork": "osaka",
+  "digest": "0x0a172d5f8b18061502405f8d1b77aa3b8b6cf53257c3af210578856991089b68",
+  "b_exec": 2000000,
+  "head_block": 26243993,
+  "date": "2026-10-22T00:40:41Z"
+ },
+ "totals": {
+  "erc1271": {
+   "codes": 24,
+   "accounts": 1494,
+   "accounts_M": 1393,
+   "accounts_E": 101
+  },
+  "shim": {
+   "codes": 19,
+   "accounts": 46,
+   "accounts_M": 46,
+   "accounts_E": 0
+  },
+  "refused": {
+   "codes": 21,
+   "accounts": 680,
+   "accounts_M": 507,
+   "accounts_E": 173
+  }
+ },
+ "rows": [
+  {
+   "code_hash": "0x002fe31551358806134e6166961fd583633bcbddd90160af866e0d71c26fcac9",
+   "code_bytes": 3318,
+   "accounts": 86,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 1,
+   "label": "E",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x05de1cf1fe7ac7fd377cb2e2a8ac306d5d31e5b4e1bbd9c484638e3975540fe3",
+   "code_bytes": 6763,
+   "accounts": 3,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x0899f53a9f5800187a3d7d8c4e18e7e9f4d80548d3d902b9e4555a638ce47f79",
+   "code_bytes": 7713,
+   "accounts": 3,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x0b6676f3a7ee6ee8545ed9d91f8e94f447a59b15c00edfc9155e9907b43ef407",
+   "code_bytes": 5249,
+   "accounts": 4,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x0b77e469f5603ed1e9ff0e7ee56238b61a8cf7cb3185b33e53e2eeaad50109ab",
+   "code_bytes": 11185,
+   "accounts": 802,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x12966e3c1877d53860ac03ff7e936bbc95369242241c13899962961615e8d451",
+   "code_bytes": 4398,
+   "accounts": 4,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x1a6a18670d1bc1749ef55b0e78c09ef5ac93277d0aede05a994f41da9ac4d1ae",
+   "code_bytes": 4622,
+   "accounts": 1,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x230751afc462076247fc197edc441e96f961552b7aeda96ad11fce0a2ca5b092",
+   "code_bytes": 2129,
+   "accounts": 1,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x23d3806cc23e40c6660d4adf19b26a4451b699213ee1242cf8db3cfdcb88528a",
+   "code_bytes": 11560,
+   "accounts": 1,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x26da2196caf5bcd78f5a868b987036639f23504f8f73e1cccf4a8469e9670aa3",
+   "code_bytes": 15552,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x2f23cf415f1131580a378a6cb9602d345a5dc26f4dd1d7e86de2ddda8a266b11",
+   "code_bytes": 1799,
+   "accounts": 151,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x2f71db9893009738e8a9048e9409f658037c231f5d81c6db66f644d9d5f02250",
+   "code_bytes": 2043,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x386e55cb86f9a31fdb7926ceab54847aa4542b7a0517216144a956982a21ade3",
+   "code_bytes": 11162,
+   "accounts": 29,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x3891d3e632e114d4ea17d70f271d70ab5f3f5e948c2f5d5ae6029c9fae35ed21",
+   "code_bytes": 7269,
+   "accounts": 1,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x3a8882ed1b3e689ec5ad954bcfe8ebbbf2aee95530bb0f40cccd0f71105b1a1c",
+   "code_bytes": 1071,
+   "accounts": 5,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x3f505db74c81646e85de87863f403f5b9d9bcaff28e254296ac05c106f11fabd",
+   "code_bytes": 5472,
+   "accounts": 1,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x4064fbab82a9a4e6a9ed6c02fc48b0de08a9b20a93450b2696ca465fd82b79d4",
+   "code_bytes": 2140,
+   "accounts": 1,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x42761a7b70f69c0e44b327dc3b48ee49188e53c18d35e9922e3416f21baaa725",
+   "code_bytes": 3569,
+   "accounts": 5,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x46fc4ecb190e16f7734d2ebe8f7e1d616a1b07c5e7cf1fc5c47dbb4e7c1a7ee0",
+   "code_bytes": 24358,
+   "accounts": 15,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 3,
+   "label": "E",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x4901822b8b86bc3be145b0807d2f4aa68cd8aebfa40e823c93b59f04653ab100",
+   "code_bytes": 9973,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x517e0a9c2bbe1f33dfcec1543cbfef9bf522d66d7c2cc1e64ad8d0383cf10cda",
+   "code_bytes": 24157,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x5a15ca888b48a75d9e2ff47dc3442063a3a052b4a709a9bfc8c06219fea16f5f",
+   "code_bytes": 23971,
+   "accounts": 184,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x5c458bb6313391174ef88c09361a0a02f78b199f1b4f0dddd6fc3d2c7f0b9607",
+   "code_bytes": 9452,
+   "accounts": 148,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x5c69ebfb7d1b613efd0bf0685ae71202749d73ff91c5d0bf601d054f24b45f41",
+   "code_bytes": 11393,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x5d0a74db04aec20e3aa8400706fdffb15a8214c0fa177e5f744d70702800e9a1",
+   "code_bytes": 8375,
+   "accounts": 3,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x5e7b5977a07b6cc5dff3db807ad6c3c22d21046d0aec350fa1a8040e6d8b22b8",
+   "code_bytes": 3834,
+   "accounts": 23,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x6185e94286fa3b6e77c21ea43a68ab081b6e61dd1e1a397f5a36be5ebadd434b",
+   "code_bytes": 8396,
+   "accounts": 12,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x64e773032629ad58a69738c7a4e2daaf75ed054ec14e2f69496c3bfce247e48a",
+   "code_bytes": 2725,
+   "accounts": 132,
+   "verdict": "refused",
+   "detail": "returned 0xffffffff00000000",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x6efc2a697c142579f95b2e678eb6a243f3cfbddc16d374551c9412294940ca31",
+   "code_bytes": 2567,
+   "accounts": 63,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x7fa1bd2edb51499cb83a324acd9d0f35b31774cf8894e26fc13ac0474f4f57a4",
+   "code_bytes": 24504,
+   "accounts": 20,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x80565ee0620eb96de12e41c5983c54267c5fa3333247907b752c878f09982024",
+   "code_bytes": 1763,
+   "accounts": 1,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x82b9eb95897f16d5ff1d3b13841dfa8ab7619a8227815a0a2dafea963adb4f48",
+   "code_bytes": 9768,
+   "accounts": 5,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x82c1e6c0f83d22eef579344e8eff26baf24db4dabe5408d681b00d0512bc3ec4",
+   "code_bytes": 3639,
+   "accounts": 1,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x836afe422a9670fac93bbc33b0093a65352a68ea490d7f7ef03b35e2b3265200",
+   "code_bytes": 6905,
+   "accounts": 21,
+   "verdict": "refused",
+   "detail": "returned 0xffffffff00000000",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x869201a1beb5ee8c782cf48a5fe035ad08720c6362697e127c6167716644de5f",
+   "code_bytes": 17382,
+   "accounts": 3,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x88269c1d7c748db361214bd3a9eee3ab453dcd8c3d296210e83c8f30ed49ee9c",
+   "code_bytes": 7239,
+   "accounts": 1,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x9488536b675798f1feac388d5b2bd6166b1b988f454673c5f990cc5fd9596b2e",
+   "code_bytes": 23615,
+   "accounts": 104,
+   "verdict": "refused",
+   "detail": "returned 0xffffffff00000000",
+   "own_storage_reads": 1,
+   "label": "E",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x9a5579d03854f9fb48bc91fda6ddd7b3627d0e47b63f9d74816aeb9259f1c2bb",
+   "code_bytes": 2193,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0x9d5ba38c6ea4183c46ef3c72e85c73d01fc66fdbeb919a369f4e37d2de16773e",
+   "code_bytes": 7075,
+   "accounts": 2,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xb47811be4a976fc14fb6d5e5f522e908f0ef200b11c42a5329dfb123440c7c9d",
+   "code_bytes": 6289,
+   "accounts": 2,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xb5ebf66a7fd6681979ca0f3b320bab097283f1958b1045417c577785721b1ac5",
+   "code_bytes": 3398,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xb9f729293f97971869d456249b8b00b05d371f1215b390f33443f5c03b42c981",
+   "code_bytes": 11393,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xba5e6ba629ac32ee27310db5d0ff95bc450404becfa2742fcab786cb004c5557",
+   "code_bytes": 3589,
+   "accounts": 7,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xba697585ba58ba66ebd095ab4c7f980ed42ad115b2e3bb9b5b9bdf167bf08b1b",
+   "code_bytes": 22020,
+   "accounts": 9,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xbd96df2d1931a44a5522dc5c613b4407d9cf586e13f4b3f5335df389cd0f9089",
+   "code_bytes": 3197,
+   "accounts": 99,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xc0745699f4f0515c938337f3dfaf1ccce82bd1f19fa95980f57dd41fe395efa2",
+   "code_bytes": 7292,
+   "accounts": 5,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xc2484504b6c9ba4c4d5e37e973dd50562c696f648812fcdcca5431dcdf6996f2",
+   "code_bytes": 11293,
+   "accounts": 1,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xc526bba0122d394192fb85e1a477657e94e6666851b481ef271022d96d6cab57",
+   "code_bytes": 9531,
+   "accounts": 1,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xcc7b633aef4b2543cb8f37522adf1a401f910f0f6b2430c1eecc11f401ccfcf3",
+   "code_bytes": 3639,
+   "accounts": 1,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xcde2f4a3906855dd47b95414c4e723bfe93c53c509c0b9102942ef881159582d",
+   "code_bytes": 1255,
+   "accounts": 1,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xce58a1bffec146b34b0c297fb00b117a112d21b7c9fe5d1ca8c634997f1ed568",
+   "code_bytes": 16251,
+   "accounts": 13,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xd748c6060679ccb34583963e5edc21299e4c6723e7c7a80561d255861ed209b7",
+   "code_bytes": 24469,
+   "accounts": 10,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xddc2d020d529f37815f0301e5e801fec33d15516a0c0644fec241d88afc5bf60",
+   "code_bytes": 4511,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xdfe89167442180ab9cef366bbcc02517f16e15700c287abac0d8bde37aa19a59",
+   "code_bytes": 1045,
+   "accounts": 1,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xe056444d6f30db3a271fe83c1e0341b7e00b0bbd9f4aaaa4eb233d77972f4b0f",
+   "code_bytes": 8375,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xe8a65d1e2f25056ad25ab39c2694e190633e926236877071662ac1e4220e9caa",
+   "code_bytes": 2303,
+   "accounts": 79,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xecfc0328ce4d953a4d452e11f54b578fa2d7f2f8126246d1120ca24d11845081",
+   "code_bytes": 23741,
+   "accounts": 69,
+   "verdict": "refused",
+   "detail": "revert 0x151d90fe",
+   "own_storage_reads": 1,
+   "label": "E",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xef208786623609e6929b60ce84377b0f2bf25a91fd61ec1550c7db4a9c39bcdb",
+   "code_bytes": 1254,
+   "accounts": 10,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xef99e5554dcd0c387bd64dfb139b972445a88415b65b99afb309d3e456d95bb0",
+   "code_bytes": 5695,
+   "accounts": 2,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xf29e25bec1f70c07bf64a0195cf42a202d0b1c6d0368dad4e59d4ee46b5c09d0",
+   "code_bytes": 7075,
+   "accounts": 1,
+   "verdict": "shim",
+   "detail": "success, empty return data",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xf2e76ab7850759cf5425726909fbf937e2346f0942088ba4dddd3fb2a733f7b3",
+   "code_bytes": 1524,
+   "accounts": 3,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xf9dce9432ef1ea80ccb0d9ee91c385caa90a461a3b9b141fb1994c22218103f4",
+   "code_bytes": 3616,
+   "accounts": 2,
+   "verdict": "refused",
+   "detail": "revert (empty)",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xfac24354acb137da149ab1651a3fa33e844297d056f112b897fa2b50ee6d4716",
+   "code_bytes": 7314,
+   "accounts": 1,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  },
+  {
+   "code_hash": "0xff0357b543bbb94845b6791a8becac5e87d467814f86538a62649c877227d631",
+   "code_bytes": 24504,
+   "accounts": 57,
+   "verdict": "erc1271",
+   "detail": "magic value",
+   "own_storage_reads": 0,
+   "label": "M",
+   "call_gas": 2033544
+  }
+ ]
+}

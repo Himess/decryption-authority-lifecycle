@@ -1,0 +1,2031 @@
+{
+ "label": "Mock: the post-quantum path on a local chain (anvil, osaka)",
+ "env": {
+  "hardfork": "Osaka",
+  "client": "anvil/v1.8.5",
+  "anvil": ".foundry/bin/anvil"
+ },
+ "hardfork": "osaka",
+ "date": "2026-10-22T19:55:05.985Z",
+ "addresses": {
+  "acl": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+  "impl": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+  "owner": "0x59b670e9fA9D0A427751Af201D676719a970857b",
+  "verifier": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+  "template": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+  "dapp": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+ },
+ "paths": [
+  {
+   "name": "B1",
+   "old": "0x05baecb5172aDAe52580a8B9FbD0bC3d8AEcaB22",
+   "holder": "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f",
+   "history": [
+    "0x99aee278eb69a913d463595c119dad95f39cbd4cbbff0000000000007a690500",
+    "0xbc428f0eaab0054b09176e9843975654fefa8d99f4ff0000000000007a690500",
+    "0x726ebdfe02cd06dc1e3130c22453563c78cf486bf2ff0000000000007a690500"
+   ]
+  },
+  {
+   "name": "B2d",
+   "old": "0x3E88bEe35e74b2C27619838126C546d0A2E0e59E",
+   "holder": "0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E",
+   "history": [
+    "0x59e1d3217797eb697ddbb63c180383844444866ad9ff0000000000007a690500",
+    "0x0c12d758227ed0786e8fa3e2030d50bda8c5c3b677ff0000000000007a690500",
+    "0xd154c432d4479065e81b8ba56974926e70bf7d329dff0000000000007a690500"
+   ]
+  },
+  {
+   "name": "B2c",
+   "old": "0xFF5E694871c8d765D7aE0a05E3B93357dAdE213C",
+   "holder": "0x851356ae760d987E095750cCeb3bC6014560891C",
+   "history": [
+    "0xc741abb3d6a6d262c79db49e906405e024b7fce478ff0000000000007a690500",
+    "0x7bb80c4d864dd59c9422fdd32627b6980a373f017eff0000000000007a690500",
+    "0xeb8bfbafadfe89144e9ee4ac7e12786be1b894e27bff0000000000007a690500"
+   ]
+  },
+  {
+   "name": "B3a",
+   "old": "0x5F61F3c6f5E0C50DA70aae4e018c129d1baad342",
+   "holder": "0x5F61F3c6f5E0C50DA70aae4e018c129d1baad342",
+   "history": [
+    "0x55cb3309c382e50236696fe0c601ff295d9e30a99eff0000000000007a690500",
+    "0xcadf0ad825bef92df1b5d9bd0deef44b80a077e46dff0000000000007a690500",
+    "0x373d2e2388772b4ed74690f29a96ba0ba3b9516c9cff0000000000007a690500"
+   ]
+  },
+  {
+   "name": "B3b",
+   "old": "0x493B99ea96103D18Dc2c7C49BC186bea41869787",
+   "holder": "0x493B99ea96103D18Dc2c7C49BC186bea41869787",
+   "history": [
+    "0xd5262dfb754cf35c39a99e4aa6400047b972f37325ff0000000000007a690500",
+    "0x9c250446cea2386045d6c76189be60ab1630009241ff0000000000007a690500",
+    "0xb09ce283625b3b8a91c56c250dd05dca899e0f6315ff0000000000007a690500"
+   ]
+  }
+ ],
+ "rows": [
+  {
+   "kind": "path",
+   "path": "B1",
+   "step": "carry",
+   "handles": 3,
+   "verified": true
+  },
+  {
+   "kind": "path",
+   "path": "B2",
+   "step": "successor confirmed, retired (B2d) and certified (B2c)",
+   "delaySeconds": 604800
+  },
+  {
+   "kind": "path",
+   "path": "B3",
+   "step": "delegated, keyed; B3a rewritten to 0xef0101, B3b adopted"
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B1",
+   "who": "A",
+   "observed": {
+    "code": "empty",
+    "retired": true,
+    "successor": null
+   },
+   "expected": {
+    "code": "empty",
+    "retired": true,
+    "successor": null
+   }
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B1",
+   "who": "holder",
+   "observed": {
+    "code": "regular",
+    "retired": false
+   },
+   "expected": {
+    "code": "regular",
+    "retired": false
+   }
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B2d",
+   "who": "A",
+   "observed": {
+    "code": "empty",
+    "retired": true,
+    "successor": "0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E"
+   },
+   "expected": {
+    "code": "empty",
+    "retired": true,
+    "successor": "0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E"
+   }
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B2d",
+   "who": "holder",
+   "observed": {
+    "code": "regular",
+    "retired": false
+   },
+   "expected": {
+    "code": "regular",
+    "retired": false
+   }
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B2c",
+   "who": "A",
+   "observed": {
+    "code": "empty",
+    "retired": true,
+    "successor": "0x851356ae760d987E095750cCeb3bC6014560891C"
+   },
+   "expected": {
+    "code": "empty",
+    "retired": true,
+    "successor": "0x851356ae760d987E095750cCeb3bC6014560891C"
+   }
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B2c",
+   "who": "holder",
+   "observed": {
+    "code": "regular",
+    "retired": false
+   },
+   "expected": {
+    "code": "regular",
+    "retired": false
+   }
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B3a",
+   "who": "A",
+   "observed": {
+    "code": "eip7851",
+    "retired": false,
+    "successor": null
+   },
+   "expected": {
+    "code": "eip7851",
+    "retired": false,
+    "successor": null
+   }
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B3a",
+   "who": "holder",
+   "observed": {
+    "code": "eip7851",
+    "retired": false
+   },
+   "expected": {
+    "code": "eip7851",
+    "retired": false
+   }
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B3b",
+   "who": "A",
+   "observed": {
+    "code": "regular",
+    "retired": false,
+    "successor": null
+   },
+   "expected": {
+    "code": "regular",
+    "retired": false,
+    "successor": null
+   }
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B3b",
+   "who": "holder",
+   "observed": {
+    "code": "regular",
+    "retired": false
+   },
+   "expected": {
+    "code": "regular",
+    "retired": false
+   }
+  },
+  {
+   "kind": "sdk-precheck",
+   "path": "B1",
+   "who": "holder",
+   "observed": {
+    "accepted": true
+   },
+   "expected": {
+    "accepted": true
+   }
+  },
+  {
+   "kind": "sdk-precheck",
+   "path": "B1",
+   "who": "old key",
+   "observed": {
+    "accepted": true
+   },
+   "expected": {
+    "accepted": true
+   },
+   "note": "A has no code: the signature is valid; A is retired (getAuthorityStatus, the registry)"
+  },
+  {
+   "kind": "sdk-precheck",
+   "path": "B2d",
+   "who": "holder",
+   "observed": {
+    "accepted": true
+   },
+   "expected": {
+    "accepted": true
+   }
+  },
+  {
+   "kind": "sdk-precheck",
+   "path": "B2d",
+   "who": "old key",
+   "observed": {
+    "accepted": true
+   },
+   "expected": {
+    "accepted": true
+   },
+   "note": "A has no code: the signature is valid; A is retired (getAuthorityStatus, the registry)"
+  },
+  {
+   "kind": "sdk-precheck",
+   "path": "B2c",
+   "who": "holder",
+   "observed": {
+    "accepted": true
+   },
+   "expected": {
+    "accepted": true
+   }
+  },
+  {
+   "kind": "sdk-precheck",
+   "path": "B2c",
+   "who": "old key",
+   "observed": {
+    "accepted": true
+   },
+   "expected": {
+    "accepted": true
+   },
+   "note": "A has no code: the signature is valid; A is retired (getAuthorityStatus, the registry)"
+  },
+  {
+   "kind": "sdk-precheck",
+   "path": "B3a",
+   "who": "holder",
+   "observed": {
+    "accepted": true
+   },
+   "expected": {
+    "accepted": true
+   }
+  },
+  {
+   "kind": "sdk-precheck",
+   "path": "B3a",
+   "who": "old key",
+   "observed": {
+    "accepted": false,
+    "error": "Erc1271WrongMagicError"
+   },
+   "expected": {
+    "accepted": false
+   },
+   "note": "A has code: ERC-1271 only"
+  },
+  {
+   "kind": "sdk-precheck",
+   "path": "B3b",
+   "who": "holder",
+   "observed": {
+    "accepted": true
+   },
+   "expected": {
+    "accepted": true
+   }
+  },
+  {
+   "kind": "sdk-precheck",
+   "path": "B3b",
+   "who": "old key",
+   "observed": {
+    "accepted": false,
+    "error": "Erc1271WrongMagicError"
+   },
+   "expected": {
+    "accepted": false
+   },
+   "note": "A has code: ERC-1271 only"
+  },
+  {
+   "kind": "tx",
+   "path": "B1",
+   "action": "T1.allow",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "34204"
+  },
+  {
+   "kind": "tx",
+   "path": "B1",
+   "action": "T2.allowForDecryption",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "34691"
+  },
+  {
+   "kind": "tx",
+   "path": "B1",
+   "action": "T3.delegate",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "31888"
+  },
+  {
+   "kind": "tx",
+   "path": "B1",
+   "action": "T4.designateSuccessor",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "31211"
+  },
+  {
+   "kind": "tx",
+   "path": "B1",
+   "action": "T5.confirmSuccessor",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "30660"
+  },
+  {
+   "kind": "tx",
+   "path": "B1",
+   "action": "T6.certificate",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "AccountAlreadyRetired",
+   "gasUsed": "31898"
+  },
+  {
+   "kind": "tx",
+   "path": "B1",
+   "action": "T7.invalidateSignaturesBefore",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "50280"
+  },
+  {
+   "kind": "tx",
+   "path": "B1",
+   "action": "T8.retireAccount",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "AccountAlreadyRetired",
+   "gasUsed": "28477"
+  },
+  {
+   "kind": "tx",
+   "path": "B2d",
+   "action": "T1.allow",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "34204"
+  },
+  {
+   "kind": "tx",
+   "path": "B2d",
+   "action": "T2.allowForDecryption",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "34691"
+  },
+  {
+   "kind": "tx",
+   "path": "B2d",
+   "action": "T3.delegate",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "31888"
+  },
+  {
+   "kind": "tx",
+   "path": "B2d",
+   "action": "T4.designateSuccessor",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "31211"
+  },
+  {
+   "kind": "tx",
+   "path": "B2d",
+   "action": "T5.confirmSuccessor",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "30660"
+  },
+  {
+   "kind": "tx",
+   "path": "B2d",
+   "action": "T6.certificate",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "AccountAlreadyRetired",
+   "gasUsed": "31898"
+  },
+  {
+   "kind": "tx",
+   "path": "B2d",
+   "action": "T7.invalidateSignaturesBefore",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "50280"
+  },
+  {
+   "kind": "tx",
+   "path": "B2d",
+   "action": "T8.retireAccount",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "AccountAlreadyRetired",
+   "gasUsed": "28477"
+  },
+  {
+   "kind": "tx",
+   "path": "B2c",
+   "action": "T1.allow",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "34204"
+  },
+  {
+   "kind": "tx",
+   "path": "B2c",
+   "action": "T2.allowForDecryption",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "34691"
+  },
+  {
+   "kind": "tx",
+   "path": "B2c",
+   "action": "T3.delegate",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "31888"
+  },
+  {
+   "kind": "tx",
+   "path": "B2c",
+   "action": "T4.designateSuccessor",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "31211"
+  },
+  {
+   "kind": "tx",
+   "path": "B2c",
+   "action": "T5.confirmSuccessor",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "30660"
+  },
+  {
+   "kind": "tx",
+   "path": "B2c",
+   "action": "T6.certificate",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "AccountAlreadyRetired",
+   "gasUsed": "31898"
+  },
+  {
+   "kind": "tx",
+   "path": "B2c",
+   "action": "T7.invalidateSignaturesBefore",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "50280"
+  },
+  {
+   "kind": "tx",
+   "path": "B2c",
+   "action": "T8.retireAccount",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "AccountAlreadyRetired",
+   "gasUsed": "28477"
+  },
+  {
+   "kind": "tx",
+   "path": "B3a",
+   "action": "T1.allow",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "60686"
+  },
+  {
+   "kind": "tx",
+   "path": "B3a",
+   "action": "T2.allowForDecryption",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "61467"
+  },
+  {
+   "kind": "tx",
+   "path": "B3a",
+   "action": "T3.delegate",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "58049"
+  },
+  {
+   "kind": "tx",
+   "path": "B3a",
+   "action": "T4.designateSuccessor",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "62128"
+  },
+  {
+   "kind": "tx",
+   "path": "B3a",
+   "action": "T5.confirmSuccessor",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SuccessionNotAccepted",
+   "gasUsed": "33033"
+  },
+  {
+   "kind": "tx",
+   "path": "B3a",
+   "action": "T6.certificate",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "CertificateSuccessorMismatch",
+   "gasUsed": "34373"
+  },
+  {
+   "kind": "tx",
+   "path": "B3a",
+   "action": "T7.invalidateSignaturesBefore",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "50280"
+  },
+  {
+   "kind": "tx",
+   "path": "B3b",
+   "action": "T1.allow",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "60674"
+  },
+  {
+   "kind": "tx",
+   "path": "B3b",
+   "action": "T2.allowForDecryption",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "61455"
+  },
+  {
+   "kind": "tx",
+   "path": "B3b",
+   "action": "T3.delegate",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "58049"
+  },
+  {
+   "kind": "tx",
+   "path": "B3b",
+   "action": "T4.designateSuccessor",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "62128"
+  },
+  {
+   "kind": "tx",
+   "path": "B3b",
+   "action": "T5.confirmSuccessor",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SuccessionNotAccepted",
+   "gasUsed": "33033"
+  },
+  {
+   "kind": "tx",
+   "path": "B3b",
+   "action": "T6.certificate",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "CertificateSuccessorMismatch",
+   "gasUsed": "34373"
+  },
+  {
+   "kind": "tx",
+   "path": "B3b",
+   "action": "T7.invalidateSignaturesBefore",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "50280"
+  },
+  {
+   "kind": "undo",
+   "path": "B3a",
+   "delegatedToAttacker": false,
+   "pendingSuccessor": "0x0000000000000000000000000000000000000000"
+  },
+  {
+   "kind": "undo",
+   "path": "B3b",
+   "delegatedToAttacker": false,
+   "pendingSuccessor": "0x0000000000000000000000000000000000000000"
+  },
+  {
+   "kind": "canary",
+   "what": "before any upgrade",
+   "ok": true,
+   "line": "2026-10-22T19:54:45.596Z start: OK impl=0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0 rpc=6"
+  },
+  {
+   "kind": "b5",
+   "what": "the Core release, 8 signatures",
+   "signatures": 8,
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "NotEnoughSignatures",
+   "gasUsed": "802540",
+   "implementationAfter": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+  },
+  {
+   "kind": "b5",
+   "what": "the Core release, 9 signatures",
+   "signatures": 9,
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "11453066"
+  },
+  {
+   "kind": "canary",
+   "what": "after the Core release",
+   "ok": true,
+   "line": "2026-10-22T19:54:55.443Z start: OK impl=0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 rpc=6"
+  },
+  {
+   "kind": "b5",
+   "what": "the release without Core, 9 signatures",
+   "signatures": 9,
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "UpgradeDropsRetirement",
+   "gasUsed": "11427962",
+   "implementationAfter": "0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154"
+  },
+  {
+   "kind": "canary",
+   "what": "after the refused release",
+   "ok": true,
+   "line": "2026-10-22T19:55:00.745Z start: OK impl=0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154 rpc=6"
+  },
+  {
+   "kind": "tx",
+   "path": "B1",
+   "action": "T1.allow.after-upgrade",
+   "expected": "reverted",
+   "observed": "reverted",
+   "revert": "SenderRetired",
+   "gasUsed": "34204"
+  },
+  {
+   "kind": "b8-erc1271",
+   "path": "B1",
+   "meterGasUsed": "1233968",
+   "meterOk": true,
+   "meterMagic": "0x1626ba7e",
+   "cap250k": {
+    "ok": true,
+    "magic": "0xffffffff",
+    "gasUsed": "249107"
+   },
+   "returned": "0x1626ba7e",
+   "msMedian": "15.43",
+   "msMin": "14.73",
+   "calldataBytes": 2532
+  },
+  {
+   "kind": "b8-erc1271",
+   "path": "B2d",
+   "meterGasUsed": "1233459",
+   "meterOk": true,
+   "meterMagic": "0x1626ba7e",
+   "cap250k": {
+    "ok": true,
+    "magic": "0xffffffff",
+    "gasUsed": "249107"
+   },
+   "returned": "0x1626ba7e",
+   "msMedian": "15.59",
+   "msMin": "15.19",
+   "calldataBytes": 2532
+  },
+  {
+   "kind": "b8-erc1271",
+   "path": "B2c",
+   "meterGasUsed": "1233472",
+   "meterOk": true,
+   "meterMagic": "0x1626ba7e",
+   "cap250k": {
+    "ok": true,
+    "magic": "0xffffffff",
+    "gasUsed": "249107"
+   },
+   "returned": "0x1626ba7e",
+   "msMedian": "15.56",
+   "msMin": "3.31",
+   "calldataBytes": 2532
+  },
+  {
+   "kind": "b8-erc1271",
+   "path": "B3a",
+   "meterGasUsed": "1235715",
+   "meterOk": true,
+   "meterMagic": "0x1626ba7e",
+   "cap250k": {
+    "ok": true,
+    "magic": "0xffffffff",
+    "gasUsed": "251707"
+   },
+   "returned": "0x1626ba7e",
+   "msMedian": "15.68",
+   "msMin": "14.85",
+   "calldataBytes": 2532
+  },
+  {
+   "kind": "b8-erc1271",
+   "path": "B3b",
+   "meterGasUsed": "1231383",
+   "meterOk": true,
+   "meterMagic": "0x1626ba7e",
+   "cap250k": {
+    "ok": true,
+    "magic": "0xffffffff",
+    "gasUsed": "249107"
+   },
+   "returned": "0x1626ba7e",
+   "msMedian": "15.72",
+   "msMin": "14.93",
+   "calldataBytes": 2532
+  },
+  {
+   "kind": "tx",
+   "path": "B3a",
+   "action": "T8.retireAccount",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "54516"
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B3a",
+   "who": "A after T8",
+   "observed": {
+    "code": "eip7851",
+    "retired": true
+   },
+   "expected": {
+    "retired": true
+   }
+  },
+  {
+   "kind": "tx",
+   "path": "B3a",
+   "action": "P4.wallet-after-retirement",
+   "expected": "reverted",
+   "observed": "reverted (B3a wallet acts after A's retirement: reverted (CallFailed))"
+  },
+  {
+   "kind": "tx",
+   "path": "B3b",
+   "action": "T8.retireAccount",
+   "expected": "mined",
+   "observed": "mined",
+   "revert": "-",
+   "gasUsed": "54516"
+  },
+  {
+   "kind": "sdk-status",
+   "path": "B3b",
+   "who": "A after T8",
+   "observed": {
+    "code": "regular",
+    "retired": true
+   },
+   "expected": {
+    "retired": true
+   }
+  },
+  {
+   "kind": "tx",
+   "path": "B3b",
+   "action": "P4.wallet-after-retirement",
+   "expected": "reverted",
+   "observed": "reverted (B3b wallet acts after A's retirement: reverted (CallFailed))"
+  }
+ ],
+ "receipts": [
+  {
+   "what": "EmptyUUPSProxyACL",
+   "status": 1,
+   "gasUsed": "675564",
+   "initcodeBytes": 3008,
+   "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+  },
+  {
+   "what": "ERC1967 proxy",
+   "status": 1,
+   "gasUsed": "172634",
+   "initcodeBytes": 1143,
+   "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+  },
+  {
+   "what": "ACL v0.10.0 implementation",
+   "status": 1,
+   "gasUsed": "3546996",
+   "initcodeBytes": 16292,
+   "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+  },
+  {
+   "what": "upgradeToAndCall(ACL, initializeFromEmptyProxy())",
+   "status": 1,
+   "gasUsed": "53058",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 4
+  },
+  {
+   "what": "DappStub",
+   "status": 1,
+   "gasUsed": "157561",
+   "initcodeBytes": 511,
+   "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+  },
+  {
+   "what": "Keccak-f1600 helper (data contract)",
+   "status": 1,
+   "gasUsed": "4716360",
+   "codeBytes": 21622,
+   "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
+  },
+  {
+   "what": "MLDSA44Verifier",
+   "status": 1,
+   "gasUsed": "5166161",
+   "initcodeBytes": 24243,
+   "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F"
+  },
+  {
+   "what": "PQWallet code without a key",
+   "status": 1,
+   "gasUsed": "613190",
+   "initcodeBytes": 3061,
+   "address": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"
+  },
+  {
+   "what": "operator 0 key blob",
+   "status": 1,
+   "gasUsed": "4434609",
+   "codeBytes": 20545,
+   "address": "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"
+  },
+  {
+   "what": "operator 1 key blob",
+   "status": 1,
+   "gasUsed": "4434381",
+   "codeBytes": 20545,
+   "address": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+  },
+  {
+   "what": "operator 2 key blob",
+   "status": 1,
+   "gasUsed": "4434621",
+   "codeBytes": 20545,
+   "address": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788"
+  },
+  {
+   "what": "operator 3 key blob",
+   "status": 1,
+   "gasUsed": "4434609",
+   "codeBytes": 20545,
+   "address": "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e"
+  },
+  {
+   "what": "operator 4 key blob",
+   "status": 1,
+   "gasUsed": "4434477",
+   "codeBytes": 20545,
+   "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0"
+  },
+  {
+   "what": "operator 5 key blob",
+   "status": 1,
+   "gasUsed": "4434489",
+   "codeBytes": 20545,
+   "address": "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82"
+  },
+  {
+   "what": "operator 6 key blob",
+   "status": 1,
+   "gasUsed": "4434561",
+   "codeBytes": 20545,
+   "address": "0x9A676e781A523b5d0C0e43731313A708CB607508"
+  },
+  {
+   "what": "operator 7 key blob",
+   "status": 1,
+   "gasUsed": "4434357",
+   "codeBytes": 20545,
+   "address": "0x0B306BF915C4d645ff596e518fAf3F9669b97016"
+  },
+  {
+   "what": "operator 8 key blob",
+   "status": 1,
+   "gasUsed": "4434501",
+   "codeBytes": 20545,
+   "address": "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1"
+  },
+  {
+   "what": "operator 9 key blob",
+   "status": 1,
+   "gasUsed": "4434477",
+   "codeBytes": 20545,
+   "address": "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE"
+  },
+  {
+   "what": "operator 10 key blob",
+   "status": 1,
+   "gasUsed": "4434465",
+   "codeBytes": 20545,
+   "address": "0x68B1D87F95878fE05B998F19b66F4baba5De1aed"
+  },
+  {
+   "what": "operator 11 key blob",
+   "status": 1,
+   "gasUsed": "4434561",
+   "codeBytes": 20545,
+   "address": "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c"
+  },
+  {
+   "what": "operator 12 key blob",
+   "status": 1,
+   "gasUsed": "4434501",
+   "codeBytes": 20545,
+   "address": "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d"
+  },
+  {
+   "what": "OperatorRatifiedRegistryOwner",
+   "status": 1,
+   "gasUsed": "1171580",
+   "initcodeBytes": 4983,
+   "address": "0x59b670e9fA9D0A427751Af201D676719a970857b"
+  },
+  {
+   "what": "ACL.transferOwnership(upgrader)",
+   "status": 1,
+   "gasUsed": "52806",
+   "revert": "-",
+   "calldataBytes": 36,
+   "block": 23
+  },
+  {
+   "what": "upgrader.acceptRegistryOwnership()",
+   "status": 1,
+   "gasUsed": "39236",
+   "revert": "-",
+   "calldataBytes": 4,
+   "block": 24
+  },
+  {
+   "what": "B1 holder key blob",
+   "status": 1,
+   "gasUsed": "4434597",
+   "codeBytes": 20545,
+   "address": "0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44"
+  },
+  {
+   "what": "B1 wallet W",
+   "status": 1,
+   "gasUsed": "662195",
+   "initcodeBytes": 3061,
+   "address": "0xa85233C63b9Ee964Add6F2cffe00Fd84eb32338f"
+  },
+  {
+   "what": "B1 grant h0",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 27
+  },
+  {
+   "what": "B1 grant h1",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 28
+  },
+  {
+   "what": "B1 grant h2",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 29
+  },
+  {
+   "what": "B1 grant hv to V",
+   "status": 1,
+   "gasUsed": "94231",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 30
+  },
+  {
+   "what": "B1 V delegates to A",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 31
+  },
+  {
+   "what": "B1 A delegates to Dk",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 32
+  },
+  {
+   "what": "B2d holder key blob",
+   "status": 1,
+   "gasUsed": "4434393",
+   "codeBytes": 20545,
+   "address": "0x67d269191c92Caf3cD7723F116c85e6E9bf55933"
+  },
+  {
+   "what": "B2d wallet W",
+   "status": 1,
+   "gasUsed": "662183",
+   "initcodeBytes": 3061,
+   "address": "0xE6E340D132b5f46d1e472DebcD681B2aBc16e57E"
+  },
+  {
+   "what": "B2d grant h0",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 35
+  },
+  {
+   "what": "B2d grant h1",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 36
+  },
+  {
+   "what": "B2d grant h2",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 37
+  },
+  {
+   "what": "B2d grant hv to V",
+   "status": 1,
+   "gasUsed": "94231",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 38
+  },
+  {
+   "what": "B2d V delegates to A",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 39
+  },
+  {
+   "what": "B2d A delegates to Dk",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 40
+  },
+  {
+   "what": "B2c holder key blob",
+   "status": 1,
+   "gasUsed": "4434477",
+   "codeBytes": 20545,
+   "address": "0x1613beB3B2C4f22Ee086B2b38C1476A3cE7f78E8"
+  },
+  {
+   "what": "B2c wallet W",
+   "status": 1,
+   "gasUsed": "662195",
+   "initcodeBytes": 3061,
+   "address": "0x851356ae760d987E095750cCeb3bC6014560891C"
+  },
+  {
+   "what": "B2c grant h0",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 43
+  },
+  {
+   "what": "B2c grant h1",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 44
+  },
+  {
+   "what": "B2c grant h2",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 45
+  },
+  {
+   "what": "B2c grant hv to V",
+   "status": 1,
+   "gasUsed": "94231",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 46
+  },
+  {
+   "what": "B2c V delegates to A",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 47
+  },
+  {
+   "what": "B2c A delegates to Dk",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 48
+  },
+  {
+   "what": "B3a grant h0",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 49
+  },
+  {
+   "what": "B3a grant h1",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 50
+  },
+  {
+   "what": "B3a grant h2",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 51
+  },
+  {
+   "what": "B3a grant hv to V",
+   "status": 1,
+   "gasUsed": "94231",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 52
+  },
+  {
+   "what": "B3a V delegates to A",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 53
+  },
+  {
+   "what": "B3a A delegates to Dk",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 54
+  },
+  {
+   "what": "B3b grant h0",
+   "status": 1,
+   "gasUsed": "94231",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 55
+  },
+  {
+   "what": "B3b grant h1",
+   "status": 1,
+   "gasUsed": "94231",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 56
+  },
+  {
+   "what": "B3b grant h2",
+   "status": 1,
+   "gasUsed": "94243",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 57
+  },
+  {
+   "what": "B3b grant hv to V",
+   "status": 1,
+   "gasUsed": "94231",
+   "revert": "-",
+   "calldataBytes": 132,
+   "block": 58
+  },
+  {
+   "what": "B3b V delegates to A",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 59
+  },
+  {
+   "what": "B3b A delegates to Dk",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 60
+  },
+  {
+   "what": "B1 carry tool tx 0 (3 handles + retireAccount())",
+   "status": 1,
+   "gasUsed": "156448",
+   "calldataBytes": 644
+  },
+  {
+   "what": "B2d designateSuccessor",
+   "status": 1,
+   "gasUsed": "62128",
+   "revert": "-",
+   "calldataBytes": 36,
+   "block": 62
+  },
+  {
+   "what": "B2d W accepts (execute)",
+   "status": 1,
+   "gasUsed": "1336560",
+   "revert": "-",
+   "calldataBytes": 2660,
+   "block": 63
+  },
+  {
+   "what": "B2c designateSuccessor",
+   "status": 1,
+   "gasUsed": "62128",
+   "revert": "-",
+   "calldataBytes": 36,
+   "block": 64
+  },
+  {
+   "what": "B2c W accepts (execute)",
+   "status": 1,
+   "gasUsed": "1336510",
+   "revert": "-",
+   "calldataBytes": 2660,
+   "block": 65
+  },
+  {
+   "what": "B2d confirmSuccessor",
+   "status": 1,
+   "gasUsed": "57256",
+   "revert": "-",
+   "calldataBytes": 4,
+   "block": 67
+  },
+  {
+   "what": "B2c confirmSuccessor",
+   "status": 1,
+   "gasUsed": "57256",
+   "revert": "-",
+   "calldataBytes": 4,
+   "block": 68
+  },
+  {
+   "what": "B2d retireAccount",
+   "status": 1,
+   "gasUsed": "54516",
+   "revert": "-",
+   "calldataBytes": 4,
+   "block": 69
+  },
+  {
+   "what": "B2c certificate relayed by the watchtower",
+   "status": 1,
+   "gasUsed": "65610",
+   "calldataBytes": 324
+  },
+  {
+   "what": "B3a key blob",
+   "status": 1,
+   "gasUsed": "4434489",
+   "codeBytes": 20545,
+   "address": "0x4c5859f0F772848b2D91F1D83E2Fe57935348029"
+  },
+  {
+   "what": "B3a type-4 delegation and initialize (one transaction)",
+   "status": 1,
+   "gasUsed": "83071"
+  },
+  {
+   "what": "B3b key blob",
+   "status": 1,
+   "gasUsed": "4434297",
+   "codeBytes": 20545,
+   "address": "0x1291Be112d480055DaFd8a610b7d1e203891C274"
+  },
+  {
+   "what": "B3b type-4 delegation and initialize (one transaction)",
+   "status": 1,
+   "gasUsed": "83059"
+  },
+  {
+   "what": "B1 holder declares its KDA (execute)",
+   "status": 1,
+   "gasUsed": "1356272",
+   "revert": "-",
+   "calldataBytes": 2724,
+   "block": 75
+  },
+  {
+   "what": "B2d holder declares its KDA (execute)",
+   "status": 1,
+   "gasUsed": "1338039",
+   "revert": "-",
+   "calldataBytes": 2724,
+   "block": 76
+  },
+  {
+   "what": "B2c holder declares its KDA (execute)",
+   "status": 1,
+   "gasUsed": "1338902",
+   "revert": "-",
+   "calldataBytes": 2724,
+   "block": 77
+  },
+  {
+   "what": "B3a holder declares its KDA (execute)",
+   "status": 1,
+   "gasUsed": "1356469",
+   "revert": "-",
+   "calldataBytes": 2724,
+   "block": 78
+  },
+  {
+   "what": "B3b holder declares its KDA (execute)",
+   "status": 1,
+   "gasUsed": "1355329",
+   "revert": "-",
+   "calldataBytes": 2724,
+   "block": 79
+  },
+  {
+   "what": "B1 T1.allow",
+   "status": 0,
+   "gasUsed": "34204",
+   "revert": "SenderRetired",
+   "calldataBytes": 68,
+   "block": 80
+  },
+  {
+   "what": "B1 T2.allowForDecryption",
+   "status": 0,
+   "gasUsed": "34691",
+   "revert": "SenderRetired",
+   "calldataBytes": 100,
+   "block": 81
+  },
+  {
+   "what": "B1 T3.delegate",
+   "status": 0,
+   "gasUsed": "31888",
+   "revert": "SenderRetired",
+   "calldataBytes": 100,
+   "block": 82
+  },
+  {
+   "what": "B1 T4.designateSuccessor",
+   "status": 0,
+   "gasUsed": "31211",
+   "revert": "SenderRetired",
+   "calldataBytes": 36,
+   "block": 83
+  },
+  {
+   "what": "B1 T5.confirmSuccessor",
+   "status": 0,
+   "gasUsed": "30660",
+   "revert": "SenderRetired",
+   "calldataBytes": 4,
+   "block": 84
+  },
+  {
+   "what": "B1 T6.certificate",
+   "status": 0,
+   "gasUsed": "31898",
+   "revert": "AccountAlreadyRetired",
+   "calldataBytes": 324,
+   "block": 85
+  },
+  {
+   "what": "B1 T7.invalidateSignaturesBefore",
+   "status": 1,
+   "gasUsed": "50280",
+   "revert": "-",
+   "calldataBytes": 36,
+   "block": 86
+  },
+  {
+   "what": "B1 T8.retireAccount",
+   "status": 0,
+   "gasUsed": "28477",
+   "revert": "AccountAlreadyRetired",
+   "calldataBytes": 4,
+   "block": 87
+  },
+  {
+   "what": "B2d T1.allow",
+   "status": 0,
+   "gasUsed": "34204",
+   "revert": "SenderRetired",
+   "calldataBytes": 68,
+   "block": 88
+  },
+  {
+   "what": "B2d T2.allowForDecryption",
+   "status": 0,
+   "gasUsed": "34691",
+   "revert": "SenderRetired",
+   "calldataBytes": 100,
+   "block": 89
+  },
+  {
+   "what": "B2d T3.delegate",
+   "status": 0,
+   "gasUsed": "31888",
+   "revert": "SenderRetired",
+   "calldataBytes": 100,
+   "block": 90
+  },
+  {
+   "what": "B2d T4.designateSuccessor",
+   "status": 0,
+   "gasUsed": "31211",
+   "revert": "SenderRetired",
+   "calldataBytes": 36,
+   "block": 91
+  },
+  {
+   "what": "B2d T5.confirmSuccessor",
+   "status": 0,
+   "gasUsed": "30660",
+   "revert": "SenderRetired",
+   "calldataBytes": 4,
+   "block": 92
+  },
+  {
+   "what": "B2d T6.certificate",
+   "status": 0,
+   "gasUsed": "31898",
+   "revert": "AccountAlreadyRetired",
+   "calldataBytes": 324,
+   "block": 93
+  },
+  {
+   "what": "B2d T7.invalidateSignaturesBefore",
+   "status": 1,
+   "gasUsed": "50280",
+   "revert": "-",
+   "calldataBytes": 36,
+   "block": 94
+  },
+  {
+   "what": "B2d T8.retireAccount",
+   "status": 0,
+   "gasUsed": "28477",
+   "revert": "AccountAlreadyRetired",
+   "calldataBytes": 4,
+   "block": 95
+  },
+  {
+   "what": "B2c T1.allow",
+   "status": 0,
+   "gasUsed": "34204",
+   "revert": "SenderRetired",
+   "calldataBytes": 68,
+   "block": 96
+  },
+  {
+   "what": "B2c T2.allowForDecryption",
+   "status": 0,
+   "gasUsed": "34691",
+   "revert": "SenderRetired",
+   "calldataBytes": 100,
+   "block": 97
+  },
+  {
+   "what": "B2c T3.delegate",
+   "status": 0,
+   "gasUsed": "31888",
+   "revert": "SenderRetired",
+   "calldataBytes": 100,
+   "block": 98
+  },
+  {
+   "what": "B2c T4.designateSuccessor",
+   "status": 0,
+   "gasUsed": "31211",
+   "revert": "SenderRetired",
+   "calldataBytes": 36,
+   "block": 99
+  },
+  {
+   "what": "B2c T5.confirmSuccessor",
+   "status": 0,
+   "gasUsed": "30660",
+   "revert": "SenderRetired",
+   "calldataBytes": 4,
+   "block": 100
+  },
+  {
+   "what": "B2c T6.certificate",
+   "status": 0,
+   "gasUsed": "31898",
+   "revert": "AccountAlreadyRetired",
+   "calldataBytes": 324,
+   "block": 101
+  },
+  {
+   "what": "B2c T7.invalidateSignaturesBefore",
+   "status": 1,
+   "gasUsed": "50280",
+   "revert": "-",
+   "calldataBytes": 36,
+   "block": 102
+  },
+  {
+   "what": "B2c T8.retireAccount",
+   "status": 0,
+   "gasUsed": "28477",
+   "revert": "AccountAlreadyRetired",
+   "calldataBytes": 4,
+   "block": 103
+  },
+  {
+   "what": "B3a T1.allow",
+   "status": 1,
+   "gasUsed": "60686",
+   "revert": "-",
+   "calldataBytes": 68,
+   "block": 104
+  },
+  {
+   "what": "B3a T2.allowForDecryption",
+   "status": 1,
+   "gasUsed": "61467",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 105
+  },
+  {
+   "what": "B3a T3.delegate",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 106
+  },
+  {
+   "what": "B3a T4.designateSuccessor",
+   "status": 1,
+   "gasUsed": "62128",
+   "revert": "-",
+   "calldataBytes": 36,
+   "block": 107
+  },
+  {
+   "what": "B3a T5.confirmSuccessor",
+   "status": 0,
+   "gasUsed": "33033",
+   "revert": "SuccessionNotAccepted",
+   "calldataBytes": 4,
+   "block": 108
+  },
+  {
+   "what": "B3a T6.certificate",
+   "status": 0,
+   "gasUsed": "34373",
+   "revert": "CertificateSuccessorMismatch",
+   "calldataBytes": 324,
+   "block": 109
+  },
+  {
+   "what": "B3a T7.invalidateSignaturesBefore",
+   "status": 1,
+   "gasUsed": "50280",
+   "revert": "-",
+   "calldataBytes": 36,
+   "block": 110
+  },
+  {
+   "what": "B3b T1.allow",
+   "status": 1,
+   "gasUsed": "60674",
+   "revert": "-",
+   "calldataBytes": 68,
+   "block": 111
+  },
+  {
+   "what": "B3b T2.allowForDecryption",
+   "status": 1,
+   "gasUsed": "61455",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 112
+  },
+  {
+   "what": "B3b T3.delegate",
+   "status": 1,
+   "gasUsed": "58049",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 113
+  },
+  {
+   "what": "B3b T4.designateSuccessor",
+   "status": 1,
+   "gasUsed": "62128",
+   "revert": "-",
+   "calldataBytes": 36,
+   "block": 114
+  },
+  {
+   "what": "B3b T5.confirmSuccessor",
+   "status": 0,
+   "gasUsed": "33033",
+   "revert": "SuccessionNotAccepted",
+   "calldataBytes": 4,
+   "block": 115
+  },
+  {
+   "what": "B3b T6.certificate",
+   "status": 0,
+   "gasUsed": "34373",
+   "revert": "CertificateSuccessorMismatch",
+   "calldataBytes": 324,
+   "block": 116
+  },
+  {
+   "what": "B3b T7.invalidateSignaturesBefore",
+   "status": 1,
+   "gasUsed": "50280",
+   "revert": "-",
+   "calldataBytes": 36,
+   "block": 117
+  },
+  {
+   "what": "B3a holder revokes the attacker's delegation",
+   "status": 1,
+   "gasUsed": "1316572",
+   "revert": "-",
+   "calldataBytes": 2692,
+   "block": 118
+  },
+  {
+   "what": "B3a holder revokes Dk's delegation",
+   "status": 1,
+   "gasUsed": "1316319",
+   "revert": "-",
+   "calldataBytes": 2692,
+   "block": 119
+  },
+  {
+   "what": "B3a holder cancels the attacker's designation",
+   "status": 1,
+   "gasUsed": "1311469",
+   "revert": "-",
+   "calldataBytes": 2628,
+   "block": 120
+  },
+  {
+   "what": "B3b holder revokes the attacker's delegation",
+   "status": 1,
+   "gasUsed": "1314529",
+   "revert": "-",
+   "calldataBytes": 2692,
+   "block": 121
+  },
+  {
+   "what": "B3b holder revokes Dk's delegation",
+   "status": 1,
+   "gasUsed": "1314936",
+   "revert": "-",
+   "calldataBytes": 2692,
+   "block": 122
+  },
+  {
+   "what": "B3b holder cancels the attacker's designation",
+   "status": 1,
+   "gasUsed": "1312684",
+   "revert": "-",
+   "calldataBytes": 2628,
+   "block": 123
+  },
+  {
+   "what": "ACL v0.10.0 implementation, second deployment (a Core release)",
+   "status": 1,
+   "gasUsed": "3546996",
+   "initcodeBytes": 16292,
+   "address": "0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154"
+  },
+  {
+   "what": "ACL v0.7.0 implementation (a release without Core)",
+   "status": 1,
+   "gasUsed": "2281086",
+   "initcodeBytes": 10439,
+   "address": "0xb7278A61aa25c888815aFC32Ad3cC52fF24fE575"
+  },
+  {
+   "what": "propose the Core release, 8 signatures",
+   "status": 1,
+   "gasUsed": "49678",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 126
+  },
+  {
+   "what": "execute the Core release, 8 signatures with 8 signatures",
+   "status": 0,
+   "gasUsed": "802540",
+   "revert": "NotEnoughSignatures",
+   "calldataBytes": 20452,
+   "block": 128
+  },
+  {
+   "what": "execute the Core release with 9 signatures",
+   "status": 1,
+   "gasUsed": "11453066",
+   "revert": "-",
+   "calldataBytes": 22980,
+   "block": 129
+  },
+  {
+   "what": "propose the release without Core, 9 signatures",
+   "status": 1,
+   "gasUsed": "49678",
+   "revert": "-",
+   "calldataBytes": 100,
+   "block": 130
+  },
+  {
+   "what": "execute the release without Core, 9 signatures with 9 signatures",
+   "status": 0,
+   "gasUsed": "11427962",
+   "revert": "UpgradeDropsRetirement",
+   "calldataBytes": 22980,
+   "block": 132
+  },
+  {
+   "what": "B1 T1.allow after the upgrade",
+   "status": 0,
+   "gasUsed": "34204",
+   "revert": "SenderRetired",
+   "calldataBytes": 68,
+   "block": 133
+  },
+  {
+   "what": "Erc1271GasMeter (E4, test only)",
+   "status": 1,
+   "gasUsed": "223128",
+   "initcodeBytes": 817,
+   "address": "0x2bdCC0de6bE1f7D2ee689a0342D76F52E8EFABa3"
+  },
+  {
+   "what": "B3a T8.retireAccount",
+   "status": 1,
+   "gasUsed": "54516",
+   "revert": "-",
+   "calldataBytes": 4,
+   "block": 135
+  },
+  {
+   "what": "B3a wallet acts after A's retirement",
+   "status": 0,
+   "gasUsed": "1311116",
+   "revert": "CallFailed",
+   "calldataBytes": 2724,
+   "block": 136
+  },
+  {
+   "what": "B3b T8.retireAccount",
+   "status": 1,
+   "gasUsed": "54516",
+   "revert": "-",
+   "calldataBytes": 4,
+   "block": 137
+  },
+  {
+   "what": "B3b wallet acts after A's retirement",
+   "status": 0,
+   "gasUsed": "1310529",
+   "revert": "CallFailed",
+   "calldataBytes": 2724,
+   "block": 138
+  }
+ ],
+ "proxyRewritten": 5,
+ "wire": {
+  "pql.status.B1.A": {
+   "eth_call": 8,
+   "eth_getCode": 1
+  },
+  "pql.status.B1.holder": {
+   "eth_getCode": 1,
+   "eth_call": 5
+  },
+  "pql.status.B2d.A": {
+   "eth_getCode": 1,
+   "eth_call": 5
+  },
+  "pql.status.B2d.holder": {
+   "eth_getCode": 1,
+   "eth_call": 5
+  },
+  "pql.status.B2c.A": {
+   "eth_getCode": 1,
+   "eth_call": 5
+  },
+  "pql.status.B2c.holder": {
+   "eth_getCode": 1,
+   "eth_call": 5
+  },
+  "pql.status.B3a.A": {
+   "eth_getCode (rewritten)": 1,
+   "eth_call": 5
+  },
+  "pql.status.B3a.holder": {
+   "eth_getCode (rewritten)": 1,
+   "eth_call": 5
+  },
+  "pql.status.B3b.A": {
+   "eth_getCode": 1,
+   "eth_call": 5
+  },
+  "pql.status.B3b.holder": {
+   "eth_getCode": 1,
+   "eth_call": 5
+  },
+  "pql.precheck.B1.holder": {
+   "eth_blockNumber": 1,
+   "eth_getCode": 1,
+   "eth_call": 1
+  },
+  "pql.precheck.B1.old": {
+   "eth_blockNumber": 1,
+   "eth_getCode": 1
+  },
+  "pql.precheck.B2d.holder": {
+   "eth_blockNumber": 1,
+   "eth_getCode": 1,
+   "eth_call": 1
+  },
+  "pql.precheck.B2d.old": {
+   "eth_blockNumber": 1,
+   "eth_getCode": 1
+  },
+  "pql.precheck.B2c.holder": {
+   "eth_blockNumber": 1,
+   "eth_getCode": 1,
+   "eth_call": 1
+  },
+  "pql.precheck.B2c.old": {
+   "eth_blockNumber": 1,
+   "eth_getCode": 1
+  },
+  "pql.precheck.B3a.holder": {
+   "eth_blockNumber": 1,
+   "eth_getCode (rewritten)": 1,
+   "eth_call": 1
+  },
+  "pql.precheck.B3a.old": {
+   "eth_blockNumber": 1,
+   "eth_getCode (rewritten)": 1,
+   "eth_call": 1
+  },
+  "pql.precheck.B3b.holder": {
+   "eth_blockNumber": 1,
+   "eth_getCode": 1,
+   "eth_call": 1
+  },
+  "pql.precheck.B3b.old": {
+   "eth_blockNumber": 1,
+   "eth_getCode": 1,
+   "eth_call": 1
+  },
+  "pql.status.B3a.A.after-t8": {
+   "eth_getCode (rewritten)": 1,
+   "eth_call": 5
+  },
+  "pql.status.B3b.A.after-t8": {
+   "eth_getCode": 1,
+   "eth_call": 5
+  }
+ }
+}

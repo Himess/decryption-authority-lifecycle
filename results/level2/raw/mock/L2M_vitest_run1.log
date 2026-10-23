@@ -1,0 +1,16 @@
+
+ RUN  v4.1.11 <repo>/impl/harness/level2-mock
+
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > setup: the mock runs ACL v0.4.2 with the lifecycle Core and E1 28ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > E1: designate, accept, wait D, confirm; the successor has no right while the account is active 1077ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > E1: after retirement the successor reads, every other party gets the typed refusal 241ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > E1: a handle granted to the retired account afterwards (a straggler) is readable by the successor only 394ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > E1: a pending designation dies with the retirement 645ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > SDK hygiene: an ordinary refusal stays generic 63ms
+ ✓ mock-e2e-l2.test.ts > Level 2 in the Zama cleartext mock: E1 successor and SDK hygiene > SDK hygiene: one transport key per request, unusable once released, purged on retirement 536ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  17:59:41
+   Duration  6.40s (transform 2.13s, setup 0ms, import 2.93s, tests 3.22s, environment 0ms)
+

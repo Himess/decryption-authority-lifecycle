@@ -1,0 +1,549 @@
+From 0eec67588b9123e3bcca0945e923b7ce3cfce6fc Mon Sep 17 00:00:00 2001
+From: Himess <semihcvlk53@gmail.com>
+Date: Wed, 21 Oct 2026 19:34:42 +0300
+Subject: [PATCH 6/8] feat(relayer): Profile H in the signature pre-check
+ (lifecycle Level 1, H9)
+
+Decryption Authority Lifecycle draft, Profile H rule H9: advisory prechecks
+use the same caps, budget and ordering as the verifiers.
+
+- user_decrypt_signature_check.profile_h (serde default, off): the KMS
+  connector's profile_h keys minus the verifier-only H5 and H6. An unknown
+  code_first_mode is a configuration error at load.
+- Enabled, the v3 pre-check runs the shared crate's
+  verify_user_decryption_signature with that policy: H1 caps before any
+  read, H2 ordering at one block, H3 budget, and the H4 later-block gate.
+- What the pre-check retries is unchanged: transport failures and empty
+  reverts within the host-ACL retry window; every other rejection is
+  definitive. Shadow differences are logged.
+- Disabled, the pre-check is unchanged (verify_signature with
+  erc1271_gas_limit).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ relayer/config/local.mainnet.yaml.example |  11 +
+ relayer/config/local.testnet.yaml.example |  11 +
+ relayer/config/local.yaml.example         |  11 +
+ relayer/src/config/settings.rs            |  70 ++++++
+ relayer/src/host/signature_prechecker.rs  | 275 +++++++++++++++++++++-
+ relayer/src/startup.rs                    |   5 +
+ 6 files changed, 381 insertions(+), 2 deletions(-)
+
+diff --git a/relayer/config/local.mainnet.yaml.example b/relayer/config/local.mainnet.yaml.example
+index 8950e69d..0f9bfc94 100644
+--- a/relayer/config/local.mainnet.yaml.example
++++ b/relayer/config/local.mainnet.yaml.example
+@@ -38,6 +38,17 @@ keyurl:
+ # User-decryption signature check. Gas cap for the ERC-1271 isValidSignature static call.
+ user_decrypt_signature_check:
+   erc1271_gas_limit: 250000
++  # [lifecycle Level 1] Profile H (rule H9): the KMS connectors' caps, budget and ordering.
++  # Off by default; when enabled, erc1271_gas_limit is not used.
++  # profile_h:
++  #   enabled: true
++  #   code_first_mode: shadow        # off | shadow | enforce
++  #   erc1271_execution_budget: 2000000
++  #   max_user_signature_bytes: 65536
++  #   max_public_key_bytes: 4096
++  #   max_extra_data_bytes: 1024
++  #   max_erc1271_attempts: 2
++  #   eip7702_fallback: true
+ 
+ gateway:
+   blockchain_rpc:
+diff --git a/relayer/config/local.testnet.yaml.example b/relayer/config/local.testnet.yaml.example
+index 15256ac9..598be816 100644
+--- a/relayer/config/local.testnet.yaml.example
++++ b/relayer/config/local.testnet.yaml.example
+@@ -33,6 +33,17 @@ keyurl:
+ # User-decryption signature check. Gas cap for the ERC-1271 isValidSignature static call.
+ user_decrypt_signature_check:
+   erc1271_gas_limit: 250000
++  # [lifecycle Level 1] Profile H (rule H9): the KMS connectors' caps, budget and ordering.
++  # Off by default; when enabled, erc1271_gas_limit is not used.
++  # profile_h:
++  #   enabled: true
++  #   code_first_mode: shadow        # off | shadow | enforce
++  #   erc1271_execution_budget: 2000000
++  #   max_user_signature_bytes: 65536
++  #   max_public_key_bytes: 4096
++  #   max_extra_data_bytes: 1024
++  #   max_erc1271_attempts: 2
++  #   eip7702_fallback: true
+ 
+ gateway:
+   blockchain_rpc:
+diff --git a/relayer/config/local.yaml.example b/relayer/config/local.yaml.example
+index f42b4efe..f1e48a5f 100644
+--- a/relayer/config/local.yaml.example
++++ b/relayer/config/local.yaml.example
+@@ -33,6 +33,17 @@ keyurl:
+ # User-decryption signature check. Gas cap for the ERC-1271 isValidSignature static call.
+ user_decrypt_signature_check:
+   erc1271_gas_limit: 250000
++  # [lifecycle Level 1] Profile H (rule H9): the KMS connectors' caps, budget and ordering.
++  # Off by default; when enabled, erc1271_gas_limit is not used.
++  # profile_h:
++  #   enabled: true
++  #   code_first_mode: shadow        # off | shadow | enforce
++  #   erc1271_execution_budget: 2000000
++  #   max_user_signature_bytes: 65536
++  #   max_public_key_bytes: 4096
++  #   max_extra_data_bytes: 1024
++  #   max_erc1271_attempts: 2
++  #   eip7702_fallback: true
+ 
+ gateway:
+   blockchain_rpc:
+diff --git a/relayer/src/config/settings.rs b/relayer/src/config/settings.rs
+index 6abe30f4..e427e997 100644
+--- a/relayer/src/config/settings.rs
++++ b/relayer/src/config/settings.rs
+@@ -9,6 +9,7 @@ use std::env;
+ use std::fmt;
+ use std::num::NonZeroUsize;
+ use std::time::Duration;
++use user_decryption_signature::{CodeFirstMode, SignaturePolicy};
+ 
+ // Listener pool configuration limits
+ const MIN_LISTENERS: usize = 2;
+@@ -735,6 +736,69 @@ pub struct ContractConfig {
+ #[derive(Debug, Deserialize, Clone)]
+ pub struct UserDecryptSignatureCheckConfig {
+     pub erc1271_gas_limit: u64,
++    /// [lifecycle Level 1] Profile H for the pre-check. Off by default.
++    #[serde(default)]
++    pub profile_h: ProfileHPrecheckConfig,
++}
++
++/// [lifecycle Level 1] Profile H rule H9: the pre-check uses the same caps, budget and ordering as the
++/// KMS connectors' `profile_h` settings. Every field is ignored while `enabled` is false (the default),
++/// and the pre-check then runs as before, with `erc1271_gas_limit`.
++#[derive(Debug, Deserialize, Clone, PartialEq)]
++#[serde(default)]
++pub struct ProfileHPrecheckConfig {
++    pub enabled: bool,
++    /// Ordering of the signature check (H2, H8): `off`, `shadow` or `enforce`.
++    pub code_first_mode: String,
++    /// `B_exec`: execution gas for `isValidSignature`, excluding the intrinsic and calldata gas (H3).
++    pub erc1271_execution_budget: u64,
++    /// H1 caps, in bytes, checked before any host-chain read.
++    pub max_user_signature_bytes: usize,
++    pub max_public_key_bytes: usize,
++    pub max_extra_data_bytes: usize,
++    /// H4: ERC-1271 negatives allowed per request, a block apart.
++    pub max_erc1271_attempts: u8,
++    /// H2's narrow EIP-7702 fallback (Profile Q switches it off).
++    pub eip7702_fallback: bool,
++}
++
++impl Default for ProfileHPrecheckConfig {
++    fn default() -> Self {
++        let policy = SignaturePolicy::default();
++        Self {
++            enabled: false,
++            code_first_mode: CodeFirstMode::Off.as_str().to_string(),
++            erc1271_execution_budget: policy.erc1271_execution_budget,
++            max_user_signature_bytes: policy.max_user_signature_bytes,
++            max_public_key_bytes: policy.max_public_key_bytes,
++            max_extra_data_bytes: policy.max_extra_data_bytes,
++            max_erc1271_attempts: policy.max_erc1271_attempts,
++            eip7702_fallback: policy.eip7702_fallback,
++        }
++    }
++}
++
++impl ProfileHPrecheckConfig {
++    /// The shared-crate policy for these values, or `None` while Profile H is disabled.
++    pub fn signature_policy(&self) -> Result<Option<SignaturePolicy>, AppConfigError> {
++        if !self.enabled {
++            return Ok(None);
++        }
++        let mode = self.code_first_mode.parse().map_err(|e: String| {
++            AppConfigError::Config(format!(
++                "user_decrypt_signature_check.profile_h.code_first_mode: {e}"
++            ))
++        })?;
++        Ok(Some(SignaturePolicy {
++            mode,
++            erc1271_execution_budget: self.erc1271_execution_budget,
++            max_user_signature_bytes: self.max_user_signature_bytes,
++            max_public_key_bytes: self.max_public_key_bytes,
++            max_extra_data_bytes: self.max_extra_data_bytes,
++            max_erc1271_attempts: self.max_erc1271_attempts,
++            eip7702_fallback: self.eip7702_fallback,
++        }))
++    }
+ }
+ 
+ impl ContractConfig {
+@@ -891,6 +955,12 @@ impl Settings {
+         // Validate listener pool configuration
+         settings.validate_listener_pool_config()?;
+ 
++        // [lifecycle Level 1] Validate the Profile H pre-check settings
++        settings
++            .user_decrypt_signature_check
++            .profile_h
++            .signature_policy()?;
++
+         Ok(settings)
+     }
+ 
+diff --git a/relayer/src/host/signature_prechecker.rs b/relayer/src/host/signature_prechecker.rs
+index 7cbedc4a..ebf4afd2 100644
+--- a/relayer/src/host/signature_prechecker.rs
++++ b/relayer/src/host/signature_prechecker.rs
+@@ -3,6 +3,10 @@
+ //! Recomputes the unified EIP-712 digest and runs the shared verifier
+ //! (`user_decryption_signature::verify_signature`) to detect bad signatures before forwarding,
+ //! returning a specific error to the caller instead of letting the request fail downstream.
++//!
++//! [lifecycle Level 1] With Profile H enabled, the pre-check runs the shared crate's Profile H
++//! verification instead (`verify_user_decryption_signature`), with the KMS connectors' caps,
++//! budget and ordering (rule H9).
+ 
+ use crate::config::settings::{HostChainConfig, RetrySettings};
+ use crate::core::event::UserDecryptRequest;
+@@ -16,9 +20,11 @@ use reqwest::Url;
+ use std::collections::HashMap;
+ use std::str::FromStr;
+ use std::time::Duration;
+-use tracing::warn;
++use tracing::{info, warn};
+ use user_decryption_signature::{
+-    compute_user_decrypt_digest, default_user_decrypt_domain, verify_signature, Erc1271Error,
++    compute_user_decrypt_digest, default_user_decrypt_domain, verify_signature,
++    verify_user_decryption_signature, AttemptState, Disposition, Erc1271Error, SignatureInput,
++    SignaturePolicy,
+ };
+ 
+ /// Outcome of a failed pre-check.
+@@ -44,6 +50,8 @@ pub struct UserDecryptSignaturePreChecker {
+     erc1271_gas_limit: u64,
+     /// Retry policy for transport errors, shared with the host ACL checks.
+     retry: RetrySettings,
++    /// [lifecycle Level 1] Profile H policy (H9); `None` keeps the check above.
++    profile_h: Option<SignaturePolicy>,
+ }
+ 
+ impl UserDecryptSignaturePreChecker {
+@@ -52,6 +60,7 @@ impl UserDecryptSignaturePreChecker {
+         decryption_address: &str,
+         erc1271_gas_limit: u64,
+         retry: RetrySettings,
++        profile_h: Option<SignaturePolicy>,
+     ) -> anyhow::Result<Self> {
+         let decryption_contract = Address::from_str(decryption_address)
+             .map_err(|e| anyhow::anyhow!("Invalid decryption address: {e}"))?;
+@@ -73,6 +82,7 @@ impl UserDecryptSignaturePreChecker {
+             decryption_contract,
+             erc1271_gas_limit,
+             retry,
++            profile_h,
+         })
+     }
+ 
+@@ -114,6 +124,13 @@ impl UserDecryptSignaturePreChecker {
+         };
+         let digest = compute_user_decrypt_digest(&payload, &domain);
+ 
++        if let Some(policy) = &self.profile_h {
++            let input = SignatureInput::from_payload(&payload, digest);
++            return self
++                .verify_profile_h(provider, chain_id, &input, policy)
++                .await;
++        }
++
+         let max_attempts = self.retry.max_attempts.max(1);
+         let interval = Duration::from_millis(self.retry.retry_interval_ms);
+         let mut last_retryable: Option<Erc1271Error> = None;
+@@ -169,6 +186,84 @@ impl UserDecryptSignaturePreChecker {
+             )),
+         }
+     }
++
++    /// [lifecycle Level 1] The pre-check under Profile H (H9): the shared crate applies the
++    /// verifier's caps before any read (H1), its ordering at one block (H2) and its budget (H3).
++    /// What is retried stays as above: transport failures and empty reverts, within the retry
++    /// window, and an empty revert only at a later block (H4). Every other rejection is
++    /// definitive.
++    async fn verify_profile_h(
++        &self,
++        provider: &RootProvider,
++        chain_id: u64,
++        input: &SignatureInput<'_>,
++        policy: &SignaturePolicy,
++    ) -> Result<(), SigPreCheckError> {
++        let signer = input.signer;
++        let max_attempts = self.retry.max_attempts.max(1);
++        let interval = Duration::from_millis(self.retry.retry_interval_ms);
++        let mut attempts = AttemptState::default();
++        let mut last_retryable: Option<Erc1271Error> = None;
++
++        for attempt in 0..max_attempts {
++            let outcome = verify_user_decryption_signature(provider, input, policy, attempts).await;
++            attempts = outcome.attempts;
++            if let Some(report) = outcome.shadow() {
++                if report.would_reject() || report.would_accept() {
++                    info!(
++                        signer = %signer,
++                        chain_id,
++                        would_reject = report.would_reject(),
++                        would_accept = report.would_accept(),
++                        served = ?report.served,
++                        code_first = ?report.code_first,
++                        code = ?report.code,
++                        "Profile H shadow: the code-first ordering decides differently"
++                    );
++                }
++            }
++            let rejection = match outcome.result {
++                Ok(_) => return Ok(()),
++                Err(rejection) => rejection,
++            };
++            match (rejection.disposition, rejection.error) {
++                (Disposition::Transport, e) => last_retryable = Some(e),
++                (Disposition::RetryNextBlock, e @ Erc1271Error::EmptyRevert(_)) => {
++                    last_retryable = Some(e)
++                }
++                // Nothing was called: the earlier empty revert stands until a later block.
++                (Disposition::AwaitingNextBlock, _) => {}
++                (_, e) => {
++                    return Err(SigPreCheckError::Invalid {
++                        signer,
++                        reason: e.to_string(),
++                    });
++                }
++            }
++            if attempt + 1 < max_attempts {
++                warn!(
++                    signer = %signer,
++                    chain_id,
++                    attempt = attempt + 1,
++                    max_attempts,
++                    disposition = ?rejection.disposition,
++                    "Profile H signature pre-check not decided yet, retrying"
++                );
++                tokio::time::sleep(interval).await;
++            }
++        }
++
++        match last_retryable {
++            Some(e @ Erc1271Error::EmptyRevert(_)) => Err(SigPreCheckError::Invalid {
++                signer,
++                reason: e.to_string(),
++            }),
++            Some(e) => Err(SigPreCheckError::HostCallFailed(e.to_string())),
++            None => Err(SigPreCheckError::HostCallFailed(
++                "signature pre-check exhausted its attempts without a result".to_string(),
++            )),
++        }
++    }
+ }
+ 
+ /// All handles in a unified request share one host chain (the EIP-712 domain carries a single
+@@ -241,6 +336,7 @@ mod tests {
+                 max_attempts: 3,
+                 retry_interval_ms: 0,
+             },
++            profile_h: None,
+         }
+     }
+ 
+@@ -335,4 +431,179 @@ mod tests {
+         assert_eq!(single_chain_id([&h1, &h1]).unwrap(), 8009);
+         assert!(single_chain_id(std::iter::empty()).is_err());
+     }
++
++    // [lifecycle Level 1] Profile H in the pre-check (H9). The mock answers in queue order and
++    // fails any request beyond the queue, so each test pins the RPC sequence.
++
++    use alloy::primitives::{B256, U64};
++    use alloy::signers::{local::PrivateKeySigner, SignerSync};
++    use user_decryption_signature::{CodeFirstMode, ERC1271_MAGIC_VALUE};
++
++    fn profile_h_checker(
++        asserter: Asserter,
++        mode: CodeFirstMode,
++    ) -> UserDecryptSignaturePreChecker {
++        let mut checker = checker(asserter);
++        checker.profile_h = Some(SignaturePolicy {
++            mode,
++            ..SignaturePolicy::default()
++        });
++        checker
++    }
++
++    /// The digest `verify` recomputes for `unified_request(_)` from `user`.
++    fn digest_of(user: Address) -> B256 {
++        let payload = UserDecryptionRequestPayload {
++            userAddress: user,
++            publicKey: Bytes::new(),
++            allowedContracts: vec![],
++            requestValidity: SolRequestValiditySeconds {
++                startTimestamp: U256::ZERO,
++                durationSeconds: U256::ZERO,
++            },
++            extraData: Bytes::new(),
++            signature: Bytes::new(),
++        };
++        let domain = default_user_decrypt_domain(TEST_CHAIN_ID, Address::from([0xCA; 20]));
++        compute_user_decrypt_digest(&payload, &domain)
++    }
++
++    /// A unified request from a fresh key's address, with that key's 65-byte signature.
++    fn signed_request() -> UserDecryptRequest {
++        let key = PrivateKeySigner::random();
++        let signature = key
++            .sign_hash_sync(&digest_of(key.address()))
++            .unwrap()
++            .as_bytes();
++        let mut request = unified_request(Bytes::copy_from_slice(&signature));
++        if let UserDecryptRequest::Eip712UnifiedV1 { user_address, .. } = &mut request {
++            *user_address = key.address();
++        }
++        request
++    }
++
++    fn word(prefix: [u8; 4]) -> Bytes {
++        let mut r = [0u8; 32];
++        r[..4].copy_from_slice(&prefix);
++        Bytes::copy_from_slice(&r)
++    }
++
++    fn eip7702_code(delegate: Address) -> Bytes {
++        let mut code = vec![0xef, 0x01, 0x00];
++        code.extend_from_slice(delegate.as_slice());
++        Bytes::from(code)
++    }
++
++    #[tokio::test]
++    async fn profile_h_caps_refuse_before_any_rpc() {
++        // H1: a 65,537-byte signature is refused with no host-chain read (the queue is empty).
++        let err = profile_h_checker(Asserter::new(), CodeFirstMode::Enforce)
++            .verify(&unified_request(Bytes::from(vec![0x11; 65_537])))
++            .await
++            .unwrap_err();
++        match err {
++            SigPreCheckError::Invalid { reason, .. } => {
++                assert!(reason.contains("65537"), "{reason}")
++            }
++            other => panic!("expected Invalid, got {other:?}"),
++        }
++    }
++
++    #[tokio::test]
++    async fn profile_h_off_accepts_an_eoa_signature_with_no_rpc() {
++        // `off` keeps today's ordering: ecrecover first, no host-chain read.
++        profile_h_checker(Asserter::new(), CodeFirstMode::Off)
++            .verify(&signed_request())
++            .await
++            .unwrap();
++    }
++
++    #[tokio::test]
++    async fn profile_h_enforce_refuses_a_7702_root_key_its_delegate_rejects() {
++        // H2: the code is read first at block B; the 7702 account's delegate answers wrong
++        // magic at the same B, and the root key's ECDSA signature does not override it.
++        let asserter = Asserter::new();
++        asserter.push_success(&U64::from(16));
++        asserter.push_success(&eip7702_code(Address::from([0x77; 20])));
++        asserter.push_success(&word([0xff, 0xff, 0xff, 0xff]));
++        let err = profile_h_checker(asserter, CodeFirstMode::Enforce)
++            .verify(&signed_request())
++            .await
++            .unwrap_err();
++        match err {
++            SigPreCheckError::Invalid { reason, .. } => {
++                assert!(reason.to_lowercase().contains("magic"), "{reason}")
++            }
++            other => panic!("expected Invalid, got {other:?}"),
++        }
++    }
++
++    #[tokio::test]
++    async fn profile_h_enforce_accepts_an_eoa_after_one_code_read() {
++        let asserter = Asserter::new();
++        asserter.push_success(&U64::from(16));
++        asserter.push_success(&Bytes::new());
++        profile_h_checker(asserter, CodeFirstMode::Enforce)
++            .verify(&signed_request())
++            .await
++            .unwrap();
++    }
++
++    #[tokio::test]
++    async fn profile_h_empty_revert_is_retried_only_at_a_later_block() {
++        // H4: attempt 1 reverts with no reason at block 16; attempt 2 sees block 16 again and
++        // makes no call; attempt 3 sees block 17 and the wallet answers the magic value.
++        let asserter = Asserter::new();
++        asserter.push_success(&U64::from(16));
++        asserter.push_failure(empty_revert());
++        asserter.push_success(&U64::from(16));
++        asserter.push_success(&U64::from(17));
++        asserter.push_success(&word(ERC1271_MAGIC_VALUE));
++        profile_h_checker(asserter, CodeFirstMode::Off)
++            .verify(&unified_request(Bytes::from(vec![0x11; 100])))
++            .await
++            .unwrap();
++    }
++
++    #[tokio::test]
++    async fn profile_h_wrong_magic_is_definitive_for_the_precheck() {
++        // As before Profile H, only empty reverts and transport failures are retried.
++        let asserter = Asserter::new();
++        asserter.push_success(&U64::from(16));
++        asserter.push_success(&word([0xff, 0xff, 0xff, 0xff]));
++        let err = profile_h_checker(asserter, CodeFirstMode::Off)
++            .verify(&unified_request(Bytes::from(vec![0x11; 100])))
++            .await
++            .unwrap_err();
++        assert!(matches!(err, SigPreCheckError::Invalid { .. }), "{err:?}");
++    }
++
++    #[test]
++    fn profile_h_settings_default_off_and_reject_an_unknown_mode() {
++        use crate::config::settings::ProfileHPrecheckConfig;
++        assert!(ProfileHPrecheckConfig::default()
++            .signature_policy()
++            .unwrap()
++            .is_none());
++        let enabled = ProfileHPrecheckConfig {
++            enabled: true,
++            code_first_mode: "enforce".to_string(),
++            ..ProfileHPrecheckConfig::default()
++        };
++        let policy = enabled.signature_policy().unwrap().unwrap();
++        assert_eq!(policy.mode, CodeFirstMode::Enforce);
++        assert_eq!(
++            policy,
++            SignaturePolicy {
++                mode: CodeFirstMode::Enforce,
++                ..SignaturePolicy::default()
++            }
++        );
++        let bogus = ProfileHPrecheckConfig {
++            enabled: true,
++            code_first_mode: "bogus".to_string(),
++            ..ProfileHPrecheckConfig::default()
++        };
++        assert!(bogus.signature_policy().is_err());
++    }
+ }
+diff --git a/relayer/src/startup.rs b/relayer/src/startup.rs
+index 1f5975f0..045c6f41 100644
+--- a/relayer/src/startup.rs
++++ b/relayer/src/startup.rs
+@@ -171,6 +171,11 @@ pub async fn run_fhevm_relayer(
+             .host_acl_check
+             .retry
+             .clone(),
++        // [lifecycle Level 1] Profile H (H9), when enabled
++        settings
++            .user_decrypt_signature_check
++            .profile_h
++            .signature_policy()?,
+     )?);
+ 
+     let mut settings = settings;

@@ -1,0 +1,20 @@
+date=2026-10-23T06:32:52Z host=VPS nproc=4 kernel=6.8.0-139-generic
+tree HEAD=ed851716c9a6b799996a23399ece2858336f96db pristine HEAD=ed851716c9a6b799996a23399ece2858336f96db
+== diff -rq pristine vs tree kms-connector, excluding directories named 'tests'
+IDENTICAL
+tree-sha256 crates/kms-worker/src (excluding ./tests): tree=8718ddd7d46f5d16134e5a0d63d8decf71bd094e7c62abef70fad11c6bd830c7 pristine=8718ddd7d46f5d16134e5a0d63d8decf71bd094e7c62abef70fad11c6bd830c7 EQUAL
+tree-sha256 crates/utils/src (excluding ./tests): tree=5c6b4fa4535f57a638aa676c1deac9ae311cd1b148415da3ab576a56c08080e0 pristine=5c6b4fa4535f57a638aa676c1deac9ae311cd1b148415da3ab576a56c08080e0 EQUAL
+== harness inputs
+28b9bb51659d6c8deca0686d395700c463b45c0a82bf1bf7670dd21fea51b224  /srv/lifecycle/src/fhevm-main-harness/kms-connector/crates/kms-worker/tests/acl_p04_eip7851.rs
+f77d80a57ae7025c22f79d9a6cd3eeba9ec9159aaee32b8829a82056ec19355a  /srv/lifecycle/harness/level0/base_acl_main.json
+b6c9361d70ab108e773dfaea81183fb4428e333a32ec47878c46cb289153b2b7  /srv/lifecycle/harness/level0/level0_acl_main.json
+4605658bedb1872fb595ea9ac6f4094cab169adacb4094480f63b278b694797d  /srv/lifecycle/harness/level0/level0_acl_v0.13.8.json
+c535fb0cbf87776524f6f968f169e504853b1bc5b91f4792a5b9c58df1151bad  /srv/lifecycle/harness/sol/src/DappStub.sol
+613348ca2fe17f2d8057247a6476617b8d7dac24a68ab6438eb854b049bc7b08  /srv/lifecycle/harness/sol/src/ExecutorStub.sol
+37d0516d3e7c123bbf981774a2ab5ae26d25c5f61e53b23584aa81bcb97034ff  /srv/lifecycle/harness/sol/src/Proxy.sol
+11d95c2391019bf28578193118413a868244d5e77c8165c3ce079c41340bbe60  /srv/lifecycle/harness/p04/artifacts/MLDSA44Account1271.json
+d206177a976f801d5193de2b6d91f0dfa91ed71a06705a624b22b45a921ed4f2  /srv/lifecycle/harness/p04/artifacts/MLDSA44Verifier.json
+2d724ab4640530e454f5216a7d539178c50030781f0239163ee87f57539dedaa  /srv/lifecycle/harness/p04/artifacts/NoErc1271.json
+164340ddf9bb45f728d3eddb4d576e8782b2937acd84dee46338773efdefac74  /srv/lifecycle/pq/mldsa_tool.py
+46aa3b639ade6877794a18349339cee9fd452b2c7a5bde6a6e3049885653efa8  /srv/lifecycle/scripts/fault_proxy_v2.py
+6fa80156ba56bd35e7a7c7b00950ece45a2eb36627ccd59c0ff1703aedca5817  /srv/lifecycle/scripts/run_p04.sh
