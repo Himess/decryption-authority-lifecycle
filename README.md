@@ -179,7 +179,7 @@ The test wallet and the owner contract are test fixtures.
 | `impl/p3-operator-ratification/`, `impl/bench-pq/` | Prototypes and benchmarks of post-quantum building blocks; the ML-DSA verifier is vendored and unaudited | see `NOTICE` |
 | `experiments/` | Two files of earlier experiments that the local drill runs: the ML-DSA-44 test signer and an ERC-1271 gas meter | MIT; the meter carries its own SPDX header |
 | `results/` | Reports and raw data; per-address data and machine identifiers removed | MIT, except files with their own SPDX header and the Zama-derived files `NOTICE` lists |
-| `G1_TARTISMA_RAPORU.md` | An early design discussion (Turkish) | MIT |
+| `docs/history/G1_TARTISMA_RAPORU.md` | An early design discussion (Turkish) | MIT |
 
 **References to unpublished files.** Reports written on the authors' machine cite its internal briefs
 (`docs/CLAUDE_CODE_BRIEF_*.md`), a design review (`DESIGN_REVIEW.md`), its worktrees (`impl/wt-*`) and its server's

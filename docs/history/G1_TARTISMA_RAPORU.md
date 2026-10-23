@@ -1,3 +1,5 @@
+Early design discussion (Turkish), kept for history. The current design is in erc/ and docs/.
+
 # FHE şifre çözme yetkisi: doğrulama ve tasarım incelemesi raporu (G1 öncesi)
 
 **Tarih:** 21 Ekim 2026
